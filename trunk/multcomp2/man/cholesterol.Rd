@@ -32,6 +32,7 @@ data(cholesterol)
 
 # adjusted p-values for all-pairwise comparisons in a one-way layout 
 amod <- aov(response ~ trt, data = cholesterol)
+confint(mcp(amod, hypotheses = list(trt = "Tukey")))
 summary(mcp(amod, hypotheses = list(trt = "Tukey")))
 
 # use only a subset of all pairwise hypotheses:
@@ -41,6 +42,7 @@ summary(mcp(amod, hypotheses = list(trt = "Tukey")))
 # the contrast matrix
 K <- linhypo(cholesterol$trt, type="Tukey")
 Ksub <- K[c(1,3,5,6,8,10),]
+confint(mcp(amod, hypotheses = list(trt = Ksub)))
 summary(mcp(amod, hypotheses = list(trt = Ksub)))
 
 }

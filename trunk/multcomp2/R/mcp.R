@@ -85,10 +85,10 @@ mcp <- function(object, hypotheses = NULL,
             for (i in which(pos)[-1]) {
                 k <- sum(attr(mm, "assign") == i) / ncol(Kstar)
                 if (sum(factors[1:which(rownames(factors) == nm), i]) == 1) {
-                    Kinter <- cbind(Kinter, Kstar[,rep(1:ncol(Kstar), k)] / (k + 1))
+                    Kinter <- cbind(Kinter, Kstar[,rep(1:ncol(Kstar), k), drop = FALSE] / (k + 1))
                 } else {
                     Kinter <- cbind(Kinter, 
-                        Kstar[,rep(1:ncol(Kstar), rep(k, ncol(Kstar)))] / (k + 1))
+                        Kstar[,rep(1:ncol(Kstar), rep(k, ncol(Kstar))), drop = FALSE] / (k + 1))
                 }
             }
             Kstar <- cbind(Kstar, Kinter)

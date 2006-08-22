@@ -37,6 +37,8 @@ confint(mcp(amod, hypotheses = list(dose = "Williams"), alternative = "greater")
 confint(mcp(amod, hypotheses = list(dose = "Changepoint"), alternative = "greater"))
 
 # compute now adjusted p-values for McDermott's test on trend
+summary(mcp(amod, hypotheses = list(dose = "McDermott"), alternative = "greater"), type = "raw")
+summary(mcp(amod, hypotheses = list(dose = "McDermott"), alternative = "greater"), type = "Bonf")
 summary(mcp(amod, hypotheses = list(dose = "McDermott"), alternative = "greater"))
 }
 \keyword{datasets}

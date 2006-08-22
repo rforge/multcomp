@@ -30,7 +30,7 @@
 data(recovery)
 
 amod <- aov(minutes ~ blanket, data = recovery)
-confint(mcp(amod, hypotheses = list(blanket = "Dunnett"), alternative = "less"))
+confint(mcp(amod, hypotheses = list(blanket = "Dunnett"), alternative = "less"), level = 0.9)
 
 }
 \keyword{datasets}

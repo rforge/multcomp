@@ -36,6 +36,7 @@ Kdose <- matrix(c(1,1,1,.75,.384,.887,-1,0,0,.25,.37,.113,0,-1,0,-.25,
 rownames(Kdose) <- paste("dose", 1:nrow(Kdose), sep="")
 
 summary(mcp(amod, hypotheses = list(dose = Kdose)))
+confint(mcp(amod, hypotheses = list(dose = Kdose)))
 
 }
 \keyword{datasets}

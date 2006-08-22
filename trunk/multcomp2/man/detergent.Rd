@@ -32,7 +32,7 @@ amod <- aov(plates ~ block + detergent, data = detergent)
 
 K <- linhypo(detergent$detergent, type="Tukey")
 
-mcp(amod, hypotheses = list(detergent = "Tukey"))
+summary(mcp(amod, hypotheses = list(detergent = "Tukey")))
 confint(mcp(amod, hypotheses = list(detergent = K)))
 
 }
