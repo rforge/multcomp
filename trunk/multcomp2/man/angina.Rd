@@ -30,6 +30,7 @@ data(angina)
 
 # perform a dose-response analysis using simultaneous confidence 
 # intervals for Williams' contrasts
+### REPRODUCIBLE?
 amod <- aov(response ~ dose, data = angina)
 confint(mcp(amod, hypotheses = list(dose = "Williams"), alternative = "greater"))
 

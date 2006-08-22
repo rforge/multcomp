@@ -30,6 +30,8 @@
 data(recovery)
 
 amod <- aov(minutes ~ blanket, data = recovery)
+
+### cf. Westfall et al. (1999, p. 80)
 confint(mcp(amod, hypotheses = list(blanket = "Dunnett"), alternative = "less"), level = 0.9)
 
 }

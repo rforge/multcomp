@@ -24,9 +24,21 @@
 }
 \examples{
 
-  data(halothane)
-  amod <- aov(rate ~ treatment + dog, data=halothane)
-  confint(mcp(amod, hypotheses = list(treatment = "Tukey")))
+  data("halothane")
+
+  library("lme4")
+
+  lmod <- lmer(rate ~ treatment + (1 | dog), data = halothane)
+
+  C <- contr.treatment(nlevels(halothane$treatment))
+  K <- (linhypo(halothane$treatment, type = "Tukey") * -1) %*% C
+
+  ### compare with Westfall et al. (1999, p. 215)
+  tmp <- pqmcp(t(as.matrix(coef(lmod)[[1]][1,])), 
+               as.matrix(vcov(lmod)), cbind(0, K), df = 18)
+  tmp$coefficients
+  tmp$sigma
+  tmp$qfunction("two", 0.95)
 
 }
 \keyword{datasets}

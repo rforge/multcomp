@@ -31,12 +31,17 @@ data(litter)
 amod <- aov(weight ~ dose + gesttime + number, data = litter)
 
 # define matrix of linear hypotheses for `dose'
-Kdose <- matrix(c(1,1,1,.75,.384,.887,-1,0,0,.25,.37,.113,0,-1,0,-.25,
-              .246,-.339,0,0,-1,-.75,-1,-.661),ncol = 4)
-rownames(Kdose) <- paste("dose", 1:nrow(Kdose), sep="")
+K <- rbind(c(1, -1,  0,  0),
+           c(1,  0, -1,  0),
+           c(1,  0,  0, -1),
+           c(0.75, 0.25, -0.25, -0.75),
+           c(0.384, 0.370, 0.246, -1),
+           c(0.887, 0.113, -0.339, -0.661))
+rownames(K) <- c("cont-low", "cont-mid", "cond-high", "ordinal", "arith", "log ord")
 
-summary(mcp(amod, hypotheses = list(dose = Kdose)))
-confint(mcp(amod, hypotheses = list(dose = Kdose)))
+### cf. Westfall et al. (1999, p. 111)
+summary(mcp(amod, hypotheses = list(dose = K), alternative = "greater"))
+confint(mcp(amod, hypotheses = list(dose = K), alternative = "greater"))
 
 }
 \keyword{datasets}
