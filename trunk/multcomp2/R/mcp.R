@@ -2,25 +2,51 @@
 ### multiple comparison procedures for generalized linear models
 ### `object' requires methods for `model.matrix', `model.frame', `terms', 
 ### `coef' and `vcov'
-### `hypotheses' is a named list of characters (`type' arguments in `contrMat')
+### `hypotheses' is a named list of characters (`type' arguments in `linhypo')
 
-mcp <- function(object, hypotheses = NULL) {
+mcp <- function(object, hypotheses = NULL, 
+                alternative = c("two.sided", "less", "greater")) {
 
     ### extract model matrix, frame and terms
     mm <- try(model.matrix(object))
     if (inherits(mm, "try-error"))
-        stop("no", sQuote("model.matrix"), "method for", 
-             sQuote("object"), "found!")
+        stop("no ", sQuote("model.matrix"), " method for ", 
+             sQuote("object"), " found!")
 
     mf <- try(model.frame(object))
     if (inherits(mf, "try-error"))
-        stop("no", sQuote("model.frame"), "method for", 
-             sQuote("object"), "found!")
+        stop("no ", sQuote("model.frame"), " method for ", 
+             sQuote("object"), " found!")
 
     tm <- try(terms(object))
     if (inherits(tm, "try-error"))
-        stop("no", sQuote("terms"), "method for", 
-             sQuote("object"), "found!")
+        stop("no ", sQuote("terms"), " method for ", 
+             sQuote("object"), " found!")
+
+    beta <- try(coef(object))
+    if (inherits(beta, "try-error"))
+        stop("no ", sQuote("coef"), " method for ",
+             sQuote("object"), " found!")
+    sigma <- try(vcov(object))
+    if (inherits(sigma, "try-error"))
+        stop("no ", sQuote("vcov"), " method for ",
+             sQuote("object"), " found!")       
+
+    alternative <- match.arg(alternative)
+
+    ### OK! You know what you want!
+    if (is.matrix(hypotheses)) { 
+        if(ncol(hypotheses) != length(beta))
+            stop("dimensions of ", sQuote("hypotheses"), " and ", sQuote("coef(object)"),
+                 "don't match")
+
+         RET <- list(object = object, 
+                hypotheses = hypotheses, beta = beta, sigma = sigma,
+                type = "user-defined",
+                alternative = alternative)
+         class(RET) <- "mcp"
+         return(RET)
+     }
 
     ### factors and contrasts
     contrasts <- attr(mm, "contrasts")
@@ -85,71 +111,61 @@ mcp <- function(object, hypotheses = NULL) {
     rownames(M) <- unlist(lapply(hypo, function(x) rownames(x$K)))
 
     ### create `mcp' object
-    beta <- try(coef(object))
-    if (inherits(beta, "try-error"))
-        stop("no", sQuote("coef"), "method for",
-             sQuote("object"), "found!")
-    sigma <- try(vcov(object))
-    if (inherits(sigma, "try-error"))
-        stop("no", sQuote("vcov"), "method for",
-             sQuote("object"), "found!")       
-
     RET <- list(object = object, 
                 hypotheses = M, beta = beta, sigma = sigma,
-                type = paste(sapply(hypo, function(x) x$type), collapse = ";"))
+                type = paste(sapply(hypo, function(x) x$type), collapse = ";"),
+                alternative = alternative)
     class(RET) <- "mcp"
     return(RET)
 }
 
-print.mcp <- function(x, ...) {
-    cat("\n\t", "Multiple Comparison Procedures for Linear Hypotheses\n")
-    cat("\t", "Estimates: ")
-    print(x$hypotheses %*% x$beta)
-}
-
-summary.mcp <- function(object, logical = FALSE, ...) {
+summary.mcp <- function(object, type = c("adjusted", "raw", "Bonferroni"), ...) {
 
     ### use multivariate t distribution for linear models,
     ### normal distribution otherwise
     df <- 0
-    asympt <- TRUE
     if (inherits(object$object, "lm")) {
         class(object$object) <- "lm"
         df <- summary(object$object)$df[2]
-        asympt <- FALSE
     }
 
     ### OK, we are done, call the work horse ...
-    csimtest(estpar = object$beta,
-            df = df,
-            covm = object$sigma,
-            cmatrix = object$hypotheses,
-            ctype = object$type,
-            ttype = ifelse(logical, "logical", "free"),
-            asympt = asympt,
-            ...)
+    pq <- pqmcp(beta = object$beta,
+                sigma = object$sigma,
+                df = df,
+                linhypo = object$hypotheses,
+                ...)
+    type <- match.arg(type)
+    object$mcp <- cbind(pq$coefficients, pq$sigma, pq$tstat, 
+                        pq$pfunction(object$alternative, type))
+    colnames(object$mcp) <- c("Estimate", "Std. Error",
+        ifelse(df == 0, "z value", "t value"), "p value")
+    attr(object$mcp, "type") <- type
+    class(object) <- c("summary.mcp", "mcp")
+    return(object)
 }
-    
 
 confint.mcp <- function(object, parm, level = 0.95, ...) {
 
     ### use multivariate t distribution for linear models,
     ### normal distribution otherwise
     df <- 0
-    asympt <- TRUE
     if (inherits(object$object, "lm")) {
         class(object$object) <- "lm"
         df <- summary(object$object)$df[2]
-        asympt <- FALSE
     }
 
     ### OK, we are done, call the work horse ...
-    csimint(estpar = object$beta, 
-            df = df, 
-            covm = object$sigma, 
-            cmatrix = object$hypotheses, 
-            ctype = object$type, 
-            conf.level = level, 
-            asympt = asympt, 
-            ...) 
+    pq <- pqmcp(beta = object$beta,
+                sigma = object$sigma,
+                df = df,
+                linhypo = object$hypotheses,
+                ...)
+    object$confint <- cbind(pq$coefficients, 
+                            pq$qfunction(object$alternative, 
+                                         conf.level = level))
+    colnames(object$confint) <- c("Estimate", "lwr", "upr")
+    attr(object$confint, "conf.level") <- level
+    class(object) <- c("confint.mcp", "mcp")
+    return(object)
 }
