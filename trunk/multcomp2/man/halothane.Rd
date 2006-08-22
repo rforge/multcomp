@@ -9,11 +9,7 @@
 \format{
   This data frame contains the following variables
   \describe{
-    \item{treatment}{Treatment at 4 levels:}
-    \item{treatment}{\code{HA}}
-    \item{treatment}{\code{LA}}
-    \item{treatment}{\code{HP}}
-    \item{treatment}{\code{LP}}
+    \item{treatment}{a factor at four levels: \code{HA}, \code{LA}, \code{HP}, and \code{LP}.}
     \item{dog}{Subject ID at 19 levels: 1 ... 19}
     \item{rate}{Response variable: milliseconds between heartbeats}
   }

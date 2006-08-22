@@ -2,7 +2,7 @@
 
 linhypo <- function(x, type = c("Dunnett", "Tukey", "Sequen", "AVE",
                                 "Changepoint", "Williams", "Marcus",
-                                "McDermott","Tetrade"), base = 1) {
+                                "McDermott"), base = 1) {
 
     if (!is.factor(x)) stop(sQuote("x"), "is not a factor!")
     if (nlevels(x) < 2) stop("less than 2 groups!")
