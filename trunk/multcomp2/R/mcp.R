@@ -124,7 +124,7 @@ summary.mcp <- function(object, type = c("adjusted", "raw", "Bonferroni"), ...) 
     ### use multivariate t distribution for linear models,
     ### normal distribution otherwise
     df <- 0
-    if (inherits(object$object, "lm")) {
+    if (class(object$object)[1] %in% c("aov", "lm")) {
         class(object$object) <- "lm"
         df <- summary(object$object)$df[2]
     }
@@ -150,7 +150,7 @@ confint.mcp <- function(object, parm, level = 0.95, ...) {
     ### use multivariate t distribution for linear models,
     ### normal distribution otherwise
     df <- 0
-    if (inherits(object$object, "lm")) {
+    if (class(object$object)[1] %in% c("aov", "lm")) {
         class(object$object) <- "lm"
         df <- summary(object$object)$df[2]
     }
