@@ -1,9 +1,14 @@
 
 # $Id: simint.R,v 1.52 2005/07/25 15:25:05 hothorn Exp $
 
-pqmcp <- function(beta, sigma, linhypo, df = 0, ...) 
+pqmcp <- function(object) 
 {
 
+    beta <- object$beta
+    sigma <- object$sigma
+    linhypo <- object$hypotheses
+    df <- object$df
+    alternative <- object$alternative
     p <- length(beta)
     covm  <- linhypo %*% sigma %*% t(linhypo)
     d     <- 1/sqrt(diag(covm))
@@ -16,10 +21,8 @@ pqmcp <- function(beta, sigma, linhypo, df = 0, ...)
     tvals <- ests/ses
     dim   <- ncol(cr)
 
-    pfunction <- function(alternative = c("two.sided","less","greater"),
-                          type = c("raw", "Bonferroni", "adjusted")) {
+    pfunction <- function(type = c("univariate", "Bonferroni", "adjusted"), ...) {
 
-        alternative <- match.arg(alternative)
         type <- match.arg(type) 
 
         pfct <- function(q) {
@@ -47,7 +50,7 @@ pqmcp <- function(beta, sigma, linhypo, df = 0, ...)
             else        pvals <- 1-pnorm(tvals)
         })
 
-        if (type == "raw") {
+        if (type == "univariate") {
             return(pvals)
         }
 
@@ -58,10 +61,7 @@ pqmcp <- function(beta, sigma, linhypo, df = 0, ...)
             return(1 - apply(tvals, 1, pfct))
     }
 
-    qfunction <- function(alternative = c("two.sided","less","greater"),
-                          conf.level) {
-
-        alternative <- match.arg(alternative)
+    qfunction <- function(conf.level, ...) {
 
         tail <- switch(alternative, "two.sided" = "both.tails",
                                     "less"      = "upper.tail",
@@ -89,4 +89,32 @@ pqmcp <- function(beta, sigma, linhypo, df = 0, ...)
                 coefficients = ests, sigma = ses, tstat = tvals)
     class(RET) <- "pqmcp"
     RET
+}
+
+univariate <- function() 
+{
+    function(object) {
+        RET <- pqmcp(object)
+        RET$pvalues <- RET$pfunction("univariate")
+        RET$type <- "univariate"
+        RET
+    }
+}
+
+Bonferroni <- function() {
+    function(object) {
+        RET <- pqmcp(object)
+        RET$pvalues <- RET$pfunction("Bonferroni")
+        RET$type <- "Bonferroni"
+        RET
+    }
+}
+
+adjusted <- function(...) {
+    function(object) {
+        RET <- pqmcp(object)
+        RET$pvalues <- RET$pfunction("adjusted", ...)
+        RET$type <- "adjusted"
+        RET
+    }
 }

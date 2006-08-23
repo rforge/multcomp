@@ -21,7 +21,7 @@ print.summary.mcp <- function(x, digits = max(3, getOption("digits") - 3),
     printCoefmat(x$mcp, digits = digits, 
                  has.Pvalue = TRUE, P.values = TRUE)
     switch(type, 
-        "raw" = cat("(Raw p values reported)"),
+        "univariate" = cat("(Univariate p values reported)"),
         "Bonferroni" = cat("(Bonferroni-adjusted p values reported)"),
         "adjusted" = cat("(Adjusted p values reported)"))
     cat("\n\n")

@@ -34,6 +34,13 @@ mcp <- function(object, hypotheses = NULL,
 
     alternative <- match.arg(alternative)
 
+    df <- 0
+    if (class(object)[1] %in% c("aov", "lm")) {
+        class(object) <- "lm"
+        df <- summary(object)$df[2]
+    }
+
+
     ### OK! You know what you want!
     if (is.matrix(hypotheses)) { 
         if(ncol(hypotheses) != length(beta))
@@ -43,7 +50,7 @@ mcp <- function(object, hypotheses = NULL,
          RET <- list(object = object, 
                 hypotheses = hypotheses, beta = beta, sigma = sigma,
                 type = "user-defined",
-                alternative = alternative)
+                alternative = alternative, df = df)
          class(RET) <- "mcp"
          return(RET)
      }
@@ -110,60 +117,34 @@ mcp <- function(object, hypotheses = NULL,
     }
     rownames(M) <- unlist(lapply(hypo, function(x) rownames(x$K)))
 
+
     ### create `mcp' object
     RET <- list(object = object, 
                 hypotheses = M, beta = beta, sigma = sigma,
                 type = paste(sapply(hypo, function(x) x$type), collapse = ";"),
-                alternative = alternative)
+                alternative = alternative,
+                df = df)
     class(RET) <- "mcp"
     return(RET)
 }
 
-summary.mcp <- function(object, type = c("adjusted", "raw", "Bonferroni"), ...) {
+summary.mcp <- function(object, distribution = adjusted(), ...) {
 
-    ### use multivariate t distribution for linear models,
-    ### normal distribution otherwise
-    df <- 0
-    if (class(object$object)[1] %in% c("aov", "lm")) {
-        class(object$object) <- "lm"
-        df <- summary(object$object)$df[2]
-    }
-
-    ### OK, we are done, call the work horse ...
-    pq <- pqmcp(beta = object$beta,
-                sigma = object$sigma,
-                df = df,
-                linhypo = object$hypotheses,
-                ...)
-    type <- match.arg(type)
+    pq <- distribution(object)
     object$mcp <- cbind(pq$coefficients, pq$sigma, pq$tstat, 
-                        pq$pfunction(object$alternative, type))
+                        pq$pvalues)
     colnames(object$mcp) <- c("Estimate", "Std. Error",
-        ifelse(df == 0, "z value", "t value"), "p value")
-    attr(object$mcp, "type") <- type
+        ifelse(object$df == 0, "z value", "t value"), "p value")
+    attr(object$mcp, "type") <- pq$type
     class(object) <- c("summary.mcp", "mcp")
     return(object)
 }
 
 confint.mcp <- function(object, parm, level = 0.95, ...) {
 
-    ### use multivariate t distribution for linear models,
-    ### normal distribution otherwise
-    df <- 0
-    if (class(object$object)[1] %in% c("aov", "lm")) {
-        class(object$object) <- "lm"
-        df <- summary(object$object)$df[2]
-    }
-
-    ### OK, we are done, call the work horse ...
-    pq <- pqmcp(beta = object$beta,
-                sigma = object$sigma,
-                df = df,
-                linhypo = object$hypotheses,
-                ...)
+    pq <- pqmcp(object)
     object$confint <- cbind(pq$coefficients, 
-                            pq$qfunction(object$alternative, 
-                                         conf.level = level))
+                            pq$qfunction(conf.level = level, ...))
     colnames(object$confint) <- c("Estimate", "lwr", "upr")
     attr(object$confint, "conf.level") <- level
     class(object) <- c("confint.mcp", "mcp")
