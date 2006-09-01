@@ -101,18 +101,19 @@ univariate <- function()
     }
 }
 
-Bonferroni <- function() {
-    function(object) {
-        RET <- pqmcp(object)
-        RET$pvalues <- RET$pfunction("Bonferroni")
-        RET$type <- "Bonferroni"
-        RET
-    }
-}
-
-adjusted <- function(type = c("free", "Shaffer", "Westfall"), ...) 
+adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...) 
 {
     type <- match.arg(type)
+
+    ### simple Bonferroni-adjustment
+    if (type == "Bonferroni") {
+        return(function(object) {
+            RET <- pqmcp(object)
+            RET$pvalues <- RET$pfunction("Bonferroni")
+            RET$type <- "Bonferroni"
+            RET
+        })
+    }
 
     ### usual max-type adjustment over all linear hypotheses
     if (type == "free") {
@@ -124,50 +125,35 @@ adjusted <- function(type = c("free", "Shaffer", "Westfall"), ...)
         })
     }
 
-    ### Westfall (1997, JASA): constraints and correlations    
-    if (type == "Westfall") {
-        return(function(object) {
-            RET <- pqmcp(object)
-            tstat <- RET$tstat
-            C <- object$hypotheses
-            Corder <- C[order(tstat), ]
-            ms <- maxsets(Corder)
-            p <- sapply(ms, function(x) {
-                max(sapply(x, function(s) {
-                    object$hypotheses <- Corder[s, , drop = FALSE]
-                    min(pqmcp(object)$pfunction("adjusted", ...))
-                }))
-            })
-            for (i in 2:length(p))
-                p[i] <- max(p[i-1], p[i])
-            ### <FIXME> what happens in case of ties??? </FIXME> ###
-            RET$pvalues <- p[rank(tstat)]
-            RET$type <- "adjusted (Westfall -- constraints and correlations)"
-            RET
-        })
-    }
+    ### Westfall (1997, JASA): constraints and correlations 
+    ### or
     ### Shaffer (1886, JASA): constraints
-    if (type == "Shaffer") {
-        return(function(object) {
-            RET <- pqmcp(object)
-            tstat <- RET$tstat
-            C <- object$hypotheses
-            Corder <- C[order(tstat), ]
-            ms <- maxsets(Corder)
-            p <- sapply(ms, function(x) {
-                max(sapply(x, function(s) {
-                    object$hypotheses <- Corder[s, , drop = FALSE]
-                    min(pqmcp(object)$pfunction("Bonferroni", ...))
-                }))
-            })
-            for (i in 2:length(p))
-                p[i] <- max(p[i-1], p[i])
-            ### <FIXME> what happens in case of ties??? </FIXME> ###
-            RET$pvalues <- p[rank(tstat)]
-            RET$type <- "adjusted (Shaffer -- constraints with Bonferroni)"
-            RET
+    return(function(object) {
+        RET <- pqmcp(object)
+        tstat <- switch(object$alternative, 
+                        "less" = RET$tstat,
+                        "greater" = -RET$tstat,
+                        "two.sided" = -abs(RET$tstat))
+        C <- object$hypotheses
+        Corder <- C[order(tstat), ]
+        ms <- maxsets(Corder)
+        p <- sapply(ms, function(x) {
+           max(sapply(x, function(s) {
+                object$hypotheses <- Corder[s, , drop = FALSE]
+                min(pqmcp(object)$pfunction(ifelse(type == "Westfall", 
+                                                   "adjusted", "Bonferroni"), 
+                                            ...))
+            }))
         })
-    }
+        for (i in 2:length(p))
+            p[i] <- max(p[i-1], p[i])
+        ### <FIXME> what happens in case of ties??? </FIXME> ###
+        RET$pvalues <- p[rank(tstat)]
+        RET$type <- ifelse(type == "Westfall", 
+            "adjusted (Westfall -- constraints and correlations)",
+            "adjusted (Shaffer -- constraints with Bonferroni)")
+        RET
+    })
 }
 
 ### compute all possible (ordered) subsets of the index set K

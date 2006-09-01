@@ -87,7 +87,9 @@ C <- C[,-1]
 ### linear model
 mod <- lm(Score ~ Treatment:AgeGroup:InitHealth - 1, data=respiratory)
 
-summary(mcp(mod, hypotheses = C, alternative="less"))
+### see Westfall et al. (1999, page 198)
+summary(mcp(mod, hypotheses = C, alternative="less"), distribution = univariate())
+summary(mcp(mod, hypotheses = C, alternative = "less"), distr = adjusted("Shaffer"))
 
 }
 \keyword{datasets}

@@ -4,7 +4,8 @@
 \title{ Litter Weights Data Set }
 \usage{data(litter)}
 \description{
-  Dose response of litter weights in rats; data set taken from Westfall et al. (1999, p. 109). Specific dose comparisons in a dose response experiment with two covariates. 
+  Dose response of litter weights in rats; data set taken from Westfall et al. (1999, p. 109). 
+  Specific dose comparisons in a dose response experiment with two covariates. 
 }
 \format{
   This data frame contains the following variables
@@ -48,11 +49,9 @@
   ### set up multiple comparison object
   Kmcp <- mcp(amod, hypotheses = list(dose = K), alternative = "less")
 
-  Kmcp
-
   ### cf. Westfall (1997, Table 2)
   summary(Kmcp, distribution = univariate())
-  summary(Kmcp, distribution = Bonferroni())
+  summary(Kmcp, distribution = adjusted("Bonferroni"))
   summary(Kmcp, distribution = adjusted("Shaffer"))
   summary(Kmcp, distribution = adjusted("Westfall"))
   summary(Kmcp, distribution = adjusted("free"))

@@ -32,8 +32,12 @@ data(cholesterol)
 
 # adjusted p-values for all-pairwise comparisons in a one-way layout 
 amod <- aov(response ~ trt, data = cholesterol)
-confint(mcp(amod, hypotheses = list(trt = "Tukey")))
-summary(mcp(amod, hypotheses = list(trt = "Tukey")))
+confint(cmcp <- mcp(amod, hypotheses = list(trt = "Tukey")))
+
+### cf. Westfall et al. (1999, page 171)
+summary(cmcp, distribution = univariate())
+summary(cmcp, distribution = adjusted("Shaffer"))
+summary(cmcp, distribution = adjusted("Westfall"))
 
 # use only a subset of all pairwise hypotheses:
 #
