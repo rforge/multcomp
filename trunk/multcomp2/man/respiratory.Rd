@@ -27,69 +27,65 @@
   Cary, NC: SAS Institute Inc.  
 }
 \examples{
-data(respiratory)
 
-# compute the contrast matrix in several steps 
-# overall active vs. placebo
-CA  <- c(0, 13, 0, 11, 0, 13, 0, 17, 0)
-CP  <- c(0, 0, 14, 0, 12,  0, 19, 0, 12)
-CA  <- CA/sum(CA)
-CP  <- CP/sum(CP)
-C1  <- CP-CA
+  data("respiratory")
 
-# for older subgroup only
-CAO <- c( 0, 13,  0,  0,  0, 13,  0,  0,  0 ) 
-CPO <- c( 0,  0, 14,  0,  0,  0, 19,  0,  0 ) 
-CAO <- CAO/sum(CAO)
-CPO <- CPO/sum(CPO)
-C2  <- CPO - CAO
+  ### three-way ANOVA without intercept
+  amod <- aov(Score ~ Treatment:AgeGroup:InitHealth - 1, data = respiratory)
+  
+  ### compute weighted linear hypotheses in several steps 
+  ### overall active vs. placebo
+  CA  <- c(13,  0, 11,  0, 13,  0, 17,  0)
+  CP  <- c( 0, 14,  0, 12,  0, 19,  0, 12)
+  CA  <- CA/sum(CA)
+  CP  <- CP/sum(CP)
+  C1  <- CP-CA
 
-# for younger subgroup only 
-CAY <- c( 0,  0,  0, 11,  0,  0,  0, 17,  0 ) 
-CPY <- c( 0,  0,  0,  0, 12,  0,  0,  0, 12 ) 
-CAY <- CAY/sum(CAY)
-CPY <- CPY/sum(CPY)
-C3  <- CPY - CAY
+  ### for older subgroup only
+  CAO <- c(13,  0,  0,  0, 13,  0,  0,  0) 
+  CPO <- c( 0, 14,  0,  0,  0, 19,  0,  0) 
+  CAO <- CAO/sum(CAO)
+  CPO <- CPO/sum(CPO)
+  C2  <- CPO - CAO
 
-# subgroup with inital good health
-CAG <- c( 0, 13,  0, 11,  0,  0,  0,  0,  0 ) 
-CPG <- c( 0,  0, 14,  0, 12,  0,  0,  0,  0 ) 
-CAG <- CAG/sum(CAG)
-CPG <- CPG/sum(CPG)
-C4  <- CPG - CAG
+  ### for younger subgroup only 
+  CAY <- c(0,  0, 11,  0,  0,  0, 17,  0) 
+  CPY <- c(0,  0,  0, 12,  0,  0,  0, 12) 
+  CAY <- CAY/sum(CAY)
+  CPY <- CPY/sum(CPY)
+  C3  <- CPY - CAY
 
-# subgroup with inital poor health
-CAP <- c( 0,  0,  0,  0,  0, 13,  0, 17,  0 ) 
-CPP <- c( 0,  0,  0,  0,  0,  0, 19,  0, 12 ) 
-CAP <- CAP/sum(CAP)
-CPP <- CPP/sum(CPP)
-C5  <- CPP - CAP
+  ### subgroup with inital good health
+  CAG <- c(13,  0, 11,  0,  0,  0,  0,  0) 
+  CPG <- c( 0, 14,  0, 12,  0,  0,  0,  0) 
+  CAG <- CAG/sum(CAG)
+  CPG <- CPG/sum(CPG)
+  C4  <- CPG - CAG
 
-# all 4 subgroup combinations of age and initial health condition 
-C6  <- c( 0, -1,  1,  0,  0,  0,  0,  0,  0 )
-C7  <- c( 0,  0,  0,  0,  0, -1,  1,  0,  0 )
-C8  <- c( 0,  0,  0, -1,  1,  0,  0,  0,  0 )
-C9  <- c( 0,  0,  0,  0,  0,  0,  0, -1,  1 )
+  ### subgroup with inital poor health
+  CAP <- c(0,  0,  0,  0, 13,  0, 17,  0 ) 
+  CPP <- c(0,  0,  0,  0,  0, 19,  0, 12 ) 
+  CAP <- CAP/sum(CAP)
+  CPP <- CPP/sum(CPP)
+  C5  <- CPP - CAP
 
-# contrast matrix, note: first column is zero and corresponds to the
-# intercept implicitly given in the formula
-C   <- rbind(C1, C2, C3, C4, C5, C6, C7, C8, C9)   
+  ### all 4 subgroup combinations of age and initial health condition 
+  C6  <- c(-1,  1,  0,  0,  0,  0,  0,  0)
+  C7  <- c( 0,  0,  0,  0, -1,  1,  0,  0)
+  C8  <- c( 0,  0, -1,  1,  0,  0,  0,  0)
+  C9  <- c( 0,  0,  0,  0,  0,  0, -1,  1)
 
-# numerate the contrasts
-colnames(C) <- NULL
-rownames(C) <- c("Overall", "Older", "Younger", "Good Init", "Poor Init",
-                 "Old x Good", "Old x Poor", "Young x Good", "Young x Poor") 
+  ### matrix of linear hypotheses
+  C <- rbind(C1, C2, C3, C4, C5, C6, C7, C8, C9)   
+  rownames(C) <- c("Overall", "Older", "Younger", "Good Init", "Poor Init",
+                   "Old x Good", "Old x Poor", "Young x Good", "Young x Poor") 
 
-# remove the intercept (not needed, simtest can deal with contrast matrices
-# with and without a column of zeros for the intercept
-C <- C[,-1]
+  ### set up one-sided multiple comparisons
+  rmcp <- mcp(amod, hypotheses = C, alternative="less")
 
-### linear model
-mod <- lm(Score ~ Treatment:AgeGroup:InitHealth - 1, data=respiratory)
-
-### see Westfall et al. (1999, page 198)
-summary(mcp(mod, hypotheses = C, alternative="less"), distribution = univariate())
-summary(mcp(mod, hypotheses = C, alternative = "less"), distr = adjusted("Shaffer"))
+  ### see Westfall et al. (1999, page 198)
+  summary(rmcp, distribution = univariate())
+  summary(rmcp, distribution = adjusted("Shaffer"))
 
 }
 \keyword{datasets}

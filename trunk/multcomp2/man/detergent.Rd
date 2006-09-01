@@ -26,19 +26,22 @@
 }
 \examples{
 
-data("detergent")
 
-amod <- aov(plates ~ block + detergent, data = detergent)
+  data("detergent")
 
-dmcp <- mcp(amod, hypotheses = list(detergent = "Tukey"))
+  ### set up two-way ANOVA without interactions
+  amod <- aov(plates ~ block + detergent, data = detergent)
 
-### see Westfall et al. (1999, p. 190)
-confint(dmcp)
+  ### set up all-pair comparisons
+  dmcp <- mcp(amod, hypotheses = list(detergent = "Tukey"))
 
-### see Westfall et al. (1999, p. 192)
-summary(dmcp, distribution = univariate())
-summary(dmcp, distribution = adjusted("Shaffer"))
-summary(dmcp, distribution = adjusted("Westfall"))
+  ### see Westfall et al. (1999, p. 190)
+  confint(dmcp)
+
+  ### see Westfall et al. (1999, p. 192)
+  summary(dmcp, distribution = univariate())
+  summary(dmcp, distribution = adjusted("Shaffer"))
+  summary(dmcp, distribution = adjusted("Westfall"))
 
 }
 \keyword{datasets}

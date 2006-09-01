@@ -18,21 +18,29 @@
   }
 }
 \details{
+
   See Westfall et al. (1999, p. 80)
+
 }
 \source{
+
   P. H. Westfall, R. D. Tobias, D. Rom, R. D. Wolfinger, Y. Hochberg (1999).
   \emph{Multiple Comparisons and Multiple Tests Using the SAS System}.
   Cary, NC: SAS Institute Inc.  
+
 }
 \examples{
 
-data(recovery)
+  data("recovery")
 
-amod <- aov(minutes ~ blanket, data = recovery)
+  ### set up one-way ANOVA
+  amod <- aov(minutes ~ blanket, data = recovery)
 
-### cf. Westfall et al. (1999, p. 80)
-confint(mcp(amod, hypotheses = list(blanket = "Dunnett"), alternative = "less"), level = 0.9)
+  ### set up multiple comparisons: one-sided Dunnett contrasts
+  rmcp <- mcp(amod, hypotheses = list(blanket = "Dunnett"), alternative = "less")
+
+  ### cf. Westfall et al. (1999, p. 80)
+  confint(rmcp, level = 0.9)
 
 }
 \keyword{datasets}

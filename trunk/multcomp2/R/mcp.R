@@ -58,6 +58,7 @@ mcp <- function(object, hypotheses = NULL,
     ### factors and contrasts
     contrasts <- attr(mm, "contrasts")
     factors <- attr(tm, "factors")
+    intercept <- attr(tm, "intercept") != 0
    
     ### linear hypotheses
     if (!is.list(hypotheses) || is.null(names(hypotheses)))
@@ -84,7 +85,13 @@ mcp <- function(object, hypotheses = NULL,
             C <- contrasts[[nm]]
         }
         ### and transform the original linear hypothesis
-        Kstar <- hypotheses[[nm]] %*% C
+        if (intercept) {
+            Kstar <- hypotheses[[nm]] %*% C
+        } else {
+            ### model.matrix has `contrasts' argument even if no intercept
+            ### was fitted and the contrast actually hasn't been applied
+            Kstar <- hypotheses[[nm]]
+        }
         pos <- factors[nm,] == 1
         ### average over interaction terms (if any)
         if (sum(pos) > 1) {

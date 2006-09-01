@@ -23,7 +23,10 @@ print.summary.mcp <- function(x, digits = max(3, getOption("digits") - 3),
     switch(type, 
         "univariate" = cat("(Univariate p values reported)"),
         "Bonferroni" = cat("(Bonferroni-adjusted p values reported)"),
-        "adjusted" = cat("(Adjusted p values reported)"))
+        "free" = cat("(Adjusted p values reported)"),
+        "Shaffer" = cat("(Adjusted p values reported -- Shaffer method)"),
+        "Westfall" = cat("(Adjusted p values reported -- Westfall method)")
+    )
     cat("\n\n")
     invisible(x)                    
 }

@@ -16,38 +16,47 @@
   }
 }
 \details{
+
   See Westfall et al. (1999, p. 153). The treatment formulations 
-are defined as: 20mg one a day (\code{1time}), 10mg twice a day
-(\code{2times})
-and 5mg four times a day (\code{4times}). In addition, two competing drugs
-were used as control (\code{drugD}) and (\code{drugE}).
+  are defined as: 20mg once a day (\code{1time}), 10mg twice a day
+  (\code{2times}) and 5mg four times a day (\code{4times}). 
+  In addition, two competing drugs were used as control: (\code{drugD}) 
+  and (\code{drugE}).
+
 }
 \source{
+
   P. H. Westfall, R. D. Tobias, D. Rom, R. D. Wolfinger, Y. Hochberg (1999).
   \emph{Multiple Comparisons and Multiple Tests Using the SAS System}.
   Cary, NC: SAS Institute Inc.  
+
 }
 \examples{
-data(cholesterol)
 
-# adjusted p-values for all-pairwise comparisons in a one-way layout 
-amod <- aov(response ~ trt, data = cholesterol)
-confint(cmcp <- mcp(amod, hypotheses = list(trt = "Tukey")))
+  data("cholesterol")
 
-### cf. Westfall et al. (1999, page 171)
-summary(cmcp, distribution = univariate())
-summary(cmcp, distribution = adjusted("Shaffer"))
-summary(cmcp, distribution = adjusted("Westfall"))
+  ### adjusted p-values for all-pairwise comparisons in a one-way layout 
+  ### set up ANOVA model  
+  amod <- aov(response ~ trt, data = cholesterol)
 
-# use only a subset of all pairwise hypotheses:
-#
-# * drug D versus all other formulations and
-# * all pairwise comparisions for "1time", "2times" and "4times"
-# the contrast matrix
-K <- linhypo(cholesterol$trt, type="Tukey")
-Ksub <- K[c(1,3,5,6,8,10),]
-confint(mcp(amod, hypotheses = list(trt = Ksub)))
-summary(mcp(amod, hypotheses = list(trt = Ksub)))
+  ### set up multiple comparisons object for all-pair comparisons
+  cmcp <- mcp(amod, hypotheses = list(trt = "Tukey"))
+
+  ### cf. Westfall et al. (1999, page 171)
+  summary(cmcp, distribution = univariate())
+  summary(cmcp, distribution = adjusted("Shaffer"))
+  summary(cmcp, distribution = adjusted("Westfall"))
+
+  ### use only a subset of all pairwise hypotheses
+  K <- linhypo(cholesterol$trt, type="Tukey")
+  Ksub <- rbind(K[c(1,2,5),],
+                "D-test" = c(-1, -1, -1, 3, 0),
+                "E-test" = c(-1, -1, -1, 0, 3))
+
+  ### reproduce results in Westfall et al. (1999, page 172)
+  amod <- aov(response ~ trt - 1, data = cholesterol)
+  summary(mcp(amod, hypotheses = list(trt = Ksub[,5:1])), 
+          distribution = adjusted("Westfall"))
 
 }
 \keyword{datasets}

@@ -120,7 +120,7 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
         return(function(object) {
             RET <- pqmcp(object)
             RET$pvalues <- RET$pfunction("adjusted", ...)
-            RET$type <- "adjusted (free)"
+            RET$type <- type
             RET
         })
     }
@@ -149,9 +149,7 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
             p[i] <- max(p[i-1], p[i])
         ### <FIXME> what happens in case of ties??? </FIXME> ###
         RET$pvalues <- p[rank(tstat)]
-        RET$type <- ifelse(type == "Westfall", 
-            "adjusted (Westfall -- constraints and correlations)",
-            "adjusted (Shaffer -- constraints with Bonferroni)")
+        RET$type <- type
         RET
     })
 }

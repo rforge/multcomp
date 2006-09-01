@@ -5,8 +5,8 @@
 \usage{data(waste)}
 \description{
   Industrial waste data set taken from Westfall et al. (1999, p. 177). 
-Simultaneous confidence intervals for interaction contrasts in 
-a two-way layout with interactions.
+  Simultaneous confidence intervals for interaction contrasts in 
+  a two-way layout with interactions.
 }
 \format{
   This data frame contains the following variables
@@ -26,15 +26,17 @@ a two-way layout with interactions.
   Cary, NC: SAS Institute Inc.  
 }
 \examples{
-data(waste)
-summary(aov(waste ~ envir + temp + envir*temp, data=waste))
 
-#summary(simint(waste ~ envir:temp, data=waste,
-#               type="Tetrade", eps=0.1))
-#summary(simtest(waste ~ envir:temp, data=waste,
-#                type="Tetrade", eps=0.1))
+  data("waste")
 
-}
+  ### set up two-way ANOVA with interactions
+  amod <- aov(waste ~ envir + temp + envir*temp, data=waste)
+
+  ### set up multiple comparisons: all-pairs for both factors
+  wmcp <- mcp(amod, hypotheses = list(envir = "Tukey", temp = "Tukey"))
+
+  ### cf. Westfall et al. (1999, page 181)
+  summary(wmcp, distribution = adjusted("Shaffer"))
 
 }
 \keyword{datasets}
