@@ -114,7 +114,7 @@ mcp <- function(object, hypotheses = NULL,
 
     ### create matrix of all transformed linear hypotheses
     M <- matrix(0, nrow = sum(sapply(hypo, function(x) nrow(x$K))),
-                    ncol = ncol(mm))
+                   ncol = ncol(mm))
     colnames(M) <- colnames(mm)
 
     count <- 1
