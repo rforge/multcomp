@@ -110,11 +110,124 @@ Bonferroni <- function() {
     }
 }
 
-adjusted <- function(...) {
-    function(object) {
-        RET <- pqmcp(object)
-        RET$pvalues <- RET$pfunction("adjusted", ...)
-        RET$type <- "adjusted"
-        RET
+adjusted <- function(type = c("free", "Shaffer", "Westfall"), ...) 
+{
+    type <- match.arg(type)
+
+    ### usual max-type adjustment over all linear hypotheses
+    if (type == "free") {
+        return(function(object) {
+            RET <- pqmcp(object)
+            RET$pvalues <- RET$pfunction("adjusted", ...)
+            RET$type <- "adjusted (free)"
+            RET
+        })
     }
+
+    ### Westfall (1997, JASA): constraints and correlations    
+    if (type == "Westfall") {
+        return(function(object) {
+            RET <- pqmcp(object)
+            tstat <- RET$tstat
+            C <- object$hypotheses
+            Corder <- C[order(tstat), ]
+            ms <- maxsets(Corder)
+            p <- sapply(ms, function(x) {
+                max(sapply(x, function(s) {
+                    object$hypotheses <- Corder[s, , drop = FALSE]
+                    min(pqmcp(object)$pfunction("adjusted", ...))
+                }))
+            })
+            for (i in 2:length(p))
+                p[i] <- max(p[i-1], p[i])
+            ### <FIXME> what happens in case of ties??? </FIXME> ###
+            RET$pvalues <- p[rank(tstat)]
+            RET$type <- "adjusted (Westfall -- constraints and correlations)"
+            RET
+        })
+    }
+    ### Shaffer (1886, JASA): constraints
+    if (type == "Shaffer") {
+        return(function(object) {
+            RET <- pqmcp(object)
+            tstat <- RET$tstat
+            C <- object$hypotheses
+            Corder <- C[order(tstat), ]
+            ms <- maxsets(Corder)
+            p <- sapply(ms, function(x) {
+                max(sapply(x, function(s) {
+                    object$hypotheses <- Corder[s, , drop = FALSE]
+                    min(pqmcp(object)$pfunction("Bonferroni", ...))
+                }))
+            })
+            for (i in 2:length(p))
+                p[i] <- max(p[i-1], p[i])
+            ### <FIXME> what happens in case of ties??? </FIXME> ###
+            RET$pvalues <- p[rank(tstat)]
+            RET$type <- "adjusted (Shaffer -- constraints with Bonferroni)"
+            RET
+        })
+    }
+}
+
+### compute all possible (ordered) subsets of the index set K
+### cf. Westfall (1997, Section 3.2)
+allsubsets <- function(K) 
+{
+    if (length(K) == 0) return(list(NULL))
+    if (length(K) == 1) return(list(K))
+    ret <- as.list(K)
+    for (i in 1:(length(K)-1)) {
+        tmp <- allsubsets(K[-(1:i)])
+        for (j in 1:length(tmp))
+            tmp[[j]] <- c(K[i], tmp[[j]])
+        ret <- c(ret, tmp)
+    }
+    ret
+}
+
+### check if any of C[,1:(min(K)-1)] is in column space of C[,K]
+### cf. Westfall (1997, Section 3.2)
+checkCS <- function(K, C) 
+{
+    if (length(K) == ncol(C)) return(TRUE)
+    CK <- C[,K,drop = FALSE]
+    Cj <- C[,1:(min(K)-1), drop = FALSE]
+    tmp <- Cj - (CK %*% ginv(CK) %*% Cj)
+    all(colSums(tmp^2) > .Machine$double.eps)
+}
+
+### remove redundant index sets
+rmsets <- function(sets) 
+{
+    if (length(sets) == 1) return(sets)
+    rm <- logical(length(sets))
+    for (j in 1:(length(sets) - 1)) {
+        set <- sets[[j]]
+        rm[j] <- any(sapply(sets[(j + 1):length(sets)], function(x) 
+                            all(set %in% x)))
+    }
+    sets[!rm]
+}
+
+### compute maximal sets of linear hypotheses
+### cf. Westfall (1997, Section 3.2)
+maxsets <- function(hypotheses) 
+{
+    C <- t(hypotheses)
+    k <- ncol(C)
+    p <- nrow(C)
+    S <- 1:k
+    ret <- vector(mode = "list", length = k)
+
+    for (j in S) {
+        tmp <- allsubsets(S[-(1:j)])
+        for (i in 1:length(tmp))
+            tmp[[i]] <- c(j, tmp[[i]])
+        if (length(tmp) > 1 || length(tmp[[1]]) > 1)
+            tmp <- c(j, tmp)
+        ret[[j]] <- tmp[sapply(tmp, checkCS, C = C)]
+        
+    }
+    lapply(ret, rmsets)
 }

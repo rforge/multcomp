@@ -12,7 +12,7 @@
   This data frame contains the following variables
   \describe{
     \item{blanket}{Blanket type at 4 levels: \code{b0}, \code{b1},
-                   \code{b3}, \code{b4}.}
+                   \code{b2}, \code{b3}.}
     \item{minutes}{Response variable: recovery time after a surgical 
                    procedure.}
   }

@@ -21,27 +21,41 @@
   See Westfall et al. (1999, p. 109)
 }
 \source{
+
   P. H. Westfall, R. D. Tobias, D. Rom, R. D. Wolfinger, Y. Hochberg (1999).
   \emph{Multiple Comparisons and Multiple Tests Using the SAS System}.
   Cary, NC: SAS Institute Inc.  
+
+  P. H. Westfall (1997). Multiple Testing of General Contrasts Using
+  Logical Constraints and Correlations. \emph{Journal of the American
+  Statistical Association}, \bold{92}(437), 299--306.
+
 }
 \examples{
-data(litter)
 
-amod <- aov(weight ~ dose + gesttime + number, data = litter)
+  data("litter")
 
-# define matrix of linear hypotheses for `dose'
-K <- rbind(c(1, -1,  0,  0),
-           c(1,  0, -1,  0),
-           c(1,  0,  0, -1),
-           c(0.75, 0.25, -0.25, -0.75),
-           c(0.384, 0.370, 0.246, -1),
-           c(0.887, 0.113, -0.339, -0.661))
-rownames(K) <- c("cont-low", "cont-mid", "cond-high", "ordinal", "arith", "log ord")
+  ### fit ANCOVA model to data
+  amod <- aov(weight ~ dose + gesttime + number, data = litter)
 
-### cf. Westfall et al. (1999, p. 111)
-summary(mcp(amod, hypotheses = list(dose = K), alternative = "greater"))
-confint(mcp(amod, hypotheses = list(dose = K), alternative = "greater"))
+  ### define matrix of linear hypotheses for `dose'
+  doselev <- as.integer(levels(litter$dose))
+  K <- rbind(linhypo(litter$dose, "Tukey"),
+             otrend = c(-1.5, -0.5, 0.5, 1.5),
+             atrend = doselev - mean(doselev),
+             ltrend = log(1:4) - mean(log(1:4)))
+
+  ### set up multiple comparison object
+  Kmcp <- mcp(amod, hypotheses = list(dose = K), alternative = "less")
+
+  Kmcp
+
+  ### cf. Westfall (1997, Table 2)
+  summary(Kmcp, distribution = univariate())
+  summary(Kmcp, distribution = Bonferroni())
+  summary(Kmcp, distribution = adjusted("Shaffer"))
+  summary(Kmcp, distribution = adjusted("Westfall"))
+  summary(Kmcp, distribution = adjusted("free"))
 
 }
 \keyword{datasets}

@@ -8,5 +8,5 @@ Author: Torsten Hothorn <Torsten.Hothorn@rzmail.uni-erlangen.de>,
 Description: Multiple comparison procedures for linear hypotheses 
   in generalized linear and Cox models.
 Maintainer: Torsten Hothorn <Torsten.Hothorn@R-project.org>
-Depends: mvtnorm (>= 0.7-0)
+Depends: mvtnorm (>= 0.7-0), MASS
 License: GPL
