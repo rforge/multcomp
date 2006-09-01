@@ -1,0 +1,10 @@
+
+export(mcp, linhypo, univariate, adjusted)
+
+S3method(summary, mcp)
+S3method(confint, mcp)
+S3method(print, mcp)
+S3method(print, confint.mcp)
+S3method(plot, confint.mcp)
+S3method(print, linhypo)
+S3method(print, summary.mcp)
