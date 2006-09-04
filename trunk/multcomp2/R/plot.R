@@ -12,8 +12,9 @@ plot.confint.mcp <- function(x, ...) {
     abline(h = yvals, lty = 1, lwd = 0, col = "lightgray")
     abline(v = 0, lty = 2, lwd = 0, ...)
     segments(xi[, "lwr"], yvals, xi[, "upr"], yvals, ...)
-    segments(as.vector(xi), rep.int(yvals - 0.1, 3), as.vector(xi), 
-        rep.int(yvals + 0.1, 3), ...)
+    points(xi[, "lwr"], yvals, pch = "(", ...)
+    points(xi[, "upr"], yvals, pch = ")", ...)
+    points(xi[, "Estimate"], yvals, pch = 20, ...)
     title(main = paste(format(100 * attr(x$confint, "conf.level"), 
           2), "% family-wise confidence level\n", sep = ""), 
           xlab = "Linear Hypotheses")
