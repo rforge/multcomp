@@ -31,6 +31,7 @@
 dig <- 4
 options(width = 60, digits = dig)
 library("multcomp2")
+set.seed(290875)
 @
 
 
@@ -137,7 +138,8 @@ z \sim \mathcal{N}(0, \sigma \K \V(\hat{\beta}) \K^\top \sigma^\top)
 \end{eqnarray*}
 Efficient algorithms for the evalutation of both multivariate distributions
 are nowadays available \citep{Genz1992, GenzBretz1999, GenzBretz2002} and thus
-we can easily compute $p$ values or quantiles.
+we can easily compute adjusted $p$ values $p_j = P(\max(\abs(T)) \ge z_j | H_0)$ 
+or quantiles.
 
 \paragraph{Example: Simple Linear Model}
 
@@ -181,6 +183,84 @@ summary(mcp.cars)
 
 <<lm-confint, echo = TRUE>>=
 confint(mcp.cars)
+@
+
+\paragraph{Example: Confidence Bands for Regression Line}
+
+Suppose we want to plot the linear model fit to the \Robject{cars} data
+including an assessment of the variability of the model fit. This can 
+be based on simultaneous confidence intervals for the regression line:
+<<lm-band, echo = TRUE>>=
+K <- model.matrix(lm.cars)[!duplicated(cars$speed),]
+ci.cars <- confint(mcp(lm.cars, hypotheses = K), abseps = 0.1)
+@
+\begin{figure}
+\begin{center}
+<<lm-plot, echo = FALSE, fig = TRUE>>=
+plot(cars, xlab = "Speed (mph)", ylab = "Stopping distance (ft)",
+            las = 1)
+abline(lm.cars)
+lines(K[,2], ci.cars$confint[,"lwr"], lty = 2)
+lines(K[,2], ci.cars$confint[,"upr"], lty = 2)
+@
+\caption{\Robject{cars} data: Regression line with confidence bands.}
+\end{center}
+\end{figure}
+
+\section{Comparing Means: AN(C)OVA Models} 
+
+Consider a one-way ANOVA model, i.e., the only covariate $\x_1$ is a factor at $l$ levels.
+In this case, the design matrix $\X$ is the matrix of dummy codings of the factor
+levels (in the absence of an intercept term):
+<<aov-ex, echo = TRUE>>=
+ex <- data.frame(y = rnorm(12), x = gl(3, 4))
+aov.ex <- aov(y ~ x - 1, data = ex)
+summary(aov.ex)
+@
+The elements of the regression coefficient 
+$\beta = (\beta_1, \beta_2, \beta_3)$ correspond to the mean values of the
+response variable in each group:
+<<aov-coef, echo = TRUE>>=
+coef(aov.ex)
+@
+Thus, the hypotheses $\beta_2 - \beta_1 = 0 \text{ and } \beta_3 - \beta_1 = 0$ can be written
+in form of linear hypotheses $\K \beta$ with
+<<aov-Dunnett, echo = TRUE>>=
+K <- rbind(c(-1, 1, 0),
+           c(-1, 0, 1))
+rownames(K) <- c("x2 - x1", "x3 - x1")
+K
+@
+This "many-to-one" comparison procedure (Dunnett) is now simply
+<<aov-mcp, echo = TRUE>>=
+summary(mcp(aov.ex, hypotheses = K))
+@
+
+In the presence of an intercept term, the full design matrix $\X$ can't be used to fit such
+a model because the columns of $\X$ aren't independent of each other. Therefore,
+a contrast matrix $\C$ is included into this model:
+\begin{eqnarray*}
+\X \beta = \X \C \beta^\star = \X^\star \beta^\star
+\end{eqnarray*}
+any we only obtain estimates for $\beta^\star = \C \beta$, not $\beta$:
+<<aov-constrasts, echo = TRUE>>=
+aov.ex2 <- aov(y ~ x, data = ex)
+coef(aov.ex2)
+@
+The default contrasts are so-called treatment contrasts, nothing but differences in means
+for one baseline group (compare the Dunnett contrasts and the estimated regression coefficients):
+<<aov-mm, echo = TRUE>>=
+contr.treatment(table(ex$x))
+K %*% contr.treatment(table(ex$x)) %*% coef(aov.ex2)[-1]
+@
+so that $\K \C \hat{\beta}^\star = \K \hat{\beta}$.
+
+However, the \Rcmd{mcp} function takes care of contrasts and the matrix of
+linear hypotheses $\K$ can be written in terms of $\beta$, not $\beta^\star$. Note
+that the matrix of linear hypotheses only applies to those elements of $\hat{\beta}^\star$
+attached to factor \Robject{x} but not to the intercept term $\hat{\beta}_1$:
+<<aov-contrasts-mcp, echo = TRUE>>=
+summary(mcp(aov.ex2, hypotheses = list(x = K)))
 @
 
 \bibliographystyle{plainnat}
