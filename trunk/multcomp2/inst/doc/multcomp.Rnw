@@ -1,0 +1,190 @@
+
+\documentclass{article}
+
+\usepackage{amsfonts}
+\usepackage{amstext}
+\usepackage{amsmath}
+\newcommand{\R}{\mathbb{R} }
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\K}{\mathbf{K}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\abs}{\text{abs}}
+\usepackage{natbib}
+
+\newcommand{\Rpackage}[1]{{\normalfont\fontseries{b}\selectfont #1}}
+\newcommand{\Robject}[1]{\texttt{#1}}
+\newcommand{\Rclass}[1]{\textit{#1}}
+\newcommand{\Rcmd}[1]{\texttt{#1}}
+\newcommand{\Roperator}[1]{\texttt{#1}}
+\newcommand{\Rarg}[1]{\texttt{#1}}
+\newcommand{\Rlevel}[1]{\texttt{#1}}
+
+
+\begin{document}
+
+<<setup, echo = FALSE, results = hide>>=
+dig <- 4
+options(width = 60, digits = dig)
+library("multcomp2")
+@
+
+
+\title{On Multiple Comparison Procedures for Linear Hypotheses}
+
+\author{Torsten Hothorn}
+
+\maketitle
+
+\section{Introduction}
+
+Consider a linear model, where the response variables 
+$\y = (y_1, \dots, y_n)$ depend on a set of $p$ covariates 
+$\x_j = (x_{j1}, \dots, x_{jn}), j = 1, \dots, p$ in 
+a linear way. More specifically, the expectation of the response
+variables is described by a link function $h$ applied to 
+a linear combination of the covariates
+\begin{eqnarray*}
+\E(\y | \x_1, \dots, \x_p) = h(\X \beta)
+\end{eqnarray*}
+where $\X$ is an $n \times p$ \emph{design matrix} and 
+$\beta \in \R^p$ is the parameter vector. 
+
+We are interested in testing \emph{general linear hypotheses} 
+\citep{Searle1971}:
+\begin{eqnarray*}
+H_0: \K \beta = 0
+\end{eqnarray*}
+where $\K$ is an $k \times p$ matrix. Classically, $\chi^2$ or $F$ 
+tests are applied to test such hypotheses. However, we are not
+only interested in the global hypothesis $H_0$ but in all partial
+hypotheses defined by the rows of the matrix $\K$:
+\begin{eqnarray*}
+H_0^j: K_j \beta = 0 \text{ where } H_0 = \cap_{j = 1}^k H_0^j
+\end{eqnarray*}
+
+\subsection{Estimation}
+
+We assume that an unbiased estimator $\hat{\beta}$ of $\beta$ with expectation
+$\E(\hat{\beta}) = \beta$ and covariance matrix $\V(\hat{\beta})$ is available.
+Furthermore, the estimator $\hat{\beta}$ is jointly normal, either exactly 
+(linear model) or asymptotically (generalized linear model, Cox model, ...):
+\begin{eqnarray*}
+\hat{\beta} \sim \mathcal{N}(\beta, \V(\hat{\beta})).
+\end{eqnarray*}
+Under such circumstances, the linear combination $\K \beta$ can be estimated by
+$\K \hat{\beta}$ with covariance matrix $\K \V(\hat{\beta}) \K^\top$ and it follows that
+\begin{eqnarray*}
+\K \hat{\beta} \sim \mathcal{N}(\K \beta, \K \V(\hat{\beta}) \K^\top).
+\end{eqnarray*}
+Note that, under the conditions of the global null hypothesis $H_0$, it holds that
+$\K \hat{\beta} \sim \mathcal{N}(0, \K \V(\hat{\beta}) \K^\top)$.
+
+\subsection{Inference for $\K \beta$}
+
+Classically, the global hypothesis $H_0$ is testing using an $F$ statistic based on the 
+quadratic form 
+\begin{eqnarray*}
+(\K \hat{\beta})^\top (\K \V(\hat{\beta}) \K^\top)^{-1} (\K \hat{\beta}) 
+\end{eqnarray*}
+which collapses all $k$ partial linear hypothesis. Thus, inference about 
+$H_0^j$ is not possible. 
+
+Alternatively, let $\sigma = \sqrt{\K \V(\hat{\beta}) \K^\top}^{-1}$ and consider
+the \emph{multivariate} statistics $z = \K \hat{\beta} / \sigma \in \R^k$. 
+As a test statistic for $H_0$ one can choose the maximum of the absolute
+values of $z$, i.e.,  $T = \max(\abs(z))$. 
+
+\paragraph{Example: Simple Linear Model}
+
+Consider a simple univariate linear model regressing the distance to stop 
+on speed for $\Sexpr{nrow(cars)}$ cars:
+<<lm-cars, echo = TRUE>>=
+lm.cars <- lm(dist ~ speed, data = cars)
+summary(lm.cars)
+@
+The estimates of the regression coefficients $\beta$ and their covariance matrix
+can be extracted from the fitted model via:
+<<lm-coef-vcov, echo = TRUE>>=
+betahat <- coef(lm.cars)
+Vbetahat <- vcov(lm.cars)
+@
+At first, we are interested in the hypothesis $\beta_2 = 0$. This is equivalent
+to the linear hypothesis $\K \beta = 0$ where $\K = (0, 1)$, i.e.,
+<<lm-K, echo = TRUE>>=
+K <- matrix(c(0, 1), nrow = 1)
+z <- K %*% betahat / sqrt(diag(K %*% Vbetahat %*% t(K)))
+@
+Note that $z = \Sexpr{round(z, dig)}$ is equal to the $t$ statistic for \Robject{speed}.
+
+\subsection{Simultaneous Testing of $H_0^j$}
+
+Conveniently, the joint distribution of all
+elements of the multivariate statistic $z$ is known. For the linear model,
+where $\hat{\beta}$ is multivariate normal, the statistic $z$ follows
+a multivariate $t$ distribution (under $H_0$)
+\begin{eqnarray*}
+z \sim \mathcal{T}_{n - p}(0, \sigma \K \V(\hat{\beta}) \K^\top \sigma^\top)
+\end{eqnarray*}
+In all other models, where the estimated regression coefficients are only
+asymptotically normal, the statistic $z$ is asymptotic normal as well:
+\begin{eqnarray*}
+z \sim \mathcal{N}(0, \sigma \K \V(\hat{\beta}) \K^\top \sigma^\top) 
+\end{eqnarray*}
+Efficient algorithms for the evalutation of both multivariate distributions
+are nowadays available \citep{Genz1992, GenzBretz1999, GenzBretz2002} and thus
+we can easily compute $p$ values or quantiles.
+
+\paragraph{Example: Simple Linear Model}
+
+A more complicated hypothesis is $\beta_1 = 0 \text{and} \beta_2 = 0$. The corresponding
+linear hypothesis is $H_0: I \beta = 0$:
+<<lm-biv, echo = TRUE>>=
+K <- diag(2)
+sigma <- sqrt(diag(K %*% Vbetahat %*% t(K)))
+z <- K %*% betahat / sigma
+Vz <- diag(1 / sigma) %*% (K %*% Vbetahat %*% t(K)) %*% t(diag(1 / sigma))
+@
+Now, we can compute the test statistic $T$ and evaluate the $p$ value for $H_0$
+from the multivariate $t$ distribution using the function \Rcmd{pmvt} from package
+\Rpackage{mvtnorm}
+<<lm-global, echo = TRUE>>=
+T <- max(abs(z))
+df.cars <- nrow(cars) - length(betahat)
+library("mvtnorm")
+1 - pmvt(rep(-T, 2), rep(T, 2), corr = Vz, df = df.cars)
+@
+The advantage of this approach, compared to the usual $F$ test, is that we can easily
+compute $p$ values for each of the partial hypothesis the global hypothesis $H_0$ consists of:
+<<lm-partial, echo = TRUE>>=
+sapply(z, function(x) 1 - pmvt(-rep(abs(x), 2), rep(abs(x), 2), corr = Vz, df = df.cars))
+@
+Note that the $p$ value of the global test is the minimum $p$ value of the partial tests.
+
+The computations above can be performed much more conveniently using the functionality
+implemented in package \Rpackage{multcomp2}. The function \Rcmd{mcp} just takes a fitted 
+model and a matrix defining the linear hypotheses to be tested:
+<<lm-K, echo = FALSE>>=
+rownames(K) <- names(betahat)
+@
+<<lm-mcp, echo = TRUE>>=
+library("multcomp2")
+mcp.cars <- mcp(lm.cars, hypotheses = K)
+summary(mcp.cars)
+@
+
+\subsection{Confidence Sets}
+
+<<lm-confint, echo = TRUE>>=
+confint(mcp.cars)
+@
+
+\bibliographystyle{plainnat}
+\bibliography{mcp}
+
+\end{document}
+
