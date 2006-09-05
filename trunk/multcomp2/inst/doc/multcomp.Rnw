@@ -14,8 +14,10 @@
 \newcommand{\K}{\mathbf{K}}
 \newcommand{\x}{\mathbf{x}}
 \newcommand{\y}{\mathbf{y}}
+\newcommand{\z}{\mathbf{z}}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\V}{\mathbb{V}}
+\newcommand{\Cor}{\text{Cor}}
 \newcommand{\abs}{\text{abs}}
 \usepackage{natbib}
 
@@ -38,7 +40,7 @@ set.seed(290875)
 @
 
 
-\title{On Multiple Comparison Procedures for Linear Hypotheses}
+\title{On Multiple Test Procedures for Linear Hypotheses}
 
 \author{Torsten Hothorn}
 
@@ -46,62 +48,77 @@ set.seed(290875)
 
 \section{Introduction}
 
-Consider a linear model, where the response variables 
-$\y = (y_1, \dots, y_n)$ depend on a set of $p$ covariates 
-$\x_j = (x_{j1}, \dots, x_{jn}), j = 1, \dots, p$ in 
-a linear way. More specifically, the expectation of the response
-variables is described by a link function $h$ applied to 
-a linear combination of the covariates
+We consider a generalized linear model, where the response variable 
+$\y = (y_1, \dots, y_n)$ is modelled by a linear combination
+of a set of design variables. More specifically, the expectation 
+of the response $\y$ is described by a link function $h$ applied to 
+a linear combination of the $n \times p$ \emph{design matrix} $\X$
 \begin{eqnarray*}
-\E(\y | \x_1, \dots, \x_p) = h(\X \beta)
+\E(\y | \X) = h(\X \beta).
 \end{eqnarray*}
-where $\X$ is an $n \times p$ \emph{design matrix} and 
-$\beta \in \R^p$ is the parameter vector. 
 
-We are interested in testing \emph{general linear hypotheses} 
-\citep{Searle1971}:
+Our primary target is inference about 
+\emph{general linear hypotheses} \citep{Searle1971}, i.e, linear combinations 
+of the vector of regression coefficients $\beta \in \R^p$:
 \begin{eqnarray*}
 H_0: \K \beta = 0
 \end{eqnarray*}
-where $\K$ is an $k \times p$ matrix. Classically, $\chi^2$ or $F$ 
-tests are applied to test such hypotheses. However, we are not
-only interested in the global hypothesis $H_0$ but in all partial
-hypotheses defined by the rows of the matrix $\K$:
+where $\K$ is an full-rank $k \times p$ matrix with each row corresponding to
+one specific hypothesis. Classically, $F$ tests are applied to test 
+such hypotheses. However, we are not only interested in the 
+\emph{global} hypothesis $H_0$ but in all partial
+hypotheses defined by the rows $K_j, j = 1, \dots, k$, of $\K$:
 \begin{eqnarray*}
-H_0^j: K_j \beta = 0 \text{ where } H_0 = \cap_{j = 1}^k H_0^j
+H_0^j: K_j \beta = 0 \text{ where } H_0 = \bigcap_{j = 1}^k H_0^j
+\end{eqnarray*}
+We only consider inference procedures, both tests and confidence intervals,
+which control the \emph{familywise error rate} (FWE), that is the probability of 
+incorrectly rejecting at least one hypothesis $H_0^j, j = 1, \dots, k$.
+
+\subsection{Estimates of the Regression Coefficients}
+
+Linear or generalized linear modelling functions provide us with 
+an unbiased estimator $\hat{\beta}$ of $\beta$ including its 
+$p \times p$ covariance matrix $\V(\hat{\beta})$. In case of the linear model 
+(Gaussian family with identity link $h$), the estimate $\hat{\beta}$ follows
+a multivariate normal distribution $\hat{\beta} \sim \mathcal{N}(\beta, \V(\hat{\beta}))$
+and thus $\K \hat{\beta} \sim \mathcal{N}(\K \beta, \K \V(\hat{\beta}) \K^\top)$.
+For generalized linear models, the multivariate normal distribution of $\hat{\beta}$
+and $\K \hat{\beta}$ is valid only asymptotically.
+
+\subsection{Multiple Testing and Simultaneous Confidence Intervals}
+
+Under the conditions of the global hypothesis $H_0$ it holds that
+$\K \hat{\beta} \sim \mathcal{N}(0, \K \V(\hat{\beta}) \K^\top)$, 
+either exactly (linear model) or asymptotically.
+
+For each partial hypothesis $H_0^j$, a standardized test statistic 
+of the form $z_j = K_j \hat{\beta} (K_j \V(\hat{\beta}) K_j^\top)^{-\frac{1}{2}}$
+follows a $t$ distribution with $n - p$ degrees for freedom (linear model) 
+or a asymptotical standard normal distribution (generalized linear model) and
+tests or confidence intervals for the partial hypotheses can be constructed in
+the classical way.
+
+However, the vector of standarized statistics
+\begin{eqnarray*}
+\z = (z_1, \dots, z_k) = \Sigma K \hat{\beta} \\
+\Sigma = \text{diag}\left((\K \V(\hat{\beta}) \K^\top)^{-\frac{1}{2}}\right)
+\end{eqnarray*}
+follows a multivariate $t$ distribution with correlation matrix
+$\Cor(\K \hat{\beta}) = \Sigma \K \V(\hat{\beta}) \K^\top \Sigma^\top$ (linear model)
+\begin{eqnarray*}
+\z \sim \mathcal{T}_{n - p}(0, \Cor(\K \hat{\beta}))
+\end{eqnarray*}
+or an asymptotic multivariate normal distribution
+\begin{eqnarray*}
+\z \sim \mathcal{N}(0, \Cor(\K \hat{\beta})).
 \end{eqnarray*}
 
-\subsection{Estimation}
-
-We assume that an unbiased estimator $\hat{\beta}$ of $\beta$ with expectation
-$\E(\hat{\beta}) = \beta$ and covariance matrix $\V(\hat{\beta})$ is available.
-Furthermore, the estimator $\hat{\beta}$ is jointly normal, either exactly 
-(linear model) or asymptotically (generalized linear model, Cox model, ...):
-\begin{eqnarray*}
-\hat{\beta} \sim \mathcal{N}(\beta, \V(\hat{\beta})).
-\end{eqnarray*}
-Under such circumstances, the linear combination $\K \beta$ can be estimated by
-$\K \hat{\beta}$ with covariance matrix $\K \V(\hat{\beta}) \K^\top$ and it follows that
-\begin{eqnarray*}
-\K \hat{\beta} \sim \mathcal{N}(\K \beta, \K \V(\hat{\beta}) \K^\top).
-\end{eqnarray*}
-Note that, under the conditions of the global null hypothesis $H_0$, it holds that
-$\K \hat{\beta} \sim \mathcal{N}(0, \K \V(\hat{\beta}) \K^\top)$.
-
-\subsection{Inference for $\K \beta$}
-
-Classically, the global hypothesis $H_0$ is testing using an $F$ statistic based on the 
-quadratic form 
-\begin{eqnarray*}
-(\K \hat{\beta})^\top (\K \V(\hat{\beta}) \K^\top)^{-1} (\K \hat{\beta}) 
-\end{eqnarray*}
-which collapses all $k$ partial linear hypothesis. Thus, inference about 
-$H_0^j$ is not possible. 
-
-Alternatively, let $\sigma = \sqrt{\K \V(\hat{\beta}) \K^\top}^{-1}$ and consider
-the \emph{multivariate} statistics $z = \K \hat{\beta} / \sigma \in \R^k$. 
-As a test statistic for $H_0$ one can choose the maximum of the absolute
-values of $z$, i.e.,  $T = \max(\abs(z))$. 
+Now, a multiple testing procedure is based on the maximum of the absolute values
+of the test statistics $\z$. Adjusted $p$ values, controlling the familywise error rate,
+for each linear hypothesis $H_0^j$ are simply $p_j = P_{H_0}(\max(|\z|) \ge |z_j|)$.
+Efficient algorithms for the evalutation of both multivariate distributions
+are nowadays available \citep{Genz1992, GenzBretz1999, GenzBretz2002}.
 
 \paragraph{Example: Simple Linear Model}
 
@@ -117,56 +134,21 @@ can be extracted from the fitted model via:
 betahat <- coef(lm.cars)
 Vbetahat <- vcov(lm.cars)
 @
-At first, we are interested in the hypothesis $\beta_2 = 0$. This is equivalent
-to the linear hypothesis $\K \beta = 0$ where $\K = (0, 1)$, i.e.,
+At first, we are interested in the hypothesis $\beta_1 = 0 \text{ and } \beta_2 = 0$. 
+This is equivalent
+to the linear hypothesis $\K \beta = 0$ where $\K = \text{diag}(2)$, i.e.,
 <<lm-K, echo = TRUE>>=
-K <- matrix(c(0, 1), nrow = 1)
-z <- K %*% betahat / sqrt(diag(K %*% Vbetahat %*% t(K)))
-@
-Note that $z = \Sexpr{round(z, dig)}$ is equal to the $t$ statistic for \Robject{speed}.
-
-\subsection{Simultaneous Testing of $H_0^j$}
-
-Conveniently, the joint distribution of all
-elements of the multivariate statistic $z$ is known. For the linear model,
-where $\hat{\beta}$ is multivariate normal, the statistic $z$ follows
-a multivariate $t$ distribution (under $H_0$)
-\begin{eqnarray*}
-z \sim \mathcal{T}_{n - p}(0, \sigma \K \V(\hat{\beta}) \K^\top \sigma^\top)
-\end{eqnarray*}
-In all other models, where the estimated regression coefficients are only
-asymptotically normal, the statistic $z$ is asymptotic normal as well:
-\begin{eqnarray*}
-z \sim \mathcal{N}(0, \sigma \K \V(\hat{\beta}) \K^\top \sigma^\top) 
-\end{eqnarray*}
-Efficient algorithms for the evalutation of both multivariate distributions
-are nowadays available \citep{Genz1992, GenzBretz1999, GenzBretz2002} and thus
-we can easily compute adjusted $p$ values $p_j = P(\max(\abs(T)) \ge z_j | H_0)$ 
-or quantiles.
-
-\paragraph{Example: Simple Linear Model}
-
-A more complicated hypothesis is $\beta_1 = 0 \text{and} \beta_2 = 0$. The corresponding
-linear hypothesis is $H_0: I \beta = 0$:
-<<lm-biv, echo = TRUE>>=
 K <- diag(2)
-sigma <- sqrt(diag(K %*% Vbetahat %*% t(K)))
-z <- K %*% betahat / sigma
-Vz <- diag(1 / sigma) %*% (K %*% Vbetahat %*% t(K)) %*% t(diag(1 / sigma))
+Sigma <- diag(1 / sqrt(diag(K %*% Vbetahat %*% t(K)))) 
+z <- Sigma %*% K %*% betahat
+Cor <- Sigma %*% (K %*% Vbetahat %*% t(K)) %*% t(Sigma)                  
 @
-Now, we can compute the test statistic $T$ and evaluate the $p$ value for $H_0$
-from the multivariate $t$ distribution using the function \Rcmd{pmvt} from package
-\Rpackage{mvtnorm}
-<<lm-global, echo = TRUE>>=
-T <- max(abs(z))
-df.cars <- nrow(cars) - length(betahat)
-library("mvtnorm")
-1 - pmvt(rep(-T, 2), rep(T, 2), corr = Vz, df = df.cars)
-@
-The advantage of this approach, compared to the usual $F$ test, is that we can easily
-compute $p$ values for each of the partial hypothesis the global hypothesis $H_0$ consists of:
+Note that $\z = \Sexpr{paste("(", paste(round(z, dig), collapse = ", "), ")")}$ 
+is equal to the $t$ statistics for \Robject{speed}.
 <<lm-partial, echo = TRUE>>=
-sapply(z, function(x) 1 - pmvt(-rep(abs(x), 2), rep(abs(x), 2), corr = Vz, df = df.cars))
+library("mvtnorm")
+df.cars <- nrow(cars) - length(betahat)
+sapply(abs(z), function(x) 1 - pmvt(-rep(x, 2), rep(x, 2), corr = Cor, df = df.cars))
 @
 Note that the $p$ value of the global test is the minimum $p$ value of the partial tests.
 
@@ -181,9 +163,8 @@ library("multcomp2")
 mcp.cars <- mcp(lm.cars, hypotheses = K)
 summary(mcp.cars)
 @
-
-\subsection{Confidence Sets}
-
+Simultaneous confidence intervals corresponding to this multiple testing
+procedure are available via
 <<lm-confint, echo = TRUE>>=
 confint(mcp.cars)
 @
@@ -192,11 +173,15 @@ confint(mcp.cars)
 
 Suppose we want to plot the linear model fit to the \Robject{cars} data
 including an assessment of the variability of the model fit. This can 
-be based on simultaneous confidence intervals for the regression line:
+be based on simultaneous confidence intervals for the regression line $\X \hat{\beta}$,
+i.e., we choose $\K = \X$:
 <<lm-band, echo = TRUE>>=
 K <- model.matrix(lm.cars)[!duplicated(cars$speed),]
 ci.cars <- confint(mcp(lm.cars, hypotheses = K), abseps = 0.1)
 @
+Figure \ref{lm-plot} depicts the regression fit together with the
+confidence band for the regression line and the pointwise 
+confidence intervals as computed by \Rcmd{predict(lm.cars)}.
 \begin{figure}
 \begin{center}
 <<lm-plot, echo = FALSE, fig = TRUE>>=
@@ -205,8 +190,16 @@ plot(cars, xlab = "Speed (mph)", ylab = "Stopping distance (ft)",
 abline(lm.cars)
 lines(K[,2], ci.cars$confint[,"lwr"], lty = 2)
 lines(K[,2], ci.cars$confint[,"upr"], lty = 2)
+ci.lm <- predict(lm.cars, interval = "confidence")
+lines(cars$speed, ci.lm[,"lwr"], lty = 3)
+lines(cars$speed, ci.lm[,"upr"], lty = 3)
+legend("topleft", lty = c(1, 2, 3), legend = c("Regression line", 
+                                               "Simultaneous confidence band", 
+                                               "Pointwise confidence intervals"),
+       bty = "n")
 @
-\caption{\Robject{cars} data: Regression line with confidence bands.}
+\caption{\Robject{cars} data: Regression line with confidence 
+    bands (dashed) and intervals (dotted). \label{lm-plot}}
 \end{center}
 \end{figure}
 
