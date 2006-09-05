@@ -41,7 +41,7 @@ print.confint.mcp <- function(x, digits = max(3, getOption("digits") - 3),
     print(x$object$call)
     cat("\n")
     cat("Linear Hypotheses:\n")
-    print(x$confint, digits = digits)    
+    print(format(x$confint, nsmall = digits, digits = digits), quote = FALSE)
     cat("\n")
     cat(paste(level * 100, 
               "% family-wise confidence level\n", sep = ""), "\n\n")

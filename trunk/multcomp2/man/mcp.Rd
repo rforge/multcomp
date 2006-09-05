@@ -25,7 +25,9 @@ adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
           '"less"'.  You can specify just the initial letter.}
   \item{distribution}{a function for computing p values.}
   \item{type}{the type of adjustment to be applied.}
-  \item{...}{additional arguments}
+  \item{...}{additional arguments, such as \code{maxpts}, \code{abseps} or \code{releps} to
+             \code{\link[mvtnorm]{pmvnorm}} in \code{adjusted} or 
+             \code{\link[mvtnorm]{qmvnorm}} in \code{confint}.}
 }
 \details{
 

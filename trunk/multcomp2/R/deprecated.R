@@ -1,6 +1,28 @@
 
+contrMat <- function(n, ...) {
+    x <- factor(rep(1:length(n), n))
+    if (!null(names(n)))
+        levels(x) <- names(n)
+    .Deprecated("linhypo", package = "multcomp")
+    linhypo(x)
+}
+
 simint <- function(object, ...) UseMethod("simint")
 simtest <- function(object, ...) UseMethod("simtest")
+
+csimint <- function(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
+                    conf.level=0.95,
+                    alternative=c("two.sided","less","greater"), asympt=FALSE,
+                    eps=0.001, maxpts=1000000)
+{
+    if (is.null(cmatrix)) cmatrix <- diag(length(estpar))
+    object <- list(object = NULL, hypotheses = cmatrix, beta = estpar, sigma = covm,
+                   type = ctype, alternative = match.arg(alternative),
+                   df = ifelse(is.null(df) || asympt, 0, df))
+    class(object) <- "mcp"
+    .Deprecated("mcp", package = "multcomp")
+    confint(object, level = conf.level, abseps = eps, maxpts = maxpts)
+}
 
 simint.default <- function(object, 
     type = c("Dunnett", "Tukey", "Sequen", "AVE", "Changepoint", "Williams", "Marcus",
@@ -16,13 +38,16 @@ simint.default <- function(object,
         names(linhypo) <- whichf
     }
     tmcp <- mcp(object, hypotheses = linhypo, alternative = match.arg(alternative))
-    .Deprecated("mcp", package = "multcomp2")
+    .Deprecated("mcp", package = "multcomp")
     confint(tmcp, level = conf.level, abseps = eps, maxpts = maxpts)
 }
 
 simint.formula <- function(formula, data=list(), subset, na.action, ...)
 {
     cl <- match.call(expand.dots = FALSE)
+    m <- match(c("formula", "data", "subset", "na.action"),
+               names(cl), 0)
+    cl <- cl[c(1, m)]
     cl[[1]] <- as.name("lm")
     object <- eval(cl, parent.frame())
     addargs <- list(...)
@@ -47,6 +72,25 @@ simint.lm <- function(object, psubset = NULL, ...) {
 }
 
 
+csimtest <- function(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
+                     ttype=c("free","logical"),
+                     alternative=c("two.sided","less","greater"), asympt=FALSE,
+                     eps=0.001, maxpts=1000000)
+{
+    if (is.null(cmatrix)) cmatrix <- diag(length(estpar))
+    object <- list(object = NULL, hypotheses = cmatrix, beta = estpar, sigma = covm,
+                   type = ctype, alternative = match.arg(alternative),
+                   df = ifelse(is.null(df) || asympt, 0, df))
+    class(object) <- "mcp"
+    ttype <- match.arg(ttype)
+    if (ttype == "free")
+        distr <- adjusted("free")
+    if (ttype == "logical")
+        distr <- adjusted("Westfall")
+    .Deprecated("mcp", package = "multcomp")
+    summary(object, distribution = distr, abseps = eps, maxpts = maxpts)
+}
+
 simtest.default <- function(object, 
     type = c("Dunnett", "Tukey", "Sequen", "AVE", "Changepoint", "Williams", "Marcus",
              "McDermott"), 
@@ -62,7 +106,7 @@ simtest.default <- function(object,
         names(linhypo) <- whichf
     }
     tmcp <- mcp(object, hypotheses = linhypo, alternative = match.arg(alternative))
-    .Deprecated("mcp", package = "multcomp2")
+    .Deprecated("mcp", package = "multcomp")
     ttype <- match.arg(ttype)
     if (ttype == "free")
         distr <- adjusted("free")
@@ -74,6 +118,9 @@ simtest.default <- function(object,
 simtest.formula <- function(formula, data=list(), subset, na.action, ...)
 {
     cl <- match.call(expand.dots = FALSE)
+    m <- match(c("formula", "data", "subset", "na.action"),
+               names(cl), 0)
+    cl <- cl[c(1, m)]
     cl[[1]] <- as.name("lm")
     object <- eval(cl, parent.frame())
     addargs <- list(...)
@@ -96,3 +143,6 @@ simtest.lm <- function(object, psubset = NULL, ...) {
     psubset <- which(beta %in% beta[psubset])
     simtest.default(object, cmatrix = diag(length(beta))[psubset,])
 }
+
+summary.summary.mcp <- function(object, ...) invisible(x)
+summary.confint.mcp <- function(object, ...) invisible(x)
