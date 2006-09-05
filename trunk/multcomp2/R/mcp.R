@@ -27,6 +27,7 @@ mcp <- function(object, hypotheses = NULL,
     if (inherits(beta, "try-error"))
         stop("no ", sQuote("coef"), " method for ",
              sQuote("object"), " found!")
+
     sigma <- try(vcov(object))
     if (inherits(sigma, "try-error"))
         stop("no ", sQuote("vcov"), " method for ",
@@ -44,8 +45,8 @@ mcp <- function(object, hypotheses = NULL,
     ### OK! You know what you want!
     if (is.matrix(hypotheses)) { 
         if(ncol(hypotheses) != length(beta))
-            stop("dimensions of ", sQuote("hypotheses"), " and ", sQuote("coef(object)"),
-                 "don't match")
+            stop("dimensions of ", sQuote("hypotheses"), " and ", 
+                 sQuote("coef(object)"), "don't match")
 
          RET <- list(object = object, 
                 hypotheses = hypotheses, beta = beta, sigma = sigma,
@@ -99,17 +100,20 @@ mcp <- function(object, hypotheses = NULL,
             for (i in which(pos)[-1]) {
                 k <- sum(attr(mm, "assign") == i) / ncol(Kstar)
                 if (sum(factors[1:which(rownames(factors) == nm), i]) == 1) {
-                    Kinter <- cbind(Kinter, Kstar[,rep(1:ncol(Kstar), k), drop = FALSE] / (k + 1))
+                    Kinter <- cbind(Kinter, 
+                        Kstar[,rep(1:ncol(Kstar), k), drop = FALSE] / (k + 1))
                 } else {
                     Kinter <- cbind(Kinter, 
-                        Kstar[,rep(1:ncol(Kstar), rep(k, ncol(Kstar))), drop = FALSE] / (k + 1))
+                        Kstar[,rep(1:ncol(Kstar), rep(k, ncol(Kstar))), 
+                              drop = FALSE] / (k + 1))
                 }
             }
             Kstar <- cbind(Kstar, Kinter)
         }
         hypo[[nm]] <- list(K = Kstar,
                            where = attr(mm, "assign") %in% which(factors[nm,] == 1),
-                           type = paste(attr(hypotheses[[nm]], "type"), "(", nm, ")", sep = ""))
+                           type = paste(attr(hypotheses[[nm]], "type"), 
+                                        "(", nm, ")", sep = ""))
     }
 
     ### create matrix of all transformed linear hypotheses

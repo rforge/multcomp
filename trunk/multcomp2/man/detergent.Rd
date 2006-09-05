@@ -2,7 +2,7 @@
 \alias{detergent}
 \non_function{}
 \title{ Detergent Durability Data Set }
-\usage{data(detergent)}
+\usage{data("detergent")}
 \description{
  Detergent durability in a fractional design experiment; data set 
  taken from Westfall et al. (1999, p. 189). Balanced incomplete block design.

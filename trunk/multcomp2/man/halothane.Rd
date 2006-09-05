@@ -2,7 +2,7 @@
 \alias{halothane}
 \non_function{}
 \title{ Repeated Measures Data Set }
-\usage{data(Halothane)}
+\usage{data("halothane")}
 \description{
  Repeated measures on dogs data set taken from Westfall et al. (1999, p. 214). 2x2 factorial application of Halothane and CO2 pressure as repeated measurements on dogs with unstructured covariance matrix between the subjects and Satterthwaite correction for the df.
 }
@@ -27,7 +27,7 @@
   data("halothane")
 
 \dontrun{
-  if (require(""lme4")) {
+  if (require("lme4")) {
 
       lmod <- lmer(rate ~ treatment + (1 | dog), data = halothane)
 

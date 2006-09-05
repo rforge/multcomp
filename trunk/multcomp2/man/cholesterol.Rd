@@ -2,7 +2,7 @@
 \alias{cholesterol}
 \non_function{}
 \title{ Cholesterol Reduction Data Set }
-\usage{data(cholesterol)}
+\usage{data("cholesterol")}
 \description{
  Cholesterol reduction for five treatments; data set taken from 
  Westfall et al. (1999, p. 153). All pairwise comparisons according 

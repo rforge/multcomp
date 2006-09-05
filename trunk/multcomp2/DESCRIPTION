@@ -1,12 +1,12 @@
 Package: multcomp2
-Title: Multiple Comparison Procedures
+Title: Simultaneous Inference Procedures for Linear Hypotheses
 Version: 0.9-1
 Date: $Date: 2004/10/29 07:11:49 $
-Author: Torsten Hothorn <Torsten.Hothorn@rzmail.uni-erlangen.de>,
- Frank Bretz <bretz@ifgb.uni-hannover.de> and 
- Peter Westfall <WESTFALL@ba.ttu.edu>
-Description: Multiple comparison procedures for linear hypotheses 
-  in generalized linear and Cox models.
+Author: Torsten Hothorn <Torsten.Hothorn@R-project.org>,
+  Frank Bretz <frank.bretz@novartis.com>, and
+  Peter Westfall <WESTFALL@ba.ttu.edu>
+Description: Simultaneous confidence intervals and tests 
+  for linear hypotheses in linear, generalized linear, and Cox models.
 Maintainer: Torsten Hothorn <Torsten.Hothorn@R-project.org>
 Depends: mvtnorm (>= 0.7-0), MASS, survival
 License: GPL

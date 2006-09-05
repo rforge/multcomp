@@ -6,7 +6,8 @@ linhypo <- function(x, type = c("Dunnett", "Tukey", "Sequen", "AVE",
 
     if (!is.factor(x)) stop(sQuote("x"), "is not a factor!")
     if (nlevels(x) < 2) stop("less than 2 groups!")
-    if (any(tabulate(x) < 2)) stop("less than 2 observations in at least one group!")
+    if (any(tabulate(x) < 2)) 
+        stop("less than 2 observations in at least one group!")
     k <- nlevels(x)
     n <- tabulate(x)
     if (base < 1 || base > k) stop("base is not between 1 and ", k)
