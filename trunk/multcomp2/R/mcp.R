@@ -4,7 +4,7 @@
 ### `coef' and `vcov'
 ### `hypotheses' is a named list of characters (`type' arguments in `linhypo')
 
-mcp <- function(object, hypotheses = NULL, 
+mcp <- function(object, hypotheses = NULL, m = 0,
                 alternative = c("two.sided", "less", "greater")) {
 
     ### extract model matrix, frame and terms
@@ -44,17 +44,21 @@ mcp <- function(object, hypotheses = NULL,
 
     ### OK! You know what you want!
     if (is.matrix(hypotheses)) { 
-        if(ncol(hypotheses) != length(beta))
+        if (ncol(hypotheses) != length(beta))
             stop("dimensions of ", sQuote("hypotheses"), " and ", 
                  sQuote("coef(object)"), "don't match")
 
-         RET <- list(object = object, 
-                hypotheses = hypotheses, beta = beta, sigma = sigma,
-                type = "user-defined",
-                alternative = alternative, df = df)
-         class(RET) <- "mcp"
-         return(RET)
-     }
+        if (!any(length(m) == c(1, nrow(hypotheses))))
+            stop("dimensions of ", sQuote("hypotheses"), " and ", 
+                 sQuote("m"), "don't match")
+
+        RET <- list(object = object, 
+               hypotheses = hypotheses, beta = beta, sigma = sigma,
+               type = "user-defined",
+               alternative = alternative, df = df, m = m)
+        class(RET) <- "mcp"
+        return(RET)
+    }
 
     ### factors and contrasts
     contrasts <- attr(mm, "contrasts")
@@ -128,13 +132,16 @@ mcp <- function(object, hypotheses = NULL,
     }
     rownames(M) <- unlist(lapply(hypo, function(x) rownames(x$K)))
 
+    if (!any(length(m) == c(1, nrow(M))))
+        stop("dimensions of ", sQuote("hypotheses"), " and ", 
+             sQuote("m"), "don't match")
 
     ### create `mcp' object
     RET <- list(object = object, 
                 hypotheses = M, beta = beta, sigma = sigma,
                 type = paste(sapply(hypo, function(x) x$type), collapse = ";"),
                 alternative = alternative,
-                df = df)
+                df = df, m = m)
     class(RET) <- "mcp"
     return(RET)
 }

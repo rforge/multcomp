@@ -9,7 +9,7 @@
   Multiple Comparison Procedures for Linear Hypotheses in the Generalized Linear Model
 }
 \usage{
-mcp(object, hypotheses = NULL, alternative = c("two.sided", "less", "greater"))
+mcp(object, hypotheses = NULL, m = 0, alternative = c("two.sided", "less", "greater"))
 \method{summary}{mcp}(object, distribution = adjusted(), ...)
 univariate()
 adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
@@ -20,6 +20,7 @@ adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
   \item{hypotheses}{ either a matrix of linear hypotheses for the coefficients of \code{object} or
                      a named list of matrices (or \code{type} arguments for \code{\link{linhypo}}) 
                      for linear hypotheses for levels of the corresponding factors. }
+  \item{m}{ right hand side of the hypothesis: \eqn{H_0: K \beta = m}. }
   \item{alternative}{ a character string specifying the alternative hypothesis,
           must be one of '"two.sided"' (default), '"greater"' or
           '"less"'.  You can specify just the initial letter.}

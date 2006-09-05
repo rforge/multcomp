@@ -18,7 +18,7 @@ pqmcp <- function(object)
 
     ests  <- linhypo %*% beta
     ses   <- sqrt(diag(covm))
-    tvals <- ests/ses
+    tvals <- (ests - object$m) / ses
     dim   <- ncol(cr)
 
     pfunction <- function(type = c("univariate", "Bonferroni", "adjusted"), ...) {
