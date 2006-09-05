@@ -2,7 +2,7 @@
 \alias{respiratory}
 \non_function{}
 \title{ Respiratory Health Data Set }
-\usage{data(respiratory)}
+\usage{data("respiratory")}
 \description{
   Sub-group and whole-group analysis of a respiratory therapy drug; data set taken from Westfall et al. (1999, p. 195). Three-way ANOVA with weighted contrasts.
 }

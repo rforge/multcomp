@@ -2,7 +2,7 @@
 \alias{recovery}
 \non_function{}
 \title{ Recovery Time Data Set }
-\usage{data(recovery)}
+\usage{data("recovery")}
 \description{
  Recovery time data set taken from Westfall 
  et al. (1999, p. 80). Many-to-one comparisons according to 

@@ -2,7 +2,7 @@
 \alias{waste}
 \non_function{}
 \title{ Industrial Waste Data Set }
-\usage{data(waste)}
+\usage{data("waste")}
 \description{
   Industrial waste data set taken from Westfall et al. (1999, p. 177). 
   Simultaneous confidence intervals for interaction contrasts in 
