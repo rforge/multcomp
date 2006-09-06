@@ -50,11 +50,11 @@
   Kht <- glht(amod, K = list(dose = K), alternative = "less")
 
   ### cf. Westfall (1997, Table 2)
-  summary(Kht, distribution = univariate())
-  summary(Kht, distribution = adjusted("Bonferroni"))
-  summary(Kht, distribution = adjusted("Shaffer"))
-  summary(Kht, distribution = adjusted("Westfall"))
-  summary(Kht, distribution = adjusted("free"))
+  summary(Kht, test = univariate())
+  summary(Kht, test = adjusted("Bonferroni"))
+  summary(Kht, test = adjusted("Shaffer"))
+  summary(Kht, test = adjusted("Westfall"))
+  summary(Kht, test = adjusted("free"))
 
 }
 \keyword{datasets}

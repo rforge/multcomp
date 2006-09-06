@@ -39,9 +39,9 @@
   confint(dht)
 
   ### see Westfall et al. (1999, p. 192)
-  summary(dht, distribution = univariate())
-  summary(dht, distribution = adjusted("Shaffer"))
-  summary(dht, distribution = adjusted("Westfall"))
+  summary(dht, test = univariate())
+  summary(dht, test = adjusted("Shaffer"))
+  summary(dht, test = adjusted("Westfall"))
 
 }
 \keyword{datasets}

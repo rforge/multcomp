@@ -36,7 +36,7 @@
   wht <- glht(amod, K = list(envir = "Tukey", temp = "Tukey"))
 
   ### cf. Westfall et al. (1999, page 181)
-  summary(wht, distribution = adjusted("Shaffer"))
+  summary(wht, test = adjusted("Shaffer"))
 
 }
 \keyword{datasets}

@@ -101,8 +101,10 @@ contrMat <- function(n, type = c("Dunnett", "Tukey", "Sequen", "AVE",
         	    for (j2 in (j1+1):b) {
                 	CM <- rbind(CM, kronecker( ( as.numeric(idi==i1)-as.numeric(idi==i2) ),
                                                    ( as.numeric(idj==j1)-as.numeric(idj==j2) ) ) ) 
-		        rnames <- c(rnames, paste( "(", varnames[i1], varnamesm[j1], "-", varnames[i1], varnamesm[j2], ")", "-", 
-                                                   "(", varnames[i2], varnamesm[j1], "-", varnames[i2], varnamesm[j2], ")",  sep=""))
+		        rnames <- c(rnames, paste( "(", paste(varnames[i1], varnamesm[j1], sep = ":"), "-", 
+                                                        paste(varnames[i1], varnamesm[j2], sep = ":"), ")", "-", 
+                                                   "(", paste(varnames[i2], varnamesm[j1], sep = ":"), "-", 
+                                                        paste(varnames[i2], varnamesm[j2], sep = ":"), ")",  sep=""))
             	    }
         	}
 	    }
@@ -110,7 +112,7 @@ contrMat <- function(n, type = c("Dunnett", "Tukey", "Sequen", "AVE",
     },)
     rownames(CM) <- rnames
     if (type == "Tetrade")
-      colnames(CM) <- levels(interaction(varnames, varnamesm))
+      colnames(CM) <- NULL ###levels(interaction(varnames, varnamesm))
     else 
       colnames(CM) <- varnames
     attr(CM, "type") <- type

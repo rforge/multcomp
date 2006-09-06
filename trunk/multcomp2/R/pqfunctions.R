@@ -109,7 +109,7 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
     ### simple Bonferroni-adjustment
     if (type == "Bonferroni") {
         return(function(object) {
-            RET <- pqghlt(object)
+            RET <- pqglht(object)
             RET$pvalues <- RET$pfunction("Bonferroni")
             RET$type <- "Bonferroni"
             RET

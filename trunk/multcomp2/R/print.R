@@ -1,6 +1,6 @@
 
 print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...) {
-    cat("\n\t", "Multiple Comparison Procedures for Linear Hypotheses\n\n")
+    cat("\n\t", "General Linear Hypotheses\n\n")
     x <- x$K %*% x$beta
     colnames(x) <- "Linear Hypotheses:"
     print(x, digits = digits)

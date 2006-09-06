@@ -35,7 +35,7 @@
       K <- (contrMat(table(halothane$treatment), type = "Tukey") * -1) %*% C
 
       ### compare with Westfall et al. (1999, p. 215)
-      tmp <- multcomp2:::pqghlt(t(as.matrix(coef(lmod)[[1]][1,])), 
+      tmp <- multcomp2:::pqglht(t(as.matrix(coef(lmod)[[1]][1,])), 
                    as.matrix(vcov(lmod)), cbind(0, K), df = 18)
       tmp$coefficients
       tmp$sigma

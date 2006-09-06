@@ -43,9 +43,9 @@
   cht <- glht(amod, K = list(trt = "Tukey"))
 
   ### cf. Westfall et al. (1999, page 171)
-  summary(cht, distribution = univariate())
-  summary(cht, distribution = adjusted("Shaffer"))
-  summary(cht, distribution = adjusted("Westfall"))
+  summary(cht, test = univariate())
+  summary(cht, test = adjusted("Shaffer"))
+  summary(cht, test = adjusted("Westfall"))
 
   ### use only a subset of all pairwise hypotheses
   K <- contrMat(table(cholesterol$trt), type="Tukey")
@@ -56,7 +56,7 @@
   ### reproduce results in Westfall et al. (1999, page 172)
   amod <- aov(response ~ trt - 1, data = cholesterol)
   summary(glht(amod, K = list(trt = Ksub[,5:1])), 
-          distribution = adjusted("Westfall"))
+          test = adjusted("Westfall"))
 
 }
 \keyword{datasets}

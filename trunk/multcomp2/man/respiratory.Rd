@@ -84,8 +84,8 @@
   rht <- glht(amod, K = C, alternative="less")
 
   ### see Westfall et al. (1999, page 198)
-  summary(rht, distribution = univariate())
-  summary(rht, distribution = adjusted("Shaffer"))
+  summary(rht, test = univariate())
+  summary(rht, test = adjusted("Shaffer"))
 
 }
 \keyword{datasets}
