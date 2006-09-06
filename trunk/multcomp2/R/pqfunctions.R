@@ -11,7 +11,6 @@ pqglht <- function(object)
     df <- object$df
     alternative <- object$alternative
 
-    p <- length(beta)
     covm <- K %*% sigma %*% t(K)
     d <- 1/sqrt(diag(covm))
     if (length(d) > 1) d <- diag(d)              

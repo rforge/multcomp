@@ -31,7 +31,7 @@ simint.default <- function(object,
     }
     tglht <- glht(object, K = K, alternative = match.arg(alternative))
     .Deprecated("glht", package = "multcomp")
-    confint(thglt, level = conf.level, abseps = eps, maxpts = maxpts)
+    confint(tglht, level = conf.level, abseps = eps, maxpts = maxpts)
 }
 
 simint.formula <- function(formula, data=list(), subset, na.action, ...)
@@ -57,10 +57,10 @@ simint.lm <- function(object, psubset = NULL, ...) {
 
     beta <- coef(object)
     if (is.null(psubset)) 
-        simin.default(object, cmatrix = diag(length(beta)), ...)
+        simint.default(object, cmatrix = diag(length(beta)), ...)
     
     psubset <- which(beta %in% beta[psubset])
-    simtest.default(object, cmatrix = diag(length(beta))[psubset,])
+    simint.default(object, cmatrix = diag(length(beta))[psubset,])
 }
 
 
@@ -97,7 +97,7 @@ simtest.default <- function(object,
         K <- list(match.arg(type))
         names(K) <- whichf
     }
-    tglht <- glth(object, K = K, alternative = match.arg(alternative))
+    tglht <- glht(object, K = K, alternative = match.arg(alternative))
     .Deprecated("glht", package = "multcomp")
     ttype <- match.arg(ttype)
     if (ttype == "free")
@@ -130,11 +130,11 @@ simtest.lm <- function(object, psubset = NULL, ...) {
 
     beta <- coef(object)
     if (is.null(psubset)) 
-        simin.default(object, cmatrix = diag(length(beta)), ...)
+        simtest.default(object, cmatrix = diag(length(beta)), ...)
     
     psubset <- which(beta %in% beta[psubset])
     simtest.default(object, cmatrix = diag(length(beta))[psubset,])
 }
 
-summary.summary.glht <- function(object, ...) invisible(x)
-summary.confint.glht <- function(object, ...) invisible(x)
+summary.summary.glht <- function(object, ...) invisible(object)
+summary.confint.glht <- function(object, ...) invisible(object)

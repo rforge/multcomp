@@ -67,7 +67,7 @@ contrMat <- function(n, type = c("Dunnett", "Tukey", "Sequen", "AVE",
             cm1[i,(i+1):k] <- n[(i+1):k]/sum(n[(i+1):k])
             cm2[i,1:i] <- n[1:i]/sum(n[1:i])
         }
-        row <- k*(k-1)/2
+        ### row <- k*(k-1)/2
         index <- 1
         for (i in 1:(k-1)) {
             for (j in 1:i) {

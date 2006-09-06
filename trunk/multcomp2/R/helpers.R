@@ -45,7 +45,6 @@ maxsets <- function(K)
 {
     C <- t(K)
     k <- ncol(C)
-    p <- nrow(C)
     S <- 1:k
     ret <- vector(mode = "list", length = k)
 
