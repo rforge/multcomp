@@ -22,8 +22,12 @@ glht(lmod, K = list(f1 = "Dunnett"))
 coef(lmod <- lm(y ~ f1 + f2 + f2:f1 + x, data = testdata))
 glht(lmod, K = list(f1 = "Dunnett"))
 
-y <- gl(3, 3)
-levels(y) <- paste("x", 1:3, sep = "")
-max(abs(multcomp2:::chr2K(c(l1 = "x1 - x2 = 2", l2 = "x2 + 3 * x3 = 1"), y)$K - 
-        rbind(c(1, -1, 0), c(0, 1, 3))))
+# with contrasts as expressions
+glht(lmod, K = list(f1 = c("B - A = 0", "C - A = 0")))
 
+tmp <- multcomp2:::chr2K(c(l1 = "x1 - x2 = 2", 
+                          l2 = "x2 + 3 * x3 = 1"), 
+                          paste("x", 1:3, sep = ""))
+
+stopifnot(max(abs(tmp$K - rbind(c(1, -1, 0), c(0, 1, 3)))) < sqrt(.Machine$double.eps))
+stopifnot(max(abs(tmp$m - c(2, 1))) < sqrt(.Machine$double.eps))
