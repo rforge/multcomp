@@ -22,3 +22,8 @@ glht(lmod, K = list(f1 = "Dunnett"))
 coef(lmod <- lm(y ~ f1 + f2 + f2:f1 + x, data = testdata))
 glht(lmod, K = list(f1 = "Dunnett"))
 
+y <- gl(3, 3)
+levels(y) <- paste("x", 1:3, sep = "")
+max(abs(multcomp2:::chr2K(c(l1 = "x1 - x2 = 2", l2 = "x2 + 3 * x3 = 1"), y)$K - 
+        rbind(c(1, -1, 0), c(0, 1, 3))))
+

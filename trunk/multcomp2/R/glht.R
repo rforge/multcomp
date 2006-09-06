@@ -45,6 +45,14 @@ glht <- function(model, K = NULL, m = 0,
 
 
     ### OK! You know what you want!
+    if (is.character(K)) {
+        tmp <-  chr2K(K, names(beta))
+        K <- tmp$K
+        if (m != 0)
+            warning(sQuote("m"), " is given in both ", sQuote("K"),
+                    " and ", sQuote("m"), " -- the latter is ignored")
+        m <- tmp$m
+    }
     if (is.matrix(K)) { 
         if (ncol(K) != length(beta))
             stop("dimensions of ", sQuote("K"), " and ", 
@@ -75,8 +83,21 @@ glht <- function(model, K = NULL, m = 0,
     if (!all(checknm)) 
         stop("Factor", nhypo[!checknm], "not found!")
     for (nm in nhypo) {
-        if (is.character(K[[nm]]))
-            K[[nm]] <- contrMat(table(mf[[nm]]), type = K[[nm]], ...)
+        if (is.character(K[[nm]])) {
+            kch <- K[[nm]]
+            ### compute K from `contrMat' or from expressions
+            if (any(kch %in%  eval(formals(contrMat)$type))) {
+                K[[nm]] <- contrMat(table(mf[[nm]]), type = kch, ...)
+            } else {
+                tmp <-  chr2K(kch, levels(mf[[nm]]))
+                K[[nm]] <- tmp$K
+                if (m == 0) {
+                    m <- tmp$m
+                } else {
+                    m <- c(m, tmp$m)
+                }
+            }
+        }
     }
 
     ### transform linear hypotheses using model contrasts

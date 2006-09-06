@@ -74,3 +74,96 @@ model.matrix.coxph <- function(object, ...)
     attributes(mm) <- at
     mm
 }
+
+### handle contrasts specified via (character) expressions
+### extract left hand side of an expression
+lhs <- function(ex) {
+
+    if (length(ex) != 1)
+        stop("expression is not of length 1")
+
+    if (length(ex[[1]]) != 3 || ex[[1]][[1]] != "=")
+        stop("expression has not three element or does not contain ", sQuote("="))
+
+    return(ex[[1]][[2]])
+}
+
+### extract right hand side of an expression
+rhs <- function(ex) {
+
+    if (length(ex) != 1)
+        stop("expression is not of length 1")
+
+    if (length(ex[[1]][[3]]) == 2)
+        return(-ex[[1]][[3]][[2]])
+
+    rhs <- ex[[1]][[3]]
+    if (!is.numeric(rhs) || length(rhs) > 1)
+        stop("right hand side of expression is not a scalar numeric")
+
+    rhs
+}
+
+### extract coefficients for factor levels
+coefs <- function(ex) {
+
+    if (length(ex) == 1)
+        return(list(coef = 1, level = ex))
+
+    if (length(ex) == 2)
+        return(list(coef = -1, level = ex[[2]]))
+
+    if (length(ex) == 3) {
+
+        if (ex[[1]] == "*")
+            return(list(coef = ex[[2]], level = ex[[3]]))
+
+        cf <- coefs(ex[[3]])
+        if (ex[[1]] == "-")
+            cf$coef <- cf$coef * (-1)
+
+        return(cf)
+    }
+}
+ 
+### convert an expression of factor levels to a linear hypothesis
+expression2K <- function(ex, y) {
+
+    ex <- parse(text = ex)
+    m <- rhs(ex)
+    x <- lhs(ex)
+    K <- rep.int(0, length(y))
+    while(TRUE) {
+        cf <- coefs(x)
+        if (!any(cf$level == y))
+            stop("level \"", cf$level, "\" not found")
+        K[y == cf$level] <- cf$coef
+        if (length(x) > 1) {
+            x <- x[[2]]   
+        } else {
+            break
+        }
+    }
+    return(list(K = K, m = m))
+}
+
+### convert a vector of character expressions of 
+### factor levels to a linear hypothesis
+chr2K <- function(ex, y) {
+
+    if (!is.character(y))
+        stop(sQuote("y"), " is not a a character vector")
+    if (class(ex) != "character")
+        stop(sQuote(ex), " is not a character vector")
+
+    K <- c()
+    m <- c()
+    for (x in ex) {
+        tmp <- expression2K(parse(text = x), y)
+        K <- rbind(K, tmp$K)
+        m <- c(m, tmp$m)
+    }
+    colnames(K) <- levels(y)
+    rownames(K) <- ex
+    list(K = K, m = m)
+}

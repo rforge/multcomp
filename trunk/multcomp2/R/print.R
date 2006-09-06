@@ -2,7 +2,8 @@
 print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...) {
     cat("\n\t", "General Linear Hypotheses\n\n")
     x <- x$K %*% x$beta
-    colnames(x) <- "Linear Hypotheses:"
+    cat("Linear Hypotheses:\n")
+    colnames(x) <- "Estimate"
     print(x, digits = digits)
     cat("\n")
     invisible(x)
@@ -38,7 +39,7 @@ print.confint.glht <- function(x, digits = max(3, getOption("digits") - 3),
     level <- attr(x$confint, "conf.level")
     attr(x$confint, "conf.level") <- NULL
     cat("Fit: ")
-    print(x$object$call)
+    print(x$model$call)
     cat("\n")
     cat("Linear Hypotheses:\n")
     print(format(x$confint, nsmall = digits, digits = digits), quote = FALSE)

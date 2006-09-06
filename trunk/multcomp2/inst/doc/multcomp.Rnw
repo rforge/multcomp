@@ -57,7 +57,7 @@ a linear combination of the $n \times p$ \emph{design matrix} $\X$
 \E(\y | \X) = h(\X \beta).
 \end{eqnarray*}
 
-Our primary target is inference about 
+Our primary target is simultaneous inference about 
 \emph{general linear hypotheses} \citep{Searle1971}, i.e, linear combinations 
 of the vector of regression coefficients $\beta \in \R^p$:
 \begin{eqnarray*}
@@ -71,7 +71,7 @@ hypotheses defined by the rows $K_j, j = 1, \dots, k$, of $\K$:
 \begin{eqnarray*}
 H_0^j: K_j \beta = 0 \text{ where } H_0 = \bigcap_{j = 1}^k H_0^j
 \end{eqnarray*}
-We only consider inference procedures, both tests and confidence intervals,
+We only consider simultaneous inference procedures, both tests and confidence intervals,
 which control the \emph{familywise error rate} (FWE), that is the probability of 
 incorrectly rejecting at least one hypothesis $H_0^j, j = 1, \dots, k$.
 
@@ -89,9 +89,10 @@ and $\K \hat{\beta}$ is valid only asymptotically.
 \subsection{Multiple Testing and Simultaneous Confidence Intervals}
 
 Under the conditions of the global hypothesis $H_0$ it holds that
-$\K \hat{\beta} \sim \mathcal{N}(0, \K \V(\hat{\beta}) \K^\top)$, 
+\begin{eqnarray*}
+\K \hat{\beta} \sim \mathcal{N}(0, \K \V(\hat{\beta}) \K^\top),
+\end{eqnarray*} 
 either exactly (linear model) or asymptotically.
-
 For each partial hypothesis $H_0^j$, a standardized test statistic 
 of the form $z_j = K_j \hat{\beta} (K_j \V(\hat{\beta}) K_j^\top)^{-\frac{1}{2}}$
 follows a $t$ distribution with $n - p$ degrees for freedom (linear model) 
@@ -209,7 +210,7 @@ Consider a one-way ANOVA model, i.e., the only covariate $\x_1$ is a factor at $
 In this case, the design matrix $\X$ is the matrix of dummy codings of the factor
 levels (in the absence of an intercept term):
 <<aov-ex, echo = TRUE>>=
-ex <- data.frame(y = rnorm(12), x = gl(3, 4))
+ex <- data.frame(y = rnorm(12), x = gl(3, 4, labels = LETTERS[1:3]))
 aov.ex <- aov(y ~ x - 1, data = ex)
 summary(aov.ex)
 @
@@ -224,12 +225,13 @@ in form of linear hypotheses $\K \beta$ with
 <<aov-Dunnett, echo = TRUE>>=
 K <- rbind(c(-1, 1, 0),
            c(-1, 0, 1))
-rownames(K) <- c("x2 - x1", "x3 - x1")
+rownames(K) <- c("B - A", "C - A")
 K
 @
 This "many-to-one" comparison procedure (Dunnett) is now simply
 <<aov-mcp, echo = TRUE>>=
 summary(glht(aov.ex, K = K))
+summary(glht(aov.ex, K = c("xB - xA = 0", "xC - xA = 0")))
 @
 
 In the presence of an intercept term, the full design matrix $\X$ can't be used to fit such
@@ -257,6 +259,7 @@ that the matrix of linear hypotheses only applies to those elements of $\hat{\be
 attached to factor \Robject{x} but not to the intercept term $\hat{\beta}_1$:
 <<aov-contrasts-glht, echo = TRUE>>=
 summary(glht(aov.ex2, K = list(x = K)))
+summary(glht(aov.ex2, K = list(x = c("B - A = 0", "C - A = 0"))))
 @
 
 \bibliographystyle{plainnat}

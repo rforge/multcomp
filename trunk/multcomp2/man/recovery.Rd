@@ -42,5 +42,12 @@
   ### cf. Westfall et al. (1999, p. 80)
   confint(rht, level = 0.9)
 
+  ### the same
+  rht <- glht(amod, K = list(blanket = c("b1 - b0 = 0", 
+                                         "b2 - b0 = 0", 
+                                         "b3 - b0 = 0")),
+              alternative = "less")
+  confint(rht, level = 0.9)
+
 }
 \keyword{datasets}
