@@ -8,17 +8,17 @@ testdata <- data.frame(y = rnorm(21),
 
 # one-way ANOVA
 coef(amod <- aov(y ~ f1, data = testdata))
-mcp(amod, hypotheses = list(f1 = "Dunnett"))
+glht(amod, K = list(f1 = "Dunnett"))
 
 # and a continuous covariable: ANCOVA
 coef(lmod <- lm(y ~ f1 + x, data = testdata))
-mcp(lmod, hypotheses = list(f1 = "Dunnett"))
+glht(lmod, K = list(f1 = "Dunnett"))
 
 # ANCOVA with an additional factor as covariable
 coef(lmod <- lm(y ~ f1 + f2 + x, data = testdata))
-mcp(lmod, hypotheses = list(f1 = "Dunnett"))
+glht(lmod, K = list(f1 = "Dunnett"))
 
 # and with interaction terms
 coef(lmod <- lm(y ~ f1 + f2 + f2:f1 + x, data = testdata))
-mcp(lmod, hypotheses = list(f1 = "Dunnett"))
+glht(lmod, K = list(f1 = "Dunnett"))
 

@@ -32,11 +32,11 @@
   ### set up two-way ANOVA with interactions
   amod <- aov(waste ~ envir + temp + envir*temp, data=waste)
 
-  ### set up multiple comparisons: all-pairs for both factors
-  wmcp <- mcp(amod, hypotheses = list(envir = "Tukey", temp = "Tukey"))
+  ### set up linear hypotheses for all-pairs of both factors
+  wht <- glht(amod, K = list(envir = "Tukey", temp = "Tukey"))
 
   ### cf. Westfall et al. (1999, page 181)
-  summary(wmcp, distribution = adjusted("Shaffer"))
+  summary(wht, distribution = adjusted("Shaffer"))
 
 }
 \keyword{datasets}

@@ -1,6 +1,6 @@
 Package: multcomp2
 Title: Simultaneous Inference Procedures for Linear Hypotheses
-Version: 0.9-1
+Version: 0.9-2
 Date: $Date: 2004/10/29 07:11:49 $
 Author: Torsten Hothorn <Torsten.Hothorn@R-project.org>,
   Frank Bretz <frank.bretz@novartis.com>, and
@@ -10,3 +10,4 @@ Description: Simultaneous confidence intervals and tests
 Maintainer: Torsten Hothorn <Torsten.Hothorn@R-project.org>
 Depends: mvtnorm (>= 0.7-0), MASS, survival
 License: GPL
+Packaged: Wed Sep  6 08:27:55 2006; hothorn

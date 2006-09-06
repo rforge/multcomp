@@ -1,30 +1,34 @@
-\name{mcp}
-\alias{mcp}
-\alias{summary.mcp}
-\alias{confint.mcp}
+\name{glht}
+\alias{glht}
+\alias{summary.glht}
+\alias{confint.glht}
 \alias{univariate}
 \alias{adjusted}
-\title{ Multiple Comparison Procedures }
+\title{ General Linear Hypotheses }
 \description{
-  Multiple Comparison Procedures for Linear Hypotheses in the Generalized Linear Model
+  Simultaneous Inference for General Linear Hypotheses in the Generalized Linear Model
 }
 \usage{
-mcp(object, hypotheses = NULL, m = 0, alternative = c("two.sided", "less", "greater"))
-\method{summary}{mcp}(object, distribution = adjusted(), ...)
+glht(model, K = NULL, m = 0, alternative = c("two.sided", "less", "greater"), ...)
+\method{summary}{glht}(object, test = adjusted(), ...)
+\method{confint}{glht}(object, parm, level = 0.95, ...)
 univariate()
 adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
 }
 \arguments{
-  \item{object}{ a fitted (generalized) linear model, for example \code{\link{lm}}, 
+  \item{model}{ a fitted (generalized) linear model, for example \code{\link{lm}}, 
                  \code{\link{glm}}, \code{\link{aov}} etc.}
-  \item{hypotheses}{ either a matrix of linear hypotheses for the coefficients of \code{object} or
-                     a named list of matrices (or \code{type} arguments for \code{\link{linhypo}}) 
+  \item{K}{ either a matrix of linear hypotheses for the coefficients of \code{object} or
+                     a named list of matrices (or \code{type} arguments for \code{\link{contrMat}}) 
                      for linear hypotheses for levels of the corresponding factors. }
   \item{m}{ right hand side of the hypothesis: \eqn{H_0: K \beta = m}. }
   \item{alternative}{ a character string specifying the alternative hypothesis,
           must be one of '"two.sided"' (default), '"greater"' or
           '"less"'.  You can specify just the initial letter.}
-  \item{distribution}{a function for computing p values.}
+  \item{test}{a function for computing p values.}
+  \item{object}{an object of class \code{glht}.}
+  \item{parm}{}
+  \item{level}{confidence level}
   \item{type}{the type of adjustment to be applied.}
   \item{...}{additional arguments, such as \code{maxpts}, \code{abseps} or \code{releps} to
              \code{\link[mvtnorm]{pmvnorm}} in \code{adjusted} or 
@@ -37,7 +41,7 @@ adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
 }
 \value{
 
-  An object of class \code{mcp} with \code{summary} and \code{confint} 
+  An object of class \code{glht} with \code{summary} and \code{confint} 
   methods being available.
 
 }
@@ -47,16 +51,16 @@ adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
   amod <- aov(breaks ~ wool * tension, data = warpbreaks)
 
   ### set up all-pair comparisons for factor `tension'
-  wmcp <- mcp(amod, hypotheses = list(tension = "Tukey"))
+  wht <- glht(amod, K = list(tension = "Tukey"))
 
   ### 95% simultaneous confidence intervals
-  plot(print(confint(wmcp)))
+  plot(print(confint(wht)))
 
   ### the same (for balanced designs only)
   TukeyHSD(amod, "tension")
 
   ### corresponding adjusted p values
-  summary(wmcp)
+  summary(wht)
 
 
   ### confidence bands for a simple linear model, `cars' data
@@ -74,11 +78,11 @@ adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
   ### linear hypotheses: 10 selected points on the regression line != 0
   K <- cbind(1, speeds)                                                        
 
-  ### set up multiple comparisons
-  cmcp <- mcp(lmod, hypotheses = K)
+  ### set up linear hypotheses
+  cht <- glht(lmod, K = K)
 
   ### confidence intervals, i.e., confidence bands, and add them plot
-  cci <- confint(cmcp)
+  cci <- confint(cht)
   lines(speeds, cci$confint[,"lwr"], col = "blue")
   lines(speeds, cci$confint[,"upr"], col = "blue")
 
@@ -86,11 +90,11 @@ adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
   ### simultaneous p values for parameters in a Cox model
   leuk.cox <- coxph(Surv(time) ~ ag + log(wbc), data = leuk)
 
-  ### set up multiple comparisons for all coefficients
-  lmcp <- mcp(leuk.cox, hypotheses = diag(length(coef(leuk.cox))))
+  ### set up linear hypotheses
+  lht <- glht(leuk.cox, K = diag(length(coef(leuk.cox))))
 
   ### adjusted p values
-  summary(lmcp)
+  summary(lht)
 
 }
 \keyword{htest}

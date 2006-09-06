@@ -1,62 +1,64 @@
 
-### multiple comparison procedures for generalized linear models
-### `object' requires methods for `model.matrix', `model.frame', `terms', 
+### simultaneous inference procedures for general linear hypothesis
+### in a fitted generalized linear model `model'
+###
+### `model' requires methods for `model.matrix', `model.frame', `terms', 
 ### `coef' and `vcov'
-### `hypotheses' is a named list of characters (`type' arguments in `linhypo')
+### `K' is either a named list of characters or matrices _or_ a matrix.
 
-mcp <- function(object, hypotheses = NULL, m = 0,
-                alternative = c("two.sided", "less", "greater")) {
+glht <- function(model, K = NULL, m = 0,
+                 alternative = c("two.sided", "less", "greater"), ...) {
 
     ### extract model matrix, frame and terms
-    mm <- try(model.matrix(object))
+    mm <- try(model.matrix(model))
     if (inherits(mm, "try-error"))
         stop("no ", sQuote("model.matrix"), " method for ", 
-             sQuote("object"), " found!")
+             sQuote("model"), " found!")
 
-    mf <- try(model.frame(object))
+    mf <- try(model.frame(model))
     if (inherits(mf, "try-error"))
         stop("no ", sQuote("model.frame"), " method for ", 
-             sQuote("object"), " found!")
+             sQuote("model"), " found!")
 
-    tm <- try(terms(object))
+    tm <- try(terms(model))
     if (inherits(tm, "try-error"))
         stop("no ", sQuote("terms"), " method for ", 
-             sQuote("object"), " found!")
+             sQuote("model"), " found!")
 
-    beta <- try(coef(object))
+    beta <- try(coef(model))
     if (inherits(beta, "try-error"))
         stop("no ", sQuote("coef"), " method for ",
-             sQuote("object"), " found!")
+             sQuote("model"), " found!")
 
-    sigma <- try(vcov(object))
+    sigma <- try(vcov(model))
     if (inherits(sigma, "try-error"))
         stop("no ", sQuote("vcov"), " method for ",
-             sQuote("object"), " found!")       
+             sQuote("model"), " found!")       
 
     alternative <- match.arg(alternative)
 
     df <- 0
-    if (class(object)[1] %in% c("aov", "lm")) {
-        class(object) <- "lm"
-        df <- summary(object)$df[2]
+    if (class(model)[1] %in% c("aov", "lm")) {
+        class(model) <- "lm"
+        df <- summary(model)$df[2]
     }
 
 
     ### OK! You know what you want!
-    if (is.matrix(hypotheses)) { 
-        if (ncol(hypotheses) != length(beta))
-            stop("dimensions of ", sQuote("hypotheses"), " and ", 
-                 sQuote("coef(object)"), "don't match")
+    if (is.matrix(K)) { 
+        if (ncol(K) != length(beta))
+            stop("dimensions of ", sQuote("K"), " and ", 
+                 sQuote("coef(model)"), "don't match")
 
-        if (!any(length(m) == c(1, nrow(hypotheses))))
-            stop("dimensions of ", sQuote("hypotheses"), " and ", 
+        if (!any(length(m) == c(1, nrow(K))))
+            stop("dimensions of ", sQuote("K"), " and ", 
                  sQuote("m"), "don't match")
 
-        RET <- list(object = object, 
-               hypotheses = hypotheses, beta = beta, sigma = sigma,
-               type = "user-defined",
-               alternative = alternative, df = df, m = m)
-        class(RET) <- "mcp"
+        RET <- list(model = model, K = K, m = m,
+                    beta = beta, sigma = sigma, df = df,
+                    alternative = alternative,
+                    type = "user-defined")
+        class(RET) <- "glht"
         return(RET)
     }
 
@@ -66,15 +68,15 @@ mcp <- function(object, hypotheses = NULL, m = 0,
     intercept <- attr(tm, "intercept") != 0
    
     ### linear hypotheses
-    if (!is.list(hypotheses) || is.null(names(hypotheses)))
-        stop(sQuote("hypotheses"), "is not a named list")
-    nhypo <- names(hypotheses)
+    if (!is.list(K) || is.null(names(K)))
+        stop(sQuote("K"), "is not a named list")
+    nhypo <- names(K)
     checknm <- nhypo %in% rownames(factors) & sapply(mf[nhypo], is.factor)
     if (!all(checknm)) 
         stop("Factor", nhypo[!checknm], "not found!")
     for (nm in nhypo) {
-        if (is.character(hypotheses[[nm]]))
-            hypotheses[[nm]] <- linhypo(mf[[nm]], hypotheses[[nm]])
+        if (is.character(K[[nm]]))
+            K[[nm]] <- contrMat(table(mf[[nm]]), type = K[[nm]], ...)
     }
 
     ### transform linear hypotheses using model contrasts
@@ -82,20 +84,21 @@ mcp <- function(object, hypotheses = NULL, m = 0,
     names(hypo) <- nhypo
 
     for (nm in nhypo) {
-        ### extract contrast matrix for each factor
+        ### extract contrast matrix for each factor from model fit
         if (is.character(contrasts[[nm]])) {
             C <- do.call(contrasts[[nm]], 
                          list(n = nlevels(mf[[nm]])))
         } else {
             C <- contrasts[[nm]]
         }
-        ### and transform the original linear hypothesis
+        ### and transform the original linear hypotheses 
+        ### K beta to K C beta^* 
         if (intercept) {
-            Kstar <- hypotheses[[nm]] %*% C
+            Kstar <- K[[nm]] %*% C
         } else {
             ### model.matrix has `contrasts' argument even if no intercept
             ### was fitted and the contrast actually hasn't been applied
-            Kstar <- hypotheses[[nm]]
+            Kstar <- K[[nm]]
         }
         pos <- factors[nm,] == 1
         ### average over interaction terms (if any)
@@ -116,55 +119,54 @@ mcp <- function(object, hypotheses = NULL, m = 0,
         }
         hypo[[nm]] <- list(K = Kstar,
                            where = attr(mm, "assign") %in% which(factors[nm,] == 1),
-                           type = paste(attr(hypotheses[[nm]], "type"), 
+                           type = paste(attr(K[[nm]], "type"), 
                                         "(", nm, ")", sep = ""))
     }
 
-    ### create matrix of all transformed linear hypotheses
-    M <- matrix(0, nrow = sum(sapply(hypo, function(x) nrow(x$K))),
-                   ncol = ncol(mm))
-    colnames(M) <- colnames(mm)
+    ### create matrix of all transformed linear hypoheses
+    Ktotal <- matrix(0, nrow = sum(sapply(hypo, function(x) nrow(x$K))),
+                     ncol = ncol(mm))
+    colnames(Ktotal) <- colnames(mm)
 
     count <- 1
     for (h in hypo) {
-        M[count:(count + nrow(h$K) - 1), h$where] <- h$K
+        Ktotal[count:(count + nrow(h$K) - 1), h$where] <- h$K
         count <- count + nrow(h$K)
     }
-    rownames(M) <- unlist(lapply(hypo, function(x) rownames(x$K)))
+    rownames(Ktotal) <- unlist(lapply(hypo, function(x) rownames(x$K)))
 
-    if (!any(length(m) == c(1, nrow(M))))
-        stop("dimensions of ", sQuote("hypotheses"), " and ", 
+    if (!any(length(m) == c(1, nrow(Ktotal))))
+        stop("dimensions of ", sQuote("K"), " and ", 
              sQuote("m"), "don't match")
 
-    ### create `mcp' object
-    RET <- list(object = object, 
-                hypotheses = M, beta = beta, sigma = sigma,
-                type = paste(sapply(hypo, function(x) x$type), collapse = ";"),
+    ### create `glht' model
+    RET <- list(model = model, K = Ktotal, m = m, 
+                beta = beta, sigma = sigma, df = df,
                 alternative = alternative,
-                df = df, m = m)
-    class(RET) <- "mcp"
+                type = paste(sapply(hypo, function(x) x$type), collapse = ";"))
+    class(RET) <- "glht"
     return(RET)
 }
 
-summary.mcp <- function(object, distribution = adjusted(), ...) {
+summary.glht <- function(object, test = adjusted(), ...) {
 
-    pq <- distribution(object)
-    object$mcp <- cbind(pq$coefficients, pq$sigma, pq$tstat, 
-                        pq$pvalues)
-    colnames(object$mcp) <- c("Estimate", "Std. Error",
+    pq <- test(object)
+    object$mtests <- cbind(pq$coefficients, pq$sigma, pq$tstat, 
+                           pq$pvalues)
+    colnames(object$mtests) <- c("Estimate", "Std. Error",
         ifelse(object$df == 0, "z value", "t value"), "p value")
-    attr(object$mcp, "type") <- pq$type
-    class(object) <- c("summary.mcp", "mcp")
+    attr(object$mtests, "type") <- pq$type
+    class(object) <- c("summary.glht", "glht")
     return(object)
 }
 
-confint.mcp <- function(object, parm, level = 0.95, ...) {
+confint.glht <- function(object, parm, level = 0.95, ...) {
 
-    pq <- pqmcp(object)
+    pq <- pqglht(object)
     object$confint <- cbind(pq$coefficients, 
                             pq$qfunction(conf.level = level, ...))
     colnames(object$confint) <- c("Estimate", "lwr", "upr")
     attr(object$confint, "conf.level") <- level
-    class(object) <- c("confint.mcp", "mcp")
+    class(object) <- c("confint.glht", "glht")
     return(object)
 }

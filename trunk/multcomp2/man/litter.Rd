@@ -41,20 +41,20 @@
 
   ### define matrix of linear hypotheses for `dose'
   doselev <- as.integer(levels(litter$dose))
-  K <- rbind(linhypo(litter$dose, "Tukey"),
+  K <- rbind(contrMat(table(litter$dose), "Tukey"),
              otrend = c(-1.5, -0.5, 0.5, 1.5),
              atrend = doselev - mean(doselev),
              ltrend = log(1:4) - mean(log(1:4)))
 
   ### set up multiple comparison object
-  Kmcp <- mcp(amod, hypotheses = list(dose = K), alternative = "less")
+  Kht <- glht(amod, K = list(dose = K), alternative = "less")
 
   ### cf. Westfall (1997, Table 2)
-  summary(Kmcp, distribution = univariate())
-  summary(Kmcp, distribution = adjusted("Bonferroni"))
-  summary(Kmcp, distribution = adjusted("Shaffer"))
-  summary(Kmcp, distribution = adjusted("Westfall"))
-  summary(Kmcp, distribution = adjusted("free"))
+  summary(Kht, distribution = univariate())
+  summary(Kht, distribution = adjusted("Bonferroni"))
+  summary(Kht, distribution = adjusted("Shaffer"))
+  summary(Kht, distribution = adjusted("Westfall"))
+  summary(Kht, distribution = adjusted("free"))
 
 }
 \keyword{datasets}

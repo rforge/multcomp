@@ -40,7 +40,7 @@ set.seed(290875)
 @
 
 
-\title{On Multiple Test Procedures for Linear Hypotheses}
+\title{On Simultaneous Inference for General Linear Hypotheses}
 
 \author{Torsten Hothorn}
 
@@ -153,20 +153,20 @@ sapply(abs(z), function(x) 1 - pmvt(-rep(x, 2), rep(x, 2), corr = Cor, df = df.c
 Note that the $p$ value of the global test is the minimum $p$ value of the partial tests.
 
 The computations above can be performed much more conveniently using the functionality
-implemented in package \Rpackage{multcomp2}. The function \Rcmd{mcp} just takes a fitted 
+implemented in package \Rpackage{multcomp2}. The function \Rcmd{glht} just takes a fitted 
 model and a matrix defining the linear hypotheses to be tested:
 <<lm-K, echo = FALSE>>=
 rownames(K) <- names(betahat)
 @
 <<lm-mcp, echo = TRUE>>=
 library("multcomp2")
-mcp.cars <- mcp(lm.cars, hypotheses = K)
-summary(mcp.cars)
+cars.ht <- glht(lm.cars, K = K)
+summary(cars.ht)
 @
 Simultaneous confidence intervals corresponding to this multiple testing
 procedure are available via
 <<lm-confint, echo = TRUE>>=
-confint(mcp.cars)
+confint(cars.ht)
 @
 
 \paragraph{Example: Confidence Bands for Regression Line}
@@ -177,7 +177,7 @@ be based on simultaneous confidence intervals for the regression line $\X \hat{\
 i.e., we choose $\K = \X$:
 <<lm-band, echo = TRUE>>=
 K <- model.matrix(lm.cars)[!duplicated(cars$speed),]
-ci.cars <- confint(mcp(lm.cars, hypotheses = K), abseps = 0.1)
+ci.cars <- confint(glht(lm.cars, K = K), abseps = 0.1)
 @
 Figure \ref{lm-plot} depicts the regression fit together with the
 confidence band for the regression line and the pointwise 
@@ -229,7 +229,7 @@ K
 @
 This "many-to-one" comparison procedure (Dunnett) is now simply
 <<aov-mcp, echo = TRUE>>=
-summary(mcp(aov.ex, hypotheses = K))
+summary(glht(aov.ex, K = K))
 @
 
 In the presence of an intercept term, the full design matrix $\X$ can't be used to fit such
@@ -251,12 +251,12 @@ K %*% contr.treatment(table(ex$x)) %*% coef(aov.ex2)[-1]
 @
 so that $\K \C \hat{\beta}^\star = \K \hat{\beta}$.
 
-However, the \Rcmd{mcp} function takes care of contrasts and the matrix of
+However, the \Rcmd{glht} function takes care of contrasts and the matrix of
 linear hypotheses $\K$ can be written in terms of $\beta$, not $\beta^\star$. Note
 that the matrix of linear hypotheses only applies to those elements of $\hat{\beta}^\star$
 attached to factor \Robject{x} but not to the intercept term $\hat{\beta}_1$:
-<<aov-contrasts-mcp, echo = TRUE>>=
-summary(mcp(aov.ex2, hypotheses = list(x = K)))
+<<aov-contrasts-glht, echo = TRUE>>=
+summary(glht(aov.ex2, K = list(x = K)))
 @
 
 \bibliographystyle{plainnat}

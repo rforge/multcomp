@@ -1,25 +1,26 @@
 
 # $Id: simint.R,v 1.52 2005/07/25 15:25:05 hothorn Exp $
 
-pqmcp <- function(object) 
+pqglht <- function(object) 
 {
 
     beta <- object$beta
     sigma <- object$sigma
-    linhypo <- object$hypotheses
+    K <- object$K
+    m <- object$m
     df <- object$df
     alternative <- object$alternative
-    p <- length(beta)
-    covm  <- linhypo %*% sigma %*% t(linhypo)
-    d     <- 1/sqrt(diag(covm))
-    if (length(d) > 1)
-      d <- diag(d)              
-    cr    <- d %*% covm %*% d
 
-    ests  <- linhypo %*% beta
-    ses   <- sqrt(diag(covm))
-    tvals <- (ests - object$m) / ses
-    dim   <- ncol(cr)
+    p <- length(beta)
+    covm <- K %*% sigma %*% t(K)
+    d <- 1/sqrt(diag(covm))
+    if (length(d) > 1) d <- diag(d)              
+    cr    <- d %*% covm %*% t(d)
+
+    betahat  <- K %*% beta
+    ses <- sqrt(diag(covm))
+    tstat <- (betahat - m) / ses
+    dim <- ncol(cr)
 
     pfunction <- function(type = c("univariate", "Bonferroni", "adjusted"), ...) {
 
@@ -40,14 +41,14 @@ pqmcp <- function(object)
         }
 
         switch(alternative, "two.sided" = {
-            if (df > 0) pvals <- 2*(1-pt(abs(tvals),df))     
-            else        pvals <- 2*(1-pnorm(abs(tvals)))
+            if (df > 0) pvals <- 2*(1-pt(abs(tstat),df))     
+            else        pvals <- 2*(1-pnorm(abs(tstat)))
         }, "less" = {
-            if (df > 0) pvals <- pt(tvals,df) 
-            else        pvals <- pnorm(tvals)
+            if (df > 0) pvals <- pt(tstat,df) 
+            else        pvals <- pnorm(tstat)
         }, "greater" = {
-            if (df > 0) pvals <- 1-pt(tvals,df)
-            else        pvals <- 1-pnorm(tvals)
+            if (df > 0) pvals <- 1-pt(tstat,df)
+            else        pvals <- 1-pnorm(tstat)
         })
 
         if (type == "univariate") {
@@ -58,7 +59,7 @@ pqmcp <- function(object)
             return(pmin(1, dim * pvals))
 
         if (type == "adjusted")
-            return(1 - apply(tvals, 1, pfct))
+            return(1 - apply(tstat, 1, pfct))
     }
 
     qfunction <- function(conf.level, ...) {
@@ -70,13 +71,13 @@ pqmcp <- function(object)
                        ...)$quantile
 
         switch(alternative, "two.sided" = {  
-            LowerCL <- ests - calpha*ses
-            UpperCL <- ests + calpha*ses
+            LowerCL <- betahat - calpha*ses
+            UpperCL <- betahat + calpha*ses
         }, "less" = {
             LowerCL <- rep(-Inf, dim)
-            UpperCL <- ests - calpha*ses
+            UpperCL <- betahat - calpha*ses
         }, "greater" = {
-            LowerCL <- ests - calpha*ses
+            LowerCL <- betahat - calpha*ses
             UpperCL <- rep( Inf, dim)
         })
 
@@ -86,15 +87,15 @@ pqmcp <- function(object)
         return(cint)
     }
     RET <- list(pfunction = pfunction, qfunction = qfunction,
-                coefficients = ests, sigma = ses, tstat = tvals)
-    class(RET) <- "pqmcp"
+                coefficients = betahat, sigma = ses, tstat = tstat)
+    class(RET) <- "pqglht"
     RET
 }
 
 univariate <- function() 
 {
     function(object) {
-        RET <- pqmcp(object)
+        RET <- pqglht(object)
         RET$pvalues <- RET$pfunction("univariate")
         RET$type <- "univariate"
         RET
@@ -108,7 +109,7 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
     ### simple Bonferroni-adjustment
     if (type == "Bonferroni") {
         return(function(object) {
-            RET <- pqmcp(object)
+            RET <- pqghlt(object)
             RET$pvalues <- RET$pfunction("Bonferroni")
             RET$type <- "Bonferroni"
             RET
@@ -118,7 +119,7 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
     ### usual max-type adjustment over all linear hypotheses
     if (type == "free") {
         return(function(object) {
-            RET <- pqmcp(object)
+            RET <- pqglht(object)
             RET$pvalues <- RET$pfunction("adjusted", ...)
             RET$type <- type
             RET
@@ -129,18 +130,18 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
     ### or
     ### Shaffer (1886, JASA): constraints
     return(function(object) {
-        RET <- pqmcp(object)
+        RET <- pqglht(object)
         tstat <- switch(object$alternative, 
                         "less" = RET$tstat,
                         "greater" = -RET$tstat,
                         "two.sided" = -abs(RET$tstat))
-        C <- object$hypotheses
+        C <- object$K
         Corder <- C[order(tstat), ]
         ms <- maxsets(Corder)
         p <- sapply(ms, function(x) {
            max(sapply(x, function(s) {
-                object$hypotheses <- Corder[s, , drop = FALSE]
-                min(pqmcp(object)$pfunction(ifelse(type == "Westfall", 
+                object$K <- Corder[s, , drop = FALSE]
+                min(pqglht(object)$pfunction(ifelse(type == "Westfall", 
                                                    "adjusted", "Bonferroni"), 
                                             ...))
             }))

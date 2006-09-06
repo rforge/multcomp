@@ -1,12 +1,4 @@
 
-contrMat <- function(n, ...) {
-    x <- factor(rep(1:length(n), n))
-    if (!null(names(n)))
-        levels(x) <- names(n)
-    .Deprecated("linhypo", package = "multcomp")
-    linhypo(x)
-}
-
 simint <- function(object, ...) UseMethod("simint")
 simtest <- function(object, ...) UseMethod("simtest")
 
@@ -16,11 +8,11 @@ csimint <- function(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
                     eps=0.001, maxpts=1000000)
 {
     if (is.null(cmatrix)) cmatrix <- diag(length(estpar))
-    object <- list(object = NULL, hypotheses = cmatrix, beta = estpar, sigma = covm,
+    object <- list(object = NULL, K = cmatrix, beta = estpar, sigma = covm,
                    type = ctype, alternative = match.arg(alternative),
                    df = ifelse(is.null(df) || asympt, 0, df))
-    class(object) <- "mcp"
-    .Deprecated("mcp", package = "multcomp")
+    class(object) <- "glht"
+    .Deprecated("glht", package = "multcomp")
     confint(object, level = conf.level, abseps = eps, maxpts = maxpts)
 }
 
@@ -32,14 +24,14 @@ simint.default <- function(object,
     eps = 0.001, maxpts = 1e+06, whichf) {
 
     if (!is.null(cmatrix)) {
-        linhypo <- cmatrix
+        K <- cmatrix
     } else {
-        linhypo <- list(match.arg(type))
-        names(linhypo) <- whichf
+        K <- list(match.arg(type))
+        names(K) <- whichf
     }
-    tmcp <- mcp(object, hypotheses = linhypo, alternative = match.arg(alternative))
-    .Deprecated("mcp", package = "multcomp")
-    confint(tmcp, level = conf.level, abseps = eps, maxpts = maxpts)
+    tghlt <- glht(object, K = K, alternative = match.arg(alternative))
+    .Deprecated("glht", package = "multcomp")
+    confint(thglt, level = conf.level, abseps = eps, maxpts = maxpts)
 }
 
 simint.formula <- function(formula, data=list(), subset, na.action, ...)
@@ -78,16 +70,16 @@ csimtest <- function(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
                      eps=0.001, maxpts=1000000)
 {
     if (is.null(cmatrix)) cmatrix <- diag(length(estpar))
-    object <- list(object = NULL, hypotheses = cmatrix, beta = estpar, sigma = covm,
+    object <- list(object = NULL, K = cmatrix, beta = estpar, sigma = covm,
                    type = ctype, alternative = match.arg(alternative),
                    df = ifelse(is.null(df) || asympt, 0, df))
-    class(object) <- "mcp"
+    class(object) <- "glht"
     ttype <- match.arg(ttype)
     if (ttype == "free")
         distr <- adjusted("free")
     if (ttype == "logical")
         distr <- adjusted("Westfall")
-    .Deprecated("mcp", package = "multcomp")
+    .Deprecated("glht", package = "multcomp")
     summary(object, distribution = distr, abseps = eps, maxpts = maxpts)
 }
 
@@ -100,19 +92,19 @@ simtest.default <- function(object,
     eps = 0.001, maxpts = 1e+06, whichf) {
 
     if (!is.null(cmatrix)) {
-        linhypo <- cmatrix
+        K <- cmatrix
     } else {
-        linhypo <- list(match.arg(type))
-        names(linhypo) <- whichf
+        K <- list(match.arg(type))
+        names(K) <- whichf
     }
-    tmcp <- mcp(object, hypotheses = linhypo, alternative = match.arg(alternative))
-    .Deprecated("mcp", package = "multcomp")
+    tglht <- glth(object, K = K, alternative = match.arg(alternative))
+    .Deprecated("ghlt", package = "multcomp")
     ttype <- match.arg(ttype)
     if (ttype == "free")
         distr <- adjusted("free")
     if (ttype == "logical")
         distr <- adjusted("Westfall")
-    summary(tmcp, distribution = distr, abseps = eps, maxpts = maxpts)
+    summary(tglht, distribution = distr, abseps = eps, maxpts = maxpts)
 }
 
 simtest.formula <- function(formula, data=list(), subset, na.action, ...)
@@ -144,5 +136,5 @@ simtest.lm <- function(object, psubset = NULL, ...) {
     simtest.default(object, cmatrix = diag(length(beta))[psubset,])
 }
 
-summary.summary.mcp <- function(object, ...) invisible(x)
-summary.confint.mcp <- function(object, ...) invisible(x)
+summary.summary.glht <- function(object, ...) invisible(x)
+summary.confint.glht <- function(object, ...) invisible(x)

@@ -1,6 +1,5 @@
 \name{multcomp-deprecated}
 \alias{multcomp-deprecated}
-\alias{contrMat}
 \alias{simint}
 \alias{simint.default}
 \alias{simint.formula}
@@ -17,7 +16,6 @@
   \code{multcomp} only, and may be defunct as soon as the next release.
 }
 \usage{
-contrMat(n, ...)
 csimint(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
         conf.level=0.95,
         alternative=c("two.sided","less","greater"), asympt=FALSE,
@@ -45,8 +43,6 @@ csimtest(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
 \method{simtest}{lm}(object, psubset = NULL, ...)
 }
 \arguments{
-  \item{n}{ a (possibly named) vector of sample sizes for each group or a
-            vector of factor levels. }
   \item{type}{the type of contrast to be used.}
   \item{cmatrix}{the contrast matrix itself can be specified. If
 \code{cmatrix} is defined, \code{type} is ignored.}
@@ -86,7 +82,7 @@ or whether the uncontrained method will be used.}
 }
 \details{
   The old user interface, especially the user visible functions \code{simint}, \code{csimint}, 
-  \code{simtest}, \code{csimtest}, has been replaced by one single function \code{\link{mcp}}
+  \code{simtest}, \code{csimtest}, has been replaced by one single function \code{\link{glht}}
   which offers \code{summary}, \code{confint} and \code{plot} methods.
 }
 \keyword{misc}

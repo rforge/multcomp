@@ -41,9 +41,9 @@ rmsets <- function(sets)
 
 ### compute maximal sets of linear hypotheses
 ### cf. Westfall (1997, Section 3.2)
-maxsets <- function(hypotheses) 
+maxsets <- function(K) 
 {
-    C <- t(hypotheses)
+    C <- t(K)
     k <- ncol(C)
     p <- nrow(C)
     S <- 1:k

@@ -81,11 +81,11 @@
                    "Old x Good", "Old x Poor", "Young x Good", "Young x Poor") 
 
   ### set up one-sided multiple comparisons
-  rmcp <- mcp(amod, hypotheses = C, alternative="less")
+  rht <- glht(amod, K = C, alternative="less")
 
   ### see Westfall et al. (1999, page 198)
-  summary(rmcp, distribution = univariate())
-  summary(rmcp, distribution = adjusted("Shaffer"))
+  summary(rht, distribution = univariate())
+  summary(rht, distribution = adjusted("Shaffer"))
 
 }
 \keyword{datasets}

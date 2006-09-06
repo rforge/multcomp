@@ -1,20 +1,20 @@
 
-export(mcp, linhypo, univariate, adjusted, 
+export(glht, contrMat, univariate, adjusted, 
        ### deprecated
-       csimint, simint, csimtest, simtest, contrMat)
+       csimint, simint, csimtest, simtest)
 
-S3method(summary, mcp)
-S3method(confint, mcp)
-S3method(print, mcp)
-S3method(print, confint.mcp)
-S3method(plot, confint.mcp)
-S3method(print, linhypo)
-S3method(print, summary.mcp)
+S3method(summary, glht)
+S3method(confint, glht)
+S3method(print, glht)
+S3method(print, confint.glht)
+S3method(plot, confint.glht)
+S3method(print, contrMat)
+S3method(print, summary.glht)
 
 ### deprecated from multcomp version 0.4-8
 S3method(simint, formula)
 S3method(simint, lm)
 S3method(simtest, formula)
 S3method(simtest, lm)
-S3method(summary, summary.mcp)
-S3method(summary, confint.mcp)
+S3method(summary, summary.glht)
+S3method(summary, confint.glht)

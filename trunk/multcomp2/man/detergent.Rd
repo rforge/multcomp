@@ -33,15 +33,15 @@
   amod <- aov(plates ~ block + detergent, data = detergent)
 
   ### set up all-pair comparisons
-  dmcp <- mcp(amod, hypotheses = list(detergent = "Tukey"))
+  dht <- glht(amod, K = list(detergent = "Tukey"))
 
   ### see Westfall et al. (1999, p. 190)
-  confint(dmcp)
+  confint(dht)
 
   ### see Westfall et al. (1999, p. 192)
-  summary(dmcp, distribution = univariate())
-  summary(dmcp, distribution = adjusted("Shaffer"))
-  summary(dmcp, distribution = adjusted("Westfall"))
+  summary(dht, distribution = univariate())
+  summary(dht, distribution = adjusted("Shaffer"))
+  summary(dht, distribution = adjusted("Westfall"))
 
 }
 \keyword{datasets}

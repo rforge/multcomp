@@ -40,22 +40,22 @@
   amod <- aov(response ~ trt, data = cholesterol)
 
   ### set up multiple comparisons object for all-pair comparisons
-  cmcp <- mcp(amod, hypotheses = list(trt = "Tukey"))
+  cht <- glht(amod, K = list(trt = "Tukey"))
 
   ### cf. Westfall et al. (1999, page 171)
-  summary(cmcp, distribution = univariate())
-  summary(cmcp, distribution = adjusted("Shaffer"))
-  summary(cmcp, distribution = adjusted("Westfall"))
+  summary(cht, distribution = univariate())
+  summary(cht, distribution = adjusted("Shaffer"))
+  summary(cht, distribution = adjusted("Westfall"))
 
   ### use only a subset of all pairwise hypotheses
-  K <- linhypo(cholesterol$trt, type="Tukey")
+  K <- contrMat(table(cholesterol$trt), type="Tukey")
   Ksub <- rbind(K[c(1,2,5),],
                 "D-test" = c(-1, -1, -1, 3, 0),
                 "E-test" = c(-1, -1, -1, 0, 3))
 
   ### reproduce results in Westfall et al. (1999, page 172)
   amod <- aov(response ~ trt - 1, data = cholesterol)
-  summary(mcp(amod, hypotheses = list(trt = Ksub[,5:1])), 
+  summary(glht(amod, K = list(trt = Ksub[,5:1])), 
           distribution = adjusted("Westfall"))
 
 }

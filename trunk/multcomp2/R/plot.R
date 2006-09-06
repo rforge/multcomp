@@ -1,6 +1,6 @@
 
 ### uhhh -- mainly copy and paste from plot.TukeyHSD
-plot.confint.mcp <- function(x, ...) {
+plot.confint.glht <- function(x, ...) {
 
     xi <- x$confint
     yvals <- nrow(xi):1

@@ -37,10 +37,10 @@
   amod <- aov(minutes ~ blanket, data = recovery)
 
   ### set up multiple comparisons: one-sided Dunnett contrasts
-  rmcp <- mcp(amod, hypotheses = list(blanket = "Dunnett"), alternative = "less")
+  rht <- glht(amod, K = list(blanket = "Dunnett"), alternative = "less")
 
   ### cf. Westfall et al. (1999, p. 80)
-  confint(rmcp, level = 0.9)
+  confint(rht, level = 0.9)
 
 }
 \keyword{datasets}
