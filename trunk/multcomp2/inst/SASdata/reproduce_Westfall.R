@@ -120,7 +120,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
              "cont-mid"  = c(1,  0, -1,  0),
              "cont-high" = c(1,  0,  0, -1))
 
-### hourse regression line
+### house regression line
 
   houseA <- subset(house, location == "A")
 
@@ -132,3 +132,108 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   confint(gh)
 
+### patient satisfaction, page 125, program 6.10
+
+  pat_sat <- pat_sat[order(pat_sat$severe),]
+  lmod <- lm(satisf ~ age + severe + anxiety, data = pat_sat)
+  K <- cbind(1, mean(pat_sat$age), pat_sat$severe, mean(pat_sat$anxiety))
+
+  gh <- glht(lmod, K = K)
+
+  ci <- confint(gh)
+
+  # page 127
+  plot(pat_sat$severe, ci$confint[,"Estimate"], 
+       xlab = "Severity", ylab = "Satisfaction", type = "b", 
+       ylim = c(30, 80), xlim = c(45, 60))
+  lines(pat_sat$severe, ci$confint[,"lwr"], lty = 2)
+  lines(pat_sat$severe, ci$confint[,"upr"], lty = 2)
+
+### tire data, page 127, program 6.12
+
+  amod <- aov(cost ~ make + make:mph, data = tire)
+
+  x <- seq(from = 10, to = 75, by = 5)
+  K <- cbind(0, 1, x, -x)
+  rownames(K) <- x
+
+  # page 129
+  gh <- glht(amod, K = K)
+
+  confint(gh)
+
+### cholesterol data, page 153, program 8.1
+
+  amod <- aov(response ~ trt, data = cholesterol)
+  
+  gh <- glht(amod, K = list(trt = c("B - A = 0",
+                                    "C - A = 0",
+                                    "D - A = 0",
+                                    "E - A = 0",
+                                    "C - B = 0",
+                                    "D - B = 0",
+                                    "E - B = 0",
+                                    "D - C = 0",
+                                    "E - C = 0",
+                                    "E - D = 0")))
+
+  # page 171
+  summary(gh, test = univariate())
+  summary(gh, test = adjusted("Shaffer"))
+  summary(gh, test = adjusted("Westfall"))
+
+  gh <- glht(amod, K = list(trt = c("D - E = 0",
+                                    "C - E = 0",
+                                    "C - D = 0",
+                                    "3 * B - C - D - E = 0",
+                                    "3 * A - C - D - E = 0")))
+
+  # page 172
+  summary(gh, test = univariate())
+  summary(gh, test = adjusted("Shaffer"))
+  summary(gh, test = adjusted("Westfall"))
+
+### waste data, page 177, program 9.1
+
+  waste$temp <- as.factor(waste$temp)
+  waste$envir <- as.factor(waste$envir)
+  amod <- aov(waste ~ temp * envir, data = waste)
+
+  # page 179
+  confint(glht(amod, K = list(temp = "Tukey")))
+  confint(glht(amod, K = list(envir = "Tukey")))
+
+  gh <- glht(amod, K = list(temp = "Tukey", envir = "Tukey"))
+ 
+  # page 181
+  confint(gh)
+  
+  # page 186
+  summary(gh, test = univariate())
+  summary(gh, test = adjusted("Shaffer"))
+  summary(gh, test = adjusted("Westfall"))
+
+### drug data, page 187, program 9.7
+
+  drug$drug <- as.factor(drug$drug)
+  amod <- aov(response ~ drug * disease, data = drug)
+
+  confint(glht(amod, K = list(drug = "Tukey")))
+
+### detergents data, page 189, program 9.8
+
+  detergent$block <- as.factor(detergent$block)
+  detergent$detergent <- as.factor(detergent$detergent)
+  amod <- aov(plates ~ block + detergent, data = detergent)
+
+  gh <- glht(amod, K = list(detergent = "Tukey"))
+
+  # page 190
+  confint(gh)
+
+  # page 192
+  summary(gh, test = univariate())
+  summary(gh, test = adjusted("Shaffer"))
+  summary(gh, test = adjusted("Westfall"))
+
+###   
