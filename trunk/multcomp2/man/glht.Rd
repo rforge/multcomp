@@ -2,6 +2,8 @@
 \alias{glht}
 \alias{summary.glht}
 \alias{confint.glht}
+\alias{coef.glht}
+\alias{vcov.glht}
 \alias{univariate}
 \alias{adjusted}
 \title{ General Linear Hypotheses }
@@ -12,6 +14,8 @@
 glht(model, K = NULL, m = 0, alternative = c("two.sided", "less", "greater"), ...)
 \method{summary}{glht}(object, test = adjusted(), ...)
 \method{confint}{glht}(object, parm, level = 0.95, ...)
+\method{coef}{glht}(object, null = FALSE, ...)
+\method{vcov}{glht}(object, ...)
 univariate()
 adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
 }
@@ -29,6 +33,8 @@ adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
   \item{object}{an object of class \code{glht}.}
   \item{parm}{}
   \item{level}{confidence level}
+  \item{null}{logical, indicating whether \eqn{K \hat{\beta}} or \eqn{m} (\code{null = FALSE})
+              should be returned.}
   \item{type}{the type of adjustment to be applied.}
   \item{...}{additional arguments, such as \code{maxpts}, \code{abseps} or \code{releps} to
              \code{\link[mvtnorm]{pmvnorm}} in \code{adjusted} or 
@@ -41,8 +47,8 @@ adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
 }
 \value{
 
-  An object of class \code{glht} with \code{summary} and \code{confint} 
-  methods being available.
+  An object of class \code{glht} with \code{summary}, \code{confint}, \code{coef} and 
+  \code{vcov} methods being available.
 
 }
 \examples{

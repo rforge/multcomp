@@ -6,6 +6,8 @@ export(glht, contrMat, univariate, adjusted,
 S3method(summary, glht)
 S3method(confint, glht)
 S3method(print, glht)
+S3method(coef, glht)
+S3method(vcov, glht)
 S3method(print, confint.glht)
 S3method(plot, confint.glht)
 S3method(print, contrMat)

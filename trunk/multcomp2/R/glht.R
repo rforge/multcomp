@@ -58,7 +58,8 @@ glht <- function(model, K = NULL, m = 0,
             stop("dimensions of ", sQuote("K"), " and ", 
                  sQuote("coef(model)"), "don't match")
 
-        if (!any(length(m) == c(1, nrow(K))))
+        if (length(m) == 1) m <- rep(m, nrow(K))
+        if (length(m) != nrow(K))
             stop("dimensions of ", sQuote("K"), " and ", 
                  sQuote("m"), "don't match")
 
@@ -156,7 +157,8 @@ glht <- function(model, K = NULL, m = 0,
     }
     rownames(Ktotal) <- unlist(lapply(hypo, function(x) rownames(x$K)))
 
-    if (!any(length(m) == c(1, nrow(Ktotal))))
+    if (length(m) == 1) m <- rep(m, nrow(Ktotal))
+    if (length(m) != nrow(Ktotal))
         stop("dimensions of ", sQuote("K"), " and ", 
              sQuote("m"), "don't match")
 
@@ -168,6 +170,15 @@ glht <- function(model, K = NULL, m = 0,
     class(RET) <- "glht"
     return(RET)
 }
+
+coef.glht <- function(object, null = FALSE, ...) 
+{
+    if (null) return(object$m)
+    drop(object$K %*% coef(object$model))
+}
+
+vcov.glht <- function(object, ...) 
+    object$K %*% tcrossprod(vcov(object$model), object$K)
 
 summary.glht <- function(object, test = adjusted(), ...) {
 

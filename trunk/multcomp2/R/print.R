@@ -1,9 +1,8 @@
 
 print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...) {
     cat("\n\t", "General Linear Hypotheses\n\n")
-    x <- x$K %*% x$beta
+    x <- matrix(coef(x), ncol = 1, dimnames = list(names(coef(x)), "Estimate"))
     cat("Linear Hypotheses:\n")
-    colnames(x) <- "Estimate"
     print(x, digits = digits)
     cat("\n")
     invisible(x)

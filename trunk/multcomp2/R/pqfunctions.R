@@ -3,20 +3,12 @@
 
 pqglht <- function(object) 
 {
-
-    beta <- object$beta
-    sigma <- object$sigma
-    K <- object$K
-    m <- object$m
+    betahat <- coef(object)
+    covm <- vcov(object)
+    cr <- cov2cor(covm)
+    m <- coef(object, null = TRUE)
     df <- object$df
-    alternative <- object$alternative
 
-    covm <- K %*% sigma %*% t(K)
-    d <- 1/sqrt(diag(covm))
-    if (length(d) > 1) d <- diag(d)              
-    cr    <- d %*% covm %*% t(d)
-
-    betahat  <- K %*% beta
     ses <- sqrt(diag(covm))
     tstat <- (betahat - m) / ses
     dim <- ncol(cr)
@@ -26,7 +18,7 @@ pqglht <- function(object)
         type <- match.arg(type) 
 
         pfct <- function(q) {
-            switch(alternative, "two.sided" = {
+            switch(object$alternative, "two.sided" = {
                       low <- rep(-abs(q), dim)
                       upp <- rep( abs(q), dim)
                }, "less" = {
@@ -39,7 +31,7 @@ pqglht <- function(object)
                pmvt(lower = low, upper = upp, df = df, corr = cr, ...)
         }
 
-        switch(alternative, "two.sided" = {
+        switch(object$alternative, "two.sided" = {
             if (df > 0) pvals <- 2*(1-pt(abs(tstat),df))     
             else        pvals <- 2*(1-pnorm(abs(tstat)))
         }, "less" = {
@@ -58,18 +50,18 @@ pqglht <- function(object)
             return(pmin(1, dim * pvals))
 
         if (type == "adjusted")
-            return(1 - apply(tstat, 1, pfct))
+            return(1 - sapply(tstat, pfct))
     }
 
     qfunction <- function(conf.level, ...) {
 
-        tail <- switch(alternative, "two.sided" = "both.tails",
+        tail <- switch(object$alternative, "two.sided" = "both.tails",
                                     "less"      = "upper.tail",
                                     "greater"   = "lower.tail")
         calpha <- qmvt(conf.level, df = df, corr = cr, tail = tail, 
                        ...)$quantile
 
-        switch(alternative, "two.sided" = {  
+        switch(object$alternative, "two.sided" = {  
             LowerCL <- betahat - calpha*ses
             UpperCL <- betahat + calpha*ses
         }, "less" = {
@@ -130,16 +122,19 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
     ### Shaffer (1886, JASA): constraints
     return(function(object) {
         RET <- pqglht(object)
+        m <- coef(object, null = TRUE)
         tstat <- switch(object$alternative, 
                         "less" = RET$tstat,
                         "greater" = -RET$tstat,
                         "two.sided" = -abs(RET$tstat))
         C <- object$K
-        Corder <- C[order(tstat), ]
+        Corder <- C[order(tstat), , drop = FALSE]
+        Cm <- m[order(tstat)]
         ms <- maxsets(Corder)
         p <- sapply(ms, function(x) {
            max(sapply(x, function(s) {
                 object$K <- Corder[s, , drop = FALSE]
+                object$m <- Cm[s]
                 min(pqglht(object)$pfunction(ifelse(type == "Westfall", 
                                                    "adjusted", "Bonferroni"), 
                                             ...))
