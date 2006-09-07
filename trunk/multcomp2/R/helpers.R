@@ -137,7 +137,7 @@ expression2K <- function(ex, y) {
         if (!any(cf$level == y))
             stop("level \"", cf$level, "\" not found")
         K[y == cf$level] <- cf$coef
-        if (length(x) > 1) {
+        if (length(x) > 1 && !is.numeric(x[[2]])) {
             x <- x[[2]]   
         } else {
             break

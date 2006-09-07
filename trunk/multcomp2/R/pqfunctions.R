@@ -5,12 +5,12 @@ pqglht <- function(object)
 {
     betahat <- coef(object)
     covm <- vcov(object)
-    cr <- cov2cor(covm)
     m <- coef(object, null = TRUE)
     df <- object$df
 
     ses <- sqrt(diag(covm))
     tstat <- (betahat - m) / ses
+    cr <- cov2cor(covm)
     dim <- ncol(cr)
 
     pfunction <- function(type = c("univariate", "Bonferroni", "adjusted"), ...) {
@@ -75,6 +75,7 @@ pqglht <- function(object)
         cint <- cbind(LowerCL, UpperCL)
         colnames(cint) <- c("lower", "upper")
         attr(cint, "conf.level") <- conf.level
+        attr(cint, "calpha") <- calpha
         return(cint)
     }
     RET <- list(pfunction = pfunction, qfunction = qfunction,

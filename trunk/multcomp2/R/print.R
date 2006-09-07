@@ -40,6 +40,8 @@ print.confint.glht <- function(x, digits = max(3, getOption("digits") - 3),
     cat("Fit: ")
     print(x$model$call)
     cat("\n")
+    cat("Estimated Quantile =", round(attr(x$confint, "calpha"), digits))
+    cat("\n\n")
     cat("Linear Hypotheses:\n")
     print(format(x$confint, nsmall = digits, digits = digits), quote = FALSE)
     cat("\n")

@@ -195,10 +195,12 @@ summary.glht <- function(object, test = adjusted(), ...) {
 confint.glht <- function(object, parm, level = 0.95, ...) {
 
     pq <- pqglht(object)
+    ci <- pq$qfunction(conf.level = level, ...)
     object$confint <- cbind(pq$coefficients, 
-                            pq$qfunction(conf.level = level, ...))
+                            ci)
     colnames(object$confint) <- c("Estimate", "lwr", "upr")
     attr(object$confint, "conf.level") <- level
+    attr(object$confint, "calpha") <- attr(ci, "calpha")
     class(object) <- c("confint.glht", "glht")
     return(object)
 }
