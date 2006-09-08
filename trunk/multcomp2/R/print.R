@@ -13,7 +13,11 @@ print.summary.glht <- function(x, digits = max(3, getOption("digits") - 3),
 {
     cat("\n\t", "Multiple Tests for General Linear Hypotheses\n\n")
     cat("Fit: ")
-    print(x$model$call)
+    if (inherits(x$model, "lmer")) {
+        print(x$model@call)
+    } else {
+        print(x$model$call)
+    }
     cat("\n")
     type <- attr(x$mtests, "type")
     attr(x$mtests, "type") <- NULL
@@ -38,7 +42,11 @@ print.confint.glht <- function(x, digits = max(3, getOption("digits") - 3),
     level <- attr(x$confint, "conf.level")
     attr(x$confint, "conf.level") <- NULL
     cat("Fit: ")
-    print(x$model$call)
+    if (inherits(x$model, "lmer")) {
+        print(x$model@call)
+    } else {
+        print(x$model$call)
+    }
     cat("\n")
     cat("Estimated Quantile =", round(attr(x$confint, "calpha"), digits))
     cat("\n\n")

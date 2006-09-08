@@ -74,6 +74,39 @@ model.matrix.coxph <- function(object, ...)
     mm
 }
 
+model.matrix.lmer <- function(object, ...) {
+    x <- object@X
+    if (is.null(x))
+        stop("models of class ", sQuote("lmer"), 
+             " need to be fitted with argument ", 
+             sQuote("model = TRUE"))
+    x
+}
+
+model.frame.lmer <- function(object, ...) {
+    x <- object@frame
+    if (is.null(x))
+        stop("models of class ", sQuote("lmer"), 
+             " need to be fitted with argument ", 
+             sQuote("model = TRUE"))
+    x
+}
+
+terms.lmer <- function(object, ...) {
+    x <- object@terms
+    if (is.null(x))
+        stop("models of class ", sQuote("lmer"), 
+             " need to be fitted with argument ", 
+             sQuote("model = TRUE"))
+    x
+}
+
+coeflmer <- function(object, ...) {
+    x <- object@fixef
+    names(x) <- rownames(vcov(object))
+    x
+}
+
 ### handle contrasts specified via (character) expressions
 ### extract left hand side of an expression
 lhs <- function(ex) {
@@ -166,3 +199,4 @@ chr2K <- function(ex, y) {
     rownames(K) <- ex
     list(K = K, m = m)
 }
+ 

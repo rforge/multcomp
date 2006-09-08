@@ -99,6 +99,8 @@ glht <- function(model, K = NULL, m = 0,
                 }
             }
         }
+        if (is.null(rownames(K[[nm]]))) 
+            rownames(K[[nm]]) <- 1:nrow(K[[nm]])
     }
 
     ### transform linear hypotheses using model contrasts
@@ -174,11 +176,14 @@ glht <- function(model, K = NULL, m = 0,
 coef.glht <- function(object, null = FALSE, ...) 
 {
     if (null) return(object$m)
-    drop(object$K %*% coef(object$model))
+    betahat <- coef(object$model)
+    if (inherits(object$model, "lmer"))
+        betahat <- coeflmer(object$model)
+    drop(object$K %*% betahat)
 }
 
 vcov.glht <- function(object, ...) 
-    object$K %*% tcrossprod(vcov(object$model), object$K)
+    object$K %*% tcrossprod(as.matrix(vcov(object$model)), object$K)
 
 summary.glht <- function(object, test = adjusted(), ...) {
 

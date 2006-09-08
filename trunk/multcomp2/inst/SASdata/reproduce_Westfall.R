@@ -232,8 +232,106 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   confint(gh)
 
   # page 192
+
+### pigs data, page 195, program 9.13
+
+  pigs$pen <- as.factor(pigs$pen)
+  pigs$feed <- as.factor(pigs$feed)
+  amod <- aov(gain ~ pen + feed * sex + initial, data = pigs)
+
+  S <- matrix(c(1, -1), ncol = 2, dimnames = list("F-M", c("F", "M")))
+  gh <- glht(amod, K = list(feed = "Tukey", sex = S))
+  gh$K <- rbind(gh$K, "initial" = c(rep(0, 10), 1))
+  gh$m <- c(gh$m, 0)
+
+  # page 194
+  confint(gh)
+
+  # page 195
   summary(gh, test = univariate())
   summary(gh, test = adjusted("Shaffer"))
   summary(gh, test = adjusted("Westfall"))
 
-###   
+### respiratory, page 196, program 9.14
+
+         ### three-way ANOVA without intercept
+       amod <- aov(Score ~ Treatment:AgeGroup:InitHealth - 1, data = respiratory)
+       
+       ### compute weighted linear hypotheses in several steps 
+       ### overall active vs. placebo
+       CA  <- c(13,  0, 11,  0, 13,  0, 17,  0)
+       CP  <- c( 0, 14,  0, 12,  0, 19,  0, 12)
+       CA  <- CA/sum(CA)
+       CP  <- CP/sum(CP)
+       C1  <- CP-CA
+
+       ### for older subgroup only
+       CAO <- c(13,  0,  0,  0, 13,  0,  0,  0) 
+       CPO <- c( 0, 14,  0,  0,  0, 19,  0,  0) 
+       CAO <- CAO/sum(CAO)
+       CPO <- CPO/sum(CPO)
+       C2  <- CPO - CAO
+
+       ### for younger subgroup only 
+       CAY <- c(0,  0, 11,  0,  0,  0, 17,  0) 
+       CPY <- c(0,  0,  0, 12,  0,  0,  0, 12) 
+       CAY <- CAY/sum(CAY)
+       CPY <- CPY/sum(CPY)
+       C3  <- CPY - CAY
+
+       ### subgroup with inital good health
+       CAG <- c(13,  0, 11,  0,  0,  0,  0,  0) 
+       CPG <- c( 0, 14,  0, 12,  0,  0,  0,  0) 
+       CAG <- CAG/sum(CAG)
+       CPG <- CPG/sum(CPG)
+       C4  <- CPG - CAG
+
+       ### subgroup with inital poor health
+       CAP <- c(0,  0,  0,  0, 13,  0, 17,  0 ) 
+       CPP <- c(0,  0,  0,  0,  0, 19,  0, 12 ) 
+       CAP <- CAP/sum(CAP)
+       CPP <- CPP/sum(CPP)
+       C5  <- CPP - CAP
+
+       ### all 4 subgroup combinations of age and initial health condition 
+       C6  <- c(-1,  1,  0,  0,  0,  0,  0,  0)
+       C7  <- c( 0,  0,  0,  0, -1,  1,  0,  0)
+       C8  <- c( 0,  0, -1,  1,  0,  0,  0,  0)
+       C9  <- c( 0,  0,  0,  0,  0,  0, -1,  1)
+
+       ### matrix of linear hypotheses
+       C <- rbind(C1, C2, C3, C4, C5, C6, C7, C8, C9)   
+       rownames(C) <- c("Overall", "Older", "Younger", "Good Init", "Poor Init",
+                        "Old x Good", "Old x Poor", "Young x Good", "Young x Poor") 
+
+       ### set up one-sided multiple comparisons
+       rht <- glht(amod, K = C, alternative="less")
+
+       ### see Westfall et al. (1999, page 198)
+       summary(rht, test = univariate())
+       summary(rht, test = adjusted("Shaffer"))
+
+### wine data, page 199, program 9.16
+
+  wine$Purchase <- as.factor(wine$Purchase)
+  wine$CustomerType <- as.factor(wine$CustomerType)
+  wine$light <- as.factor(wine$light)
+  wine$music <- as.factor(wine$music)
+
+  amod <- glm(Purchase ~ CustomerType + light + music + CustomerType:light + CustomerType:music
+              + light:music + CustomerType:light:music + handle + examine, data = wine,
+              family = binomial())
+
+### wloss data, page 205, program 10.1
+
+  library("lme4")
+  lmod <- lmer(wloss ~ diet + (1 | i), data = wloss, model = TRUE)
+  
+  gh <- glht(lmod, list(diet = "Tukey"))
+
+  # page 205
+  confint(gh)
+
+  # page 207 / 208
+  summary(gh)
+
