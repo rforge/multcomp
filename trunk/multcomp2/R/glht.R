@@ -6,8 +6,8 @@
 ### `coef' and `vcov'
 ### `K' is either a named list of characters or matrices _or_ a matrix.
 
-glht <- function(model, K = NULL, m = 0,
-                 alternative = c("two.sided", "less", "greater"), ...) {
+glht <- function(model, K, m = 0,
+                 alternative = c("two.sided", "less", "greater")) {
 
     ### extract model matrix, frame and terms
     mm <- try(model.matrix(model))
@@ -43,8 +43,12 @@ glht <- function(model, K = NULL, m = 0,
         df <- summary(model)$df[2]
     }
 
+    if (!any(c(is.character(K),
+               is.matrix(K),
+               is.list(K))))
+        stop(sQuote("K"), " is neither character, matrix nor list")
 
-    ### OK! You know what you want!
+    ### interpret K in terms of coef(model)
     if (is.character(K)) {
         tmp <-  chr2K(K, names(beta))
         K <- tmp$K
@@ -71,7 +75,8 @@ glht <- function(model, K = NULL, m = 0,
         return(RET)
     }
 
-    ### factors and contrasts
+    ### interpret K in terms of factor levels
+    ### extract factors and contrasts
     contrasts <- attr(mm, "contrasts")
     factors <- attr(tm, "factors")
     intercept <- attr(tm, "intercept") != 0
@@ -82,14 +87,18 @@ glht <- function(model, K = NULL, m = 0,
     nhypo <- names(K)
     checknm <- nhypo %in% rownames(factors) & sapply(mf[nhypo], is.factor)
     if (!all(checknm)) 
-        stop("Factor", nhypo[!checknm], "not found!")
+        stop("Factor(s) ", nhypo[!checknm], " not found!")
     for (nm in nhypo) {
         if (is.character(K[[nm]])) {
             kch <- K[[nm]]
-            ### compute K from `contrMat' or from expressions
-            if (any(kch %in%  eval(formals(contrMat)$type))) {
-                K[[nm]] <- contrMat(table(mf[[nm]]), type = kch, ...)
+            ### check if kch is suitable as `type' argument to `contrMat'
+            types <- eval(formals(contrMat)$type)
+            pm <- pmatch(kch, types)
+            ### if yes, compute K from `contrMat'
+            if (!is.na(pm)) {
+                K[[nm]] <- contrMat(table(mf[[nm]]), type = types[pm])
             } else {
+                ### if not, interpret kch as an expression
                 tmp <-  chr2K(kch, levels(mf[[nm]]))
                 K[[nm]] <- tmp$K
                 if (m == 0) {
@@ -142,12 +151,11 @@ glht <- function(model, K = NULL, m = 0,
             Kstar <- cbind(Kstar, Kinter)
         }
         hypo[[nm]] <- list(K = Kstar,
-                           where = attr(mm, "assign") %in% which(factors[nm,] == 1),
-                           type = paste(attr(K[[nm]], "type"), 
-                                        "(", nm, ")", sep = ""))
+            where = attr(mm, "assign") %in% which(factors[nm,] == 1),
+            type = paste(attr(K[[nm]], "type"), "(", nm, ")", sep = ""))
     }
 
-    ### create matrix of all transformed linear hypoheses
+    ### create matrix of all linear hypoheses
     Ktotal <- matrix(0, nrow = sum(sapply(hypo, function(x) nrow(x$K))),
                      ncol = ncol(mm))
     colnames(Ktotal) <- colnames(mm)
@@ -168,7 +176,8 @@ glht <- function(model, K = NULL, m = 0,
     RET <- list(model = model, K = Ktotal, m = m, 
                 beta = beta, sigma = sigma, df = df,
                 alternative = alternative,
-                type = paste(sapply(hypo, function(x) x$type), collapse = ";"))
+                type = paste(sapply(hypo, function(x) x$type), 
+                             collapse = ";"))
     class(RET) <- "glht"
     return(RET)
 }
@@ -185,8 +194,8 @@ coef.glht <- function(object, null = FALSE, ...)
 vcov.glht <- function(object, ...) 
     object$K %*% tcrossprod(as.matrix(vcov(object$model)), object$K)
 
-summary.glht <- function(object, test = adjusted(), ...) {
-
+summary.glht <- function(object, test = adjusted(), ...) 
+{
     pq <- test(object)
     object$mtests <- cbind(pq$coefficients, pq$sigma, pq$tstat, 
                            pq$pvalues)
@@ -197,12 +206,11 @@ summary.glht <- function(object, test = adjusted(), ...) {
     return(object)
 }
 
-confint.glht <- function(object, parm, level = 0.95, ...) {
-
+confint.glht <- function(object, parm, level = 0.95, ...) 
+{
     pq <- pqglht(object)
     ci <- pq$qfunction(conf.level = level, ...)
-    object$confint <- cbind(pq$coefficients, 
-                            ci)
+    object$confint <- cbind(pq$coefficients, ci)
     colnames(object$confint) <- c("Estimate", "lwr", "upr")
     attr(object$confint, "conf.level") <- level
     attr(object$confint, "calpha") <- attr(ci, "calpha")

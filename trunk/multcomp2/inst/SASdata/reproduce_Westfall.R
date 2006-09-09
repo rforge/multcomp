@@ -99,6 +99,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   gh <- glht(amod, list(trt = "Dunnett"), alternative = "less")
 
+  # page 100
   summary(gh)
   confint(gh)
 
@@ -108,6 +109,8 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   amod <- aov(score ~ therapy * since + age, data = alz)
 
   gh <- glht(amod, K = list(therapy = "Tukey"))
+  gh$K[,8:11] <- gh$K[,8:11] * 10
+  gh$K[,"age"] <- mean(alz$age)
 
   confint(gh)
 
@@ -118,7 +121,26 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   K <- rbind("cont-low"  = c(1, -1,  0,  0),
              "cont-mid"  = c(1,  0, -1,  0),
-             "cont-high" = c(1,  0,  0, -1))
+             "cont-high" = c(1,  0,  0, -1),
+              otrend = c(1.5, 0.5, -0.5, -1.5) / 2,
+              atrend = c(0, 5, 50, 500) - mean(c(0, 5, 50, 500)),
+              ltrend = -(log(1:4) - mean(log(1:4))))
+  K["atrend",] <- K["atrend",] / -max(K["atrend",])
+
+  gh <- glht(amod, K = list(dose = K))
+
+  # page 110
+  summary(gh, test = univariate())
+
+  # page 111
+  gh$alternative <- "greater"
+  summary(gh, test = univariate())
+  summary(gh)
+  confint(gh)
+
+  # page 174
+  gh$alternative <- "greater"
+  summary(gh, test = adjusted("Westfall"))
 
 ### house regression line
 
@@ -130,6 +152,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   gh <- glht(lmod, K = K)
 
+  # page 123
   confint(gh)
 
 ### patient satisfaction, page 125, program 6.10
@@ -151,31 +174,24 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
 ### tire data, page 127, program 6.12
 
-  amod <- aov(cost ~ make + make:mph, data = tire)
+  amod <- aov(cost ~ make + make:mph - 1, data = tire)
 
-  x <- seq(from = 10, to = 75, by = 5)
-  K <- cbind(0, 1, x, -x)
+  x <- seq(from = 10, to = 70, by = 5)
+  K <- cbind(1, -1, x, -x)
   rownames(K) <- x
 
-  # page 129
   gh <- glht(amod, K = K)
 
+  # page 129
   confint(gh)
 
 ### cholesterol data, page 153, program 8.1
 
-  amod <- aov(response ~ trt, data = cholesterol)
+  cholesterol$trt <- as.factor(rev(as.integer(cholesterol$trt)))
+  levels(cholesterol$trt) <- LETTERS[1:5]
+  amod <- aov(response ~ trt - 1, data = cholesterol)
   
-  gh <- glht(amod, K = list(trt = c("B - A = 0",
-                                    "C - A = 0",
-                                    "D - A = 0",
-                                    "E - A = 0",
-                                    "C - B = 0",
-                                    "D - B = 0",
-                                    "E - B = 0",
-                                    "D - C = 0",
-                                    "E - C = 0",
-                                    "E - D = 0")))
+  gh <- glht(amod, K = list(trt = "Tukey"))
 
   # page 171
   summary(gh, test = univariate())
@@ -208,7 +224,11 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   # page 181
   confint(gh)
   
-  # page 186
+  # page 186 CHECK!
+  amod <- aov(waste ~ temp + envir, data = waste)
+
+  gh <- glht(amod, K = list(temp = "Tukey", envir = "Tukey"),
+             alternative = "greater")
   summary(gh, test = univariate())
   summary(gh, test = adjusted("Shaffer"))
   summary(gh, test = adjusted("Westfall"))
@@ -232,6 +252,9 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   confint(gh)
 
   # page 192
+  summary(gh, test = univariate())
+  summary(gh, test = adjusted("Shaffer"))
+  summary(gh, test = adjusted("Westfall"))
 
 ### pigs data, page 195, program 9.13
 

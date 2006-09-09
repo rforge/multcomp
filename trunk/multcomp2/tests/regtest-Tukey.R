@@ -1,6 +1,8 @@
 
 library("multcomp2")
 
+set.seed(290875)
+
 data("warpbreaks")
 fm1 <- aov(breaks ~ wool * tension, data = warpbreaks)
 

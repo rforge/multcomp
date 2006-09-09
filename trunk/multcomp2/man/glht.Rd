@@ -1,44 +1,27 @@
 \name{glht}
 \alias{glht}
-\alias{summary.glht}
-\alias{confint.glht}
-\alias{coef.glht}
-\alias{vcov.glht}
-\alias{univariate}
-\alias{adjusted}
 \title{ General Linear Hypotheses }
 \description{
-  Simultaneous Inference for General Linear Hypotheses in the Generalized Linear Model
+  General Linear Hypotheses in the Generalized Linear Model
 }
 \usage{
-glht(model, K = NULL, m = 0, alternative = c("two.sided", "less", "greater"), ...)
-\method{summary}{glht}(object, test = adjusted(), ...)
-\method{confint}{glht}(object, parm, level = 0.95, ...)
-\method{coef}{glht}(object, null = FALSE, ...)
-\method{vcov}{glht}(object, ...)
-univariate()
-adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
+glht(model, K, m = 0, alternative = c("two.sided", "less", "greater"))
 }
 \arguments{
-  \item{model}{ a fitted (generalized) linear model, for example \code{\link{lm}}, 
-                 \code{\link{glm}}, \code{\link{aov}} etc.}
-  \item{K}{ either a matrix of linear hypotheses for the coefficients of \code{object} or
-                     a named list of matrices (or \code{type} arguments for \code{\link{contrMat}}) 
-                     for linear hypotheses for levels of the corresponding factors. }
-  \item{m}{ right hand side of the hypothesis: \eqn{H_0: K \beta = m}. }
-  \item{alternative}{ a character string specifying the alternative hypothesis,
-          must be one of '"two.sided"' (default), '"greater"' or
-          '"less"'.  You can specify just the initial letter.}
-  \item{test}{a function for computing p values.}
-  \item{object}{an object of class \code{glht}.}
-  \item{parm}{}
-  \item{level}{confidence level}
-  \item{null}{logical, indicating whether \eqn{K \hat{\beta}} or \eqn{m} (\code{null = FALSE})
-              should be returned.}
-  \item{type}{the type of adjustment to be applied.}
-  \item{...}{additional arguments, such as \code{maxpts}, \code{abseps} or \code{releps} to
-             \code{\link[mvtnorm]{pmvnorm}} in \code{adjusted} or 
-             \code{\link[mvtnorm]{qmvnorm}} in \code{confint}.}
+  \item{model}{a fitted (generalized) linear model, 
+               for example \code{\link{lm}}, 
+               \code{\link{glm}}, \code{\link{aov}} etc.}
+  \item{K}{ either a matrix of linear hypotheses for 
+            the coefficients of \code{model} or a symbolic
+            description of the linear hypotheses. Alternatively,
+            a named list of matrices, symbolic descriptions 
+            or \code{type} arguments for \code{\link{contrMat}} 
+            for multiple comparisons of means, i.e., 
+            for the levels of the corresponding factors. }
+  \item{m}{right hand side of the hypothesis: \eqn{H_0: K \beta = m}.}
+  \item{alternative}{a character string specifying the alternative 
+      hypothesis, must be one of '"two.sided"' (default), '"greater"' or
+      '"less"'.  You can specify just the initial letter.}
 }
 \details{
 
@@ -47,7 +30,8 @@ adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
 }
 \value{
 
-  An object of class \code{glht} with \code{summary}, \code{confint}, \code{coef} and 
+  An object of class \code{glht} with \code{summary}, 
+  \code{confint}, \code{coef} and 
   \code{vcov} methods being available.
 
 }
@@ -57,50 +41,14 @@ adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
   amod <- aov(breaks ~ wool * tension, data = warpbreaks)
 
   ### set up all-pair comparisons for factor `tension'
-  wht <- glht(amod, K = list(tension = "Tukey"))
-
-  ### 95% simultaneous confidence intervals
-  plot(print(confint(wht)))
-
-  ### the same (for balanced designs only)
-  TukeyHSD(amod, "tension")
-
-  ### corresponding adjusted p values
-  summary(wht)
-
-
-  ### confidence bands for a simple linear model, `cars' data
-  plot(cars, xlab = "Speed (mph)", ylab = "Stopping distance (ft)",
-       las = 1)
-
-  ### fit linear model and add regression line to plot
-  lmod <- lm(dist ~ speed, data = cars)
-  abline(lmod)
-
-  ### a grid of speeds
-  speeds <- seq(from = min(cars$speed), to = max(cars$speed), 
-                length = 10)
-
-  ### linear hypotheses: 10 selected points on the regression line != 0
-  K <- cbind(1, speeds)                                                        
-
-  ### set up linear hypotheses
-  cht <- glht(lmod, K = K)
-
-  ### confidence intervals, i.e., confidence bands, and add them plot
-  cci <- confint(cht)
-  lines(speeds, cci$confint[,"lwr"], col = "blue")
-  lines(speeds, cci$confint[,"upr"], col = "blue")
+  glht(amod, K = list(tension = "Tukey"))
 
 
   ### simultaneous p values for parameters in a Cox model
   leuk.cox <- coxph(Surv(time) ~ ag + log(wbc), data = leuk)
 
   ### set up linear hypotheses
-  lht <- glht(leuk.cox, K = diag(length(coef(leuk.cox))))
-
-  ### adjusted p values
-  summary(lht)
+  glht(leuk.cox, K = diag(length(coef(leuk.cox))))
 
 }
 \keyword{htest}
