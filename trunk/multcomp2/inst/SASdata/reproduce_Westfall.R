@@ -1,6 +1,8 @@
 
 library("multcomp2")
 
+set.seed(290875)
+
 rda <- list.files(pattern = "\\.rda")
 sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
