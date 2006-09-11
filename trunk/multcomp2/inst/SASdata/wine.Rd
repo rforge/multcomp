@@ -9,8 +9,8 @@
 \format{
   A data frame with 169 observations on the following 6 variables.
   \describe{
-    \item{\code{Purchase}}{a numeric vector}
-    \item{\code{CustomerType}}{a numeric vector}
+    \item{\code{purchase}}{a numeric vector}
+    \item{\code{customertype}}{a numeric vector}
     \item{\code{light}}{a numeric vector}
     \item{\code{music}}{a numeric vector}
     \item{\code{handle}}{a numeric vector}

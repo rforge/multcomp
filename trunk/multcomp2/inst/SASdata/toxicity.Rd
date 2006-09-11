@@ -9,9 +9,9 @@
 \format{
   A data frame with 8 observations on the following 3 variables.
   \describe{
-    \item{\code{Group}}{a factor with levels \code{Curr} \code{High} \code{Hist} \code{Low}}
-    \item{\code{Outcome}}{a numeric vector}
-    \item{\code{Freq}}{a numeric vector}
+    \item{\code{group}}{a factor with levels \code{Curr} \code{High} \code{Hist} \code{Low}}
+    \item{\code{outcome}}{a numeric vector}
+    \item{\code{freq}}{a numeric vector}
   }
 }
 \details{

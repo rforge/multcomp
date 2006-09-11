@@ -11,7 +11,7 @@
   \describe{
     \item{\code{died}}{a numeric vector}
     \item{\code{freq}}{a numeric vector}
-    \item{\code{Penicillin}}{a factor with levels \code{1} \code{1/2} \code{1/4} \code{1/8} \code{4}}
+    \item{\code{penicillin}}{a factor with levels \code{1} \code{1/2} \code{1/4} \code{1/8} \code{4}}
   }
 }
 \details{

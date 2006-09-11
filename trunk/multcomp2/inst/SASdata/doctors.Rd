@@ -9,14 +9,14 @@
 \format{
   A data frame with 225 observations on the following 8 variables.
   \describe{
-    \item{\code{HDeath}}{a numeric vector}
-    \item{\code{MI_EKG}}{a numeric vector}
-    \item{\code{RFB}}{a numeric vector}
-    \item{\code{Infect}}{a numeric vector}
-    \item{\code{Neuro}}{a numeric vector}
-    \item{\code{Pulm}}{a numeric vector}
-    \item{\code{RenFail}}{a numeric vector}
-    \item{\code{Doctor}}{a numeric vector}
+    \item{\code{hdeath}}{a numeric vector}
+    \item{\code{mi_ekg}}{a numeric vector}
+    \item{\code{rfb}}{a numeric vector}
+    \item{\code{infect}}{a numeric vector}
+    \item{\code{neuro}}{a numeric vector}
+    \item{\code{pulm}}{a numeric vector}
+    \item{\code{renfail}}{a numeric vector}
+    \item{\code{doctor}}{a numeric vector}
   }
 }
 \details{

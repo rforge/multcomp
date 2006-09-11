@@ -9,13 +9,13 @@
 \format{
   A data frame with 12 observations on the following 7 variables.
   \describe{
-    \item{\code{Group}}{a factor with levels \code{Curr} \code{High} \code{Hist} \code{Low}}
-    \item{\code{Outcome}}{a numeric vector}
-    \item{\code{Freq}}{a numeric vector}
-    \item{\code{HistVsCurr}}{a numeric vector}
-    \item{\code{DummyGroup}}{a numeric vector}
-    \item{\code{Low_VsCurr}}{a numeric vector}
-    \item{\code{HighVsCurr}}{a numeric vector}
+    \item{\code{group}}{a factor with levels \code{Curr} \code{High} \code{Hist} \code{Low}}
+    \item{\code{outcome}}{a numeric vector}
+    \item{\code{freq}}{a numeric vector}
+    \item{\code{histvscurr}}{a numeric vector}
+    \item{\code{dummygroup}}{a numeric vector}
+    \item{\code{low_vscurr}}{a numeric vector}
+    \item{\code{highvscurr}}{a numeric vector}
   }
 }
 \details{

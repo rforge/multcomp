@@ -9,23 +9,23 @@
 \format{
   A data frame with 30 observations on the following 17 variables.
   \describe{
-    \item{\code{HusbQ1}}{a numeric vector}
-    \item{\code{HusbQ2}}{a numeric vector}
-    \item{\code{HusbQ3}}{a numeric vector}
-    \item{\code{HusbQ4}}{a numeric vector}
-    \item{\code{WifeQ1}}{a numeric vector}
-    \item{\code{WifeQ2}}{a numeric vector}
-    \item{\code{WifeQ3}}{a numeric vector}
-    \item{\code{WifeQ4}}{a numeric vector}
-    \item{\code{DiffQ1}}{a numeric vector}
-    \item{\code{DiffQ2}}{a numeric vector}
-    \item{\code{DiffQ3}}{a numeric vector}
-    \item{\code{DiffQ4}}{a numeric vector}
-    \item{\code{DiffQAvg}}{a numeric vector}
-    \item{\code{DiffComp}}{a numeric vector}
-    \item{\code{DiffPass}}{a numeric vector}
-    \item{\code{DiffFFP}}{a numeric vector}
-    \item{\code{DiffFFY}}{a numeric vector}
+    \item{\code{husbq1}}{a numeric vector}
+    \item{\code{husbq2}}{a numeric vector}
+    \item{\code{husbq3}}{a numeric vector}
+    \item{\code{husbq4}}{a numeric vector}
+    \item{\code{wifeq1}}{a numeric vector}
+    \item{\code{wifeq2}}{a numeric vector}
+    \item{\code{wifeq3}}{a numeric vector}
+    \item{\code{wifeq4}}{a numeric vector}
+    \item{\code{diffq1}}{a numeric vector}
+    \item{\code{diffq2}}{a numeric vector}
+    \item{\code{diffq3}}{a numeric vector}
+    \item{\code{diffq4}}{a numeric vector}
+    \item{\code{diffqavg}}{a numeric vector}
+    \item{\code{diffcomp}}{a numeric vector}
+    \item{\code{diffpass}}{a numeric vector}
+    \item{\code{diffffp}}{a numeric vector}
+    \item{\code{diffffy}}{a numeric vector}
   }
 }
 \details{

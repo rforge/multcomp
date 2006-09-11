@@ -6,6 +6,7 @@ sapply(csv, function(x) {
     tmp <- read.table(x, header = TRUE, sep = ",")
     name <- tolower(gsub(".csv", "", x))
     eval(parse(text = paste(name, " <- tmp")))
+    eval(parse(text = paste("names(", name, ") <- tolower(names(", name, "))", sep = "")))
     prompt(name = name)
     save(list = name, file = tolower(gsub("csv", "rda", x)))
 })

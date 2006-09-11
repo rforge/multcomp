@@ -9,9 +9,9 @@
 \format{
   A data frame with 444 observations on the following 4 variables.
   \describe{
-    \item{\code{Treatment}}{a factor with levels \code{Drug} \code{Placebo}}
-    \item{\code{Subject}}{a numeric vector}
-    \item{\code{Endpoint}}{a numeric vector}
+    \item{\code{treatment}}{a factor with levels \code{Drug} \code{Placebo}}
+    \item{\code{subject}}{a numeric vector}
+    \item{\code{endpoint}}{a numeric vector}
     \item{\code{y}}{a numeric vector}
   }
 }

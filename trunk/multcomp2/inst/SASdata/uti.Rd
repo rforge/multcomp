@@ -13,9 +13,9 @@
     \item{\code{treatment}}{a factor with levels \code{A} \code{B} \code{C}}
     \item{\code{cured}}{a numeric vector}
     \item{\code{total}}{a numeric vector}
-    \item{\code{AminusC}}{a numeric vector}
-    \item{\code{BminusC}}{a numeric vector}
-    \item{\code{CompminusUnComp}}{a numeric vector}
+    \item{\code{aminusc}}{a numeric vector}
+    \item{\code{bminusc}}{a numeric vector}
+    \item{\code{compminusuncomp}}{a numeric vector}
   }
 }
 \details{

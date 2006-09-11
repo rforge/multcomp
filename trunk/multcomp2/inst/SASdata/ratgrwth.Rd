@@ -10,11 +10,11 @@
   A data frame with 27 observations on the following 6 variables.
   \describe{
     \item{\code{trt}}{a factor with levels \code{Control} \code{Thiouracil} \code{Thyroxin}}
-    \item{\code{W0}}{a numeric vector}
-    \item{\code{W1}}{a numeric vector}
-    \item{\code{W2}}{a numeric vector}
-    \item{\code{W3}}{a numeric vector}
-    \item{\code{W4}}{a numeric vector}
+    \item{\code{w0}}{a numeric vector}
+    \item{\code{w1}}{a numeric vector}
+    \item{\code{w2}}{a numeric vector}
+    \item{\code{w3}}{a numeric vector}
+    \item{\code{w4}}{a numeric vector}
   }
 }
 \details{

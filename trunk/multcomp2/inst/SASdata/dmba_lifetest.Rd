@@ -9,9 +9,9 @@
 \format{
   A data frame with 40 observations on the following 3 variables.
   \describe{
-    \item{\code{Group}}{a numeric vector}
-    \item{\code{Days}}{a numeric vector}
-    \item{\code{Censored}}{a numeric vector}
+    \item{\code{group}}{a numeric vector}
+    \item{\code{days}}{a numeric vector}
+    \item{\code{censored}}{a numeric vector}
   }
 }
 \details{

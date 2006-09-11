@@ -9,9 +9,9 @@
 \format{
   A data frame with 21 observations on the following 3 variables.
   \describe{
-    \item{\code{Brand}}{a numeric vector}
+    \item{\code{brand}}{a numeric vector}
     \item{\code{i}}{a numeric vector}
-    \item{\code{NColony}}{a numeric vector}
+    \item{\code{ncolony}}{a numeric vector}
   }
 }
 \details{

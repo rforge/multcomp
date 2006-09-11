@@ -9,16 +9,16 @@
 \format{
   A data frame with 111 observations on the following 10 variables.
   \describe{
-    \item{\code{Age}}{a numeric vector}
-    \item{\code{R0}}{a numeric vector}
-    \item{\code{R1}}{a numeric vector}
-    \item{\code{R2}}{a numeric vector}
-    \item{\code{R3}}{a numeric vector}
-    \item{\code{R4}}{a numeric vector}
-    \item{\code{Score}}{a numeric vector}
-    \item{\code{Treatment}}{a factor with levels \code{Active} \code{Placebo}}
-    \item{\code{AgeGroup}}{a factor with levels \code{Older} \code{Younger}}
-    \item{\code{InitHealth}}{a factor with levels \code{Good} \code{Poor}}
+    \item{\code{age}}{a numeric vector}
+    \item{\code{r0}}{a numeric vector}
+    \item{\code{r1}}{a numeric vector}
+    \item{\code{r2}}{a numeric vector}
+    \item{\code{r3}}{a numeric vector}
+    \item{\code{r4}}{a numeric vector}
+    \item{\code{score}}{a numeric vector}
+    \item{\code{treatment}}{a factor with levels \code{Active} \code{Placebo}}
+    \item{\code{agegroup}}{a factor with levels \code{Older} \code{Younger}}
+    \item{\code{inithealth}}{a factor with levels \code{Good} \code{Poor}}
   }
 }
 \details{

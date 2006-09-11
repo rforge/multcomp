@@ -118,6 +118,12 @@ glht <- function(model, K, m = 0,
             } else {
                 m <- c(m, drop(unlist(sapply(tmp, function(x) x$m))))
             }
+        } else {
+            if (length(m) == 1) {
+                m <- rep(mnull, nrow(K[[nm]]))
+            } else {
+                m <- c(m, rep(mnull, nrow(K[[nm]])))
+            }
         }
     }
 
