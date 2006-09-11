@@ -2,8 +2,8 @@
 print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...) 
 {
     cat("\n\t", "General Linear Hypotheses\n\n")
-    x <- matrix(coef(x), ncol = 1, dimnames = list(names(coef(x)), 
-                                                   "Estimate"))
+    x <- cbind(coef(x), coef(x, null = TRUE))
+    colnames(x) <- c("Estimate", "Hypothesis")
     cat("Linear Hypotheses:\n")
     print(x, digits = digits)
     cat("\n")
@@ -78,5 +78,23 @@ print.contrMat <- function(x, digits = max(3, getOption("digits") - 3), ...) {
     attr(x, "type") <- NULL
     class(x) <- "matrix"  
     print(x, digits = digits)
+    invisible(x)
+}
+
+print.summary.glht.global <- function(x, 
+    digits = max(3, getOption("digits") - 3), ...) {
+
+    print.glht(x, digits = digits)
+    cat("Global Test:\n")
+    if (x$gtest$type == "Chisq") {
+        pr <- data.frame(x$gtest$SSH, x$gtest$df[1], x$gtest$pval)
+        names(pr) <- c("Sum Squares", "DF", "p value")
+    }
+    if (x$gtest$type == "F") {
+        pr <- data.frame(x$gtest$fstat, x$gtest$df[1], x$gtest$df[2], 
+                         x$gtest$pval)
+        names(pr) <- c("F stat", "DF1", "DF2", "p value")
+    }
+    print(pr, digits = digits)
     invisible(x)
 }

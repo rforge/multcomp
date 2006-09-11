@@ -5,6 +5,7 @@
 \alias{vcov.glht}
 \alias{univariate}
 \alias{adjusted}
+\alias{global}
 \title{ General Linear Hypotheses }
 \description{
   Simultaneous Inference for General Linear Hypotheses
@@ -16,6 +17,7 @@
 \method{vcov}{glht}(object, ...)
 univariate()
 adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
+global(type = c("Chisq", "F"))
 }
 \arguments{
   \item{object}{an object of class \code{\link{glht}}.}
