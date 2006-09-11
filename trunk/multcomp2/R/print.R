@@ -1,7 +1,9 @@
 
-print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...) {
+print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...) 
+{
     cat("\n\t", "General Linear Hypotheses\n\n")
-    x <- matrix(coef(x), ncol = 1, dimnames = list(names(coef(x)), "Estimate"))
+    x <- matrix(coef(x), ncol = 1, dimnames = list(names(coef(x)), 
+                                                   "Estimate"))
     cat("Linear Hypotheses:\n")
     print(x, digits = digits)
     cat("\n")
@@ -21,9 +23,17 @@ print.summary.glht <- function(x, digits = max(3, getOption("digits") - 3),
     cat("\n")
     type <- attr(x$mtests, "type")
     attr(x$mtests, "type") <- NULL
+    ### print p values according to simulation precision
+    error <- attr(x$mtests, "error")
+    if (!is.null(error) && error > .Machine$double.eps) {
+        sig <- which.min(abs(1 / error - (10^(1:10))))
+        sig <- 1 / (10^sig)
+    } else {
+        sig <- .Machine$double.eps
+    }
     cat("Linear Hypotheses:\n")
     printCoefmat(x$mtests, digits = digits, 
-                 has.Pvalue = TRUE, P.values = TRUE)
+                 has.Pvalue = TRUE, P.values = TRUE, eps.Pvalue = sig)
     switch(type, 
         "univariate" = cat("(Univariate p values reported)"),
         "Bonferroni" = cat("(Bonferroni-adjusted p values reported)"),
@@ -48,6 +58,9 @@ print.confint.glht <- function(x, digits = max(3, getOption("digits") - 3),
         print(x$model$call)
     }
     cat("\n")
+    error <- attr(x$confint, "error")
+    if (!is.null(error) && error > .Machine$double.eps)
+        digits <- min(digits, which.min(abs(1 / error - (10^(1:10)))))
     cat("Estimated Quantile =", round(attr(x$confint, "calpha"), digits))
     cat("\n\n")
     cat("Linear Hypotheses:\n")

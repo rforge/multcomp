@@ -148,7 +148,7 @@ coefs <- function(ex) {
     if (length(ex) == 3) {
 
         if (ex[[1]] == "*")
-            return(list(coef = ex[[2]], level = ex[[3]]))
+            return(list(coef = eval(ex[[2]]), level = ex[[3]]))
 
         cf <- coefs(ex[[3]])
         if (ex[[1]] == "-")
@@ -170,11 +170,9 @@ expression2K <- function(ex, y) {
         if (!any(cf$level == y))
             stop("level \"", cf$level, "\" not found")
         K[y == cf$level] <- cf$coef
-        if (length(x) > 1 && !is.numeric(x[[2]])) {
-            x <- x[[2]]   
-        } else {
-            break
-        }
+        if (is.name(x)) break
+        if (length(x) == 2 && is.numeric(x[[2]])) break
+        x <- x[[2]]   
     }
     return(list(K = K, m = m))
 }

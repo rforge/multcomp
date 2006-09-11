@@ -88,28 +88,37 @@ glht <- function(model, K, m = 0,
     checknm <- nhypo %in% rownames(factors) & sapply(mf[nhypo], is.factor)
     if (!all(checknm)) 
         stop("Factor(s) ", nhypo[!checknm], " not found!")
+    mnull <- m
     for (nm in nhypo) {
         if (is.character(K[[nm]])) {
-            kch <- K[[nm]]
-            ### check if kch is suitable as `type' argument to `contrMat'
-            types <- eval(formals(contrMat)$type)
-            pm <- pmatch(kch, types)
-            ### if yes, compute K from `contrMat'
-            if (!is.na(pm)) {
-                K[[nm]] <- contrMat(table(mf[[nm]]), type = types[pm])
-            } else {
-                ### if not, interpret kch as an expression
-                tmp <-  chr2K(kch, levels(mf[[nm]]))
-                K[[nm]] <- tmp$K
-                if (m == 0) {
-                    m <- tmp$m
+
+            Kchr <- function(kch) {
+                ### check if kch is suitable as `type' argument to `contrMat'
+                types <- eval(formals(contrMat)$type)
+                pm <- pmatch(kch, types)
+                ### if yes, compute K from `contrMat'
+                if (!is.na(pm)) {
+                    tmpK <- contrMat(table(mf[[nm]]), type = types[pm])
+                    tmpm <- rep(mnull, nrow(tmpK))
                 } else {
-                    m <- c(m, tmp$m)
+                    ### if not, interpret kch as an expression
+                    tmp <-  chr2K(kch, levels(mf[[nm]]))
+                    tmpK <- tmp$K
+                    tmpm <- tmp$m
                 }
+                if (is.null(rownames(tmpK)))
+                    rownames(tmpK) <- 1:nrow(tmpK)
+                list(K = tmpK, m = tmpm)
+            }
+            
+            tmp <- lapply(K[[nm]], Kchr)
+            K[[nm]] <- do.call("rbind", lapply(tmp, function(x) x$K))
+            if (length(m) == 1) {
+                m <- drop(unlist(sapply(tmp, function(x) x$m)))
+            } else {
+                m <- c(m, drop(unlist(sapply(tmp, function(x) x$m))))
             }
         }
-        if (is.null(rownames(K[[nm]]))) 
-            rownames(K[[nm]]) <- 1:nrow(K[[nm]])
     }
 
     ### transform linear hypotheses using model contrasts
@@ -199,6 +208,7 @@ summary.glht <- function(object, test = adjusted(), ...)
     pq <- test(object)
     object$mtests <- cbind(pq$coefficients, pq$sigma, pq$tstat, 
                            pq$pvalues)
+    attr(object$mtests, "error") <- attr(pq$pvalues, "error")
     colnames(object$mtests) <- c("Estimate", "Std. Error",
         ifelse(object$df == 0, "z value", "t value"), "p value")
     attr(object$mtests, "type") <- pq$type
@@ -214,6 +224,7 @@ confint.glht <- function(object, parm, level = 0.95, ...)
     colnames(object$confint) <- c("Estimate", "lwr", "upr")
     attr(object$confint, "conf.level") <- level
     attr(object$confint, "calpha") <- attr(ci, "calpha")
+    attr(object$confint, "error") <- attr(ci, "error")
     class(object) <- c("confint.glht", "glht")
     return(object)
 }

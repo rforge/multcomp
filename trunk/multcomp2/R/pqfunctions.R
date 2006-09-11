@@ -13,7 +13,8 @@ pqglht <- function(object)
     cr <- cov2cor(covm)
     dim <- ncol(cr)
 
-    pfunction <- function(type = c("univariate", "Bonferroni", "adjusted"), ...) {
+    pfunction <- function(type = c("univariate", "Bonferroni", "adjusted"), 
+                          ...) {
 
         type <- match.arg(type) 
 
@@ -22,35 +23,45 @@ pqglht <- function(object)
                       low <- rep(-abs(q), dim)
                       upp <- rep( abs(q), dim)
                }, "less" = {
-                      low <- rep(      q, dim)
-                      upp <- rep(    Inf, dim)
+                      low <- rep(q, dim)
+                      upp <- rep(Inf, dim)
                }, "greater" = {
-                      low <- rep(   -Inf, dim)
-                      upp <- rep(      q, dim)
+                      low <- rep(-Inf, dim)
+                      upp <- rep(q, dim)
                })
                pmvt(lower = low, upper = upp, df = df, corr = cr, ...)
         }
 
         switch(object$alternative, "two.sided" = {
-            if (df > 0) pvals <- 2*(1-pt(abs(tstat),df))     
-            else        pvals <- 2*(1-pnorm(abs(tstat)))
+            if (df > 0) pvals <- 2*(1 - pt(abs(tstat),df))     
+            else        pvals <- 2*(1 - pnorm(abs(tstat)))
         }, "less" = {
             if (df > 0) pvals <- pt(tstat,df) 
             else        pvals <- pnorm(tstat)
         }, "greater" = {
-            if (df > 0) pvals <- 1-pt(tstat,df)
-            else        pvals <- 1-pnorm(tstat)
+            if (df > 0) pvals <- 1 - pt(tstat,df)
+            else        pvals <- 1 - pnorm(tstat)
         })
 
-        if (type == "univariate") {
+        if (type == "univariate")
             return(pvals)
-        }
 
         if (type == "Bonferroni")
             return(pmin(1, dim * pvals))
 
-        if (type == "adjusted")
-            return(1 - sapply(tstat, pfct))
+        if (type == "adjusted") {
+            ret <- numeric(length(tstat))
+            error <- 0
+            for (i in 1:length(tstat)) {
+                tmp <- pfct(tstat[i])
+                if (error < attr(tmp, "error")) 
+                    error <- attr(tmp, "error")
+                ret[i] <- tmp
+            }
+            ret <- 1 - ret
+            attr(ret, "error") <- error
+            return(ret)
+        }
     }
 
     qfunction <- function(conf.level, ...) {
@@ -59,16 +70,18 @@ pqglht <- function(object)
                                     "less"      = "upper.tail",
                                     "greater"   = "lower.tail")
         calpha <- qmvt(conf.level, df = df, corr = cr, tail = tail, 
-                       ...)$quantile
+                       ...)
+        error <- calpha$estim.prec
+        calpha <- calpha$quantile
 
         switch(object$alternative, "two.sided" = {  
-            LowerCL <- betahat - calpha*ses
-            UpperCL <- betahat + calpha*ses
+            LowerCL <- betahat - calpha * ses
+            UpperCL <- betahat + calpha * ses
         }, "less" = {
             LowerCL <- rep(-Inf, dim)
-            UpperCL <- betahat - calpha*ses
+            UpperCL <- betahat - calpha * ses
         }, "greater" = {
-            LowerCL <- betahat - calpha*ses
+            LowerCL <- betahat - calpha * ses
             UpperCL <- rep( Inf, dim)
         })
 
@@ -76,6 +89,7 @@ pqglht <- function(object)
         colnames(cint) <- c("lower", "upper")
         attr(cint, "conf.level") <- conf.level
         attr(cint, "calpha") <- calpha
+        attr(cint, "error") <- error
         return(cint)
     }
     RET <- list(pfunction = pfunction, qfunction = qfunction,
@@ -94,7 +108,8 @@ univariate <- function()
     }
 }
 
-adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...) 
+adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), 
+                     ...) 
 {
     type <- match.arg(type)
 
@@ -132,19 +147,26 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
         Corder <- C[order(tstat), , drop = FALSE]
         Cm <- m[order(tstat)]
         ms <- maxsets(Corder)
+        error <<- 0
         p <- sapply(ms, function(x) {
            max(sapply(x, function(s) {
                 object$K <- Corder[s, , drop = FALSE]
                 object$m <- Cm[s]
-                min(pqglht(object)$pfunction(ifelse(type == "Westfall", 
+                tmp <- pqglht(object)$pfunction(ifelse(type == "Westfall", 
                                                    "adjusted", "Bonferroni"), 
-                                            ...))
+                                            ...)
+                tmperr <- attr(tmp, "error")
+                if (!is.null(tmperr) && tmperr > error)
+                    error <<- tmperr
+                min(tmp)
             }))
         })
         for (i in 2:length(p))
             p[i] <- max(p[i-1], p[i])
         ### <FIXME> what happens in case of ties??? </FIXME> ###
         RET$pvalues <- p[rank(tstat)]
+        attr(RET$pvalues, "error") <- error
+        eval(expression(rm(error)), envir = .GlobalEnv)
         RET$type <- type
         RET
     })
