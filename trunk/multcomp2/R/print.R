@@ -88,12 +88,12 @@ print.summary.glht.global <- function(x,
     cat("Global Test:\n")
     if (x$gtest$type == "Chisq") {
         pr <- data.frame(x$gtest$SSH, x$gtest$df[1], x$gtest$pval)
-        names(pr) <- c("Sum Squares", "DF", "p value")
+        names(pr) <- c("Chisq", "DF", "Pr(>Chisq)")
     }
     if (x$gtest$type == "F") {
         pr <- data.frame(x$gtest$fstat, x$gtest$df[1], x$gtest$df[2], 
                          x$gtest$pval)
-        names(pr) <- c("F stat", "DF1", "DF2", "p value")
+        names(pr) <- c("F", "DF1", "DF2", "Pr(>F)")
     }
     print(pr, digits = digits)
     invisible(x)
