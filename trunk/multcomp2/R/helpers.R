@@ -158,6 +158,15 @@ coefs <- function(ex) {
     }
 }
  
+is_num <- function(x) {
+    opt <- options("show.error.messages")
+    options(show.error.messages = FALSE)
+    tr <- try(eval(x))
+    options(opt)
+    if (!inherits(tr, "try-error")) return(is.numeric(tr))
+    return(FALSE)
+}
+
 ### convert an expression of factor levels to a linear hypothesis
 expression2K <- function(ex, y) {
 
@@ -170,8 +179,14 @@ expression2K <- function(ex, y) {
         if (!any(cf$level == y))
             stop("level \"", cf$level, "\" not found")
         K[y == cf$level] <- cf$coef
+        ### x == "A"
         if (is.name(x)) break
-        if (length(x) == 2 && is.numeric(x[[2]])) break
+        ### x == "-1"
+        if (is_num(x)) break
+        ### x == "3 * A"
+        if (length(x) == 3 && is_num(x[[2]])) break
+        ### x == "-3 * A"
+        if (length(x) == 3 && is_num(x[[2]])) break
         x <- x[[2]]   
     }
     return(list(K = K, m = m))
