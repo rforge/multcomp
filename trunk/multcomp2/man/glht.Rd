@@ -9,15 +9,18 @@ glht(model, K, m = 0, alternative = c("two.sided", "less", "greater"))
 }
 \arguments{
   \item{model}{a fitted (generalized) linear model, 
-               for example \code{\link{lm}}, 
-               \code{\link{glm}}, \code{\link{aov}} etc.}
-  \item{K}{ either a matrix of linear hypotheses for 
-            the coefficients of \code{model} or a symbolic
-            description of the linear hypotheses. Alternatively,
-            a named list of matrices, symbolic descriptions 
-            or \code{type} arguments for \code{\link{contrMat}} 
-            for multiple comparisons of means, i.e., 
-            for the levels of the corresponding factors. }
+               for example an object returned by \code{\link{lm}}, 
+               \code{\link{glm}}, \code{\link{aov}} etc. \code{\link{coef}},
+               \code{\link{vcov}}, \code{\link{model.matrix}}, 
+               \code{\link{model.frame}} and \code{\link{terms}}
+               methods are expected to be available for \code{model}.}
+  \item{K}{ a specification of the linear hypotheses to be tested. 
+            \code{K} can be supplied in form of a matrix of coefficients or
+            by a symbolic description interpretable as expression.
+            Alternatively, \code{K} may be a named list of matrices, 
+            symbolic descriptions or \code{type} arguments 
+            for \code{\link{contrMat}} when multiple comparisons of 
+            means, i.e., factor levels, are of special interest.}
   \item{m}{right hand side of the hypothesis: \eqn{H_0: K \beta = m}.}
   \item{alternative}{a character string specifying the alternative 
       hypothesis, must be one of '"two.sided"' (default), '"greater"' or

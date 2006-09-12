@@ -9,6 +9,125 @@
 glht <- function(model, K, m = 0,
                  alternative = c("two.sided", "less", "greater")) {
 
+    ### extract factors and contrast matrices from `model'
+    fc <- factor_contrasts(model)
+
+    ### extract coefficients and their covariance matrix
+    beta <- try(coef(model))
+    if (inherits(beta, "try-error"))
+        stop("no ", sQuote("coef"), " method for ",
+             sQuote("model"), " found!")
+
+    sigma <- try(vcov(model))
+    if (inherits(sigma, "try-error"))
+        stop("no ", sQuote("vcov"), " method for ",
+             sQuote("model"), " found!")       
+
+    ### check other arguments
+    if (!any(c(is.character(K),
+               is.matrix(K),
+               is.list(K))))
+        stop(sQuote("K"), " is neither character, matrix nor list")
+
+    if (!is.numeric(m))
+        stop(sQuote("m"), " is not a numeric vector")
+
+    alternative <- match.arg(alternative)
+
+    ### check if a linear model was supplied
+    df <- 0
+    if (class(model)[1] %in% c("aov", "lm")) {
+        class(model) <- "lm"
+        df <- summary(model)$df[2]
+    }
+
+    ### interpret K in terms of coef(model)
+    if (is.character(K)) {
+        tmp <-  chr2K(K, names(beta))
+        K <- tmp$K
+        if (!all(m == 0))
+            warning(sQuote("m"), " is given in both ", sQuote("K"),
+                    " and ", sQuote("m"), " -- the latter is ignored")
+        m <- tmp$m
+    }
+    if (is.matrix(K)) { 
+        if (ncol(K) != length(beta))
+            stop("dimensions of ", sQuote("K"), " and ", 
+                 sQuote("coef(model)"), "don't match")
+
+        if (length(m) == 1) m <- rep(m, nrow(K))
+        if (length(m) != nrow(K))
+            stop("dimension of ", sQuote("K"), " and length of ", 
+                 sQuote("m"), "doesn't match")
+
+        RET <- list(model = model, K = K, m = m,
+                    beta = beta, sigma = sigma, df = df,
+                    alternative = alternative,
+                    type = "user-defined")
+        class(RET) <- "glht"
+        return(RET)
+    }
+
+    ### interpret K in terms of factor levels
+    RET <- list2matrix(fc, K = K, m = m)
+
+    ### create `glht' model
+    RET$model <- model
+    RET$beta <- beta
+    RET$sigma <- sigma
+    RET$df <- df
+    RET$alternative <- alternative
+
+    class(RET) <- "glht"
+    return(RET)
+}
+
+coef.glht <- function(object, null = FALSE, ...) 
+{
+    if (null) return(object$m)
+    betahat <- coef(object$model)
+    if (inherits(object$model, "lmer"))
+        betahat <- coeflmer(object$model)
+    drop(object$K %*% betahat)
+}
+
+vcov.glht <- function(object, ...) 
+    object$K %*% tcrossprod(as.matrix(vcov(object$model)), object$K)
+
+summary.glht <- function(object, test = adjusted(), ...) 
+{
+    pq <- test(object)
+    if (class(pq) == "summary.glht.global") {
+        object$gtest <- pq
+        class(object) <- c("summary.glht.global", "glht")
+        return(object)
+    }
+    object$mtests <- cbind(pq$coefficients, coef(object, null = TRUE), 
+                           pq$sigma, pq$tstat, pq$pvalues)
+    attr(object$mtests, "error") <- attr(pq$pvalues, "error")
+    colnames(object$mtests) <- c("Estimate", "Hypothesis", "Std. Error",
+        ifelse(object$df == 0, "z value", "t value"), "p value")
+    attr(object$mtests, "type") <- pq$type
+    class(object) <- c("summary.glht", "glht")
+    return(object)
+}
+
+confint.glht <- function(object, parm, level = 0.95, ...) 
+{
+    pq <- pqglht(object)
+    ci <- pq$qfunction(conf.level = level, ...)
+    object$confint <- cbind(pq$coefficients, ci)
+    colnames(object$confint) <- c("Estimate", "lwr", "upr")
+    attr(object$confint, "conf.level") <- level
+    attr(object$confint, "calpha") <- attr(ci, "calpha")
+    attr(object$confint, "error") <- attr(ci, "error")
+    class(object) <- c("confint.glht", "glht")
+    return(object)
+}
+
+### extract factors and contrast matrices used in `model'
+factor_contrasts <- function(model) {
+
     ### extract model matrix, frame and terms
     mm <- try(model.matrix(model))
     if (inherits(mm, "try-error"))
@@ -25,69 +144,32 @@ glht <- function(model, K, m = 0,
         stop("no ", sQuote("terms"), " method for ", 
              sQuote("model"), " found!")
 
-    beta <- try(coef(model))
-    if (inherits(beta, "try-error"))
-        stop("no ", sQuote("coef"), " method for ",
-             sQuote("model"), " found!")
+    list(contrasts = attr(mm, "contrasts"),
+         factors = attr(tm, "factors"),
+         intercept = attr(tm, "intercept") != 0,
+         mm = mm, 
+         mf = mf)
+}
 
-    sigma <- try(vcov(model))
-    if (inherits(sigma, "try-error"))
-        stop("no ", sQuote("vcov"), " method for ",
-             sQuote("model"), " found!")       
+### convert linear hypotheses supplied as single matrices,
+### type arguments or expressions into one matrix
+list2matrix <- function(fc, K, m) {
 
-    alternative <- match.arg(alternative)
-
-    df <- 0
-    if (class(model)[1] %in% c("aov", "lm")) {
-        class(model) <- "lm"
-        df <- summary(model)$df[2]
-    }
-
-    if (!any(c(is.character(K),
-               is.matrix(K),
-               is.list(K))))
-        stop(sQuote("K"), " is neither character, matrix nor list")
-
-    ### interpret K in terms of coef(model)
-    if (is.character(K)) {
-        tmp <-  chr2K(K, names(beta))
-        K <- tmp$K
-        if (m != 0)
-            warning(sQuote("m"), " is given in both ", sQuote("K"),
-                    " and ", sQuote("m"), " -- the latter is ignored")
-        m <- tmp$m
-    }
-    if (is.matrix(K)) { 
-        if (ncol(K) != length(beta))
-            stop("dimensions of ", sQuote("K"), " and ", 
-                 sQuote("coef(model)"), "don't match")
-
-        if (length(m) == 1) m <- rep(m, nrow(K))
-        if (length(m) != nrow(K))
-            stop("dimensions of ", sQuote("K"), " and ", 
-                 sQuote("m"), "don't match")
-
-        RET <- list(model = model, K = K, m = m,
-                    beta = beta, sigma = sigma, df = df,
-                    alternative = alternative,
-                    type = "user-defined")
-        class(RET) <- "glht"
-        return(RET)
-    }
-
-    ### interpret K in terms of factor levels
     ### extract factors and contrasts
-    contrasts <- attr(mm, "contrasts")
-    factors <- attr(tm, "factors")
-    intercept <- attr(tm, "intercept") != 0
-   
+    contrasts <- fc$contrasts
+    factors <- fc$factors
+    intercept <- fc$intercept
+    mf <- fc$mf
+    mm <- fc$mm
+
     ### linear hypotheses
     if (!is.list(K) || is.null(names(K)))
         stop(sQuote("K"), "is not a named list")
     nhypo <- names(K)
     checknm <- nhypo %in% rownames(factors) & sapply(mf[nhypo], is.factor)
     if (!all(checknm)) 
-        stop("Factor(s) ", nhypo[!checknm], " not found!")
+        stop("Factor(s) ", nhypo[!checknm], " have been specified in ",
+             sQuote("K"), " but cannot be found in ", sQuote("model"), "!")
     mnull <- m
     for (nm in nhypo) {
         if (is.character(K[[nm]])) {
@@ -107,7 +189,7 @@ glht <- function(model, K, m = 0,
                     tmpm <- tmp$m
                 }
                 if (is.null(rownames(tmpK)))
-                    rownames(tmpK) <- 1:nrow(tmpK)
+                    rownames(tmpK) <- paste(kch, 1:nrow(tmpK), sep = "_")
                 list(K = tmpK, m = tmpm)
             }
             
@@ -170,7 +252,8 @@ glht <- function(model, K, m = 0,
             type = paste(attr(K[[nm]], "type"), "(", nm, ")", sep = ""))
     }
 
-    ### create matrix of all linear hypoheses
+    ### combine all single matrices computed so far into
+    ### one matrix of all linear hypoheses
     Ktotal <- matrix(0, nrow = sum(sapply(hypo, function(x) nrow(x$K))),
                      ncol = ncol(mm))
     colnames(Ktotal) <- colnames(mm)
@@ -187,55 +270,7 @@ glht <- function(model, K, m = 0,
         stop("dimensions of ", sQuote("K"), " and ", 
              sQuote("m"), "don't match")
 
-    ### create `glht' model
-    RET <- list(model = model, K = Ktotal, m = m, 
-                beta = beta, sigma = sigma, df = df,
-                alternative = alternative,
-                type = paste(sapply(hypo, function(x) x$type), 
-                             collapse = ";"))
-    class(RET) <- "glht"
-    return(RET)
-}
+    type <- paste(sapply(hypo, function(x) x$type), collapse = ";")
 
-coef.glht <- function(object, null = FALSE, ...) 
-{
-    if (null) return(object$m)
-    betahat <- coef(object$model)
-    if (inherits(object$model, "lmer"))
-        betahat <- coeflmer(object$model)
-    drop(object$K %*% betahat)
-}
-
-vcov.glht <- function(object, ...) 
-    object$K %*% tcrossprod(as.matrix(vcov(object$model)), object$K)
-
-summary.glht <- function(object, test = adjusted(), ...) 
-{
-    pq <- test(object)
-    if (class(pq) == "summary.glht.global") {
-        object$gtest <- pq
-        class(object) <- c("summary.glht.global", "glht")
-        return(object)
-    }
-    object$mtests <- cbind(pq$coefficients, coef(object, null = TRUE), 
-                           pq$sigma, pq$tstat, pq$pvalues)
-    attr(object$mtests, "error") <- attr(pq$pvalues, "error")
-    colnames(object$mtests) <- c("Estimate", "Hypothesis", "Std. Error",
-        ifelse(object$df == 0, "z value", "t value"), "p value")
-    attr(object$mtests, "type") <- pq$type
-    class(object) <- c("summary.glht", "glht")
-    return(object)
-}
-
-confint.glht <- function(object, parm, level = 0.95, ...) 
-{
-    pq <- pqglht(object)
-    ci <- pq$qfunction(conf.level = level, ...)
-    object$confint <- cbind(pq$coefficients, ci)
-    colnames(object$confint) <- c("Estimate", "lwr", "upr")
-    attr(object$confint, "conf.level") <- level
-    attr(object$confint, "calpha") <- attr(ci, "calpha")
-    attr(object$confint, "error") <- attr(ci, "error")
-    class(object) <- c("confint.glht", "glht")
-    return(object)
+    list(K = Ktotal, m = m, type = type)
 }
