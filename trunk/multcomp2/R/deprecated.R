@@ -28,8 +28,9 @@ simint.default <- function(object,
     } else {
         K <- list(match.arg(type))
         names(K) <- whichf
+        class(K) <- "mcp"
     }
-    tglht <- glht(object, K = K, alternative = match.arg(alternative))
+    tglht <- glht(object, linfct = K, alternative = match.arg(alternative))
     .Deprecated("glht", package = "multcomp")
     confint(tglht, level = conf.level, abseps = eps, maxpts = maxpts)
 }
@@ -96,8 +97,9 @@ simtest.default <- function(object,
     } else {
         K <- list(match.arg(type))
         names(K) <- whichf
+        class(K) <- "mcp"
     }
-    tglht <- glht(object, K = K, alternative = match.arg(alternative))
+    tglht <- glht(object, linfct = K, alternative = match.arg(alternative))
     .Deprecated("glht", package = "multcomp")
     ttype <- match.arg(ttype)
     if (ttype == "free")
