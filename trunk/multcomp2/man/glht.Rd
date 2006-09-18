@@ -1,11 +1,21 @@
 \name{glht}
 \alias{glht}
+\alias{glht.matrix}
+\alias{glht.character}
+\alias{glht.expression}
+\alias{glht.mcp}
+\alias{mcp}
 \title{ General Linear Hypotheses }
 \description{
   General Linear Hypotheses in the Generalized Linear Model
 }
 \usage{
-glht(model, K, m = 0, alternative = c("two.sided", "less", "greater"))
+\method{glht}{matrix}(model, linfct, 
+    m = 0, alternative = c("two.sided", "less", "greater"), ...)
+\method{glht}{character}(model, linfct, ...)
+\method{glht}{expression}(model, linfct, ...)
+\method{glht}{mcp}(model, linfct, ...)
+mcp(...)
 }
 \arguments{
   \item{model}{a fitted (generalized) linear model, 
@@ -14,7 +24,7 @@ glht(model, K, m = 0, alternative = c("two.sided", "less", "greater"))
                \code{\link{vcov}}, \code{\link{model.matrix}}, 
                \code{\link{model.frame}} and \code{\link{terms}}
                methods are expected to be available for \code{model}.}
-  \item{K}{ a specification of the linear hypotheses to be tested. 
+  \item{linfct}{ a specification of the linear hypotheses to be tested. 
             \code{K} can be supplied in form of a matrix of coefficients or
             by a symbolic description interpretable as expression.
             Alternatively, \code{K} may be a named list of matrices, 
@@ -25,6 +35,7 @@ glht(model, K, m = 0, alternative = c("two.sided", "less", "greater"))
   \item{alternative}{a character string specifying the alternative 
       hypothesis, must be one of '"two.sided"' (default), '"greater"' or
       '"less"'.  You can specify just the initial letter.}
+  \item{\dots}{additional arguments}
 }
 \details{
 
@@ -44,14 +55,14 @@ glht(model, K, m = 0, alternative = c("two.sided", "less", "greater"))
   amod <- aov(breaks ~ wool * tension, data = warpbreaks)
 
   ### set up all-pair comparisons for factor `tension'
-  glht(amod, K = list(tension = "Tukey"))
+  glht(amod, linfct = mcp(tension = "Tukey"))
 
 
   ### simultaneous p values for parameters in a Cox model
   leuk.cox <- coxph(Surv(time) ~ ag + log(wbc), data = leuk)
 
   ### set up linear hypotheses
-  glht(leuk.cox, K = diag(length(coef(leuk.cox))))
+  glht(leuk.cox, linfct = diag(length(coef(leuk.cox))))
 
 }
 \keyword{htest}

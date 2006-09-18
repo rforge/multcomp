@@ -52,7 +52,7 @@ global(type = c("Chisq", "F"))
   amod <- aov(breaks ~ wool * tension, data = warpbreaks)
 
   ### set up all-pair comparisons for factor `tension'
-  wht <- glht(amod, K = list(tension = "Tukey"))
+  wht <- glht(amod, linfct = mcp(tension = "Tukey"))
 
   ### 95% simultaneous confidence intervals
   plot(print(confint(wht)))
@@ -80,7 +80,7 @@ global(type = c("Chisq", "F"))
   K <- cbind(1, speeds)                                                        
 
   ### set up linear hypotheses
-  cht <- glht(lmod, K = K)
+  cht <- glht(lmod, linfct = K)
 
   ### confidence intervals, i.e., confidence bands, and add them plot
   cci <- confint(cht)
@@ -92,7 +92,7 @@ global(type = c("Chisq", "F"))
   leuk.cox <- coxph(Surv(time) ~ ag + log(wbc), data = leuk)
 
   ### set up linear hypotheses
-  lht <- glht(leuk.cox, K = diag(length(coef(leuk.cox))))
+  lht <- glht(leuk.cox, linfct = diag(length(coef(leuk.cox))))
 
   ### adjusted p values
   summary(lht)

@@ -47,7 +47,7 @@
              ltrend = log(1:4) - mean(log(1:4)))
 
   ### set up multiple comparison object
-  Kht <- glht(amod, K = list(dose = K), alternative = "less")
+  Kht <- glht(amod, linfct = mcp(dose = K), alternative = "less")
 
   ### cf. Westfall (1997, Table 2)
   summary(Kht, test = univariate())

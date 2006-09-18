@@ -11,7 +11,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   amod <- aov(wloss ~ diet, data = wloss)
   amod
 
-  gh <- glht(amod, list(diet = "Tukey"))
+  gh <- glht(amod, mcp(diet = "Tukey"))
 
   # page 49 / 50
   confint(gh)
@@ -32,11 +32,11 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   amod
 
   # page 56
-  gh <- glht(amod, list(g = "Dunnett"))
+  gh <- glht(amod, mcp(g = "Dunnett"))
   confint(gh)
 
   # page 59
-  gh <- glht(amod, list(g = "Dunnett"), alternative = "less")
+  gh <- glht(amod, mcp(g = "Dunnett"), alternative = "less")
   confint(gh)
 
 
@@ -45,9 +45,10 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   coupon$discount <- as.factor(coupon$discount)
   amod <- aov(purchase ~ discount - 1, data = coupon)
 
-  gh <- glht(amod, K = rbind("linear" = c(-3, -1,  1,  3),
-                             "quad" =  c(-2,  2,  2, -2),
-                             "cubic" = c(-1,  3, -3,  1)))
+  gh <- glht(amod, linfct = mcp(discount = rbind(
+                                    linear = c(-3, -1,  1,  3),
+                                    quad =  c(-2,  2,  2, -2),
+                                    cubic = c(-1,  3, -3,  1))))
 
   # page 63
   summary(gh)
@@ -57,7 +58,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   amod <- aov(minutes ~ blanket, data = recover)
 
-  gh <- glht(amod, list(blanket = "Tukey"))
+  gh <- glht(amod, mcp(blanket = "Tukey"))
 
   # page 68
   confint(gh)
@@ -65,7 +66,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   # page 75
   summary(gh)
 
-  gh <- glht(amod, list(blanket = "Dunnett"))
+  gh <- glht(amod, mcp(blanket = "Dunnett"))
 
   # page 78
   confint(gh)
@@ -73,7 +74,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   # page 79
   summary(gh)
 
-  gh <- glht(amod, list(blanket = "Dunnett"), alternative = "less")
+  gh <- glht(amod, mcp(blanket = "Dunnett"), alternative = "less")
 
   # page 80
   confint(gh, level = 0.9)
@@ -83,13 +84,13 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   # page 80
   amod <- aov(minutes ~ blanket - 1, data = recover)
-  confint(glht(amod, K = diag(4)), level = 0.9)
+  confint(glht(amod, linfct = diag(4)), level = 0.9)
 
 
 ### house prices, page 84
 
   amod <- aov(price ~ location + sqfeet + age, data = house)
-  gh <- glht(amod, list(location = "Tukey"))
+  gh <- glht(amod, mcp(location = "Tukey"))
 
   # page 85
   confint(gh)
@@ -103,7 +104,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   amod <- aov(w4 ~ trt + I(w0 - w3), data = ratgrwth)
 
-  gh <- glht(amod, list(trt = "Dunnett"), alternative = "less")
+  gh <- glht(amod, mcp(trt = "Dunnett"), alternative = "less")
 
   # page 100
   summary(gh)
@@ -115,7 +116,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   alz$therapy <- as.factor(alz$therapy)
   amod <- aov(score ~ therapy * since + age, data = alz)
 
-  gh <- glht(amod, K = list(therapy = "Tukey"))
+  gh <- glht(amod, linfct = mcp(therapy = "Tukey"))
   gh$K[,8:11] <- gh$K[,8:11] * 10
   gh$K[,"age"] <- mean(alz$age)
 
@@ -135,7 +136,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
               ltrend = -(log(1:4) - mean(log(1:4))))
   K["atrend",] <- K["atrend",] / -max(K["atrend",])
 
-  gh <- glht(amod, K = list(dose = K))
+  gh <- glht(amod, linfct = mcp(dose = K))
 
   # page 110
   summary(gh, test = univariate())
@@ -159,7 +160,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   K <- cbind(1, grid <- seq(from = 1000, to = 3000, by = 200))
   rownames(K) <- grid
 
-  gh <- glht(lmod, K = K)
+  gh <- glht(lmod, linfct = K)
 
   # page 123
   confint(gh)
@@ -171,7 +172,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   lmod <- lm(satisf ~ age + severe + anxiety, data = pat_sat)
   K <- cbind(1, mean(pat_sat$age), pat_sat$severe, mean(pat_sat$anxiety))
 
-  gh <- glht(lmod, K = K)
+  gh <- glht(lmod, linfct = K)
 
   ci <- confint(gh)
 
@@ -191,7 +192,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   K <- cbind(1, -1, x, -x)
   rownames(K) <- x
 
-  gh <- glht(amod, K = K)
+  gh <- glht(amod, linfct = K)
 
   # page 129
   confint(gh)
@@ -203,14 +204,14 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   levels(cholesterol$trt) <- LETTERS[1:5]
   amod <- aov(response ~ trt - 1, data = cholesterol)
   
-  gh <- glht(amod, K = list(trt = "Tukey"))
+  gh <- glht(amod, linfct = mcp(trt = "Tukey"))
 
   # page 171
   summary(gh, test = univariate())
   summary(gh, test = adjusted("Shaffer"))
   summary(gh, test = adjusted("Westfall"))
 
-  gh <- glht(amod, K = list(trt = c("D - E = 0",
+  gh <- glht(amod, linfct = mcp(trt = c("D - E = 0",
                                     "C - E = 0",
                                     "C - D = 0",
                                     "3 * B - C - D - E = 0",
@@ -229,10 +230,10 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   amod <- aov(waste ~ temp * envir, data = waste)
 
   # page 179
-  confint(glht(amod, K = list(temp = "Tukey")))
-  confint(glht(amod, K = list(envir = "Tukey")))
+  confint(glht(amod, linfct = mcp(temp = "Tukey")))
+  confint(glht(amod, linfct = mcp(envir = "Tukey")))
 
-  gh <- glht(amod, K = list(temp = "Tukey", envir = "Tukey"))
+  gh <- glht(amod, linfct = mcp(temp = "Tukey", envir = "Tukey"))
  
   # page 181
   confint(gh)
@@ -240,11 +241,11 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   # page 186 CHECK!
   amod <- aov(waste ~ temp + envir, data = waste)
 
-  gh <- glht(amod, K = list(temp = "Tukey", envir = "Tukey"),
+  gh <- glht(amod, linfct = mcp(temp = "Tukey", envir = "Tukey"),
              alternative = "greater")
   summary(gh, test = univariate())
   summary(gh, test = adjusted("Shaffer"))
-  summary(gh, test = adjusted("Westfall"))
+  summary(gh, test = adjusted("Westfall", abseps = 0.1))
 
 
 ### drug data, page 187
@@ -252,7 +253,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   drug$drug <- as.factor(drug$drug)
   amod <- aov(response ~ drug * disease, data = drug)
 
-  confint(glht(amod, K = list(drug = "Tukey")))
+  confint(glht(amod, linfct = mcp(drug = "Tukey")))
 
 
 ### detergents data, page 189
@@ -261,7 +262,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   detergent$detergent <- as.factor(detergent$detergent)
   amod <- aov(plates ~ block + detergent, data = detergent)
 
-  gh <- glht(amod, K = list(detergent = "Tukey"))
+  gh <- glht(amod, linfct = mcp(detergent = "Tukey"))
 
   # page 190
   confint(gh)
@@ -279,7 +280,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   amod <- aov(gain ~ pen + feed * sex + initial, data = pigs)
 
   S <- matrix(c(1, -1), ncol = 2, dimnames = list("F-M", c("F", "M")))
-  gh <- glht(amod, K = list(feed = "Tukey", sex = S))
+  gh <- glht(amod, linfct = mcp(feed = "Tukey", sex = S))
   gh$K <- rbind(gh$K, "initial" = c(rep(0, 10), 1))
   gh$m <- c(gh$m, 0)
 
@@ -335,7 +336,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   rownames(C) <- c("Overall", "Older", "Younger", "Good Init", "Poor Init",
                    "Old x Good", "Old x Poor", "Young x Good", "Young x Poor") 
 
-  gh <- glht(amod, K = C, alternative="less")
+  gh <- glht(amod, linfct = C, alternative="less")
 
   # page 198
   summary(gh, test = univariate())
@@ -358,7 +359,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   library("lme4")
   lmod <- lmer(wloss ~ diet + (1 | i), data = wloss, model = TRUE)
   
-  gh <- glht(lmod, list(diet = "Tukey"))
+  gh <- glht(lmod, mcp(diet = "Tukey"))
 
   # page 205
   confint(gh)
@@ -374,7 +375,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   lmod <- lmer(plates ~ detergent + (1 | block), data = detergent, 
                model = TRUE)
 
-  gh <- glht(lmod, list(detergent = "Tukey"))
+  gh <- glht(lmod, mcp(detergent = "Tukey"))
 
   # page 211
   confint(gh)
@@ -387,7 +388,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   lmod <- lmer(waste ~ temp + (1 | envir) + (1 | envir : temp),
                data = waste)
 
-  gh <- glht(lmod, list(temp = "Tukey"))
+  gh <- glht(lmod, mcp(temp = "Tukey"))
 
   # page 213
   confint(gh)
@@ -398,13 +399,13 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   lmod <- lmer(rate ~ treatment + (1 | dog), data = halothane, 
                model = TRUE)
 
-  gh <- glht(lmod, K = list(treatment = "Tukey"))
+  gh <- glht(lmod, linfct = mcp(treatment = "Tukey"))
 
   # page 215
   confint(gh)
 
   gh <- glht(lmod, 
-      K = list(treatment = c("Tukey", 
+      linfct = mcp(treatment = c("Tukey", 
             Halo = "-0.5 * HA - 0.5 * HP + 0.5 * LA + 0.5 * LP = 0",
             CO2 = "0.5 * HA -0.5 * HP + 0.5 * LA -0.5 * LP = 0",
             Interaction = "HA - HP - LA + LP = 0")))

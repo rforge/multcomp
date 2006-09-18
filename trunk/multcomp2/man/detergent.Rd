@@ -33,7 +33,7 @@
   amod <- aov(plates ~ block + detergent, data = detergent)
 
   ### set up all-pair comparisons
-  dht <- glht(amod, K = list(detergent = "Tukey"))
+  dht <- glht(amod, linfct = mcp(detergent = "Tukey"))
 
   ### see Westfall et al. (1999, p. 190)
   confint(dht)

@@ -33,7 +33,7 @@
   amod <- aov(waste ~ envir + temp + envir*temp, data=waste)
 
   ### set up linear hypotheses for all-pairs of both factors
-  wht <- glht(amod, K = list(envir = "Tukey", temp = "Tukey"))
+  wht <- glht(amod, linfct = mcp(envir = "Tukey", temp = "Tukey"))
 
   ### cf. Westfall et al. (1999, page 181)
   summary(wht, test = adjusted("Shaffer"))

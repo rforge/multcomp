@@ -1,5 +1,5 @@
 
-R version 2.4.0 alpha (2006-09-06 r39158)
+R version 2.4.0 alpha (2006-09-15 r39323)
 Copyright (C) 2006 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -17,8 +17,6 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-[Previously saved workspace restored]
-
 > invisible(options(echo = TRUE))
 > 
 > library("multcomp2")
@@ -26,14 +24,6 @@ Loading required package: mvtnorm
 Loading required package: MASS
 Loading required package: survival
 Loading required package: splines
-
-Attaching package: 'survival'
-
-
-	The following object(s) are masked _by_ .GlobalEnv :
-
-	 heart 
-
 > 
 > set.seed(290875)
 > 
@@ -79,7 +69,7 @@ Deg. of Freedom       4        45
 Residual standard error: 0.9967057 
 Estimated effects may be unbalanced
 > 
->   gh <- glht(amod, list(diet = "Tukey"))
+>   gh <- glht(amod, mcp(diet = "Tukey"))
 > 
 >   # page 49 / 50
 >   confint(gh)
@@ -151,7 +141,7 @@ Residual standard error: 14.49154
 Estimated effects may be unbalanced
 > 
 >   # page 56
->   gh <- glht(amod, list(g = "Dunnett"))
+>   gh <- glht(amod, mcp(g = "Dunnett"))
 >   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
@@ -174,7 +164,7 @@ Linear Hypotheses:
 
 > 
 >   # page 59
->   gh <- glht(amod, list(g = "Dunnett"), alternative = "less")
+>   gh <- glht(amod, mcp(g = "Dunnett"), alternative = "less")
 >   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
@@ -202,9 +192,10 @@ Linear Hypotheses:
 >   coupon$discount <- as.factor(coupon$discount)
 >   amod <- aov(purchase ~ discount - 1, data = coupon)
 > 
->   gh <- glht(amod, K = rbind("linear" = c(-3, -1,  1,  3),
-+                              "quad" =  c(-2,  2,  2, -2),
-+                              "cubic" = c(-1,  3, -3,  1)))
+>   gh <- glht(amod, linfct = mcp(discount = rbind(
++                                     linear = c(-3, -1,  1,  3),
++                                     quad =  c(-2,  2,  2, -2),
++                                     cubic = c(-1,  3, -3,  1))))
 > 
 >   # page 63
 >   summary(gh)
@@ -228,7 +219,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > 
 >   amod <- aov(minutes ~ blanket, data = recover)
 > 
->   gh <- glht(amod, list(blanket = "Tukey"))
+>   gh <- glht(amod, mcp(blanket = "Tukey"))
 > 
 >   # page 68
 >   confint(gh)
@@ -272,7 +263,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 (Adjusted p values reported)
 
 > 
->   gh <- glht(amod, list(blanket = "Dunnett"))
+>   gh <- glht(amod, mcp(blanket = "Dunnett"))
 > 
 >   # page 78
 >   confint(gh)
@@ -310,7 +301,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 (Adjusted p values reported)
 
 > 
->   gh <- glht(amod, list(blanket = "Dunnett"), alternative = "less")
+>   gh <- glht(amod, mcp(blanket = "Dunnett"), alternative = "less")
 > 
 >   # page 80
 >   confint(gh, level = 0.9)
@@ -350,7 +341,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > 
 >   # page 80
 >   amod <- aov(minutes ~ blanket - 1, data = recover)
->   confint(glht(amod, K = diag(4)), level = 0.9)
+>   confint(glht(amod, linfct = diag(4)), level = 0.9)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -359,11 +350,11 @@ Fit: aov(formula = minutes ~ blanket - 1, data = recover)
 Estimated Quantile = 2.3111
 
 Linear Hypotheses:
-     Estimate lwr     upr    
-[1,] 14.8000  13.4614 16.1386
-[2,] 12.6667   9.2103 16.1230
-[3,]  7.3333   3.8770 10.7897
-[4,] 13.1333  11.5876 14.6791
+  Estimate lwr     upr    
+1 14.8000  13.4614 16.1386
+2 12.6667   9.2103 16.1230
+3  7.3333   3.8770 10.7897
+4 13.1333  11.5876 14.6791
 
 90% family-wise confidence level
  
@@ -373,7 +364,7 @@ Linear Hypotheses:
 > ### house prices, page 84
 > 
 >   amod <- aov(price ~ location + sqfeet + age, data = house)
->   gh <- glht(amod, list(location = "Tukey"))
+>   gh <- glht(amod, mcp(location = "Tukey"))
 > 
 >   # page 85
 >   confint(gh)
@@ -452,7 +443,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > 
 >   amod <- aov(w4 ~ trt + I(w0 - w3), data = ratgrwth)
 > 
->   gh <- glht(amod, list(trt = "Dunnett"), alternative = "less")
+>   gh <- glht(amod, mcp(trt = "Dunnett"), alternative = "less")
 > 
 >   # page 100
 >   summary(gh)
@@ -492,7 +483,7 @@ Thyroxin-Control    0.5609     -Inf  6.8794
 >   alz$therapy <- as.factor(alz$therapy)
 >   amod <- aov(score ~ therapy * since + age, data = alz)
 > 
->   gh <- glht(amod, K = list(therapy = "Tukey"))
+>   gh <- glht(amod, linfct = mcp(therapy = "Tukey"))
 >   gh$K[,8:11] <- gh$K[,8:11] * 10
 >   gh$K[,"age"] <- mean(alz$age)
 > 
@@ -535,7 +526,7 @@ Linear Hypotheses:
 +               ltrend = -(log(1:4) - mean(log(1:4))))
 >   K["atrend",] <- K["atrend",] / -max(K["atrend",])
 > 
->   gh <- glht(amod, K = list(dose = K))
+>   gh <- glht(amod, linfct = mcp(dose = K))
 > 
 >   # page 110
 >   summary(gh, test = univariate())
@@ -646,7 +637,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   K <- cbind(1, grid <- seq(from = 1000, to = 3000, by = 200))
 >   rownames(K) <- grid
 > 
->   gh <- glht(lmod, K = K)
+>   gh <- glht(lmod, linfct = K)
 > 
 >   # page 123
 >   confint(gh)
@@ -682,7 +673,7 @@ Linear Hypotheses:
 >   lmod <- lm(satisf ~ age + severe + anxiety, data = pat_sat)
 >   K <- cbind(1, mean(pat_sat$age), pat_sat$severe, mean(pat_sat$anxiety))
 > 
->   gh <- glht(lmod, K = K)
+>   gh <- glht(lmod, linfct = K)
 > 
 >   ci <- confint(gh)
 > 
@@ -702,7 +693,7 @@ Linear Hypotheses:
 >   K <- cbind(1, -1, x, -x)
 >   rownames(K) <- x
 > 
->   gh <- glht(amod, K = K)
+>   gh <- glht(amod, linfct = K)
 > 
 >   # page 129
 >   confint(gh)
@@ -740,7 +731,7 @@ Linear Hypotheses:
 >   levels(cholesterol$trt) <- LETTERS[1:5]
 >   amod <- aov(response ~ trt - 1, data = cholesterol)
 >   
->   gh <- glht(amod, K = list(trt = "Tukey"))
+>   gh <- glht(amod, linfct = mcp(trt = "Tukey"))
 > 
 >   # page 171
 >   summary(gh, test = univariate())
@@ -810,7 +801,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 (Adjusted p values reported -- Westfall method)
 
 > 
->   gh <- glht(amod, K = list(trt = c("D - E = 0",
+>   gh <- glht(amod, linfct = mcp(trt = c("D - E = 0",
 +                                     "C - E = 0",
 +                                     "C - D = 0",
 +                                     "3 * B - C - D - E = 0",
@@ -826,8 +817,8 @@ Fit: aov(formula = response ~ trt - 1, data = cholesterol)
 Linear Hypotheses:
                       Estimate Hypothesis Std. Error t value  p value    
 D - E = 0                3.443      0.000      1.443   2.385   0.0213 *  
-C - E = 0               -5.782      0.000      1.021  -5.665 9.78e-07 ***
-C - D = 0               -9.225      0.000      1.021  -9.039 1.12e-11 ***
+C - E = 0                6.593      0.000      1.443   4.568 3.82e-05 ***
+C - D = 0                3.150      0.000      1.443   2.182   0.0344 *  
 3 * B - C - D - E = 0   18.702      0.000      3.536   5.290 3.49e-06 ***
 3 * A - C - D - E = 0   35.461      0.000      3.536  10.030 4.74e-13 ***
 ---
@@ -842,10 +833,10 @@ Fit: aov(formula = response ~ trt - 1, data = cholesterol)
 
 Linear Hypotheses:
                       Estimate Hypothesis Std. Error t value  p value    
-D - E = 0                3.443      0.000      1.443   2.385   0.0213 *  
-C - E = 0               -5.782      0.000      1.021  -5.665 1.96e-06 ***
-C - D = 0               -9.225      0.000      1.021  -9.039 4.47e-11 ***
-3 * B - C - D - E = 0   18.702      0.000      3.536   5.290 6.97e-06 ***
+D - E = 0                3.443      0.000      1.443   2.385 0.021333 *  
+C - E = 0                6.593      0.000      1.443   4.568 0.000115 ***
+C - D = 0                3.150      0.000      1.443   2.182 0.034352 *  
+3 * B - C - D - E = 0   18.702      0.000      3.536   5.290 1.39e-05 ***
 3 * A - C - D - E = 0   35.461      0.000      3.536  10.030 2.37e-12 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
@@ -860,8 +851,8 @@ Fit: aov(formula = response ~ trt - 1, data = cholesterol)
 Linear Hypotheses:
                       Estimate Hypothesis Std. Error t value p value    
 D - E = 0                3.443      0.000      1.443   2.385  0.0213 *  
-C - E = 0               -5.782      0.000      1.021  -5.665  <0.001 ***
-C - D = 0               -9.225      0.000      1.021  -9.039  <0.001 ***
+C - E = 0                6.593      0.000      1.443   4.568  <0.001 ***
+C - D = 0                3.150      0.000      1.443   2.182  0.0344 *  
 3 * B - C - D - E = 0   18.702      0.000      3.536   5.290  <0.001 ***
 3 * A - C - D - E = 0   35.461      0.000      3.536  10.030  <0.001 ***
 ---
@@ -877,49 +868,49 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   amod <- aov(waste ~ temp * envir, data = waste)
 > 
 >   # page 179
->   confint(glht(amod, K = list(temp = "Tukey")))
+>   confint(glht(amod, linfct = mcp(temp = "Tukey")))
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
 Fit: aov(formula = waste ~ temp * envir, data = waste)
 
-Estimated Quantile = 2.5975
+Estimated Quantile = 2.598
 
 Linear Hypotheses:
     Estimate lwr     upr    
-2-1 -0.2410  -1.5001  1.0181
-3-1  2.0150   0.7559  3.2741
-3-2  2.2560   0.9969  3.5151
+2-1 -0.2410  -1.5003  1.0183
+3-1  2.0150   0.7557  3.2743
+3-2  2.2560   0.9967  3.5153
 
 95% family-wise confidence level
  
 
->   confint(glht(amod, K = list(envir = "Tukey")))
+>   confint(glht(amod, linfct = mcp(envir = "Tukey")))
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
 Fit: aov(formula = waste ~ temp * envir, data = waste)
 
-Estimated Quantile = 3.086
+Estimated Quantile = 3.0943
 
 Linear Hypotheses:
-    Estimate lwr     upr    
-2-1  1.3833  -0.5478  3.3145
-3-1  1.6850  -0.2461  3.6161
-4-1  2.0183   0.0872  3.9495
-5-1  2.7533   0.8222  4.6845
-3-2  0.3017  -1.6295  2.2328
-4-2  0.6350  -1.2961  2.5661
-5-2  1.3700  -0.5611  3.3011
-4-3  0.3333  -1.5978  2.2645
-5-3  1.0683  -0.8628  2.9995
-5-4  0.7350  -1.1961  2.6661
+    Estimate lwr      upr     
+2-1  1.38333 -0.55303  3.31969
+3-1  1.68500 -0.25136  3.62136
+4-1  2.01833  0.08197  3.95469
+5-1  2.75333  0.81697  4.68969
+3-2  0.30167 -1.63469  2.23803
+4-2  0.63500 -1.30136  2.57136
+5-2  1.37000 -0.56636  3.30636
+4-3  0.33333 -1.60303  2.26969
+5-3  1.06833 -0.86803  3.00469
+5-4  0.73500 -1.20136  2.67136
 
 95% family-wise confidence level
  
 
 > 
->   gh <- glht(amod, K = list(temp = "Tukey", envir = "Tukey"))
+>   gh <- glht(amod, linfct = mcp(temp = "Tukey", envir = "Tukey"))
 >  
 >   # page 181
 >   confint(gh)
@@ -928,23 +919,23 @@ Linear Hypotheses:
 
 Fit: aov(formula = waste ~ temp * envir, data = waste)
 
-Estimated Quantile = 3.2366
+Estimated Quantile = 3.237
 
 Linear Hypotheses:
     Estimate  lwr       upr      
-2-1 -0.241000 -1.809869  1.327869
-3-1  2.015000  0.446131  3.583869
-3-2  2.256000  0.687131  3.824869
-2-1  1.383333 -0.642068  3.408735
-3-1  1.685000 -0.340401  3.710401
-4-1  2.018333 -0.007068  4.043735
-5-1  2.753333  0.727932  4.778735
-3-2  0.301667 -1.723735  2.327068
-4-2  0.635000 -1.390401  2.660401
-5-2  1.370000 -0.655401  3.395401
-4-3  0.333333 -1.692068  2.358735
-5-3  1.068333 -0.957068  3.093735
-5-4  0.735000 -1.290401  2.760401
+2-1 -0.241000 -1.810031  1.328031
+3-1  2.015000  0.445969  3.584031
+3-2  2.256000  0.686969  3.825031
+2-1  1.383333 -0.642277  3.408944
+3-1  1.685000 -0.340611  3.710611
+4-1  2.018333 -0.007277  4.043944
+5-1  2.753333  0.727723  4.778944
+3-2  0.301667 -1.723944  2.327277
+4-2  0.635000 -1.390611  2.660611
+5-2  1.370000 -0.655611  3.395611
+4-3  0.333333 -1.692277  2.358944
+5-3  1.068333 -0.957277  3.093944
+5-4  0.735000 -1.290611  2.760611
 
 95% family-wise confidence level
  
@@ -953,7 +944,7 @@ Linear Hypotheses:
 >   # page 186 CHECK!
 >   amod <- aov(waste ~ temp + envir, data = waste)
 > 
->   gh <- glht(amod, K = list(temp = "Tukey", envir = "Tukey"),
+>   gh <- glht(amod, linfct = mcp(temp = "Tukey", envir = "Tukey"),
 +              alternative = "greater")
 >   summary(gh, test = univariate())
 
@@ -1005,7 +996,7 @@ Linear Hypotheses:
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Shaffer method)
 
->   summary(gh, test = adjusted("Westfall"))
+>   summary(gh, test = adjusted("Westfall", abseps = 0.1))
 
 	 Multiple Tests for General Linear Hypotheses
 
@@ -1016,15 +1007,15 @@ Linear Hypotheses:
 2-1  -0.2410     0.0000     0.5937  -0.406  0.6557   
 3-1   2.0150     0.0000     0.5937   3.394   <0.01 **
 3-2   2.2560     0.0000     0.5937   3.800   <0.01 **
-2-1   1.3833     0.0000     0.7664   1.805  0.1765   
-3-1   1.6850     0.0000     0.7664   2.198  0.0848 . 
-4-1   2.0183     0.0000     0.7664   2.633  0.0436 * 
+2-1   1.3833     0.0000     0.7664   1.805  0.1764   
+3-1   1.6850     0.0000     0.7664   2.198  0.0847 . 
+4-1   2.0183     0.0000     0.7664   2.633  0.0433 * 
 5-1   2.7533     0.0000     0.7664   3.592   <0.01 **
 3-2   0.3017     0.0000     0.7664   0.394  0.5754   
 4-2   0.6350     0.0000     0.7664   0.828  0.5527   
-5-2   1.3700     0.0000     0.7664   1.787  0.2174   
+5-2   1.3700     0.0000     0.7664   1.787  0.2175   
 4-3   0.3333     0.0000     0.7664   0.435  0.5557   
-5-3   1.0683     0.0000     0.7664   1.394  0.2763   
+5-3   1.0683     0.0000     0.7664   1.394  0.2764   
 5-4   0.7350     0.0000     0.7664   0.959  0.4329   
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
@@ -1037,22 +1028,22 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   drug$drug <- as.factor(drug$drug)
 >   amod <- aov(response ~ drug * disease, data = drug)
 > 
->   confint(glht(amod, K = list(drug = "Tukey")))
+>   confint(glht(amod, linfct = mcp(drug = "Tukey")))
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
 Fit: aov(formula = response ~ drug * disease, data = drug)
 
-Estimated Quantile = 2.6543
+Estimated Quantile = 2.6567
 
 Linear Hypotheses:
     Estimate lwr      upr     
-2-1   1.2835 -19.5083  22.0754
-3-1 -18.1639 -41.7178   5.3900
-4-1 -19.3006 -40.0226   1.4214
-3-2 -19.4474 -43.6087   4.7139
-4-2 -20.5841 -41.9940   0.8257
-4-3  -1.1367 -25.2380  22.9645
+2-1   1.2835 -19.5276  22.0947
+3-1 -18.1639 -41.7396   5.4119
+4-1 -19.3006 -40.0419   1.4406
+3-2 -19.4474 -43.6311   4.7363
+4-2 -20.5841 -42.0139   0.8456
+4-3  -1.1367 -25.2603  22.9868
 
 95% family-wise confidence level
  
@@ -1065,7 +1056,7 @@ Linear Hypotheses:
 >   detergent$detergent <- as.factor(detergent$detergent)
 >   amod <- aov(plates ~ block + detergent, data = detergent)
 > 
->   gh <- glht(amod, K = list(detergent = "Tukey"))
+>   gh <- glht(amod, linfct = mcp(detergent = "Tukey"))
 > 
 >   # page 190
 >   confint(gh)
@@ -1074,20 +1065,20 @@ Linear Hypotheses:
 
 Fit: aov(formula = plates ~ block + detergent, data = detergent)
 
-Estimated Quantile = 3.0597
+Estimated Quantile = 3.0646
 
 Linear Hypotheses:
     Estimate lwr      upr     
-2-1  -2.1333  -4.7890   0.5223
-3-1   3.6000   0.9444   6.2556
-4-1   2.2000  -0.4556   4.8556
-5-1  -4.3333  -6.9890  -1.6777
-3-2   5.7333   3.0777   8.3890
-4-2   4.3333   1.6777   6.9890
-5-2  -2.2000  -4.8556   0.4556
-4-3  -1.4000  -4.0556   1.2556
-5-3  -7.9333 -10.5890  -5.2777
-5-4  -6.5333  -9.1890  -3.8777
+2-1  -2.1333  -4.7933   0.5266
+3-1   3.6000   0.9401   6.2599
+4-1   2.2000  -0.4599   4.8599
+5-1  -4.3333  -6.9933  -1.6734
+3-2   5.7333   3.0734   8.3933
+4-2   4.3333   1.6734   6.9933
+5-2  -2.2000  -4.8599   0.4599
+4-3  -1.4000  -4.0599   1.2599
+5-3  -7.9333 -10.5933  -5.2734
+5-4  -6.5333  -9.1933  -3.8734
 
 95% family-wise confidence level
  
@@ -1169,7 +1160,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   amod <- aov(gain ~ pen + feed * sex + initial, data = pigs)
 > 
 >   S <- matrix(c(1, -1), ncol = 2, dimnames = list("F-M", c("F", "M")))
->   gh <- glht(amod, K = list(feed = "Tukey", sex = S))
+>   gh <- glht(amod, linfct = mcp(feed = "Tukey", sex = S))
 >   gh$K <- rbind(gh$K, "initial" = c(rep(0, 10), 1))
 >   gh$m <- c(gh$m, 0)
 > 
@@ -1180,15 +1171,15 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 Fit: aov(formula = gain ~ pen + feed * sex + initial, data = pigs)
 
-Estimated Quantile = 2.8002
+Estimated Quantile = 2.8007
 
 Linear Hypotheses:
         Estimate lwr      upr     
-2-1     -0.44099 -1.07433  0.19235
-3-1     -0.67300 -1.30346 -0.04254
-3-2     -0.23201 -0.86535  0.40133
-F-M      0.42435 -0.10871  0.95740
-initial -0.09620 -1.36167  1.16927
+2-1     -0.44099 -1.07444  0.19246
+3-1     -0.67300 -1.30357 -0.04243
+3-2     -0.23201 -0.86546  0.40144
+F-M      0.42435 -0.10881  0.95750
+initial -0.09620 -1.36189  1.16949
 
 95% family-wise confidence level
  
@@ -1240,7 +1231,7 @@ Linear Hypotheses:
 2-1      -0.4410     0.0000     0.2262  -1.950  0.1258  
 3-1      -0.6730     0.0000     0.2251  -2.989  0.0336 *
 3-2      -0.2320     0.0000     0.2262  -1.026  0.5285  
-F-M       0.4244     0.0000     0.1904   2.229  0.1068  
+F-M       0.4244     0.0000     0.1904   2.229  0.1067  
 initial  -0.0962     0.0000     0.4519  -0.213  0.8337  
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
@@ -1291,7 +1282,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   rownames(C) <- c("Overall", "Older", "Younger", "Good Init", "Poor Init",
 +                    "Old x Good", "Old x Poor", "Young x Good", "Young x Poor") 
 > 
->   gh <- glht(amod, K = C, alternative="less")
+>   gh <- glht(amod, linfct = C, alternative="less")
 > 
 >   # page 198
 >   summary(gh, test = univariate())
@@ -1356,7 +1347,7 @@ Loading required package: Matrix
 Loading required package: lattice
 >   lmod <- lmer(wloss ~ diet + (1 | i), data = wloss, model = TRUE)
 >   
->   gh <- glht(lmod, list(diet = "Tukey"))
+>   gh <- glht(lmod, mcp(diet = "Tukey"))
 > 
 >   # page 205
 >   confint(gh)
@@ -1365,20 +1356,20 @@ Loading required package: lattice
 
 Fit: lmer(formula = wloss ~ diet + (1 | i), data = wloss, model = TRUE)
 
-Estimated Quantile = 2.7279
+Estimated Quantile = 2.7281
 
 Linear Hypotheses:
     Estimate  lwr       upr      
-B-A -1.030000 -2.188453  0.128453
-C-A -1.780000 -2.938453 -0.621547
-D-A -2.780000 -3.938453 -1.621547
-E-A  0.120000 -1.038453  1.278453
-C-B -0.750000 -1.908453  0.408453
-D-B -1.750000 -2.908453 -0.591547
-E-B  1.150000 -0.008453  2.308453
-D-C -1.000000 -2.158453  0.158453
-E-C  1.900000  0.741547  3.058453
-E-D  2.900000  1.741547  4.058453
+B-A -1.030000 -2.188504  0.128504
+C-A -1.780000 -2.938504 -0.621496
+D-A -2.780000 -3.938504 -1.621496
+E-A  0.120000 -1.038504  1.278504
+C-B -0.750000 -1.908504  0.408504
+D-B -1.750000 -2.908504 -0.591496
+E-B  1.150000 -0.008504  2.308504
+D-C -1.000000 -2.158504  0.158504
+E-C  1.900000  0.741496  3.058504
+E-D  2.900000  1.741496  4.058504
 
 95% family-wise confidence level
  
@@ -1393,14 +1384,14 @@ Fit: lmer(formula = wloss ~ diet + (1 | i), data = wloss, model = TRUE)
 
 Linear Hypotheses:
     Estimate Hypothesis Std. Error z value p value    
-B-A  -1.0300     0.0000     0.4247  -2.425  0.1094    
+B-A  -1.0300     0.0000     0.4247  -2.425  0.1085    
 C-A  -1.7800     0.0000     0.4247  -4.192   <0.01 ***
 D-A  -2.7800     0.0000     0.4247  -6.546   <0.01 ***
 E-A   0.1200     0.0000     0.4247   0.283  0.9986    
-C-B  -0.7500     0.0000     0.4247  -1.766  0.3937    
+C-B  -0.7500     0.0000     0.4247  -1.766  0.3934    
 D-B  -1.7500     0.0000     0.4247  -4.121   <0.01 ***
-E-B   1.1500     0.0000     0.4247   2.708  0.0528 .  
-D-C  -1.0000     0.0000     0.4247  -2.355  0.1276    
+E-B   1.1500     0.0000     0.4247   2.708  0.0542 .  
+D-C  -1.0000     0.0000     0.4247  -2.355  0.1278    
 E-C   1.9000     0.0000     0.4247   4.474   <0.01 ***
 E-D   2.9000     0.0000     0.4247   6.829   <0.01 ***
 ---
@@ -1416,7 +1407,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   lmod <- lmer(plates ~ detergent + (1 | block), data = detergent, 
 +                model = TRUE)
 > 
->   gh <- glht(lmod, list(detergent = "Tukey"))
+>   gh <- glht(lmod, mcp(detergent = "Tukey"))
 > 
 >   # page 211
 >   confint(gh)
@@ -1426,20 +1417,20 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 Fit: lmer(formula = plates ~ detergent + (1 | block), data = detergent, 
     model = TRUE)
 
-Estimated Quantile = 2.7253
+Estimated Quantile = 2.7276
 
 Linear Hypotheses:
     Estimate  lwr       upr      
-2-1  -2.32399  -4.63320  -0.01478
-3-1   3.48198   1.17277   5.79118
-4-1   2.32710   0.01789   4.63631
-5-1  -4.37873  -6.68794  -2.06952
-3-2   5.80596   3.49676   8.11517
-4-2   4.65109   2.34188   6.96030
-5-2  -2.05474  -4.36395   0.25447
-4-3  -1.15487  -3.46408   1.15434
-5-3  -7.86070 -10.16991  -5.55149
-5-4  -6.70583  -9.01504  -4.39662
+2-1  -2.32399  -4.63514  -0.01283
+3-1   3.48198   1.17082   5.79313
+4-1   2.32710   0.01595   4.63826
+5-1  -4.37873  -6.68988  -2.06757
+3-2   5.80596   3.49481   8.11712
+4-2   4.65109   2.33994   6.96225
+5-2  -2.05474  -4.36589   0.25642
+4-3  -1.15487  -3.46603   1.15628
+5-3  -7.86070 -10.17186  -5.54955
+5-4  -6.70583  -9.01699  -4.39467
 
 95% family-wise confidence level
  
@@ -1453,7 +1444,7 @@ Linear Hypotheses:
 >   lmod <- lmer(waste ~ temp + (1 | envir) + (1 | envir : temp),
 +                data = waste)
 > 
->   gh <- glht(lmod, list(temp = "Tukey"))
+>   gh <- glht(lmod, mcp(temp = "Tukey"))
 > 
 >   # page 213
 >   confint(gh)
@@ -1463,13 +1454,13 @@ Linear Hypotheses:
 Fit: lmer(formula = waste ~ temp + (1 | envir) + (1 | envir:temp), 
     data = waste)
 
-Estimated Quantile = 2.3434
+Estimated Quantile = 2.3436
 
 Linear Hypotheses:
     Estimate lwr     upr    
-2-1 -0.2410  -2.0146  1.5326
-3-1  2.0150   0.2414  3.7886
-3-2  2.2560   0.4824  4.0296
+2-1 -0.2410  -2.0147  1.5327
+3-1  2.0150   0.2413  3.7887
+3-2  2.2560   0.4823  4.0297
 
 95% family-wise confidence level
  
@@ -1481,7 +1472,7 @@ Linear Hypotheses:
 >   lmod <- lmer(rate ~ treatment + (1 | dog), data = halothane, 
 +                model = TRUE)
 > 
->   gh <- glht(lmod, K = list(treatment = "Tukey"))
+>   gh <- glht(lmod, linfct = mcp(treatment = "Tukey"))
 > 
 >   # page 215
 >   confint(gh)
@@ -1491,23 +1482,23 @@ Linear Hypotheses:
 Fit: lmer(formula = rate ~ treatment + (1 | dog), data = halothane, 
     model = TRUE)
 
-Estimated Quantile = 2.568
+Estimated Quantile = 2.5693
 
 Linear Hypotheses:
       Estimate  lwr       upr      
-HP-HA  111.0526   75.2286  146.8767
-LA-HA   36.4211    0.5970   72.2451
-LP-HA  134.6842   98.8602  170.5083
-LA-HP  -74.6316 -110.4556  -38.8075
-LP-HP   23.6316  -12.1925   59.4556
-LP-LA   98.2632   62.4391  134.0872
+HP-HA  111.0526   75.2098  146.8955
+LA-HA   36.4211    0.5782   72.2639
+LP-HA  134.6842   98.8413  170.5271
+LA-HP  -74.6316 -110.4744  -38.7887
+LP-HP   23.6316  -12.2113   59.4744
+LP-LA   98.2632   62.4203  134.1060
 
 95% family-wise confidence level
  
 
 > 
 >   gh <- glht(lmod, 
-+       K = list(treatment = c("Tukey", 
++       linfct = mcp(treatment = c("Tukey", 
 +             Halo = "-0.5 * HA - 0.5 * HP + 0.5 * LA + 0.5 * LP = 0",
 +             CO2 = "0.5 * HA -0.5 * HP + 0.5 * LA -0.5 * LP = 0",
 +             Interaction = "HA - HP - LA + LP = 0")))
@@ -1602,7 +1593,7 @@ LP-HA                                            9.655 < 0.001 ***
 LA-HP                                           -5.350 < 0.001 ***
 LP-HP                                            1.694 0.09027 .  
 LP-LA                                            7.044 < 0.001 ***
--0.5 * HA - 0.5 * HP + 0.5 * LA + 0.5 * LP = 0   3.044 0.00804 ** 
+-0.5 * HA - 0.5 * HP + 0.5 * LA + 0.5 * LP = 0   3.044 0.00773 ** 
 0.5 * HA -0.5 * HP + 0.5 * LA -0.5 * LP = 0    -10.610 < 0.001 ***
 HA - HP - LA + LP = 0                           -0.648 0.51681    
 ---
@@ -1622,5 +1613,5 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > ### heart, 222
 > 
 > proc.time()
-[1] 244.091   2.532 248.409   0.000   0.000
+[1] 243.827   2.856 250.827   0.000   0.000
 > 

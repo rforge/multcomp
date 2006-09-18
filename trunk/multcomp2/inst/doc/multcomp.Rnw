@@ -161,7 +161,7 @@ rownames(K) <- names(betahat)
 @
 <<lm-mcp, echo = TRUE>>=
 library("multcomp2")
-cars.ht <- glht(lm.cars, K = K)
+cars.ht <- glht(lm.cars, linfct = K)
 summary(cars.ht)
 @
 Simultaneous confidence intervals corresponding to this multiple testing
@@ -178,7 +178,7 @@ be based on simultaneous confidence intervals for the regression line $\X \hat{\
 i.e., we choose $\K = \X$:
 <<lm-band, echo = TRUE>>=
 K <- model.matrix(lm.cars)[!duplicated(cars$speed),]
-ci.cars <- confint(glht(lm.cars, K = K), abseps = 0.1)
+ci.cars <- confint(glht(lm.cars, linfct = K), abseps = 0.1)
 @
 Figure \ref{lm-plot} depicts the regression fit together with the
 confidence band for the regression line and the pointwise 
@@ -230,8 +230,8 @@ K
 @
 This "many-to-one" comparison procedure (Dunnett) is now simply
 <<aov-mcp, echo = TRUE>>=
-summary(glht(aov.ex, K = K))
-summary(glht(aov.ex, K = c("xB - xA = 0", "xC - xA = 0")))
+summary(glht(aov.ex, linfct = K))
+summary(glht(aov.ex, linfct = c("xB - xA = 0", "xC - xA = 0")))
 @
 
 In the presence of an intercept term, the full design matrix $\X$ can't be used to fit such
@@ -258,8 +258,8 @@ linear hypotheses $\K$ can be written in terms of $\beta$, not $\beta^\star$. No
 that the matrix of linear hypotheses only applies to those elements of $\hat{\beta}^\star$
 attached to factor \Robject{x} but not to the intercept term $\hat{\beta}_1$:
 <<aov-contrasts-glht, echo = TRUE>>=
-summary(glht(aov.ex2, K = list(x = K)))
-summary(glht(aov.ex2, K = list(x = c("B - A = 0", "C - A = 0"))))
+summary(glht(aov.ex2, linfct = mcp(x = K)))
+summary(glht(aov.ex2, linfct = mcp(x = c("B - A = 0", "C - A = 0"))))
 @
 
 \bibliographystyle{plainnat}

@@ -37,16 +37,15 @@
   amod <- aov(minutes ~ blanket, data = recovery)
 
   ### set up multiple comparisons: one-sided Dunnett contrasts
-  rht <- glht(amod, K = list(blanket = "Dunnett"), alternative = "less")
+  rht <- glht(amod, linfct = mcp(blanket = "Dunnett"), alternative = "less")
 
   ### cf. Westfall et al. (1999, p. 80)
   confint(rht, level = 0.9)
 
   ### the same
-  rht <- glht(amod, K = list(blanket = c("b1 - b0 = 0", 
-                                         "b2 - b0 = 0", 
-                                         "b3 - b0 = 0")),
-              alternative = "less")
+  rht <- glht(amod, linfct = mcp(blanket = c("b1 - b0 >= 0", 
+                                             "b2 - b0 >= 0", 
+                                             "b3 - b0 >= 0")))
   confint(rht, level = 0.9)
 
 }

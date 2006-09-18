@@ -147,7 +147,7 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"),
         Corder <- C[order(tstat), , drop = FALSE]
         Cm <- m[order(tstat)]
         ms <- maxsets(Corder)
-        error <<- 0
+        error <- 0
         p <- sapply(ms, function(x) {
            max(sapply(x, function(s) {
                 object$K <- Corder[s, , drop = FALSE]
@@ -166,7 +166,6 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"),
         ### <FIXME> what happens in case of ties??? </FIXME> ###
         RET$pvalues <- p[rank(tstat)]
         attr(RET$pvalues, "error") <- error
-        eval(expression(rm(error)), envir = .GlobalEnv)
         RET$type <- type
         RET
     })

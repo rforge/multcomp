@@ -40,7 +40,7 @@
   amod <- aov(response ~ trt, data = cholesterol)
 
   ### set up multiple comparisons object for all-pair comparisons
-  cht <- glht(amod, K = list(trt = "Tukey"))
+  cht <- glht(amod, linfct = mcp(trt = "Tukey"))
 
   ### cf. Westfall et al. (1999, page 171)
   summary(cht, test = univariate())
@@ -55,7 +55,7 @@
 
   ### reproduce results in Westfall et al. (1999, page 172)
   amod <- aov(response ~ trt - 1, data = cholesterol)
-  summary(glht(amod, K = list(trt = Ksub[,5:1])), 
+  summary(glht(amod, linfct = mcp(trt = Ksub[,5:1])), 
           test = adjusted("Westfall"))
 
 }
