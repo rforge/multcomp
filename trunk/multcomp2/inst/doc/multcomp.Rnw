@@ -4,6 +4,8 @@
 %%\VignetteIndexEntry{On Multiple Comparison Procedures for Linear Hypotheses}
 %%\VignetteDepends{multcomp2}
 
+\usepackage[utf-8]{inputenc}
+
 \usepackage{amsfonts}
 \usepackage{amstext}
 \usepackage{amsmath}
