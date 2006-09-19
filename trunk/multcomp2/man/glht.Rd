@@ -59,10 +59,13 @@ mcp(...)
 
 
   ### simultaneous p values for parameters in a Cox model
-  leuk.cox <- coxph(Surv(time) ~ ag + log(wbc), data = leuk)
+  if (require("survival")) {
+      data("leuk", package = "MASS")
+      leuk.cox <- coxph(Surv(time) ~ ag + log(wbc), data = leuk)
 
-  ### set up linear hypotheses
-  glht(leuk.cox, linfct = diag(length(coef(leuk.cox))))
+      ### set up linear hypotheses
+      print(glht(leuk.cox, linfct = diag(length(coef(leuk.cox)))))
+  }
 
 }
 \keyword{htest}

@@ -15,6 +15,7 @@ coefvcovdf <- function(model) {
     if (inherits(sigma, "try-error"))
         stop("no ", sQuote("vcov"), " method for ",
              sQuote("model"), " found!")       
+    sigma <- as.matrix(sigma)
 
     ### check if a linear model was supplied
     df <- 0

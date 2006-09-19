@@ -2,14 +2,11 @@
 coef.glht <- function(object, null = FALSE, ...) 
 {
     if (null) return(object$m)
-    betahat <- coef(object$model)
-    if (inherits(object$model, "lmer"))
-        betahat <- coeflmer(object$model)
-    drop(object$K %*% betahat)
+    drop(object$K %*% object$beta)
 }
 
 vcov.glht <- function(object, ...) 
-    object$K %*% tcrossprod(as.matrix(vcov(object$model)), object$K)
+    object$K %*% tcrossprod(object$sigma, object$K)
 
 summary.glht <- function(object, test = adjusted(), ...) 
 {

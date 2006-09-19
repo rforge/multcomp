@@ -10,7 +10,8 @@ csimint <- function(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
     if (is.null(cmatrix)) cmatrix <- diag(length(estpar))
     object <- list(object = NULL, K = cmatrix, beta = estpar, sigma = covm,
                    type = ctype, alternative = match.arg(alternative),
-                   df = ifelse(is.null(df) || asympt, 0, df))
+                   df = ifelse(is.null(df) || asympt, 0, df), 
+                   m = rep(0, nrow(cmatrix)))
     class(object) <- "glht"
     .Deprecated("glht", package = "multcomp")
     confint(object, level = conf.level, abseps = eps, maxpts = maxpts)
@@ -21,10 +22,16 @@ simint.default <- function(object,
              "McDermott"), 
     cmatrix = NULL, conf.level = 0.95,
     alternative = c("two.sided","less","greater"), 
-    eps = 0.001, maxpts = 1e+06, whichf) {
+    eps = 0.001, maxpts = 1e+06, whichf = NULL) {
 
     if (!is.null(cmatrix)) {
         K <- cmatrix
+        if (is.list(K)) class(K) <- "mcp"
+        if (is.matrix(K) && length(whichf) == 1) {
+            K <- list(K)
+            names(K) <- whichf[1]
+            class(K) <- "mcp"
+        }
     } else {
         K <- list(match.arg(type))
         names(K) <- whichf
@@ -57,8 +64,13 @@ simint.formula <- function(formula, data=list(), subset, na.action, ...)
 simint.lm <- function(object, psubset = NULL, ...) {
 
     beta <- coef(object)
+
+    cmatrix <- list(...)$cmatrix
+    if (!is.null(cmatrix))
+        return(simint.default(object, ...))
+
     if (is.null(psubset)) 
-        simint.default(object, cmatrix = diag(length(beta)), ...)
+        return(simint.default(object, cmatrix = diag(length(beta)), ...))
     
     psubset <- which(beta %in% beta[psubset])
     simint.default(object, cmatrix = diag(length(beta))[psubset,])
@@ -73,7 +85,8 @@ csimtest <- function(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
     if (is.null(cmatrix)) cmatrix <- diag(length(estpar))
     object <- list(object = NULL, K = cmatrix, beta = estpar, sigma = covm,
                    type = ctype, alternative = match.arg(alternative),
-                   df = ifelse(is.null(df) || asympt, 0, df))
+                   df = ifelse(is.null(df) || asympt, 0, df),
+                   m = rep(0, nrow(cmatrix)))
     class(object) <- "glht"
     ttype <- match.arg(ttype)
     if (ttype == "free")
@@ -90,10 +103,16 @@ simtest.default <- function(object,
     ttype = c("free", "logical"),
     cmatrix = NULL, conf.level = 0.95,
     alternative = c("two.sided","less","greater"), 
-    eps = 0.001, maxpts = 1e+06, whichf) {
+    eps = 0.001, maxpts = 1e+06, whichf = NULL) {
 
     if (!is.null(cmatrix)) {
         K <- cmatrix
+        if (is.list(K)) class(K) <- "mcp"
+        if (is.matrix(K) && length(whichf) == 1) {
+            K <- list(K)
+            names(K) <- whichf[1]
+            class(K) <- "mcp"
+        }
     } else {
         K <- list(match.arg(type))
         names(K) <- whichf
@@ -131,12 +150,17 @@ simtest.formula <- function(formula, data=list(), subset, na.action, ...)
 simtest.lm <- function(object, psubset = NULL, ...) {
 
     beta <- coef(object)
+
+    cmatrix <- list(...)$cmatrix
+    if (!is.null(cmatrix))
+        return(simtest.default(object, ...))
+
     if (is.null(psubset)) 
-        simtest.default(object, cmatrix = diag(length(beta)), ...)
+        return(simtest.default(object, cmatrix = diag(length(beta)), ...))
     
     psubset <- which(beta %in% beta[psubset])
     simtest.default(object, cmatrix = diag(length(beta))[psubset,])
 }
 
-summary.summary.glht <- function(object, ...) invisible(object)
-summary.confint.glht <- function(object, ...) invisible(object)
+summary.summary.glht <- function(object, ...) print(object)
+summary.confint.glht <- function(object, ...) print(object)
