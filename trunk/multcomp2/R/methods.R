@@ -20,8 +20,10 @@ summary.glht <- function(object, test = adjusted(), ...)
     object$mtests <- cbind(pq$coefficients, coef(object, null = TRUE), 
                            pq$sigma, pq$tstat, pq$pvalues)
     attr(object$mtests, "error") <- attr(pq$pvalues, "error")
-    colnames(object$mtests) <- c("Estimate", "Hypothesis", "Std. Error",
+    colnames(object$mtests) <- c("Estimate", "rhs", "Std. Error",
         ifelse(object$df == 0, "z value", "t value"), "p value")
+    if (max(abs(object$mtests[,"rhs"])) < .Machine$double.eps)
+        object$mtests <- object$mtests[,-2, drop = FALSE]
     attr(object$mtests, "type") <- pq$type
     class(object) <- c("summary.glht", "glht")
     return(object)

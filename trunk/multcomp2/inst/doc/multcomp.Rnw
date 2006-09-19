@@ -14,6 +14,7 @@
 \newcommand{\K}{\mathbf{K}}
 \newcommand{\x}{\mathbf{x}}
 \newcommand{\y}{\mathbf{y}}
+\newcommand{\m}{\mathbf{m}}
 \newcommand{\z}{\mathbf{z}}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\V}{\mathbb{V}}
@@ -34,13 +35,15 @@
 
 <<setup, echo = FALSE, results = hide>>=
 dig <- 4
-options(width = 60, digits = dig)
+options(width = 65, digits = dig)
 library("multcomp2")
 set.seed(290875)
 @
 
+\SweaveOpts{engine=R,eps=FALSE}
 
-\title{On Simultaneous Inference for General Linear Hypotheses}
+\title{Simultaneous Inference Procedures \\ 
+       for General Linear Hypotheses}
 
 \author{Torsten Hothorn}
 
@@ -58,18 +61,20 @@ a linear combination of the $n \times p$ \emph{design matrix} $\X$
 \end{eqnarray*}
 
 Our primary target is simultaneous inference about 
-\emph{general linear hypotheses} \citep{Searle1971}, i.e, linear combinations 
-of the vector of regression coefficients $\beta \in \R^p$:
+\emph{general linear hypotheses} \citep{Searle1971}, i.e, 
+about linear functions of the vector of 
+regression coefficients $\beta \in \R^p$:
 \begin{eqnarray*}
-H_0: \K \beta = 0
+H_0: \K \beta = \m
 \end{eqnarray*}
 where $\K$ is an full-rank $k \times p$ matrix with each row corresponding to
 one specific hypothesis. Classically, $F$ tests are applied to test 
 such hypotheses. However, we are not only interested in the 
 \emph{global} hypothesis $H_0$ but in all partial
-hypotheses defined by the rows $K_j, j = 1, \dots, k$, of $\K$:
+hypotheses defined by the rows $K_j, j = 1, \dots, k$, of $\K$ and
+the elements of $\m = (m_1, \dots, m_k)$:
 \begin{eqnarray*}
-H_0^j: K_j \beta = 0 \text{ where } H_0 = \bigcap_{j = 1}^k H_0^j
+H_0^j: K_j \beta = m_j \text{ where } H_0 = \bigcap_{j = 1}^k H_0^j
 \end{eqnarray*}
 We only consider simultaneous inference procedures, both tests and confidence intervals,
 which control the \emph{familywise error rate} (FWE), that is the probability of 
@@ -86,11 +91,11 @@ and thus $\K \hat{\beta} \sim \mathcal{N}(\K \beta, \K \V(\hat{\beta}) \K^\top)$
 For generalized linear models, the multivariate normal distribution of $\hat{\beta}$
 and $\K \hat{\beta}$ is valid only asymptotically.
 
-\subsection{Multiple Testing and Simultaneous Confidence Intervals}
+\subsection{Simultaneous Tests and Confidence Intervals}
 
 Under the conditions of the global hypothesis $H_0$ it holds that
 \begin{eqnarray*}
-\K \hat{\beta} \sim \mathcal{N}(0, \K \V(\hat{\beta}) \K^\top),
+\K \hat{\beta} - \m \sim \mathcal{N}(0, \K \V(\hat{\beta}) \K^\top),
 \end{eqnarray*} 
 either exactly (linear model) or asymptotically.
 For each partial hypothesis $H_0^j$, a standardized test statistic 
@@ -102,7 +107,7 @@ the classical way.
 
 However, the vector of standarized statistics
 \begin{eqnarray*}
-\z = (z_1, \dots, z_k) = \Sigma K \hat{\beta} \\
+\z = (z_1, \dots, z_k) = \Sigma (\K \hat{\beta} - \m) \\
 \Sigma = \text{diag}\left((\K \V(\hat{\beta}) \K^\top)^{-\frac{1}{2}}\right)
 \end{eqnarray*}
 follows a multivariate $t$ distribution with correlation matrix
@@ -121,7 +126,7 @@ for each linear hypothesis $H_0^j$ are simply $p_j = P_{H_0}(\max(|\z|) \ge |z_j
 Efficient algorithms for the evalutation of both multivariate distributions
 are nowadays available \citep{Genz1992, GenzBretz1999, GenzBretz2002}.
 
-\paragraph{Example: Simple Linear Model}
+\paragraph{Example: Simple Linear Model.}
 
 Consider a simple univariate linear model regressing the distance to stop 
 on speed for $\Sexpr{nrow(cars)}$ cars:
@@ -145,7 +150,9 @@ z <- Sigma %*% K %*% betahat
 Cor <- Sigma %*% (K %*% Vbetahat %*% t(K)) %*% t(Sigma)                  
 @
 Note that $\z = \Sexpr{paste("(", paste(round(z, dig), collapse = ", "), ")")}$ 
-is equal to the $t$ statistics for \Robject{speed}.
+is equal to the $t$ statistics for \Robject{speed}. The multiplicity-adjusted
+$p$ values can now be computed by means of the multivariate $t$ distribution
+utilizing the \Rcmd{pmvt} function available in package \Rpackage{mvtnorm}:
 <<lm-partial, echo = TRUE>>=
 library("mvtnorm")
 df.cars <- nrow(cars) - length(betahat)
@@ -155,7 +162,8 @@ Note that the $p$ value of the global test is the minimum $p$ value of the parti
 
 The computations above can be performed much more conveniently using the functionality
 implemented in package \Rpackage{multcomp2}. The function \Rcmd{glht} just takes a fitted 
-model and a matrix defining the linear hypotheses to be tested:
+model and a matrix defining the linear functions, and thus hypotheses,
+to be tested:
 <<lm-K, echo = FALSE>>=
 rownames(K) <- names(betahat)
 @
@@ -170,7 +178,7 @@ procedure are available via
 confint(cars.ht)
 @
 
-\paragraph{Example: Confidence Bands for Regression Line}
+\paragraph{Example: Confidence Bands for Regression Line.}
 
 Suppose we want to plot the linear model fit to the \Robject{cars} data
 including an assessment of the variability of the model fit. This can 
@@ -185,7 +193,7 @@ confidence band for the regression line and the pointwise
 confidence intervals as computed by \Rcmd{predict(lm.cars)}.
 \begin{figure}
 \begin{center}
-<<lm-plot, echo = FALSE, fig = TRUE>>=
+<<lm-plot, echo = FALSE, fig = TRUE, width = 8, height = 5>>=
 plot(cars, xlab = "Speed (mph)", ylab = "Stopping distance (ft)",
             las = 1)
 abline(lm.cars)
@@ -204,7 +212,7 @@ legend("topleft", lty = c(1, 2, 3), legend = c("Regression line",
 \end{center}
 \end{figure}
 
-\section{Comparing Means: AN(C)OVA Models} 
+\section{Multiple Comparison Procedures} 
 
 Consider a one-way ANOVA model, i.e., the only covariate $\x_1$ is a factor at $l$ levels.
 In this case, the design matrix $\X$ is the matrix of dummy codings of the factor
@@ -221,16 +229,21 @@ response variable in each group:
 coef(aov.ex)
 @
 Thus, the hypotheses $\beta_2 - \beta_1 = 0 \text{ and } \beta_3 - \beta_1 = 0$ can be written
-in form of linear hypotheses $\K \beta$ with
+in form of a linear function $\K \beta$ with
 <<aov-Dunnett, echo = TRUE>>=
 K <- rbind(c(-1, 1, 0),
            c(-1, 0, 1))
 rownames(K) <- c("B - A", "C - A")
+colnames(K) <- names(coef(aov.ex))
 K
 @
 This "many-to-one" comparison procedure (Dunnett) is now simply
 <<aov-mcp, echo = TRUE>>=
 summary(glht(aov.ex, linfct = K))
+@
+Alternatively, a symbolic description of the general linear hypothesis
+of interest can be supplied to \Rcmd{glht}:
+<<aov-mcp2, echo = TRUE>>=
 summary(glht(aov.ex, linfct = c("xB - xA = 0", "xC - xA = 0")))
 @
 
@@ -240,7 +253,8 @@ a contrast matrix $\C$ is included into this model:
 \begin{eqnarray*}
 \X \beta = \X \C \beta^\star = \X^\star \beta^\star
 \end{eqnarray*}
-any we only obtain estimates for $\beta^\star = \C \beta$, not $\beta$:
+any we only obtain estimates for $\beta^\star$, but not for the
+`original' parameter vector $\beta$:
 <<aov-constrasts, echo = TRUE>>=
 aov.ex2 <- aov(y ~ x, data = ex)
 coef(aov.ex2)
@@ -259,11 +273,29 @@ that the matrix of linear hypotheses only applies to those elements of $\hat{\be
 attached to factor \Robject{x} but not to the intercept term $\hat{\beta}_1$:
 <<aov-contrasts-glht, echo = TRUE>>=
 summary(glht(aov.ex2, linfct = mcp(x = K)))
+@
+or, a little bit more convenient in this simple case:
+<<aov-contrasts-glht2, echo = TRUE>>=
 summary(glht(aov.ex2, linfct = mcp(x = c("B - A = 0", "C - A = 0"))))
 @
 
+More generally, inference on linear functions of parameters which can be
+interpreted as `means' are known as \emph{multiple comparison procedures} 
+(MCP). For some of the more prominent special cases, the corresponding
+linear functions can be computed by convenience functions part
+of \Rpackage{multcomp2}. For example, Tukey all-pair comparisons
+for the factor \Robject{x} can be set up using
+<<aov-Tukey>>=
+glht(aov.ex2, linfct = mcp(x = "Tukey"))
+@
+The initial parameterization of the model is automatically taken into account:
+<<aov-Tukey2>>=
+glht(aov.ex, linfct = mcp(x = "Tukey"))
+@
+
+
 \bibliographystyle{plainnat}
-\bibliography{mcp}
+\bibliography{multcomp}
 
 \end{document}
 

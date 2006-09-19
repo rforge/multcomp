@@ -11,7 +11,7 @@
 }
 \usage{
 \method{glht}{matrix}(model, linfct, 
-    m = 0, alternative = c("two.sided", "less", "greater"), df = NULL, ...)
+    alternative = c("two.sided", "less", "greater"), rhs = 0, df = NULL, ...)
 \method{glht}{character}(model, linfct, ...)
 \method{glht}{expression}(model, linfct, ...)
 \method{glht}{mcp}(model, linfct, ...)
@@ -31,10 +31,10 @@ mcp(...)
             symbolic descriptions or \code{type} arguments 
             for \code{\link{contrMat}} when multiple comparisons of 
             means, i.e., factor levels, are of special interest.}
-  \item{m}{right hand side of the hypothesis: \eqn{H_0: K \beta = m}.}
   \item{alternative}{a character string specifying the alternative 
       hypothesis, must be one of '"two.sided"' (default), '"greater"' or
       '"less"'.  You can specify just the initial letter.}
+  \item{rhs}{right hand side of the hypothesis: \eqn{H_0: K \beta = m}.}
   \item{df}{ alternative degrees of freedom to be used for the 
              computations of multivariate t distributions.}
   \item{\dots}{additional arguments}

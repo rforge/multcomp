@@ -3,8 +3,14 @@
 print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...) 
 {
     cat("\n\t", "General Linear Hypotheses\n\n")
-    x <- cbind(coef(x), coef(x, null = TRUE))
-    colnames(x) <- c("Estimate", "Hypothesis")
+    m <- coef(x, null = TRUE)
+    if (max(abs(m)) > .Machine$double.eps) {
+       x <- cbind(coef(x), coef(x, null = TRUE))
+       colnames(x) <- c("Estimate", "rhs")
+    } else {
+       x <- matrix(coef(x), ncol = 1)
+       colnames(x) <- "Estimate"
+    }
     cat("Linear Hypotheses:\n")
     print(x, digits = digits)
     cat("\n")

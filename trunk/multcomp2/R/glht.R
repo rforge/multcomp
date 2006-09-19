@@ -2,17 +2,18 @@
 ### general linear hypotheses
 glht <- function(model, linfct, ...) UseMethod("glht", linfct)
 
-### K coef(model) _!alternative_ m
-glht.matrix <- function(model, linfct, m = 0, 
-    alternative = c("two.sided", "less", "greater"), df = NULL, ...) {
+### K coef(model) _!alternative_ rhs
+glht.matrix <- function(model, linfct, 
+    alternative = c("two.sided", "less", "greater"), rhs = 0, 
+    df = NULL, ...) {
 
     ### extract coefficients and their covariance matrix, df
     tmp <- coefvcovdf(model)
     beta <- tmp$beta
 
     alternative <- match.arg(alternative)
-    if (!is.numeric(m))
-        stop(sQuote("m"), " is not a numeric vector")
+    if (!is.numeric(rhs))
+        stop(sQuote("rhs"), " is not a numeric vector")
 
     if (ncol(linfct) != length(beta))
         stop(sQuote("ncol(linfct)"), " is not equal to ", 
@@ -24,13 +25,12 @@ glht.matrix <- function(model, linfct, m = 0,
     if (is.null(rownames(linfct)))
         rownames(linfct) <- 1:nrow(linfct)
 
-    if (!is.numeric(m)) stop(sQuote("m"), " is not a numeric vector")
-    if (length(m) == 1) m <- rep(m, nrow(linfct))
-    if (length(m) != nrow(linfct))
+    if (length(rhs) == 1) rhs <- rep(rhs, nrow(linfct))
+    if (length(rhs) != nrow(linfct))
         stop(sQuote("nrow(linfct)"), " is not equal to ",
-             sQuote("length(m)"))
+             sQuote("length(rhs)"))
 
-    RET <- list(model = model, K = linfct, m = m,
+    RET <- list(model = model, K = linfct, m = rhs,
                 beta = beta, sigma = tmp$sigma, 
                 df = ifelse(is.null(df), tmp$df, df),
                 alternative = alternative,
@@ -47,7 +47,7 @@ glht.character <- function(model, linfct, ...) {
              sQuote("model"), " found!")
 
     tmp <- chrlinfct2matrix(linfct, names(beta))
-    return(glht(model, linfct = tmp$K, m = tmp$m, 
+    return(glht(model, linfct = tmp$K, rhs = tmp$m, 
                 alternative = tmp$alternative))
 }
 
@@ -64,7 +64,7 @@ glht.mcp <- function(model, linfct, ...) {
     if (!is.null(tmp$alternative))
         args$alternative <- tmp$alternative
     if (any(tmp$m != 0))
-        args$m <- tmp$m
+        args$rhs <- tmp$m
     args <- c(args, list(...))
 
     return(do.call("glht", args))
