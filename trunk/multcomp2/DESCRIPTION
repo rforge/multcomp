@@ -6,7 +6,8 @@ Author: Torsten Hothorn <Torsten.Hothorn@R-project.org>,
   Frank Bretz <frank.bretz@novartis.com>, and
   Peter Westfall <WESTFALL@ba.ttu.edu>
 Description: Simultaneous confidence intervals and tests 
-  for linear hypotheses in linear, generalized linear, and Cox models.
+  for linear hypotheses in linear, generalized linear, linear
+  mixed effects and Cox models.
 Maintainer: Torsten Hothorn <Torsten.Hothorn@R-project.org>
 Depends: mvtnorm (>= 0.7-0)
 License: GPL

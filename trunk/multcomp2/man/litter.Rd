@@ -2,7 +2,7 @@
 \alias{litter}
 \non_function{}
 \title{ Litter Weights Data Set }
-\usage{data(litter)}
+\usage{data("litter")}
 \description{
   Dose response of litter weights in rats; data set taken from Westfall et al. (1999, p. 109). 
   Specific dose comparisons in a dose response experiment with two covariates. 

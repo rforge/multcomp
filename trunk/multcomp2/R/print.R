@@ -4,12 +4,15 @@ print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...)
 {
     cat("\n\t", "General Linear Hypotheses\n\n")
     m <- coef(x, null = TRUE)
+    beta <- coef(x)
     if (max(abs(m)) > .Machine$double.eps) {
-       x <- cbind(coef(x), coef(x, null = TRUE))
+       x <- cbind(beta, m)
        colnames(x) <- c("Estimate", "rhs")
+       rownames(x) <- names(beta)
     } else {
-       x <- matrix(coef(x), ncol = 1)
+       x <- matrix(beta, ncol = 1)
        colnames(x) <- "Estimate"
+       rownames(x) <- names(beta)
     }
     cat("Linear Hypotheses:\n")
     print(x, digits = digits)
