@@ -11,7 +11,7 @@
 }
 \usage{
 \method{glht}{matrix}(model, linfct, 
-    m = 0, alternative = c("two.sided", "less", "greater"), ...)
+    m = 0, alternative = c("two.sided", "less", "greater"), df = NULL, ...)
 \method{glht}{character}(model, linfct, ...)
 \method{glht}{expression}(model, linfct, ...)
 \method{glht}{mcp}(model, linfct, ...)
@@ -35,6 +35,8 @@ mcp(...)
   \item{alternative}{a character string specifying the alternative 
       hypothesis, must be one of '"two.sided"' (default), '"greater"' or
       '"less"'.  You can specify just the initial letter.}
+  \item{df}{ alternative degrees of freedom to be used for the 
+             computations of multivariate t distributions.}
   \item{\dots}{additional arguments}
 }
 \details{
@@ -59,7 +61,7 @@ mcp(...)
 
 
   ### simultaneous p values for parameters in a Cox model
-  if (require("survival")) {
+  if (require("survival") && require("MASS")) {
       data("leuk", package = "MASS")
       leuk.cox <- coxph(Surv(time) ~ ag + log(wbc), data = leuk)
 

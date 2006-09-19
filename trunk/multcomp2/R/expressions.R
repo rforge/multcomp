@@ -144,6 +144,3 @@ chrlinfct2matrix <- function(ex, var) {
     list(K = K, m = m, alternative = alternative)
 }
 
-chrlinfct2matrix(c("-2 * a + (-4) * b <= 3", 
-                                   "b <= 4"), 
-                 c("a", "b", "c"))

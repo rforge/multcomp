@@ -1,4 +1,6 @@
 
+### multiple comparison procedures for levels of 
+### factors in AN(C)OVA models
 mcp <- function(...) {
 
     linfct <- list(...)

@@ -89,7 +89,7 @@ global(type = c("Chisq", "F"))
 
 
   ### simultaneous p values for parameters in a Cox model
-  if (require("survival")) {
+  if (require("survival") && require("MASS")) {
       data("leuk", package = "MASS")
       leuk.cox <- coxph(Surv(time) ~ ag + log(wbc), data = leuk)
 

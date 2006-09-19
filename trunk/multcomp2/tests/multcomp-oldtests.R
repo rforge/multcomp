@@ -85,7 +85,7 @@ x <- cbind(1,
                     rep(1, 10)), nrow = 50))
 y <- cholesterol$response
 
-xpxi   <- ginv(t(x) %*% x)
+xpxi   <- multcomp2:::MPinv(t(x) %*% x)$MPinv
 rankx  <- sum(diag((xpxi %*% (t(x) %*% x))))
 n      <- nrow(x)
 p      <- ncol(x)

@@ -1,4 +1,5 @@
 
+### methods for `glht' objects
 coef.glht <- function(object, null = FALSE, ...) 
 {
     if (null) return(object$m)

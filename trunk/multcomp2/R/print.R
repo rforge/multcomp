@@ -1,4 +1,5 @@
 
+### print methods
 print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...) 
 {
     cat("\n\t", "General Linear Hypotheses\n\n")
@@ -13,7 +14,7 @@ print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...)
 print.summary.glht <- function(x, digits = max(3, getOption("digits") - 3), 
                               ...) 
 {
-    cat("\n\t", "Multiple Tests for General Linear Hypotheses\n\n")
+    cat("\n\t", "Simultaneous Tests for General Linear Hypotheses\n\n")
     cat("Fit: ")
     if (inherits(x$model, "lmer")) {
         print(x$model@call)

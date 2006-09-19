@@ -1,38 +1,10 @@
 
-### extract coefficients, covariance matrix and 
-### degrees of freedom (if available) from `model'
-coefvcovdf <- function(model) {
-
-    ### extract coefficients and their covariance matrix
-    beta <- try(coef(model))
-    if (inherits(beta, "try-error"))
-        stop("no ", sQuote("coef"), " method for ",
-             sQuote("model"), " found!")
-    if (inherits(model, "lmer"))
-        beta <- coeflmer(model)
-
-    sigma <- try(vcov(model))
-    if (inherits(sigma, "try-error"))
-        stop("no ", sQuote("vcov"), " method for ",
-             sQuote("model"), " found!")       
-    sigma <- as.matrix(sigma)
-
-    ### check if a linear model was supplied
-    df <- 0
-    if (class(model)[1] %in% c("aov", "lm")) {
-        class(model) <- "lm"
-        df <- summary(model)$df[2]
-    }
-
-    list(beta = beta, sigma = sigma, df = df)
-}
-
 ### general linear hypotheses
 glht <- function(model, linfct, ...) UseMethod("glht", linfct)
 
 ### K coef(model) _!alternative_ m
 glht.matrix <- function(model, linfct, m = 0, 
-    alternative = c("two.sided", "less", "greater"), ...) {
+    alternative = c("two.sided", "less", "greater"), df = NULL, ...) {
 
     ### extract coefficients and their covariance matrix, df
     tmp <- coefvcovdf(model)
@@ -59,7 +31,8 @@ glht.matrix <- function(model, linfct, m = 0,
              sQuote("length(m)"))
 
     RET <- list(model = model, K = linfct, m = m,
-                beta = beta, sigma = tmp$sigma, df = tmp$df,
+                beta = beta, sigma = tmp$sigma, 
+                df = ifelse(is.null(df), tmp$df, df),
                 alternative = alternative,
                 type = "user-defined")
     class(RET) <- "glht"

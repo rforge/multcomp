@@ -26,22 +26,14 @@
 
   data("halothane")
 
-\dontrun{
   if (require("lme4")) {
 
       lmod <- lmer(rate ~ treatment + (1 | dog), data = halothane)
 
-      C <- contr.treatment(nlevels(halothane$treatment))
-      K <- (contrMat(table(halothane$treatment), type = "Tukey") * -1) %*% C
-
       ### compare with Westfall et al. (1999, p. 215)
-      tmp <- multcomp2:::pqglht(t(as.matrix(coef(lmod)[[1]][1,])), 
-                   as.matrix(vcov(lmod)), cbind(0, K), df = 18)
-      tmp$coefficients
-      tmp$sigma
-      tmp$qfunction("two", 0.95)
+      confint(glht(lmod, linfct = mcp(treatment = "Tukey"), df = 18))
+
   }
-}
 
 }
 \keyword{datasets}

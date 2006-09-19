@@ -22,7 +22,7 @@ checkCS <- function(K, C)
     if (length(K) == ncol(C)) return(TRUE)
     CK <- C[,K,drop = FALSE]
     Cj <- C[,1:(min(K)-1), drop = FALSE]
-    tmp <- Cj - (CK %*% ginv(CK) %*% Cj)
+    tmp <- Cj - (CK %*% MPinv(CK)$MPinv %*% Cj)
     all(colSums(tmp^2) > .Machine$double.eps)
 }
 
@@ -74,6 +74,7 @@ model.matrix.coxph <- function(object, ...)
     mm
 }
 
+### some methods of lmer objects
 model.matrix.lmer <- function(object, ...) {
     x <- object@X
     if (is.null(x))
@@ -105,4 +106,52 @@ coeflmer <- function(object, ...) {
     x <- object@fixef
     names(x) <- rownames(vcov(object))
     x
+}
+
+### extract coefficients, covariance matrix and 
+### degrees of freedom (if available) from `model'
+coefvcovdf <- function(model) {
+
+    ### extract coefficients and their covariance matrix
+    beta <- try(coef(model))
+    if (inherits(beta, "try-error"))
+        stop("no ", sQuote("coef"), " method for ",
+             sQuote("model"), " found!")
+    if (inherits(model, "lmer"))
+        beta <- coeflmer(model)
+
+    sigma <- try(vcov(model))
+    if (inherits(sigma, "try-error"))
+        stop("no ", sQuote("vcov"), " method for ",
+             sQuote("model"), " found!")       
+    sigma <- as.matrix(sigma)
+
+    ### check if a linear model was supplied
+    df <- 0
+    if (class(model)[1] %in% c("aov", "lm")) {
+        class(model) <- "lm"
+        df <- summary(model)$df[2]
+    }
+
+    list(beta = beta, sigma = sigma, df = df)
+}
+
+### modified from package MASS  
+MPinv <- function (X, tol = sqrt(.Machine$double.eps))
+{
+    if (length(dim(X)) > 2 || !(is.numeric(X) || is.complex(X)))
+        stop("X must be a numeric or complex matrix")
+    if (!is.matrix(X))
+        X <- as.matrix(X)
+    Xsvd <- svd(X)
+    if (is.complex(X))
+        Xsvd$u <- Conj(Xsvd$u)
+    Positive <- Xsvd$d > max(tol * Xsvd$d[1], 0)
+    if (all(Positive)) 
+        RET <- Xsvd$v %*% (1/Xsvd$d * t(Xsvd$u))   
+    else if (!any(Positive))
+        RET <- array(0, dim(X)[2:1])
+    else RET <- Xsvd$v[, Positive, drop = FALSE] %*% ((1/Xsvd$d[Positive]) *
+        t(Xsvd$u[, Positive, drop = FALSE]))
+    return(list(MPinv = RET, rank = sum(Positive)))
 }

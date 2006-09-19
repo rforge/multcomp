@@ -13,6 +13,7 @@ pqglht <- function(object)
     cr <- cov2cor(covm)
     dim <- ncol(cr)
 
+    ### p value function
     pfunction <- function(type = c("univariate", "Bonferroni", "adjusted"), 
                           ...) {
 
@@ -64,6 +65,7 @@ pqglht <- function(object)
         }
     }
 
+    ### quantile function
     qfunction <- function(conf.level, ...) {
 
         tail <- switch(object$alternative, "two.sided" = "both.tails",
@@ -98,6 +100,8 @@ pqglht <- function(object)
     RET
 }
 
+### functions for summary(..., test = ) argument
+### univariate p values for each linear hypothesis
 univariate <- function() 
 {
     function(object) {
@@ -108,6 +112,47 @@ univariate <- function()
     }
 }
 
+### global classical Chisq or F tests
+global <- function(type = c("Chisq", "F")) 
+{
+    type <- match.arg(type)
+    
+    fct <- function(object) {
+
+        RET <- pqglht(object)
+        betahat <- RET$coefficients
+        m <- coef(object, null = TRUE)
+        covm <- vcov(object)
+
+        tmp <- betahat - m
+        MP <- MPinv(covm)
+        SSH <- t(tmp) %*% MP$MPinv %*% tmp
+
+        q <- MP$rank
+        df <- df.residual(object$model)
+        if (is.null(df)) {
+            type <- "Chisq"
+            warning(sQuote("df.residual"), " is not available for ",
+                    sQuote("model"), " performing F test")
+        }
+
+        if (type == "Chisq") {
+            pval <- pchisq(SSH, q, lower.tail = FALSE)
+        } else {
+            pval <- pf(SSH/q, q, df, lower.tail = FALSE)
+        }
+        RET$pvalue  <- pval
+        RET$type <- type
+        RET$SSH <- SSH
+        RET$fstat <- SSH/q
+        RET$df <- c(q, df)
+        class(RET) <- "summary.glht.global"
+        return(RET)
+    }
+    return(fct)
+}
+
+### p values adjusted for simultaneous inference
 adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), 
                      ...) 
 {
@@ -169,62 +214,4 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"),
         RET$type <- type
         RET
     })
-}
-
-### copied from package MASS  
-MPinv <- function (X, tol = sqrt(.Machine$double.eps))
-{
-    if (length(dim(X)) > 2 || !(is.numeric(X) || is.complex(X)))
-        stop("X must be a numeric or complex matrix")
-    if (!is.matrix(X))
-        X <- as.matrix(X)
-    Xsvd <- svd(X)
-    if (is.complex(X))
-        Xsvd$u <- Conj(Xsvd$u)
-    Positive <- Xsvd$d > max(tol * Xsvd$d[1], 0)
-    if (all(Positive)) 
-        RET <- Xsvd$v %*% (1/Xsvd$d * t(Xsvd$u))   
-    else if (!any(Positive))
-        RET <- array(0, dim(X)[2:1])
-    else RET <- Xsvd$v[, Positive, drop = FALSE] %*% ((1/Xsvd$d[Positive]) *
-        t(Xsvd$u[, Positive, drop = FALSE]))
-    return(list(MPinv = RET, rank = sum(Positive)))
-}
-
-global <- function(type = c("Chisq", "F")) {
-    type <- match.arg(type)
-    
-    fct <- function(object) {
-
-        RET <- pqglht(object)
-        betahat <- RET$coefficients
-        m <- coef(object, null = TRUE)
-        covm <- vcov(object)
-
-        tmp <- betahat - m
-        MP <- MPinv(covm)
-        SSH <- t(tmp) %*% MP$MPinv %*% tmp
-
-        q <- MP$rank
-        df <- df.residual(object$model)
-        if (is.null(df)) {
-            type <- "Chisq"
-            warning(sQuote("df.residual"), " is not available for ",
-                    sQuote("model"), " performing F test")
-        }
-
-        if (type == "Chisq") {
-            pval <- pchisq(SSH, q, lower.tail = FALSE)
-        } else {
-            pval <- pf(SSH/q, q, df, lower.tail = FALSE)
-        }
-        RET$pvalue  <- pval
-        RET$type <- type
-        RET$SSH <- SSH
-        RET$fstat <- SSH/q
-        RET$df <- c(q, df)
-        class(RET) <- "summary.glht.global"
-        return(RET)
-    }
-    return(fct)
 }
