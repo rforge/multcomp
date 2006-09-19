@@ -21,9 +21,6 @@ Type 'q()' to quit R.
 > 
 > library("multcomp2")
 Loading required package: mvtnorm
-Loading required package: MASS
-Loading required package: survival
-Loading required package: splines
 > 
 > set.seed(290875)
 > 
@@ -200,7 +197,7 @@ Linear Hypotheses:
 >   # page 63
 >   summary(gh)
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = purchase ~ discount - 1, data = coupon)
 
@@ -246,7 +243,7 @@ b3-b2   5.8000   1.4557  10.1443
 >   # page 75
 >   summary(gh)
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = minutes ~ blanket, data = recover)
 
@@ -287,7 +284,7 @@ b3-b0  -1.6667  -3.8679   0.5346
 >   # page 79
 >   summary(gh)
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = minutes ~ blanket, data = recover)
 
@@ -325,7 +322,7 @@ b3-b0 -1.66667     -Inf -0.03583
 >   # page 80
 >   summary(gh)
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = minutes ~ blanket, data = recover)
 
@@ -395,7 +392,7 @@ E-D  -3.0741 -11.1173   4.9691
 >   # page 96
 >   summary(gh)
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = price ~ location + sqfeet + age, data = house)
 
@@ -417,7 +414,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = univariate())
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = price ~ location + sqfeet + age, data = house)
 
@@ -448,7 +445,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   # page 100
 >   summary(gh)
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = w4 ~ trt + I(w0 - w3), data = ratgrwth)
 
@@ -531,7 +528,7 @@ Linear Hypotheses:
 >   # page 110
 >   summary(gh, test = univariate())
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = weight ~ dose + gesttime + number, data = litter)
 
@@ -552,7 +549,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   gh$alternative <- "greater"
 >   summary(gh, test = univariate())
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = weight ~ dose + gesttime + number, data = litter)
 
@@ -570,7 +567,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh)
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = weight ~ dose + gesttime + number, data = litter)
 
@@ -611,7 +608,7 @@ ltrend     1.9400  -0.1950     Inf
 >   gh$alternative <- "greater"
 >   summary(gh, test = adjusted("Westfall"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = weight ~ dose + gesttime + number, data = litter)
 
@@ -736,7 +733,7 @@ Linear Hypotheses:
 >   # page 171
 >   summary(gh, test = univariate())
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = response ~ trt - 1, data = cholesterol)
 
@@ -758,7 +755,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Shaffer"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = response ~ trt - 1, data = cholesterol)
 
@@ -780,7 +777,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Westfall"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = response ~ trt - 1, data = cholesterol)
 
@@ -810,7 +807,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   # page 172
 >   summary(gh, test = univariate())
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = response ~ trt - 1, data = cholesterol)
 
@@ -827,7 +824,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Shaffer"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = response ~ trt - 1, data = cholesterol)
 
@@ -844,7 +841,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Westfall"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = response ~ trt - 1, data = cholesterol)
 
@@ -948,7 +945,7 @@ Linear Hypotheses:
 +              alternative = "greater")
 >   summary(gh, test = univariate())
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = waste ~ temp + envir, data = waste)
 
@@ -973,7 +970,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Shaffer"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = waste ~ temp + envir, data = waste)
 
@@ -998,7 +995,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Westfall", abseps = 0.1))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = waste ~ temp + envir, data = waste)
 
@@ -1087,7 +1084,7 @@ Linear Hypotheses:
 >   # page 192
 >   summary(gh, test = univariate())
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = plates ~ block + detergent, data = detergent)
 
@@ -1109,7 +1106,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Shaffer"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = plates ~ block + detergent, data = detergent)
 
@@ -1131,7 +1128,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Westfall"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = plates ~ block + detergent, data = detergent)
 
@@ -1188,7 +1185,7 @@ initial -0.09620 -1.36189  1.16949
 >   # page 195
 >   summary(gh, test = univariate())
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = gain ~ pen + feed * sex + initial, data = pigs)
 
@@ -1205,7 +1202,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Shaffer"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = gain ~ pen + feed * sex + initial, data = pigs)
 
@@ -1222,7 +1219,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Westfall"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = gain ~ pen + feed * sex + initial, data = pigs)
 
@@ -1287,7 +1284,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   # page 198
 >   summary(gh, test = univariate())
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = score ~ treatment:agegroup:inithealth - 1, data = respiratory)
 
@@ -1308,7 +1305,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Shaffer"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: aov(formula = score ~ treatment:agegroup:inithealth - 1, data = respiratory)
 
@@ -1378,7 +1375,7 @@ E-D  2.900000  1.741496  4.058504
 >   # page 207 / 208
 >   summary(gh)
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: lmer(formula = wloss ~ diet + (1 | i), data = wloss, model = TRUE)
 
@@ -1506,7 +1503,7 @@ LP-LA   98.2632   62.4203  134.1060
 >   # page 217
 >   summary(gh, test = univariate())
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: lmer(formula = rate ~ treatment + (1 | dog), data = halothane, 
     model = TRUE)
@@ -1538,7 +1535,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Shaffer"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: lmer(formula = rate ~ treatment + (1 | dog), data = halothane, 
     model = TRUE)
@@ -1570,7 +1567,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 >   summary(gh, test = adjusted("Westfall"))
 
-	 Multiple Tests for General Linear Hypotheses
+	 Simultaneous Tests for General Linear Hypotheses
 
 Fit: lmer(formula = rate ~ treatment + (1 | dog), data = halothane, 
     model = TRUE)
@@ -1613,5 +1610,5 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > ### heart, 222
 > 
 > proc.time()
-[1] 243.827   2.856 250.827   0.000   0.000
+[1] 236.174   3.220 239.932   0.000   0.000
 > 
