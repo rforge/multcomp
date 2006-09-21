@@ -17,12 +17,11 @@
 }
 \usage{
 csimint(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
-        conf.level=0.95,
-        alternative=c("two.sided","less","greater"), asympt=FALSE,
-        eps=0.001, maxpts=1000000)
+        conf.level=0.95, alternative=c("two.sided","less","greater"), 
+        asympt=FALSE, eps=0.001, maxpts=1000000)
 \method{simint}{default}(object,
-    type = c("Dunnett", "Tukey", "Sequen", "AVE", "Changepoint", "Williams", "Marcus",
-             "McDermott"),
+    type = c("Dunnett", "Tukey", "Sequen", "AVE", "Changepoint", 
+    "Williams", "Marcus", "McDermott"),
     cmatrix = NULL, conf.level = 0.95,
     alternative = c("two.sided","less","greater"),
     eps = 0.001, maxpts = 1e+06, whichf)
@@ -33,8 +32,8 @@ csimtest(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
          alternative=c("two.sided","less","greater"), asympt=FALSE,
          eps=0.001, maxpts=1000000)
 \method{simtest}{default}(object,
-    type = c("Dunnett", "Tukey", "Sequen", "AVE", "Changepoint", "Williams", "Marcus",
-             "McDermott"),
+    type = c("Dunnett", "Tukey", "Sequen", "AVE", "Changepoint", 
+    "Williams", "Marcus", "McDermott"),
     ttype = c("free", "logical"),
     cmatrix = NULL, conf.level = 0.95,
     alternative = c("two.sided","less","greater"), 
@@ -81,8 +80,13 @@ or whether the uncontrained method will be used.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
-  The old user interface, especially the user visible functions \code{simint}, \code{csimint}, 
-  \code{simtest}, \code{csimtest}, has been replaced by one single function \code{\link{glht}}
-  which offers \code{summary}, \code{confint} and \code{plot} methods.
+  The generics \code{simint} and \code{simtest} implement the user interface for
+  multcomp versions up to 0.4-8. The user visible functions \code{simint}, \code{csimint}, 
+  \code{simtest}, \code{csimtest} have been replaced by one single function \code{\link{glht}}
+  which offers \code{\link{summary.glht}} and \code{\link{confint.glht}} methods
+  for simultaneous tests and confidence intervals, respectively.
+
+  Please use \code{\link{glht}} for your analyses. The old user interface will
+  be removed in future versions of this package.
 }
 \keyword{misc}

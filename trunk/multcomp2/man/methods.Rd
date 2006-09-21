@@ -17,7 +17,8 @@
 \method{coef}{glht}(object, null = FALSE, ...)
 \method{vcov}{glht}(object, ...)
 univariate()
-adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), ...)
+adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), 
+         ...)
 global(type = c("Chisq", "F"))
 }
 \arguments{
@@ -44,25 +45,24 @@ global(type = c("Chisq", "F"))
   null hypothesis, each of the partial hypotheses and for
   simultaneous confidence intervals for the linear function $K \beta$.
   
-  The \code{coef} and \code{vcov} methods compute the linear
+  The \code{\link{coef}} and \code{\link{vcov}} methods compute the linear
   function $K \hat{\beta}$ and its covariance, respectively.
 
   The \code{test} argument to \code{summary} takes a function specifying
   the type of test to be applied. Classical Chisq or F statistics
   for testing the global hypothesis $H_0$ are implemented in function
-  \code{global}. Multiplicity adjusted p values for each of the 
-  linear hypotheses are implemented in function \code{adjusted}.
-  
-  Different multiplicity adjustments are available. The \code{type}
+  \code{global}. Several approaches to multiplicity adjusted p 
+  values for each of the linear hypotheses are implemented 
+  in function \code{adjusted}. The \code{type}
   argument to \code{adjusted} specifies the method to be applied:
   \code{"free"} implements adjusted p values based on the joint
   normal or $t$ distribution of the linear function, \code{"Bonferroni"}
   implements a simple Bonferroni-adjustment, and \code{"Shaffer"}
-  and \code{"Westfall"} implements logically constraint 
+  and \code{"Westfall"} implement logically constraint 
   multiplicity adjustments.
 
   Simultanous confidence intervals for linear functions can be computed
-  using method \code{confint}.
+  using method \code{\link{confint}}.
 
   All simultaneous inference procedures implemented here control
   the family-wise error rate (FWER). Multivariate
@@ -73,9 +73,9 @@ global(type = c("Chisq", "F"))
 \value{
 
   \code{summary} computes (adjusted) p values for general linear hypotheses,
-  \code{confint} computes adjusted confidence intervals. 
-  \code{coef} returns the estimates linear combinations and \code{vcov}
-  its covariance. 
+  \code{\link{confint}} computes adjusted confidence intervals. 
+  \code{\link{coef}} returns estimates of the linear function $K \beta$
+  and \code{\link{vcov}} its covariance. 
 
 }
 \references{

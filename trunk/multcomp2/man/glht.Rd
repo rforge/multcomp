@@ -11,7 +11,8 @@
   linear mixed effects models and Cox models.
 }
 \usage{
-\method{glht}{matrix}(model, linfct, alternative = c("two.sided", "less", "greater"), 
+\method{glht}{matrix}(model, linfct, 
+    alternative = c("two.sided", "less", "greater"), 
     rhs = 0, df = NULL, ...)
 \method{glht}{character}(model, linfct, ...)
 \method{glht}{expression}(model, linfct, ...)
@@ -63,14 +64,18 @@ mcp(...)
   \eqn{H_0: K \beta \le m}. The right hand side vector $m$ can be defined
   via the \code{rhs} argument.
 
-  There are three ways to specify linear functions to be tested:
+  The generic method \code{glht} dispatches on its second argument
+  (\code{linfct}). There are three ways, and thus methods, 
+  to specify linear functions to be tested:
 
-  1) The matrix of coefficients $K$ can be specified directly;
+  1) The \code{matrix} of coefficients $K$ can be specified directly
+  via the \code{linfct} argument. In this case,
   the number of columns needs to correspond to the number of
   parameters estimated by \code{model}. 
 
-  2) A symbolic description
-  by either character or expression vectors can be used to define
+  2) A symbolic description,
+  either a \code{character} or \code{expression} vector passed to \code{glht}
+  via its \code{linfct} argument, can be used to define
   the null hypothesis. A symbolic description much be a valid
   R expression consisting of both the left and right hand side 
   of a linear hypothesis.
@@ -79,7 +84,7 @@ mcp(...)
   the direction under the null hypothesis (\code{=} or \code{==}
   refer to \code{"two.sided"}, \code{<=} means
   \code{"greater"} and \code{>=} indicates 
-  \code{"less"}. Numeric vectors of length one
+  \code{"less"}). Numeric vectors of length one
   are valid for the right hand side.
   
   3) Multiple comparisons of means are defined by objects
@@ -87,7 +92,8 @@ mcp(...)
   For each factor serving as independent variable in \code{model},
   a contrast matrix or a symbolic description of the contrasts
   can be specified as arguments to \code{mcp}. A symbolic
-  description may be a character or expression where the factor levels
+  description may be a \code{character} or \code{expression} 
+  where the factor levels
   are only used as variables names. In addition,
   the \code{type} argument to the contrast generating function
   \code{\link{contrMat}} may serve as a symbolic description of 
@@ -100,17 +106,18 @@ mcp(...)
 
   \code{glht} methods returns a specification of the null hypothesis
   \eqn{H_0: K \beta = m}. The value of the linear function
-  $K \beta$ can be extracted using the \code{coef} method and
+  $K \beta$ can be extracted using the \code{\link{coef}} method and
   the corresponding covariance matrix is available from the 
-  \code{vcov} method. Simultaneous tests and confidence intervals
-  are available from \code{summary} and \code{confint} methods,
+  \code{\link{vcov}} method. Simultaneous tests and confidence intervals
+  are available from \code{summary} and \code{\link{confint}} methods,
   respectively.
 
 }
 \value{
 
   An object of class \code{glht} with \code{print}, \code{summary}, 
-  \code{confint}, \code{coef} and \code{vcov} methods being available.
+  \code{\link{confint}}, \code{\link{coef}} and \code{\link{vcov}} 
+  methods being available.
 
 }
 \references{
@@ -121,13 +128,13 @@ mcp(...)
 }
 \examples{
 
-  ### multiple linear model
+  ### multiple linear model, swiss data
   lmod <- lm(Fertility ~ ., data = swiss)
 
-  ### test H_0: all regression coefficients are zero 
+  ### test of H_0: all regression coefficients are zero 
   ### (ignore intercept)
 
-  ### define K directly
+  ### define coefficients of linear function directly
   K <- diag(length(coef(lmod)))[-1,]
   rownames(K) <- names(coef(lmod))[-1]
   K
@@ -135,8 +142,8 @@ mcp(...)
   ### set up general linear hypothesis
   glht(lmod, linfct = K)
 
-  ### use a symbolic description instead of a matrix
-  ### for setting up the general linear hypothesis
+  ### alternatively, use a symbolic description 
+  ### instead of a matrix 
   glht(lmod, linfct = c("Agriculture = 0",
                         "Examination = 0",
                         "Education = 0",
@@ -149,22 +156,24 @@ mcp(...)
   amod <- aov(breaks ~ tension, data = warpbreaks)
 
   ### set up all-pair comparisons for factor `tension'
-  ### using a symbolic description (`type' argument to contrMat())
+  ### using a symbolic description (`type' argument 
+  ### to contrMat())
   glht(amod, linfct = mcp(tension = "Tukey"))
 
-  ### all pair-wise differences as a symbolic description
+  ### alternatively, describe differences symbolically
   glht(amod, linfct = mcp(tension = c("M - L = 0", 
                                       "H - L = 0",
                                       "H - M = 0")))
 
-  ### define contrast matrix directly
+  ### alternatively, define contrast matrix directly
   contr <- rbind("M-L" = c(-1, 1, 0),
                  "H-L" = c(-1, 0, 1), 
                  "H-M" = c(0, -1, 1))
   glht(amod, linfct = mcp(tension = contr))
 
-  ### use a linear function taking
-  ### model contrasts and intercept into account
+  ### alternatively, define linear function for coef(amod)
+  ### instead of contrasts for `tension'
+  ### (take model contrasts and intercept into account)
   glht(amod, linfct = cbind(0, contr \%*\% contr.treatment(3)))
 
 }
