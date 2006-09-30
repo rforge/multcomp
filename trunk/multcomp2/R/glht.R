@@ -22,8 +22,13 @@ glht.matrix <- function(model, linfct,
     if (is.null(colnames(linfct)))
         colnames(linfct) <- names(beta)
 
-    if (is.null(rownames(linfct)))
+    if (is.null(rownames(linfct))) {
         rownames(linfct) <- 1:nrow(linfct)
+    } else {
+        alt <- switch(alternative, 
+            "two.sided" = "==", "less" = ">=", "greater" = "<=")
+        rownames(linfct) <- paste(rownames(linfct), alt, rhs)
+    }
 
     if (length(rhs) == 1) rhs <- rep(rhs, nrow(linfct))
     if (length(rhs) != nrow(linfct))
@@ -34,11 +39,12 @@ glht.matrix <- function(model, linfct,
                 beta = beta, sigma = tmp$sigma, 
                 df = ifelse(is.null(df), tmp$df, df),
                 alternative = alternative,
-                type = "user-defined")
+                type = NULL)
     class(RET) <- "glht"
     RET
 }
 
+### symbolic description of H_0
 glht.character <- function(model, linfct, ...) {
     ### extract coefficients and their covariance matrix
     beta <- try(coef(model))
@@ -51,8 +57,9 @@ glht.character <- function(model, linfct, ...) {
                 alternative = tmp$alternative))
 }
 
+### symbolic description of H_0
 glht.expression <- function(model, linfct, ...) 
-    glht(model, as.character(linfct), ...)
+    glht(model, deparse(linfct), ...)
 
 ### multiple comparison procedures
 glht.mcp <- function(model, linfct, ...) {
@@ -67,5 +74,7 @@ glht.mcp <- function(model, linfct, ...) {
         args$rhs <- tmp$m
     args <- c(args, list(...))
 
-    return(do.call("glht", args))
+    ret <- do.call("glht", args)
+    ret$type <- tmp$type
+    return(ret)
 }

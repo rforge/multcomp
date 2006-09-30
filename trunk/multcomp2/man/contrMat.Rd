@@ -36,14 +36,14 @@ contrMat(n, type=c("Dunnett", "Tukey", "Sequen", "AVE",
  b <- 3
  names(n) <- paste("group", 1:4, sep="")
  contrMat(n)	# Dunnett is default
- contrMat(n, base=2)	# use second level as baseline
- contrMat(n, type="Tukey")
- contrMat(n, type="Sequen")
- contrMat(n, type="AVE")
- contrMat(n, type="Changepoint")
- contrMat(n, type="Williams")
- contrMat(n, type="Marcus")
- contrMat(n, type="McDermott")
- contrMat(n, type="Tetrade", m = n)
+ contrMat(n, base = 2)	# use second level as baseline
+ contrMat(n, type = "Tukey")
+ contrMat(n, type = "Sequen")
+ contrMat(n, type = "AVE")
+ contrMat(n, type = "Changepoint")
+ contrMat(n, type = "Williams")
+ contrMat(n, type = "Marcus")
+ contrMat(n, type = "McDermott")
+ contrMat(n, type = "Tetrade", m = n)
 }
 \keyword{misc}

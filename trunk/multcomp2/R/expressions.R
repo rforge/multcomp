@@ -1,11 +1,8 @@
 
 ### determine if an expression `x' can be interpreted as numeric
 is_num <- function(x) {
-    opt <- options("show.error.messages")
-    options(show.error.messages = FALSE)
-    tr <- try(eval(x))
-    options(opt)
-    if (!inherits(tr, "try-error")) return(is.numeric(tr))
+    if (length(x) == 1) return(is.numeric(x))
+    if (length(x) == 2) return(is.name(x[[1]]) && is.numeric(x[[2]]))
     return(FALSE)
 }
 
@@ -88,7 +85,7 @@ expression2coef <- function(ex) {
     x <- lhs(ex)
     alternative <- side(ex)
 
-    while(TRUE) {
+    while (TRUE) {
 
         tmp <- coefs(x)
         cf <- c(cf, tmp$coef)
@@ -105,7 +102,8 @@ expression2coef <- function(ex) {
         x <- x[[2]]   
     }
     return(list(coef = cf, names = nm, 
-                m = m, alternative = alternative))
+                m = m, alternative = alternative, 
+                lhs = deparse(lhs(ex))))
 }
 
 ### interpret character representations of linear functions
@@ -118,7 +116,7 @@ chrlinfct2matrix <- function(ex, var) {
 
     K <- matrix(0, nrow = length(ex), ncol = length(var))
     colnames(K) <- var
-    rownames(K) <- ex 
+    rownames(K) <- 1:length(ex)
     m <- rep(0, length(ex))
 
     for (i in 1:length(ex)) {
@@ -140,7 +138,8 @@ chrlinfct2matrix <- function(ex, var) {
             if (tmp$alternative != alternative)
                 stop("mix of alternatives currently not implemented")
         }
+
+        rownames(K)[i] <- tmp$lhs[1]
     }
     list(K = K, m = m, alternative = alternative)
 }
-

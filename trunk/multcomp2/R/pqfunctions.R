@@ -5,7 +5,7 @@ pqglht <- function(object)
 {
     betahat <- coef(object)
     covm <- vcov(object)
-    m <- coef(object, null = TRUE)
+    m <- coef(object, rhs = TRUE)
     df <- object$df
 
     ses <- sqrt(diag(covm))
@@ -108,6 +108,7 @@ univariate <- function()
         RET <- pqglht(object)
         RET$pvalues <- RET$pfunction("univariate")
         RET$type <- "univariate"
+        class(RET) <- "summary.glht"
         RET
     }
 }
@@ -121,7 +122,7 @@ global <- function(type = c("Chisq", "F"))
 
         RET <- pqglht(object)
         betahat <- RET$coefficients
-        m <- coef(object, null = TRUE)
+        m <- coef(object, rhs = TRUE)
         covm <- vcov(object)
 
         tmp <- betahat - m
@@ -164,6 +165,7 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"),
             RET <- pqglht(object)
             RET$pvalues <- RET$pfunction("Bonferroni")
             RET$type <- "Bonferroni"
+            class(RET) <- "summary.glht"
             RET
         })
     }
@@ -174,6 +176,7 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"),
             RET <- pqglht(object)
             RET$pvalues <- RET$pfunction("adjusted", ...)
             RET$type <- type
+            class(RET) <- "summary.glht"
             RET
         })
     }
@@ -183,7 +186,7 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"),
     ### Shaffer (1886, JASA): constraints
     return(function(object) {
         RET <- pqglht(object)
-        m <- coef(object, null = TRUE)
+        m <- coef(object, rhs = TRUE)
         tstat <- switch(object$alternative, 
                         "less" = RET$tstat,
                         "greater" = -RET$tstat,
@@ -212,6 +215,7 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"),
         RET$pvalues <- p[rank(tstat)]
         attr(RET$pvalues, "error") <- error
         RET$type <- type
+        class(RET) <- "summary.glht"
         RET
     })
 }

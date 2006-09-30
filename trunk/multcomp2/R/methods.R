@@ -1,31 +1,18 @@
 
 ### methods for `glht' objects
-coef.glht <- function(object, null = FALSE, ...) 
+coef.glht <- function(object, rhs = FALSE, ...) 
 {
-    if (null) return(object$m)
+    if (rhs) return(object$m)
     drop(object$K %*% object$beta)
 }
 
 vcov.glht <- function(object, ...) 
     object$K %*% tcrossprod(object$sigma, object$K)
 
-summary.glht <- function(object, test = adjusted(), ...) 
-{
-    pq <- test(object)
-    if (class(pq) == "summary.glht.global") {
-        object$gtest <- pq
-        class(object) <- c("summary.glht.global", "glht")
-        return(object)
-    }
-    object$mtests <- cbind(pq$coefficients, coef(object, null = TRUE), 
-                           pq$sigma, pq$tstat, pq$pvalues)
-    attr(object$mtests, "error") <- attr(pq$pvalues, "error")
-    colnames(object$mtests) <- c("Estimate", "rhs", "Std. Error",
-        ifelse(object$df == 0, "z value", "t value"), "p value")
-    if (max(abs(object$mtests[,"rhs"])) < .Machine$double.eps)
-        object$mtests <- object$mtests[,-2, drop = FALSE]
-    attr(object$mtests, "type") <- pq$type
-    class(object) <- c("summary.glht", "glht")
+summary.glht <- function(object, test = adjusted(), ...) {
+    ts <- test(object)
+    object$test <- ts
+    class(object) <- c(class(ts), class(object))
     return(object)
 }
 

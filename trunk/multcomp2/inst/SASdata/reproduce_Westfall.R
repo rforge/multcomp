@@ -3,8 +3,7 @@ library("multcomp2")
 
 set.seed(290875)
 
-rda <- list.files(pattern = "\\.rda")
-sapply(rda, function(x) load(file = x, env = .GlobalEnv))
+load("Westfall_et_al.rda")
 
 ### weights loss data, page 47
 
@@ -13,7 +12,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   gh <- glht(amod, mcp(diet = "Tukey"))
 
-  # page 49 / 50
+  # page 49 / 50 -- OK
   confint(gh)
 
   amod <- aov(wloss ~ diet - 1, data = wloss)
@@ -21,36 +20,34 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   rownames(K) <- levels(wloss$diet)
   gh <- glht(amod, K)
 
-  # page 61
+  # page 61 -- OK
   confint(gh)
 
 
 ### tox data, page 56
 
-  tox$g <- as.factor(tox$g)
   amod <- aov(gain ~ g, data = tox)
   amod
 
-  # page 56
+  # page 56 -- OK
   gh <- glht(amod, mcp(g = "Dunnett"))
   confint(gh)
 
-  # page 59
+  # page 59 -- OK
   gh <- glht(amod, mcp(g = "Dunnett"), alternative = "less")
   confint(gh)
 
 
 ### coupon data, page 62
 
-  coupon$discount <- as.factor(coupon$discount)
-  amod <- aov(purchase ~ discount - 1, data = coupon)
+  amod <- aov(purchase ~ discount , data = coupon)
 
   gh <- glht(amod, linfct = mcp(discount = rbind(
                                     linear = c(-3, -1,  1,  3),
                                     quad =  c(-2,  2,  2, -2),
                                     cubic = c(-1,  3, -3,  1))))
 
-  # page 63
+  # page 63 -- OK (t^2 = F stats)
   summary(gh)
 
 
@@ -60,31 +57,31 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   gh <- glht(amod, mcp(blanket = "Tukey"))
 
-  # page 68
+  # page 68 -- OK (small differences due to simuation accurary)
   confint(gh)
 
-  # page 75
+  # page 76 -- OK
   summary(gh)
 
   gh <- glht(amod, mcp(blanket = "Dunnett"))
 
-  # page 78
+  # page 78 -- OK
   confint(gh)
 
-  # page 79
+  # page 79 -- OK
   summary(gh)
 
   gh <- glht(amod, mcp(blanket = "Dunnett"), alternative = "less")
 
-  # page 80
+  # page 80 -- OK
   confint(gh, level = 0.9)
 
-  # page 80
+  # page 80 -- OK
   summary(gh)
 
-  # page 80
+  # page 80 -- OK (univariate confints!!!)
   amod <- aov(minutes ~ blanket - 1, data = recover)
-  confint(glht(amod, linfct = diag(4)), level = 0.9)
+  confint(amod, level = 0.9)
 
 
 ### house prices, page 84
@@ -92,40 +89,39 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   amod <- aov(price ~ location + sqfeet + age, data = house)
   gh <- glht(amod, mcp(location = "Tukey"))
 
-  # page 85
+  # page 85 -- OK ( * -1)
   confint(gh)
 
-  # page 96
+  # page 96 -- OK ( * -1)
   summary(gh)
   summary(gh, test = univariate())
 
 
 ### rat growth data, page 99
 
-  amod <- aov(w4 ~ trt + I(w0 - w3), data = ratgrwth)
+  amod <- aov(w4 ~ ., data = ratgrwth)
 
   gh <- glht(amod, mcp(trt = "Dunnett"), alternative = "less")
 
-  # page 100
+  # page 100 -- OK
   summary(gh)
   confint(gh)
 
 
 ### Alzheimer data, page 103
 
-  alz$therapy <- as.factor(alz$therapy)
   amod <- aov(score ~ therapy * since + age, data = alz)
 
   gh <- glht(amod, linfct = mcp(therapy = "Tukey"))
-  gh$K[,8:11] <- gh$K[,8:11] * 10
+  gh$K[,8:11] <- gh$K[,8:11] * 20
   gh$K[,"age"] <- mean(alz$age)
+  gh$K[,"since"] <- 10
 
-  confint(gh)
+  confint(gh) ### -- FIXME
 
 
 ### litter data, page 109
 
-  litter$dose <- as.factor(litter$dose)
   amod <- aov(weight ~ dose + gesttime + number, data = litter)
 
   K <- rbind("cont-low"  = c(1, -1,  0,  0),
@@ -138,16 +134,16 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   gh <- glht(amod, linfct = mcp(dose = K))
 
-  # page 110
+  # page 110 -- OK
   summary(gh, test = univariate())
 
-  # page 111
+  # page 111 -- OK
   gh$alternative <- "greater"
   summary(gh, test = univariate())
   summary(gh)
   confint(gh)
 
-  # page 174
+  # page 174 -- OK
   gh$alternative <- "greater"
   summary(gh, test = adjusted("Westfall"))
 
@@ -158,11 +154,11 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   lmod <- lm(price ~ sqfeet, data = houseA)
   K <- cbind(1, grid <- seq(from = 1000, to = 3000, by = 200))
-  rownames(K) <- grid
+  rownames(K) <- paste("sqfeet *", grid)
 
   gh <- glht(lmod, linfct = K)
 
-  # page 123
+  # page 123 -- OK
   confint(gh)
 
 
@@ -176,7 +172,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   ci <- confint(gh)
 
-  # page 127
+  # page 127 -- OK
   plot(pat_sat$severe, ci$confint[,"Estimate"], 
        xlab = "Severity", ylab = "Satisfaction", type = "b", 
        ylim = c(30, 80), xlim = c(45, 60))
@@ -194,30 +190,31 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
   gh <- glht(amod, linfct = K)
 
-  # page 129
+  # page 129 -- OK
   confint(gh)
+  summary(gh, test = univariate())
+  summary(gh, test = adjusted())
+
 
 
 ### cholesterol data, page 153
 
-  cholesterol$trt <- as.factor(rev(as.integer(cholesterol$trt)))
-  levels(cholesterol$trt) <- LETTERS[1:5]
   amod <- aov(response ~ trt - 1, data = cholesterol)
   
   gh <- glht(amod, linfct = mcp(trt = "Tukey"))
 
-  # page 171
+  # page 171 -- OK
   summary(gh, test = univariate())
   summary(gh, test = adjusted("Shaffer"))
   summary(gh, test = adjusted("Westfall"))
 
-  gh <- glht(amod, linfct = mcp(trt = c("D - E = 0",
-                                    "C - E = 0",
-                                    "C - D = 0",
-                                    "3 * B - C - D - E = 0",
-                                    "3 * A - C - D - E = 0")))
+  gh <- glht(amod, linfct = mcp(trt = c("B - A = 0",
+                                        "C - A = 0",
+                                        "C - B = 0",
+                                        "3 * D - A - B - C = 0",
+                                        "3 * E - A - B - C = 0")))
 
-  # page 172
+  # page 172 -- OK
   summary(gh, test = univariate())
   summary(gh, test = adjusted("Shaffer"))
   summary(gh, test = adjusted("Westfall"))
@@ -225,49 +222,48 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
 ### waste data, page 177
 
-  waste$temp <- as.factor(waste$temp)
-  waste$envir <- as.factor(waste$envir)
   amod <- aov(waste ~ temp * envir, data = waste)
 
-  # page 179
+  # page 179 -- OK ( * -1)
   confint(glht(amod, linfct = mcp(temp = "Tukey")))
   confint(glht(amod, linfct = mcp(envir = "Tukey")))
 
-  gh <- glht(amod, linfct = mcp(temp = "Tukey", envir = "Tukey"))
+  gh <- glht(amod, linfct = mcp(envir = "Tukey", temp = "Tukey"))
  
-  # page 181
-  confint(gh)
-  
-  # page 186 CHECK!
-  amod <- aov(waste ~ temp + envir, data = waste)
-
-  gh <- glht(amod, linfct = mcp(temp = "Tukey", envir = "Tukey"),
-             alternative = "greater")
+  # page 181 -- OK
   summary(gh, test = univariate())
   summary(gh, test = adjusted("Shaffer"))
-  summary(gh, test = adjusted("Westfall", abseps = 0.1))
+  summary(gh, test = adjusted("Westfall"))
+  
+
+  # page 186 -- OK
+  amod <- aov(waste ~ temp + envir, 
+              data = waste[seq(from = 1, to = 29, by = 2),])
+
+  gh <- glht(amod, linfct = mcp(envir = "Tukey", temp = "Tukey"))
+  summary(gh, test = univariate())
+  summary(gh, test = adjusted("Shaffer"))
+  summary(gh, test = adjusted("Westfall"))
 
 
 ### drug data, page 187
 
-  drug$drug <- as.factor(drug$drug)
   amod <- aov(response ~ drug * disease, data = drug)
 
+  # page 188 -- FIXME: cant' reproduce ANOVA (type III SS???)
   confint(glht(amod, linfct = mcp(drug = "Tukey")))
 
 
 ### detergents data, page 189
 
-  detergent$block <- as.factor(detergent$block)
-  detergent$detergent <- as.factor(detergent$detergent)
   amod <- aov(plates ~ block + detergent, data = detergent)
 
   gh <- glht(amod, linfct = mcp(detergent = "Tukey"))
 
-  # page 190
+  # page 190 -- OK
   confint(gh)
 
-  # page 192
+  # page 192 -- OK
   summary(gh, test = univariate())
   summary(gh, test = adjusted("Shaffer"))
   summary(gh, test = adjusted("Westfall"))
@@ -275,19 +271,17 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
 ### pigs data, page 195
 
-  pigs$pen <- as.factor(pigs$pen)
-  pigs$feed <- as.factor(pigs$feed)
   amod <- aov(gain ~ pen + feed * sex + initial, data = pigs)
 
   S <- matrix(c(1, -1), ncol = 2, dimnames = list("F-M", c("F", "M")))
   gh <- glht(amod, linfct = mcp(feed = "Tukey", sex = S))
-  gh$K <- rbind(gh$K, "initial" = c(rep(0, 10), 1))
+  gh$K <- rbind(gh$K, "initial" = as.numeric(names(coef(amod)) == "initial"))
   gh$m <- c(gh$m, 0)
 
-  # page 194
+  # page 194 -- OK
   confint(gh)
 
-  # page 195
+  # page 195 -- OK
   summary(gh, test = univariate())
   summary(gh, test = adjusted("Shaffer"))
   summary(gh, test = adjusted("Westfall"))
@@ -301,7 +295,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   CP  <- c( 0, 14,  0, 12,  0, 19,  0, 12)
   CA  <- CA/sum(CA)
   CP  <- CP/sum(CP)
-  C1  <- CP-CA
+  C1  <- CP-CA	
 
   CAO <- c(13,  0,  0,  0, 13,  0,  0,  0) 
   CPO <- c( 0, 14,  0,  0,  0, 19,  0,  0) 
@@ -336,23 +330,20 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   rownames(C) <- c("Overall", "Older", "Younger", "Good Init", "Poor Init",
                    "Old x Good", "Old x Poor", "Young x Good", "Young x Poor") 
 
-  gh <- glht(amod, linfct = C, alternative="less")
+  gh <- glht(amod, linfct = -C, alternative = "greater")
 
-  # page 198
+  # page 198 -- OK
   summary(gh, test = univariate())
   summary(gh, test = adjusted("Shaffer"))
+  summary(gh, test = adjusted("Westfall"))
 
 ### wine data, page 199
 
-  wine$purchase <- as.factor(wine$purchase)
-  wine$customertype <- as.factor(wine$customertype)
-  wine$light <- as.factor(wine$light)
-  wine$music <- as.factor(wine$music)
+  amod <- glm(purchase ~ customertype + light + music + customertype:light + 
+              customertype:music + light:music + customertype:light:music + 
+              handle + examine, data = wine, family = binomial())
 
-  amod <- glm(purchase ~ customertype + light + music + customertype:light + customertype:music
-              + light:music + customertype:light:music + handle + examine, data = wine,
-              family = binomial())
-
+  # page 200: FIXME (SS3???)
 
 ### wloss data, page 205
 
@@ -361,36 +352,32 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   
   gh <- glht(lmod, mcp(diet = "Tukey"))
 
-  # page 205
+  # page 205 -- FIXME: df???
   confint(gh)
 
-  # page 207 / 208
+  # page 207 / 208 -- FIXME: df???
   summary(gh)
 
 
 ### detergent data, page 211
 
-  detergent$block <- as.factor(detergent$block)
-  detergent$detergent <- as.factor(detergent$detergent)
   lmod <- lmer(plates ~ detergent + (1 | block), data = detergent, 
                model = TRUE)
 
-  gh <- glht(lmod, mcp(detergent = "Tukey"))
+  gh <- glht(lmod, mcp(detergent = "Tukey"), df = 17.6)
 
-  # page 211
+  # page 211 -- FIXME: df??? / inaccuracies?
   confint(gh)
 
 
 ### waste data
 
-  waste$temp <- as.factor(waste$temp)
-  waste$envir <- as.factor(waste$envir)
   lmod <- lmer(waste ~ temp + (1 | envir) + (1 | envir : temp),
                data = waste)
 
-  gh <- glht(lmod, mcp(temp = "Tukey"))
+  gh <- glht(lmod, mcp(temp = "Tukey"), df = 8)
 
-  # page 213
+  # page 213 -- OK
   confint(gh)
 
 
@@ -399,9 +386,9 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
   lmod <- lmer(rate ~ treatment + (1 | dog), data = halothane, 
                model = TRUE)
 
-  gh <- glht(lmod, linfct = mcp(treatment = "Tukey"))
+  gh <- glht(lmod, linfct = mcp(treatment = "Tukey"), df = 18)
 
-  # page 215
+  # page 215 -- FIXME: df???
   confint(gh)
 
   gh <- glht(lmod, 
@@ -410,7 +397,7 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
             CO2 = "0.5 * HA -0.5 * HP + 0.5 * LA -0.5 * LP = 0",
             Interaction = "HA - HP - LA + LP = 0")))
 
-  # page 217
+  # page 217 -- FIXME: df?
   summary(gh, test = univariate())
   summary(gh, test = adjusted("Shaffer"))
   summary(gh, test = adjusted("Westfall"))
@@ -418,9 +405,10 @@ sapply(rda, function(x) load(file = x, env = .GlobalEnv))
 
 ### multipleendpoints data, page 218
 
-  ##multipleendpoints$endpoint <- as.factor(multipleendpoints$endpoint)
-  ##lmod <- lmer(y ~ treatment:endpoint + (1 | subject), 
-  ##             data = multipleendpoints, model = TRUE)
+  ### lmod <- lmer(y ~ treatment:endpoint + (1 | subject), 
+  ###             data = multipleendpoints, model = TRUE)
+  ### Leading minor of order 9 in downdated X'X is not positive definite
+
 
 ### obesity, page 220
 

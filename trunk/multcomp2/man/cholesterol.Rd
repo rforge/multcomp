@@ -50,8 +50,8 @@
   ### use only a subset of all pairwise hypotheses
   K <- contrMat(table(cholesterol$trt), type="Tukey")
   Ksub <- rbind(K[c(1,2,5),],
-                "D-test" = c(-1, -1, -1, 3, 0),
-                "E-test" = c(-1, -1, -1, 0, 3))
+                "D - test" = c(-1, -1, -1, 3, 0),
+                "E - test" = c(-1, -1, -1, 0, 3))
 
   ### reproduce results in Westfall et al. (1999, page 172)
   amod <- aov(response ~ trt - 1, data = cholesterol)

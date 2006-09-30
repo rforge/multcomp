@@ -54,18 +54,18 @@ set.seed(290875)
 \section{Introduction}
 
 We consider a generalized linear model, where the response variable 
-$\y = (y_1, \dots, y_n)$ is modelled by a linear combination
+$\y \in \R^n$ is modelled by a linear combination
 of a set of design variables. More specifically, the expectation 
 of the response $\y$ is described by a link function $h$ applied to 
-a linear combination of the $n \times p$ \emph{design matrix} $\X$
+a linear combination of the \emph{design matrix} $\X \in \R^{n \times p}$:
 \begin{eqnarray*}
 \E(\y | \X) = h(\X \beta).
 \end{eqnarray*}
 
 Our primary target is simultaneous inference about 
-\emph{general linear hypotheses} \citep{Searle1971}, i.e, 
-about linear functions of the vector of 
-regression coefficients $\beta \in \R^p$:
+\emph{general linear hypotheses} about the regression coefficients
+\citep{Searle1971}, i.e, 
+about linear functions of the parameter vector $\beta \in \R^p$:
 \begin{eqnarray*}
 H_0: \K \beta = \m
 \end{eqnarray*}
@@ -79,7 +79,7 @@ the elements of $\m = (m_1, \dots, m_k)$:
 H_0^j: K_j \beta = m_j \text{ where } H_0 = \bigcap_{j = 1}^k H_0^j
 \end{eqnarray*}
 We only consider simultaneous inference procedures, both tests and confidence intervals,
-which control the \emph{familywise error rate} (FWE), that is the probability of 
+which control the \emph{family-wise error rate} (FWE), that is the probability of 
 incorrectly rejecting at least one hypothesis $H_0^j, j = 1, \dots, k$.
 
 \subsection{Estimates of the Regression Coefficients}
@@ -106,24 +106,26 @@ follows a $t$ distribution with $n - p$ degrees for freedom (linear model)
 or a asymptotical standard normal distribution (generalized linear model) and
 tests or confidence intervals for the partial hypotheses can be constructed in
 the classical way.
-
-However, the vector of standarized statistics
+The vector of standarized statistics
 \begin{eqnarray*}
-\z = (z_1, \dots, z_k) = \Sigma (\K \hat{\beta} - \m) \\
-\Sigma = \text{diag}\left((\K \V(\hat{\beta}) \K^\top)^{-\frac{1}{2}}\right)
+\z = (z_1, \dots, z_k) = \Sigma (\K \hat{\beta} - \m) \text{ with }\Sigma = \text{diag}\left((\K \V(\hat{\beta}) \K^\top)^{-\frac{1}{2}}\right)
 \end{eqnarray*}
 follows a multivariate $t$ distribution with correlation matrix
-$\Cor(\K \hat{\beta}) = \Sigma \K \V(\hat{\beta}) \K^\top \Sigma^\top$ (linear model)
+\begin{eqnarray*}
+\Cor(\K \hat{\beta}) = \Sigma \K \V(\hat{\beta}) \K^\top \Sigma^\top
+\end{eqnarray*}
+in case of a linear model:
 \begin{eqnarray*}
 \z \sim \mathcal{T}_{n - p}(0, \Cor(\K \hat{\beta}))
 \end{eqnarray*}
-or an asymptotic multivariate normal distribution
+For all other models, those statistics are jointly 
+asymptotic multivariate normal:
 \begin{eqnarray*}
 \z \sim \mathcal{N}(0, \Cor(\K \hat{\beta})).
 \end{eqnarray*}
 
 Now, a multiple testing procedure is based on the maximum of the absolute values
-of the test statistics $\z$. Adjusted $p$ values, controlling the familywise error rate,
+of the test statistics $\z$. Adjusted $p$ values, controlling the family-wise error rate,
 for each linear hypothesis $H_0^j$ are simply $p_j = P_{H_0}(\max(|\z|) \ge |z_j|)$.
 Efficient algorithms for the evalutation of both multivariate distributions
 are nowadays available \citep{Genz1992, GenzBretz1999, GenzBretz2002}.
@@ -152,7 +154,7 @@ z <- Sigma %*% K %*% betahat
 Cor <- Sigma %*% (K %*% Vbetahat %*% t(K)) %*% t(Sigma)                  
 @
 Note that $\z = \Sexpr{paste("(", paste(round(z, dig), collapse = ", "), ")")}$ 
-is equal to the $t$ statistics for \Robject{speed}. The multiplicity-adjusted
+is equal to the $t$ statistics. The multiplicity-adjusted
 $p$ values can now be computed by means of the multivariate $t$ distribution
 utilizing the \Rcmd{pmvt} function available in package \Rpackage{mvtnorm}:
 <<lm-partial, echo = TRUE>>=
@@ -197,7 +199,7 @@ confidence intervals as computed by \Rcmd{predict(lm.cars)}.
 \begin{center}
 <<lm-plot, echo = FALSE, fig = TRUE, width = 8, height = 5>>=
 plot(cars, xlab = "Speed (mph)", ylab = "Stopping distance (ft)",
-            las = 1)
+            las = 1, ylim = c(-30, 130))
 abline(lm.cars)
 lines(K[,2], ci.cars$confint[,"lwr"], lty = 2)
 lines(K[,2], ci.cars$confint[,"upr"], lty = 2)

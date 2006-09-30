@@ -3,17 +3,12 @@
 print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...) 
 {
     cat("\n\t", "General Linear Hypotheses\n\n")
-    m <- coef(x, null = TRUE)
+    if (!is.null(x$type))
+        cat("Multiple Comparisons of Means:", x$type, "Contrasts\n\n\n")
     beta <- coef(x)
-    if (max(abs(m)) > .Machine$double.eps) {
-       x <- cbind(beta, m)
-       colnames(x) <- c("Estimate", "rhs")
-       rownames(x) <- names(beta)
-    } else {
-       x <- matrix(beta, ncol = 1)
-       colnames(x) <- "Estimate"
-       rownames(x) <- names(beta)
-    }
+    x <- matrix(beta, ncol = 1)
+    colnames(x) <- "Estimate"
+    rownames(x) <- names(beta)
     cat("Linear Hypotheses:\n")
     print(x, digits = digits)
     cat("\n")
@@ -24,6 +19,8 @@ print.summary.glht <- function(x, digits = max(3, getOption("digits") - 3),
                               ...) 
 {
     cat("\n\t", "Simultaneous Tests for General Linear Hypotheses\n\n")
+    if (!is.null(x$type))
+        cat("Multiple Comparisons of Means:", x$type, "Contrasts\n\n\n")
     cat("Fit: ")
     if (inherits(x$model, "lmer")) {
         print(x$model@call)
@@ -31,10 +28,15 @@ print.summary.glht <- function(x, digits = max(3, getOption("digits") - 3),
         print(x$model$call)
     }
     cat("\n")
-    type <- attr(x$mtests, "type")
-    attr(x$mtests, "type") <- NULL
+
+    pq <- x$test
+    mtests <- cbind(pq$coefficients, pq$sigma, pq$tstat, pq$pvalues)
+    error <- attr(pq$pvalues, "error")
+    colnames(mtests) <- c("Estimate", "Std. Error",
+        ifelse(x$df == 0, "z value", "t value"), "p value")
+    type <- pq$type
+
     ### print p values according to simulation precision
-    error <- attr(x$mtests, "error")
     if (!is.null(error) && error > .Machine$double.eps) {
         sig <- which.min(abs(1 / error - (10^(1:10))))
         sig <- 1 / (10^sig)
@@ -42,7 +44,7 @@ print.summary.glht <- function(x, digits = max(3, getOption("digits") - 3),
         sig <- .Machine$double.eps
     }
     cat("Linear Hypotheses:\n")
-    printCoefmat(x$mtests, digits = digits, 
+    printCoefmat(mtests, digits = digits, 
                  has.Pvalue = TRUE, P.values = TRUE, eps.Pvalue = sig)
     switch(type, 
         "univariate" = cat("(Univariate p values reported)"),
@@ -59,6 +61,8 @@ print.confint.glht <- function(x, digits = max(3, getOption("digits") - 3),
                               ...) 
 {
     cat("\n\t", "Simultaneous Confidence Intervals for General Linear Hypotheses\n\n")
+    if (!is.null(x$type))
+        cat("Multiple Comparisons of Means:", x$type, "Contrasts\n\n\n")
     level <- attr(x$confint, "conf.level")
     attr(x$confint, "conf.level") <- NULL
     cat("Fit: ")
@@ -83,8 +87,7 @@ print.confint.glht <- function(x, digits = max(3, getOption("digits") - 3),
 
 print.contrMat <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 
-    cat("\n\t", "General Linear Hypotheses Matrix\n")
-    cat("\t\t", attr(x, "type"), "Contrasts\n\n")
+    cat("\n\t", "Multiple Comparisons of Means:", attr(x, "type"), "Contrasts\n\n")
     attr(x, "type") <- NULL
     class(x) <- "matrix"  
     print(x, digits = digits)
@@ -96,13 +99,13 @@ print.summary.glht.global <- function(x,
 
     print.glht(x, digits = digits)
     cat("Global Test:\n")
-    if (x$gtest$type == "Chisq") {
-        pr <- data.frame(x$gtest$SSH, x$gtest$df[1], x$gtest$pval)
+    if (x$test$type == "Chisq") {
+        pr <- data.frame(x$test$SSH, x$test$df[1], x$test$pval)
         names(pr) <- c("Chisq", "DF", "Pr(>Chisq)")
     }
-    if (x$gtest$type == "F") {
-        pr <- data.frame(x$gtest$fstat, x$gtest$df[1], x$gtest$df[2], 
-                         x$gtest$pval)
+    if (x$test$type == "F") {
+        pr <- data.frame(x$test$fstat, x$test$df[1], x$test$df[2], 
+                         x$test$pval)
         names(pr) <- c("F", "DF1", "DF2", "Pr(>F)")
     }
     print(pr, digits = digits)

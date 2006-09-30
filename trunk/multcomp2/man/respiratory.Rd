@@ -81,7 +81,7 @@
                    "Old x Good", "Old x Poor", "Young x Good", "Young x Poor") 
 
   ### set up one-sided multiple comparisons
-  rht <- glht(amod, linfct = C, alternative="less")
+  rht <- glht(amod, linfct = -C, alternative = "less")
 
   ### see Westfall et al. (1999, page 198)
   summary(rht, test = univariate())

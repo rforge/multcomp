@@ -7,7 +7,8 @@
 \alias{mcp}
 \title{ General Linear Hypotheses }
 \description{
-  General linear hypotheses for generalized linear models, 
+  General linear hypotheses and multiple comparisons 
+  for generalized linear models, 
   linear mixed effects models and Cox models.
 }
 \usage{
@@ -38,7 +39,7 @@ mcp(...)
   \item{alternative}{ a character string specifying the alternative 
       hypothesis, must be one of '"two.sided"' (default), '"greater"' or
       '"less"'.  You can specify just the initial letter.}
-  \item{rhs}{ a numeric vector specifying the 
+  \item{rhs}{ an optional numeric vector specifying the 
               right hand side of the hypothesis.}
   \item{df}{ an optional integer defining
              degrees of freedom to be used for the 
@@ -47,7 +48,8 @@ mcp(...)
                 \code{glht} methods. For function \code{mcp},
                 multiple comparisons are defined by 
                 matrices or symbolic descriptions specifying contrasts
-                of factor levels.}
+                of factor levels where the arguments correspond
+                to factors.}
 }
 \details{
 
@@ -76,7 +78,7 @@ mcp(...)
   2) A symbolic description,
   either a \code{character} or \code{expression} vector passed to \code{glht}
   via its \code{linfct} argument, can be used to define
-  the null hypothesis. A symbolic description much be a valid
+  the null hypothesis. A symbolic description must be a valid
   R expression consisting of both the left and right hand side 
   of a linear hypothesis.
   Only the names of \code{coef(beta)} must be used as variable
@@ -100,7 +102,9 @@ mcp(...)
   contrasts as well.
 
   \code{glht} extracts the number of degrees of freedom
-  for models of class \code{lm}. Alternatively, the 
+  for models of class \code{lm} and the
+  exact multivariate $t$ distrubtion is evaluated. For all other
+  models, results rely on the normal approximation. Alternatively, the 
   degrees of freedom to be used for the evalutation of multivariate
   $t$ distributions can be given by the \code{df} argument.
 
@@ -166,9 +170,9 @@ mcp(...)
                                       "H - M = 0")))
 
   ### alternatively, define contrast matrix directly
-  contr <- rbind("M-L" = c(-1, 1, 0),
-                 "H-L" = c(-1, 0, 1), 
-                 "H-M" = c(0, -1, 1))
+  contr <- rbind("M - L" = c(-1, 1, 0),
+                 "H - L" = c(-1, 0, 1), 
+                 "H - M" = c(0, -1, 1))
   glht(amod, linfct = mcp(tension = contr))
 
   ### alternatively, define linear function for coef(amod)

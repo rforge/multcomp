@@ -20,20 +20,18 @@ contrMat <- function(n, type = c("Dunnett", "Tukey", "Sequen", "AVE",
     switch(type, "Dunnett" = {
         for(i in kindx[-base])
             CM <- rbind(CM, as.numeric(kindx == i) - as.numeric( kindx == base))
-        rnames <- paste(varnames[kindx[-base]], "-", varnames[base], sep="")
+        rnames <- paste(varnames[kindx[-base]], "-", varnames[base])
     }, "Tukey" = {
         for (i in 1:(k-1)) {
             for(j in (i+1):k) {
                 CM  <- rbind(CM, as.numeric(kindx==j)-as.numeric(kindx==i))
-                rnames <- c(rnames, paste(varnames[j], "-", varnames[i],
-                                          sep=""))
+                rnames <- c(rnames, paste(varnames[j], "-", varnames[i]))
             }
         }
     }, "Sequen" =  {
         for (i in 2:k) {
             CM  <- rbind(CM, as.numeric(kindx==i)-as.numeric(kindx==i-1))
-            rnames <- c(rnames, paste(varnames[i], "-", varnames[i-1],
-                                      sep=""))
+            rnames <- c(rnames, paste(varnames[i], "-", varnames[i-1]))
         }
     }, "AVE" = {
         help <- c(1,  -n[2:k]/sum(n[2:k]))
@@ -51,7 +49,7 @@ contrMat <- function(n, type = c("Dunnett", "Tukey", "Sequen", "AVE",
             help <- c(-n[1:i]/sum(n[1:i]), n[(i+1):k]/sum(n[(i+1):k]))
             CM <- rbind(CM, help)
         }
-        rnames <- c(rnames, paste("C", 1:nrow(CM), sep=""))
+        rnames <- c(rnames, paste("C", 1:nrow(CM)))
     }, "Williams" = {
         for (i in 1:(k-2)) {
             help <-  c(-1, rep(0, k-i-1), n[(k-i+1):k]/sum(n[(k-i+1):k]))
@@ -59,7 +57,7 @@ contrMat <- function(n, type = c("Dunnett", "Tukey", "Sequen", "AVE",
         }
         help <- c(-1, n[2:k]/sum(n[2:k]))
         CM <- rbind(CM, help)
-        rnames <- c(rnames, paste("C", 1:nrow(CM), sep=""))
+        rnames <- c(rnames, paste("C", 1:nrow(CM)))
     }, "Marcus" = {
         cm1 <- matrix(0, nrow=k-1, ncol=k)
         cm2 <- cm1
@@ -76,7 +74,7 @@ contrMat <- function(n, type = c("Dunnett", "Tukey", "Sequen", "AVE",
                 index <- index+1
             }
         }
-        rnames <- c(rnames, paste("C", 1:nrow(CM), sep=""))
+        rnames <- c(rnames, paste("C", 1:nrow(CM)))
      }, "McDermott" = {
          for(i in 1:(k-2)) {
              help  <- c(-n[1:i]/sum(n[1:i]), 1, rep(0, k-i-1))
@@ -84,7 +82,7 @@ contrMat <- function(n, type = c("Dunnett", "Tukey", "Sequen", "AVE",
          }
          help <- c(-n[1:(k-1)]/sum(n[1:(k-1)]), 1)
          CM  <- rbind(CM, help)
-         rnames <- c(rnames, paste("C", 1:nrow(CM), sep=""))
+         rnames <- c(rnames, paste("C", 1:nrow(CM)))
     }, "Tetrade" = {
         if (is.null(m)) stop(sQuote("m"), " is missing")
         a <- length(n)

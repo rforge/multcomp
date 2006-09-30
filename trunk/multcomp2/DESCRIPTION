@@ -1,7 +1,7 @@
 Package: multcomp2
 Title: Simultaneous Inference for General Linear Hypotheses
-Version: 0.9-4
-Date: $Date: 2004/10/29 07:11:49 $
+Version: 0.9-5
+Date: $Date$
 Author: Torsten Hothorn <Torsten.Hothorn@R-project.org>,
   Frank Bretz <frank.bretz@novartis.com>, and
   Peter Westfall <WESTFALL@ba.ttu.edu>
@@ -9,6 +9,6 @@ Description: Simultaneous tests and confidence intervals
   for general linear hypotheses in linear, generalized linear, linear
   mixed effects and Cox models.
 Maintainer: Torsten Hothorn <Torsten.Hothorn@R-project.org>
-Depends: mvtnorm (>= 0.7-0)
+Depends: mvtnorm (>= 0.7-5)
 License: GPL
-Packaged: Wed Sep  6 08:27:55 2006; hothorn
+Packaged: Mon Sep 25 17:36:02 2006; hothorn

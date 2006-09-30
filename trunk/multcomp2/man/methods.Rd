@@ -14,7 +14,7 @@
 \usage{
 \method{summary}{glht}(object, test = adjusted(), ...)
 \method{confint}{glht}(object, parm, level = 0.95, ...)
-\method{coef}{glht}(object, null = FALSE, ...)
+\method{coef}{glht}(object, rhs = FALSE, ...)
 \method{vcov}{glht}(object, ...)
 univariate()
 adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), 
@@ -26,9 +26,9 @@ global(type = c("Chisq", "F"))
   \item{test}{ a function for computing p values.}
   \item{parm}{ additional parameters, currently ignored.}
   \item{level}{ the confidence level required.}
-  \item{null}{logical, indicating whether the linear function
+  \item{rhs}{logical, indicating whether the linear function
               \eqn{K \hat{\beta}} or the right hand side 
-              \eqn{m} (\code{null = FALSE}) of the linear hypothesis
+              \eqn{m} (\code{rhs = TRUE}) of the linear hypothesis
               should be returned.}
   \item{type}{ the type of test statistic (\code{global}) or 
                multiplicity adjustment (\code{adjusted}) 
@@ -41,7 +41,7 @@ global(type = c("Chisq", "F"))
 \details{
 
   The methods for general linear hypotheses as described by objects returned
-  by the \code{\link{glht}} can be used to actually test the global
+  by \code{\link{glht}} can be used to actually test the global
   null hypothesis, each of the partial hypotheses and for
   simultaneous confidence intervals for the linear function $K \beta$.
   
@@ -49,7 +49,7 @@ global(type = c("Chisq", "F"))
   function $K \hat{\beta}$ and its covariance, respectively.
 
   The \code{test} argument to \code{summary} takes a function specifying
-  the type of test to be applied. Classical Chisq or F statistics
+  the type of test to be applied. Classical Chisq (Wald test) or F statistics
   for testing the global hypothesis $H_0$ are implemented in function
   \code{global}. Several approaches to multiplicity adjusted p 
   values for each of the linear hypotheses are implemented 
@@ -66,7 +66,8 @@ global(type = c("Chisq", "F"))
 
   All simultaneous inference procedures implemented here control
   the family-wise error rate (FWER). Multivariate
-  normal and $t$ distributions are evaluated using the procedures
+  normal and $t$ distributions, the latter one only for models of 
+  class \code{\link{lm}}) are evaluated using the procedures
   implemented in package \code{mvtnorm}.
 
 }

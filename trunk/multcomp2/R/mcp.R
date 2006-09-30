@@ -75,6 +75,7 @@ mcp2matrix <- function(model, linfct) {
         stop("Factor(s) ", nhypo[!checknm], " have been specified in ",
              sQuote("linfct"), " but cannot be found in ", sQuote("model"), "!")
     m <- c()
+    ctype <- c()
     for (nm in nhypo) {
         if (is.character(linfct[[nm]])) {
 
@@ -85,15 +86,18 @@ mcp2matrix <- function(model, linfct) {
                 ### if yes, compute K from `contrMat'
                 if (!is.na(pm)) {
                     tmpK <- contrMat(table(mf[[nm]]), type = types[pm])
+                    ctype <<- c(ctype, types[pm])
                 } else {
                     ### if not, interpret kch as an expression
                     tmp <-  chrlinfct2matrix(kch, levels(mf[[nm]]))
                     tmpK <- tmp$K
-                    m <- c(m, tmp$m)
-                    alternative <- tmp$alternative
+                    m <<- c(m, tmp$m)
+                    alternative <<- tmp$alternative
                 }
                 if (is.null(rownames(tmpK)))
                     rownames(tmpK) <- paste(kch, 1:nrow(tmpK), sep = "_")
+                if (length(nhypo) > 1)
+                    rownames(tmpK) <- paste(nm, rownames(tmpK), sep = ": ")
                 list(K = tmpK)
             }
             
@@ -141,8 +145,7 @@ mcp2matrix <- function(model, linfct) {
             Kstar <- cbind(Kstar, Kinter)
         }
         hypo[[nm]] <- list(K = Kstar,
-            where = attr(mm, "assign") %in% which(factors[nm,] == 1),
-            type = paste(attr(linfct[[nm]], "type"), "(", nm, ")", sep = ""))
+            where = attr(mm, "assign") %in% which(factors[nm,] == 1))
     }
 
     ### combine all single matrices computed so far into
@@ -159,8 +162,10 @@ mcp2matrix <- function(model, linfct) {
     if (!is.matrix(Ktotal)) Ktotal <- matrix(Ktotal, nrow = 1)
     rownames(Ktotal) <- unlist(lapply(hypo, function(x) rownames(x$K)))
 
-    type <- paste(sapply(hypo, function(x) x$type), collapse = ";")
+    if (is.null(ctype))
+        ctype <- "User-defined"
+    ctype <- paste(unique(ctype), collapse = ", ")
 
     if (length(m) == 0) m <- 0
-    list(K = Ktotal, m = m, alternative = alternative, type = type)
+    list(K = Ktotal, m = m, alternative = alternative, type = ctype)
 }
