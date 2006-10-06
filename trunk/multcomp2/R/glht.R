@@ -4,23 +4,21 @@ glht <- function(model, linfct, ...) UseMethod("glht", linfct)
 
 ### K coef(model) _!alternative_ rhs
 glht.matrix <- function(model, linfct, 
-    alternative = c("two.sided", "less", "greater"), rhs = 0, 
-    df = NULL, ...) {
+    alternative = c("two.sided", "less", "greater"), rhs = 0, ...) {
 
     ### extract coefficients and their covariance matrix, df
-    tmp <- coefvcovdf(model)
-    beta <- tmp$beta
+    mpar <- modelparm(model, ...)
 
     alternative <- match.arg(alternative)
     if (!is.numeric(rhs))
         stop(sQuote("rhs"), " is not a numeric vector")
 
-    if (ncol(linfct) != length(beta))
+    if (ncol(linfct) != length(mpar$coef))
         stop(sQuote("ncol(linfct)"), " is not equal to ", 
              sQuote("length(coef(model))"))
 
     if (is.null(colnames(linfct)))
-        colnames(linfct) <- names(beta)
+        colnames(linfct) <- names(mpar$coef)
 
     if (is.null(rownames(linfct))) {
         rownames(linfct) <- 1:nrow(linfct)
@@ -35,10 +33,9 @@ glht.matrix <- function(model, linfct,
         stop(sQuote("nrow(linfct)"), " is not equal to ",
              sQuote("length(rhs)"))
 
-    RET <- list(model = model, K = linfct, m = rhs,
-                beta = beta, sigma = tmp$sigma, 
-                df = ifelse(is.null(df), tmp$df, df),
-                alternative = alternative,
+    RET <- list(model = model, linfct = linfct, rhs = rhs,
+                coef = mpar$coef, vcov = mpar$vcov, 
+                df = mpar$df, alternative = alternative,
                 type = NULL)
     class(RET) <- "glht"
     RET

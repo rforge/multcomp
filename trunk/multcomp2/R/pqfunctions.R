@@ -153,6 +153,9 @@ global <- function(type = c("Chisq", "F"))
     return(fct)
 }
 
+Ftest <- function() global("F")
+Chisqtest <- function() global("Chisq")
+
 ### p values adjusted for simultaneous inference
 adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), 
                      ...) 
@@ -191,15 +194,15 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"),
                         "less" = RET$tstat,
                         "greater" = -RET$tstat,
                         "two.sided" = -abs(RET$tstat))
-        C <- object$K
+        C <- object$linfct
         Corder <- C[order(tstat), , drop = FALSE]
         Cm <- m[order(tstat)]
         ms <- maxsets(Corder)
         error <- 0
         p <- sapply(ms, function(x) {
            max(sapply(x, function(s) {
-                object$K <- Corder[s, , drop = FALSE]
-                object$m <- Cm[s]
+                object$linfct <- Corder[s, , drop = FALSE]
+                object$rhs <- Cm[s]
                 tmp <- pqglht(object)$pfunction(ifelse(type == "Westfall", 
                                                    "adjusted", "Bonferroni"), 
                                             ...)

@@ -2,12 +2,12 @@
 ### methods for `glht' objects
 coef.glht <- function(object, rhs = FALSE, ...) 
 {
-    if (rhs) return(object$m)
-    drop(object$K %*% object$beta)
+    if (rhs) return(object$rhs)
+    drop(object$linfct %*% object$coef)
 }
 
 vcov.glht <- function(object, ...) 
-    object$K %*% tcrossprod(object$sigma, object$K)
+    object$linfct %*% tcrossprod(object$vcov, object$linfct)
 
 summary.glht <- function(object, test = adjusted(), ...) {
     ts <- test(object)

@@ -53,14 +53,15 @@ set.seed(290875)
 
 \section{Introduction}
 
-We consider a generalized linear model, where the response variable 
-$\y \in \R^n$ is modelled by a linear combination
-of a set of design variables. More specifically, the expectation 
-of the response $\y$ is described by a link function $h$ applied to 
-a linear combination of the \emph{design matrix} $\X \in \R^{n \times p}$:
-\begin{eqnarray*}
-\E(\y | \X) = h(\X \beta).
-\end{eqnarray*}
+
+Consider a parametric model $\mathcal{M}(Y, \beta)$
+with (possibly vector-valued) observations $Y$ and a
+$p$-dimensional vector of parameters $\beta$. This model 
+could be a (possibly multivariate) normal distribution for $Y$, or some
+kind of regression model when $Y = (y, x)$ can be split up into a dependent variable
+$y$ and regressors $x$. An example for the latter could be a linear regression
+model $y = x^\top \beta$ or a generalized linear model (GLM) or a survival
+regression.
 
 Our primary target is simultaneous inference about 
 \emph{general linear hypotheses} about the regression coefficients

@@ -113,9 +113,9 @@ load("Westfall_et_al.rda")
   amod <- aov(score ~ therapy * since + age, data = alz)
 
   gh <- glht(amod, linfct = mcp(therapy = "Tukey"))
-  gh$K[,8:11] <- gh$K[,8:11] * 20
-  gh$K[,"age"] <- mean(alz$age)
-  gh$K[,"since"] <- 10
+  gh$linfct[,8:11] <- gh$linfct[,8:11] * 20
+  gh$linfct[,"age"] <- mean(alz$age)
+  gh$linfct[,"since"] <- 10
 
   confint(gh) ### -- FIXME
 
@@ -275,8 +275,8 @@ load("Westfall_et_al.rda")
 
   S <- matrix(c(1, -1), ncol = 2, dimnames = list("F-M", c("F", "M")))
   gh <- glht(amod, linfct = mcp(feed = "Tukey", sex = S))
-  gh$K <- rbind(gh$K, "initial" = as.numeric(names(coef(amod)) == "initial"))
-  gh$m <- c(gh$m, 0)
+  gh$linfct <- rbind(gh$linfct, "initial" = as.numeric(names(coef(amod)) == "initial"))
+  gh$rhs <- c(gh$rhs, 0)
 
   # page 194 -- OK
   confint(gh)

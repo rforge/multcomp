@@ -8,10 +8,10 @@ csimint <- function(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
                     eps=0.001, maxpts=1000000)
 {
     if (is.null(cmatrix)) cmatrix <- diag(length(estpar))
-    object <- list(object = NULL, K = cmatrix, beta = estpar, sigma = covm,
+    object <- list(object = NULL, linfct = cmatrix, coef = estpar, vcov = covm,
                    type = ctype, alternative = match.arg(alternative),
                    df = ifelse(is.null(df) || asympt, 0, df), 
-                   m = rep(0, nrow(cmatrix)))
+                   rhs = rep(0, nrow(cmatrix)))
     class(object) <- "glht"
     .Deprecated("glht", package = "multcomp")
     confint(object, level = conf.level, abseps = eps, maxpts = maxpts)
@@ -83,10 +83,10 @@ csimtest <- function(estpar, df, covm, cmatrix=NULL, ctype="user-defined",
                      eps=0.001, maxpts=1000000)
 {
     if (is.null(cmatrix)) cmatrix <- diag(length(estpar))
-    object <- list(object = NULL, K = cmatrix, beta = estpar, sigma = covm,
+    object <- list(object = NULL, linfct = cmatrix, coef = estpar, vcov = covm,
                    type = ctype, alternative = match.arg(alternative),
                    df = ifelse(is.null(df) || asympt, 0, df),
-                   m = rep(0, nrow(cmatrix)))
+                   rhs = rep(0, nrow(cmatrix)))
     class(object) <- "glht"
     ttype <- match.arg(ttype)
     if (ttype == "free")

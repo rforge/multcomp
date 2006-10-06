@@ -14,7 +14,7 @@
 \usage{
 \method{glht}{matrix}(model, linfct, 
     alternative = c("two.sided", "less", "greater"), 
-    rhs = 0, df = NULL, ...)
+    rhs = 0, ...)
 \method{glht}{character}(model, linfct, ...)
 \method{glht}{expression}(model, linfct, ...)
 \method{glht}{mcp}(model, linfct, ...)
@@ -41,10 +41,7 @@ mcp(...)
       '"less"'.  You can specify just the initial letter.}
   \item{rhs}{ an optional numeric vector specifying the 
               right hand side of the hypothesis.}
-  \item{df}{ an optional integer defining
-             degrees of freedom to be used for the 
-             computations of multivariate t distributions.}
-  \item{\dots}{ additional arguments. Those are currently ignored for 
+  \item{\dots}{ additional arguments to function \code{\link{modelparm}} in all
                 \code{glht} methods. For function \code{mcp},
                 multiple comparisons are defined by 
                 matrices or symbolic descriptions specifying contrasts
@@ -102,11 +99,11 @@ mcp(...)
   contrasts as well.
 
   \code{glht} extracts the number of degrees of freedom
-  for models of class \code{lm} and the
+  for models of class \code{lm} (via \code{\link{modelparm}}) and the
   exact multivariate $t$ distrubtion is evaluated. For all other
   models, results rely on the normal approximation. Alternatively, the 
   degrees of freedom to be used for the evalutation of multivariate
-  $t$ distributions can be given by the \code{df} argument.
+  $t$ distributions can be given by the additional \code{df} argument.
 
   \code{glht} methods returns a specification of the null hypothesis
   \eqn{H_0: K \beta = m}. The value of the linear function

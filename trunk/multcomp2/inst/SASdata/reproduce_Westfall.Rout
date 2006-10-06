@@ -1,5 +1,5 @@
 
-R version 2.4.0 beta (2006-09-20 r39421)
+R version 2.4.0 (2006-10-03)
 Copyright (C) 2006 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -192,7 +192,7 @@ linear == 0   43.974     18.109   2.428 0.05893 .
 quad == 0     52.820     16.197   3.261 0.00723 **
 cubic == 0    -0.802     18.109  -0.044 0.99996   
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported)
 
 > 
@@ -247,7 +247,7 @@ b2 - b1 == 0  -5.3333     2.1150  -2.522 0.06727 .
 b3 - b1 == 0   0.4667     1.6383   0.285 0.99120    
 b3 - b2 == 0   5.8000     1.6383   3.540 0.00512 ** 
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported)
 
 > 
@@ -291,7 +291,7 @@ b1 - b0 == 0  -2.1333     1.6038  -1.330   0.456
 b2 - b0 == 0  -7.4667     1.6038  -4.656  <0.001 ***
 b3 - b0 == 0  -1.6667     0.8848  -1.884   0.182    
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported)
 
 > 
@@ -335,7 +335,7 @@ b1 - b0 >= 0  -2.1333     1.6038  -1.330  0.2412
 b2 - b0 >= 0  -7.4667     1.6038  -4.656  <0.001 ***
 b3 - b0 >= 0  -1.6667     0.8848  -1.884  0.0925 .  
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported)
 
 > 
@@ -406,7 +406,7 @@ D - C == 0  -4.4867     3.7343  -1.201  0.7409
 E - C == 0  -7.5608     3.6367  -2.079  0.2336    
 E - D == 0  -3.0741     2.8802  -1.067  0.8160    
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported)
 
 >   summary(gh, test = univariate())
@@ -431,7 +431,7 @@ D - C == 0  -4.4867     3.7343  -1.201   0.2345
 E - C == 0  -7.5608     3.6367  -2.079   0.0421 *  
 E - D == 0  -3.0741     2.8802  -1.067   0.2903    
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 > 
@@ -457,7 +457,7 @@ Linear Hypotheses:
 Thiouracil - Control >= 0   -9.458      3.328  -2.842 0.00982 **
 Thyroxin - Control >= 0     -2.113      3.196  -0.661 0.42184   
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported)
 
 >   confint(gh)
@@ -486,9 +486,9 @@ Thyroxin - Control >= 0   -2.1128     -Inf  4.4699
 >   amod <- aov(score ~ therapy * since + age, data = alz)
 > 
 >   gh <- glht(amod, linfct = mcp(therapy = "Tukey"))
->   gh$K[,8:11] <- gh$K[,8:11] * 20
->   gh$K[,"age"] <- mean(alz$age)
->   gh$K[,"since"] <- 10
+>   gh$linfct[,8:11] <- gh$linfct[,8:11] * 20
+>   gh$linfct[,"age"] <- mean(alz$age)
+>   gh$linfct[,"since"] <- 10
 > 
 >   confint(gh) ### -- FIXME
 
@@ -552,7 +552,7 @@ otrend == 0      1.7411     1.0433   1.669  0.0998 .
 atrend == 0      0.8712     1.1322   0.770  0.4442  
 ltrend == 0      1.9400     0.9616   2.018  0.0476 *
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 > 
@@ -576,7 +576,7 @@ otrend == 0      1.7411     1.0433   1.669 0.04988 *
 atrend == 0      0.8712     1.1322   0.770 0.22212   
 ltrend == 0      1.9400     0.9616   2.018 0.02379 * 
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 >   summary(gh)
@@ -597,7 +597,7 @@ otrend == 0      1.7411     1.0433   1.669  0.1486
 atrend == 0      0.8712     1.1322   0.770  0.5013  
 ltrend == 0      1.9400     0.9616   2.018  0.0768 .
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported)
 
 >   confint(gh)
@@ -644,7 +644,7 @@ otrend == 0      1.7411     1.0433   1.669  0.0891 .
 atrend == 0      0.8712     1.1322   0.770  0.2221  
 ltrend == 0      1.9400     0.9616   2.018  0.0396 *
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Westfall method)
 
 > 
@@ -765,7 +765,7 @@ Linear Hypotheses:
 65 == 0   3.0739     0.8084   3.802 0.001565 ** 
 70 == 0   3.7267     0.9143   4.076 0.000880 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 >   summary(gh, test = adjusted())
@@ -790,7 +790,7 @@ Linear Hypotheses:
 65 == 0   3.0739     0.8084   3.802 0.00511 **
 70 == 0   3.7267     0.9143   4.076 0.00288 **
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported)
 
 > 
@@ -825,7 +825,7 @@ D - C == 0   -3.150      1.443  -2.182 0.034352 *
 E - C == 0   -6.593      1.443  -4.568 3.82e-05 ***
 E - D == 0   -3.443      1.443  -2.385 0.021333 *  
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 >   summary(gh, test = adjusted("Shaffer"))
@@ -850,7 +850,7 @@ D - C == 0   -3.150      1.443  -2.182 0.042666 *
 E - C == 0   -6.593      1.443  -4.568 0.000153 ***
 E - D == 0   -3.443      1.443  -2.385 0.042666 *  
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Shaffer method)
 
 >   summary(gh, test = adjusted("Westfall"))
@@ -875,7 +875,7 @@ D - C == 0   -3.150      1.443  -2.182  0.0420 *
 E - C == 0   -6.593      1.443  -4.568   <0.01 ***
 E - D == 0   -3.443      1.443  -2.385  0.0420 *  
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Westfall method)
 
 > 
@@ -903,7 +903,7 @@ C - B == 0               -2.986      1.443  -2.069 0.044316 *
 3 * D - A - B - C == 0  -21.009      3.536  -5.942 3.81e-07 ***
 3 * E - A - B - C == 0  -31.338      3.536  -8.864 1.98e-11 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 >   summary(gh, test = adjusted("Shaffer"))
@@ -923,7 +923,7 @@ C - B == 0               -2.986      1.443  -2.069 0.044316 *
 3 * D - A - B - C == 0  -21.009      3.536  -5.942 1.52e-06 ***
 3 * E - A - B - C == 0  -31.338      3.536  -8.864 9.88e-11 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Shaffer method)
 
 >   summary(gh, test = adjusted("Westfall"))
@@ -943,7 +943,7 @@ C - B == 0               -2.986      1.443  -2.069  0.0443 *
 3 * D - A - B - C == 0  -21.009      3.536  -5.942  <0.001 ***
 3 * E - A - B - C == 0  -31.338      3.536  -8.864  <0.001 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Westfall method)
 
 > 
@@ -1008,7 +1008,7 @@ e5 - e4 == 0  0.73500 -1.19519  2.66519
 
 	 Simultaneous Tests for General Linear Hypotheses
 
-Multiple Comparisons of Means: Tukey, Tukey Contrasts
+Multiple Comparisons of Means: Tukey Contrasts
 
 
 Fit: aov(formula = waste ~ temp * envir, data = waste)
@@ -1029,14 +1029,14 @@ temp: t2 - t1 == 0   -0.2410     0.4847  -0.497 0.626263
 temp: t3 - t1 == 0    2.0150     0.4847   4.157 0.000843 ***
 temp: t3 - t2 == 0    2.2560     0.4847   4.654 0.000312 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 >   summary(gh, test = adjusted("Shaffer"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
-Multiple Comparisons of Means: Tukey, Tukey Contrasts
+Multiple Comparisons of Means: Tukey Contrasts
 
 
 Fit: aov(formula = waste ~ temp * envir, data = waste)
@@ -1057,14 +1057,14 @@ temp: t2 - t1 == 0   -0.2410     0.4847  -0.497 1.00000
 temp: t3 - t1 == 0    2.0150     0.4847   4.157 0.00590 **
 temp: t3 - t2 == 0    2.2560     0.4847   4.654 0.00405 **
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Shaffer method)
 
 >   summary(gh, test = adjusted("Westfall"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
-Multiple Comparisons of Means: Tukey, Tukey Contrasts
+Multiple Comparisons of Means: Tukey Contrasts
 
 
 Fit: aov(formula = waste ~ temp * envir, data = waste)
@@ -1085,7 +1085,7 @@ temp: t2 - t1 == 0   -0.2410     0.4847  -0.497  0.8563
 temp: t3 - t1 == 0    2.0150     0.4847   4.157   <0.01 **
 temp: t3 - t2 == 0    2.2560     0.4847   4.654   <0.01 **
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Westfall method)
 
 >   
@@ -1099,7 +1099,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 	 Simultaneous Tests for General Linear Hypotheses
 
-Multiple Comparisons of Means: Tukey, Tukey Contrasts
+Multiple Comparisons of Means: Tukey Contrasts
 
 
 Fit: aov(formula = waste ~ temp + envir, data = waste[seq(from = 1, 
@@ -1121,14 +1121,14 @@ temp: t2 - t1 == 0    0.0080     0.9305   0.009  0.9934
 temp: t3 - t1 == 0    2.7120     0.9305   2.914  0.0195 *
 temp: t3 - t2 == 0    2.7040     0.9305   2.906  0.0197 *
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 >   summary(gh, test = adjusted("Shaffer"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
-Multiple Comparisons of Means: Tukey, Tukey Contrasts
+Multiple Comparisons of Means: Tukey Contrasts
 
 
 Fit: aov(formula = waste ~ temp + envir, data = waste[seq(from = 1, 
@@ -1155,7 +1155,7 @@ temp: t3 - t2 == 0    2.7040     0.9305   2.906   0.253
 
 	 Simultaneous Tests for General Linear Hypotheses
 
-Multiple Comparisons of Means: Tukey, Tukey Contrasts
+Multiple Comparisons of Means: Tukey Contrasts
 
 
 Fit: aov(formula = waste ~ temp + envir, data = waste[seq(from = 1, 
@@ -1268,7 +1268,7 @@ d4 - d3 == 0  -1.4000     0.8679  -1.613 0.126291
 d5 - d3 == 0  -7.9333     0.8679  -9.140 9.45e-08 ***
 d5 - d4 == 0  -6.5333     0.8679  -7.527 1.21e-06 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 >   summary(gh, test = adjusted("Shaffer"))
@@ -1293,7 +1293,7 @@ d4 - d3 == 0  -1.4000     0.8679  -1.613 0.126291
 d5 - d3 == 0  -7.9333     0.8679  -9.140 9.45e-07 ***
 d5 - d4 == 0  -6.5333     0.8679  -7.527 7.26e-06 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Shaffer method)
 
 >   summary(gh, test = adjusted("Westfall"))
@@ -1318,7 +1318,7 @@ d4 - d3 == 0  -1.4000     0.8679  -1.613   0.126
 d5 - d3 == 0  -7.9333     0.8679  -9.140   <0.01 ***
 d5 - d4 == 0  -6.5333     0.8679  -7.527   <0.01 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Westfall method)
 
 > 
@@ -1329,8 +1329,8 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > 
 >   S <- matrix(c(1, -1), ncol = 2, dimnames = list("F-M", c("F", "M")))
 >   gh <- glht(amod, linfct = mcp(feed = "Tukey", sex = S))
->   gh$K <- rbind(gh$K, "initial" = as.numeric(names(coef(amod)) == "initial"))
->   gh$m <- c(gh$m, 0)
+>   gh$linfct <- rbind(gh$linfct, "initial" = as.numeric(names(coef(amod)) == "initial"))
+>   gh$rhs <- c(gh$rhs, 0)
 > 
 >   # page 194 -- OK
 >   confint(gh)
@@ -1374,7 +1374,7 @@ feed: f3 - f2 == 0 -0.23201    0.22617  -1.026 0.31786
 F-M == 0            0.42435    0.19036   2.229 0.03807 * 
 initial             0.08888    0.02392   3.715 0.00147 **
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 >   summary(gh, test = adjusted("Shaffer"))
@@ -1394,7 +1394,7 @@ feed: f3 - f2 == 0 -0.23201    0.22617  -1.026 0.31786
 F-M == 0            0.42435    0.19036   2.229 0.07614 . 
 initial             0.08888    0.02392   3.715 0.00734 **
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Shaffer method)
 
 >   summary(gh, test = adjusted("Westfall"))
@@ -1414,7 +1414,7 @@ feed: f3 - f2 == 0 -0.23201    0.22617  -1.026 0.31786
 F-M == 0            0.42435    0.19036   2.229 0.07358 . 
 initial             0.08888    0.02392   3.715 0.00676 **
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Westfall method)
 
 > 
@@ -1483,7 +1483,7 @@ Old x Poor <= 0     0.8154     0.3616   2.255 0.013135 *
 Young x Good <= 0  -0.1045     0.4194  -0.249 0.598177    
 Young x Poor <= 0   0.8696     0.3788   2.296 0.011864 *  
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 >   summary(gh, test = adjusted("Shaffer"))
@@ -1504,7 +1504,7 @@ Old x Poor <= 0     0.8154     0.3616   2.255 0.05932 .
 Young x Good <= 0  -0.1045     0.4194  -0.249 0.59818    
 Young x Poor <= 0   0.8696     0.3788   2.296 0.05932 .  
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Shaffer method)
 
 >   summary(gh, test = adjusted("Westfall"))
@@ -1525,7 +1525,7 @@ Old x Poor <= 0     0.8154     0.3616   2.255  0.0482 *
 Young x Good <= 0  -0.1045     0.4194  -0.249  0.5982    
 Young x Poor <= 0   0.8696     0.3788   2.296  0.0482 *  
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Westfall method)
 
 > 
@@ -1598,7 +1598,7 @@ D - C == 0  -1.0000     0.4247  -2.355  0.1274
 E - C == 0   1.9000     0.4247   4.474   <0.01 ***
 E - D == 0   2.9000     0.4247   6.829   <0.01 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported)
 
 > 
@@ -1744,7 +1744,7 @@ LP - LA == 0                                    1.87e-12 ***
 0.5 * HA - 0.5 * HP + 0.5 * LA - 0.5 * LP == 0   < 2e-16 ***
 HA - HP - LA + LP == 0                           0.51681    
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Univariate p values reported)
 
 >   summary(gh, test = adjusted("Shaffer"))
@@ -1779,7 +1779,7 @@ LP - LA == 0                                    5.61e-12 ***
 0.5 * HA - 0.5 * HP + 0.5 * LA - 0.5 * LP == 0   < 2e-16 ***
 HA - HP - LA + LP == 0                           0.51681    
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Shaffer method)
 
 >   summary(gh, test = adjusted("Westfall"))
@@ -1814,7 +1814,7 @@ LP - LA == 0                                    < 0.001 ***
 0.5 * HA - 0.5 * HP + 0.5 * LA - 0.5 * LP == 0  < 0.001 ***
 HA - HP - LA + LP == 0                          0.51681    
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 (Adjusted p values reported -- Westfall method)
 
 >   
@@ -1831,5 +1831,5 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > ### heart, 222
 > 
 > proc.time()
-[1] 492.666   5.112 502.075   0.000   0.000
+[1] 447.579   0.292 448.564   0.000   0.000
 > 

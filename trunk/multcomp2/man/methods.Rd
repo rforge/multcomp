@@ -5,7 +5,8 @@
 \alias{vcov.glht}
 \alias{univariate}
 \alias{adjusted}
-\alias{global}
+\alias{Ftest}
+\alias{Chisqtest}
 \title{ Methods for General Linear Hypotheses }
 \description{
   Simultaneous tests and confidence intervals for general linear 
@@ -19,7 +20,8 @@
 univariate()
 adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), 
          ...)
-global(type = c("Chisq", "F"))
+Ftest()
+Chisqtest()
 }
 \arguments{
   \item{object}{ an object of class \code{\link{glht}}.}
@@ -30,8 +32,7 @@ global(type = c("Chisq", "F"))
               \eqn{K \hat{\beta}} or the right hand side 
               \eqn{m} (\code{rhs = TRUE}) of the linear hypothesis
               should be returned.}
-  \item{type}{ the type of test statistic (\code{global}) or 
-               multiplicity adjustment (\code{adjusted}) 
+  \item{type}{ the multiplicity adjustment (\code{adjusted}) 
                to be applied. See below.}
   \item{...}{ additional arguments, such as \code{maxpts}, 
               \code{abseps} or \code{releps} to
@@ -50,8 +51,8 @@ global(type = c("Chisq", "F"))
 
   The \code{test} argument to \code{summary} takes a function specifying
   the type of test to be applied. Classical Chisq (Wald test) or F statistics
-  for testing the global hypothesis $H_0$ are implemented in function
-  \code{global}. Several approaches to multiplicity adjusted p 
+  for testing the global hypothesis $H_0$ are implemented in functions
+  \code{Chisqtest} and \code{Ftest}. Several approaches to multiplicity adjusted p 
   values for each of the linear hypotheses are implemented 
   in function \code{adjusted}. The \code{type}
   argument to \code{adjusted} specifies the method to be applied:

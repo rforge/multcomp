@@ -1,5 +1,5 @@
 
-export(glht, contrMat, univariate, adjusted, global, mcp,
+export(glht, contrMat, univariate, adjusted, Ftest, Chisqtest, mcp, modelparm,
        ### deprecated
        csimint, simint, csimtest, simtest)
 
