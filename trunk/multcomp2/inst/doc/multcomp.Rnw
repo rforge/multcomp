@@ -1,7 +1,7 @@
 
 \documentclass{article}
 
-%%\VignetteIndexEntry{On Multiple Comparison Procedures for Linear Hypotheses}
+%%\VignetteIndexEntry{Simultaneous Inference Procedures for General Linear Hypotheses}
 %%\VignetteDepends{multcomp2}
 
 \usepackage[utf-8]{inputenc}
@@ -10,6 +10,7 @@
 \usepackage{amstext}
 \usepackage{amsmath}
 \newcommand{\R}{\mathbb{R} }
+\newcommand{\RR}{\textsf{R} }
 \newcommand{\X}{\mathbf{X}}
 \newcommand{\W}{\mathbf{W}}
 \newcommand{\C}{\mathbf{C}}
@@ -60,21 +61,22 @@ Consider a parametric model $\mathcal{M}(Y, \beta)$
 with observations $Y$ and a
 $p$-dimensional vector of parameters $\beta$. This model 
 could be some
-kind of regression model where $Y = (y, x)$ can be split up into a dependent variable
+kind of regression model where $Y = (y, x)$ can be split 
+up into a dependent variable
 $y$ and regressors $x$. An example is a linear regression
 model $y = x^\top \beta$ or a generalized linear model (GLM) or a survival
 regression.
 
 Our primary target is simultaneous inference about 
-\emph{general linear hypotheses} about the model parameters
-\citep{Searle1971}, i.e, 
-about linear functions of the parameter vector $\beta \in \R^p$:
+\emph{general linear hypotheses} on $\beta$.
+More specifically, the global null hypothesis is
+formulated in terms of linear functions of the parameter vector $\beta \in \R^p$
+\citep{Searle1971}:
 \begin{eqnarray*}
 H_0: \K \beta = \m
 \end{eqnarray*}
 where $\K$ is a $k \times p$ matrix with each row corresponding to
-one specific hypothesis. Classically, $F$ tests are applied to test 
-such hypotheses. However, we are not only interested in the 
+one partial hypothesis. However, we are not only interested in the 
 \emph{global} hypothesis $H_0$ but in all partial
 hypotheses defined by the rows $K_j, j = 1, \dots, k$, of $\K$ and
 the elements of $\m = (m_1, \dots, m_k)$:
@@ -88,17 +90,15 @@ incorrectly rejecting at least one hypothesis $H_0^j, j = 1, \dots, k$.
 \subsection{Parameter Estimates}
 
 We assume we are provided with an estimate $\hat{\beta}$ of $\beta$ based on
-observations $Y_1, \dots, Y_n$. Two situations
-can be distinguished:
-\begin{itemize}
-  \item[A1:] the estimate follows a normal distribution with mean $\beta$ and covariance
-                matrix $\Sigma$, i.e., $\hat{\beta} \sim \N(\beta, \Sigma)$.
-  \item[A2:] the distribution of $\hat{\beta}$ is known only asymptotically:
-                     $\hat{\beta} \rightarrow \N(\beta, \Sigma)$.
-\end{itemize}
-Moreover, we assume that an estimate $\V(\hat{\beta})$ of $\Sigma$ is available. It then holds that
-$\K \hat{\beta} \sim \N(\K \beta, \K \Sigma \K^\top)$ (A1) or
-$\K \hat{\beta} \rightarrow \N(\K \beta, \K \Sigma \K^\top)$ (A2), respectively.
+observations $Y_1, \dots, Y_n$. The estimate $\hat{\beta}$
+follows a joint multivariate normal distribution
+with mean $\beta$ and covariance matrix $\Sigma$, either exactly or
+asymptotically.
+Moreover, we assume that an estimate $\V(\hat{\beta})$ of 
+the covariance matrix $\Sigma$ is available. It then holds that
+the linear combination $\K \hat{\beta}$ follows 
+a joint normal distribution  $\N(\K \beta, \K \Sigma \K^\top)$, either exactly
+or asymptoticall.y
 
 \subsection{Simultaneous Tests and Confidence Intervals}
 
@@ -106,26 +106,29 @@ Under the conditions of the global hypothesis $H_0$ it holds that
 \begin{eqnarray*}
 \K \hat{\beta} - \m \sim \N(0, \K \Sigma \K^\top),
 \end{eqnarray*}
-either exactly  or asymptotically.
-For each partial hypothesis $H_0^j$, a standardized test statistic 
-of the form $z_j = (K_j \hat{\beta} -m_j) (K_j \V(\hat{\beta}) K_j^\top)^{-\frac{1}{2}}$
-is the basis of all inference procedures.
-The vector of standarized statistics
+either exactly  or asymptotically. 
+Let $\sigma = \text{diag}\left(\K \V(\hat{\beta}) \K^\top\right)$
+denote the estimated standard deviations for all elements of $\K \hat{\beta}$.
+Then, all inference procedures are based on 
+the vector of all $k$ standardized test statistics
 \begin{eqnarray*}
-\z = (z_1, \dots, z_k) = \text{diag}\left(\K \V(\hat{\beta}) \K^\top\right)^{-\frac{1}{2}} (\K \hat{\beta} - \m)
+\z = (z_1, \dots, z_k) =  \sigma^{-\frac{1}{2}} (\K \hat{\beta} - \m).
 \end{eqnarray*}
-has a covariance matrix 
+The correlation matrix of the elements of $\z$ is
 \begin{eqnarray*}
-\V(\z) = \text{diag}\left(\K \V(\hat{\beta}) \K^\top\right)^{-\frac{1}{2}} 
+\V(\z) = \sigma^{-\frac{1}{2}} 
          \K \V(\hat{\beta}) \K^\top 
-         \left(\text{diag}\left(\K \V(\hat{\beta}) \K^\top\right)^{-\frac{1}{2}}\right)^\top.
+         \left(\sigma^{-\frac{1}{2}} \right)^\top.
 \end{eqnarray*}
-Under $H_0$ it holds that $\z \sim \T_{n - \text{Rank}(\K)}(0, \V(\z))$ (A1) or 
-$\z \rightarrow \N(0, \V(\z))$ (A2), respectively.
+Under $H_0$ is holds that $\z \rightarrow \N(0, \V(\z))$. When $\hat{\beta}$
+follows a normal distribtion exactly, the $\z$ statistics follow a multivariate
+$t$ distribution with $n - \text{Rank}(\K)$ degrees of freedom and
+correlation matrix $\V(\z))$.
 
-Now, a multiple testing procedure is based on the maximum of the absolute values
-of the test statistics $\z$. Adjusted $p$ values, controlling the family-wise error rate,
-for each linear hypothesis $H_0^j$ are simply $p_j = P_{H_0}(\max(|\z|) \ge |z_j|)$.
+A simultaneous inference procedure is based on the maximum of the absolute values
+of the test statistics: $\max|\z|$. 
+Adjusted $p$ values, controlling the family-wise error rate,
+for each linear hypothesis $H_0^j$ are $p_j = P_{H_0}(\max(|\z|) \ge |z_j|)$.
 Efficient algorithms for the evalutation of both multivariate distributions
 are nowadays available \citep{Genz1992, GenzBretz1999, GenzBretz2002}.
 
@@ -236,22 +239,26 @@ legend("topleft", lty = c(1, 2, 3), legend = c("Regression line",
 
 \section{Multiple Comparison Procedures} 
 
-Consider a one-way ANOVA model, i.e., the only covariate $\x_1$ is a factor at $l$ levels.
-In this case, the design matrix $\X$ is the matrix of dummy codings of the factor
-levels (in the absence of an intercept term):
+Multiple comparisons of means, i.e., regression coefficients for groups in
+AN(C)OVA models, are a special case of the general framework sketched in the previous
+section. The main difficulty is that the comparisons one is usually interested in,
+for example all-pairwise differences, can't be directly specified based on
+model parameters of an AN(C)OVA regression model. We start with a simple
+one-way ANOVA example and generalize to ANCOVA models in the following.
+
+Consider a one-way ANOVA model, i.e., 
+the only covariate $x$ is a factor at $j$ levels.
+In the absence of 
+an intercept term only, the elements of the parameter vector 
+$\beta \in \R^j$ correspond 
+to the mean of the response in each of the $j$ groups:
 <<aov-ex, echo = TRUE>>=
 ex <- data.frame(y = rnorm(12), x = gl(3, 4, labels = LETTERS[1:3]))
 aov.ex <- aov(y ~ x - 1, data = ex)
-summary(aov.ex)
-@
-The elements of the regression coefficient 
-$\beta = (\beta_1, \beta_2, \beta_3)$ correspond to the mean values of the
-response variable in each group:
-<<aov-coef, echo = TRUE>>=
 coef(aov.ex)
 @
-Thus, the hypotheses $\beta_2 - \beta_1 = 0 \text{ and } \beta_3 - \beta_1 = 0$ can be written
-in form of a linear function $\K \beta$ with
+Thus, the hypotheses $\beta_2 - \beta_1 = 0 \text{ and } \beta_3 - \beta_1 = 0$ 
+can be written in form of a linear function $\K \beta$ with
 <<aov-Dunnett, echo = TRUE>>=
 K <- rbind(c(-1, 1, 0),
            c(-1, 0, 1))
@@ -259,7 +266,8 @@ rownames(K) <- c("B - A", "C - A")
 colnames(K) <- names(coef(aov.ex))
 K
 @
-This "many-to-one" comparison procedure (Dunnett) is now simply
+Using the general linear hypothesis function \Rcmd{glht}, this so-called 
+`many-to-one comparison procedure' \citep{Dunnett1955} can be performed via
 <<aov-mcp, echo = TRUE>>=
 summary(glht(aov.ex, linfct = K))
 @
@@ -269,30 +277,32 @@ of interest can be supplied to \Rcmd{glht}:
 summary(glht(aov.ex, linfct = c("xB - xA = 0", "xC - xA = 0")))
 @
 
-In the presence of an intercept term, the full design matrix $\X$ can't be used to fit such
-a model because the columns of $\X$ aren't independent of each other. Therefore,
-a contrast matrix $\C$ is included into this model:
-\begin{eqnarray*}
-\X \beta = \X \C \beta^\star = \X^\star \beta^\star
-\end{eqnarray*}
-any we only obtain estimates for $\beta^\star$, but not for the
-`original' parameter vector $\beta$:
+However, in the presence of an intercept term, the full parameter vector
+$\beta = c(\mu, \beta_1, \dots, \beta_j)$ can't be estimated due to singularities
+in the corresponding design matrix. Therefore, a vector of 
+\emph{contrasts} $\beta^\star$ of the original parameter vector $\beta$ is fitted.
+More technically, a contrast matrix $\C$ is included into this model such that
+$\beta = \C \beta^\star$
+any we only obtain estimates for $\beta^\star$, but not for $\beta$:
 <<aov-constrasts, echo = TRUE>>=
 aov.ex2 <- aov(y ~ x, data = ex)
 coef(aov.ex2)
 @
-The default contrasts are so-called treatment contrasts, nothing but differences in means
-for one baseline group (compare the Dunnett contrasts and the estimated regression coefficients):
+The default contrasts in \RR{} are so-called treatment contrasts, 
+nothing but differences in means for one baseline group 
+(compare the Dunnett contrasts and the estimated regression coefficients):
 <<aov-mm, echo = TRUE>>=
 contr.treatment(table(ex$x))
 K %*% contr.treatment(table(ex$x)) %*% coef(aov.ex2)[-1]
 @
 so that $\K \C \hat{\beta}^\star = \K \hat{\beta}$.
 
-However, the \Rcmd{glht} function takes care of contrasts and the matrix of
+When the \Rcmd{mcp} function is used to specify linear hypotheses, the
+\Rcmd{glht} function takes care of contrasts. Within \Rcmd{mcp}, the matrix of
 linear hypotheses $\K$ can be written in terms of $\beta$, not $\beta^\star$. Note
-that the matrix of linear hypotheses only applies to those elements of $\hat{\beta}^\star$
-attached to factor \Robject{x} but not to the intercept term $\hat{\beta}_1$:
+that the matrix of linear hypotheses only applies to those elements of 
+$\hat{\beta}^\star$
+attached to factor \Robject{x} but not to the intercept term:
 <<aov-contrasts-glht, echo = TRUE>>=
 summary(glht(aov.ex2, linfct = mcp(x = K)))
 @
@@ -310,10 +320,34 @@ for the factor \Robject{x} can be set up using
 <<aov-Tukey>>=
 glht(aov.ex2, linfct = mcp(x = "Tukey"))
 @
-The initial parameterization of the model is automatically taken into account:
+The initial parameterization of the model is automatically taken 
+into account:
 <<aov-Tukey2>>=
 glht(aov.ex, linfct = mcp(x = "Tukey"))
 @
+
+\section{Test Procedures}
+
+Several global and multiple test procedures are available from the
+\Rcmd{summary} method of \Robject{glht} objects and can be specified 
+via its \Rcmd{test} argument:
+\begin{itemize}
+\item{\Rcmd{test = univariate()}} univariate $p$ values based on either
+  the $t$ or normal distribution are reported. Controls the type I error
+  for each partial hypothesis only.
+\item{\Rcmd{test = Ftest()}} global $F$ test for $H_0$.
+\item{\Rcmd{test = Chisqtest()}} global $\chi^2$ test for $H_0$.
+\item{\Rcmd{test = adjusted()}} multiple test procedures as specified
+  by the \Rcmd{type} argument to \Rcmd{adjusted}: \Rcmd{"free"} denotes
+  adjusted $p$ values as computed from the joint normal or $t$ distribution
+  of the $\z$ statistics (default), 
+  \Rcmd{"Shaffer"} implements Bonferroni-adjustments
+  taking logical constraints into account \cite{Shaffer1986}
+  and \Rcmd{"Westfall"} takes both logical constraints and correlations
+  among the $\z$ statistics into account \cite{Westfall1997}. In addition,
+  all adjustment methods implemented in \Rcmd{p.adjust} can be specified as well.
+\end{itemize}
+
 
 
 \bibliographystyle{plainnat}

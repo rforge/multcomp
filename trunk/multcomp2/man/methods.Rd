@@ -18,7 +18,7 @@
 \method{coef}{glht}(object, rhs = FALSE, ...)
 \method{vcov}{glht}(object, ...)
 univariate()
-adjusted(type = c("free", "Bonferroni", "Shaffer", "Westfall"), 
+adjusted(type = c("free", "Shaffer", "Westfall", p.adjust.methods), 
          ...)
 Ftest()
 Chisqtest()
@@ -33,7 +33,7 @@ Chisqtest()
               \eqn{m} (\code{rhs = TRUE}) of the linear hypothesis
               should be returned.}
   \item{type}{ the multiplicity adjustment (\code{adjusted}) 
-               to be applied. See below.}
+               to be applied. See below and \code{\link{p.adjust}}.}
   \item{...}{ additional arguments, such as \code{maxpts}, 
               \code{abseps} or \code{releps} to
               \code{\link[mvtnorm]{pmvnorm}} in \code{adjusted} or 
@@ -57,10 +57,10 @@ Chisqtest()
   in function \code{adjusted}. The \code{type}
   argument to \code{adjusted} specifies the method to be applied:
   \code{"free"} implements adjusted p values based on the joint
-  normal or $t$ distribution of the linear function, \code{"Bonferroni"}
-  implements a simple Bonferroni-adjustment, and \code{"Shaffer"}
-  and \code{"Westfall"} implement logically constraint 
-  multiplicity adjustments.
+  normal or $t$ distribution of the linear function, and
+  \code{"Shaffer"} and \code{"Westfall"} implement logically constraint 
+  multiplicity adjustments. In addition, all adjustment methods
+  implemented in \code{\link{p.adjust}} are available as well.
 
   Simultanous confidence intervals for linear functions can be computed
   using method \code{\link{confint}}.
@@ -68,7 +68,7 @@ Chisqtest()
   All simultaneous inference procedures implemented here control
   the family-wise error rate (FWER). Multivariate
   normal and $t$ distributions, the latter one only for models of 
-  class \code{\link{lm}}) are evaluated using the procedures
+  class \code{\link{lm}}, are evaluated using the procedures
   implemented in package \code{mvtnorm}.
 
 }

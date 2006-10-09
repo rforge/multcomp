@@ -432,96 +432,6 @@ C3 >= 0 -1.66667     -Inf -0.03594
 > ## Keywords: 'datasets'.
 > 
 > 
-> cleanEx(); ..nameEx <- "respiratory"
-> ###--- >>> `respiratory' <<<----- Respiratory Health Data Set
-> 
-> 	## alias	 help(respiratory)
-> 
-> ##___ Examples ___:
-> 
-> data(respiratory)
-> 
-> # compute the contrast matrix in several steps 
-> # overall active vs. placebo
-> CA  <- c(0, 13, 0, 11, 0, 13, 0, 17, 0)
-> CP  <- c(0, 0, 14, 0, 12,  0, 19, 0, 12)
-> CA  <- CA/sum(CA)
-> CP  <- CP/sum(CP)
-> C1  <- CP-CA
-> 
-> # for older subgroup only
-> CAO <- c( 0, 13,  0,  0,  0, 13,  0,  0,  0 ) 
-> CPO <- c( 0,  0, 14,  0,  0,  0, 19,  0,  0 ) 
-> CAO <- CAO/sum(CAO)
-> CPO <- CPO/sum(CPO)
-> C2  <- CPO - CAO
-> 
-> # for younger subgroup only 
-> CAY <- c( 0,  0,  0, 11,  0,  0,  0, 17,  0 ) 
-> CPY <- c( 0,  0,  0,  0, 12,  0,  0,  0, 12 ) 
-> CAY <- CAY/sum(CAY)
-> CPY <- CPY/sum(CPY)
-> C3  <- CPY - CAY
-> 
-> # subgroup with inital good health
-> CAG <- c( 0, 13,  0, 11,  0,  0,  0,  0,  0 ) 
-> CPG <- c( 0,  0, 14,  0, 12,  0,  0,  0,  0 ) 
-> CAG <- CAG/sum(CAG)
-> CPG <- CPG/sum(CPG)
-> C4  <- CPG - CAG
-> 
-> # subgroup with inital poor health
-> CAP <- c( 0,  0,  0,  0,  0, 13,  0, 17,  0 ) 
-> CPP <- c( 0,  0,  0,  0,  0,  0, 19,  0, 12 ) 
-> CAP <- CAP/sum(CAP)
-> CPP <- CPP/sum(CPP)
-> C5  <- CPP - CAP
-> 
-> # all 4 subgroup combinations of age and initial health condition 
-> C6  <- c( 0, -1,  1,  0,  0,  0,  0,  0,  0 )
-> C7  <- c( 0,  0,  0,  0,  0, -1,  1,  0,  0 )
-> C8  <- c( 0,  0,  0, -1,  1,  0,  0,  0,  0 )
-> C9  <- c( 0,  0,  0,  0,  0,  0,  0, -1,  1 )
-> 
-> C   <- rbind(C1, C2, C3, C4, C5, C6, C7, C8, C9)   
-> # numerate the contrasts
-> colnames(C) <- NULL
-> rownames(C) <- paste("C", 1:nrow(C), sep="")
-> 
-> #summary(simtest(Score ~ Treatment:AgeGroup:InitHealth,
-> #                data=respiratory, ttype="logical",
-> #                alternative="greater", cmatrix=C))
-> 
-> mod <- lm(Score ~ Treatment:AgeGroup:InitHealth - 1, data=respiratory)                
-> summary(simtest(mod, ttype="logical", alternative="less", cmatrix=C[,-1]))               
-
-	 Simultaneous Tests for General Linear Hypotheses
-
-Fit: lm(formula = Score ~ Treatment:AgeGroup:InitHealth - 1, data = respiratory)
-
-Linear Hypotheses:
-        Estimate Std. Error t value p value    
-C1 >= 0  -0.7360     0.1908  -3.857   <0.01 ***
-C2 >= 0  -1.0733     0.2635  -4.074   <0.01 ***
-C3 >= 0  -0.3190     0.2795  -1.142  0.4653    
-C4 >= 0  -0.6093     0.2844  -2.142  0.0921 .  
-C5 >= 0  -0.8611     0.2573  -3.346   <0.01 ** 
-C6 >= 0  -1.2187     0.3870  -3.149   <0.01 ** 
-C7 >= 0  -0.8154     0.3616  -2.255  0.0736 .  
-C8 >= 0   0.1045     0.4194   0.249  0.9740    
-C9 >= 0  -0.8696     0.3788  -2.296  0.0673 .  
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-(Adjusted p values reported)
-
-Warning message:
-'simtest.default' is deprecated.
-Use 'glht' instead.
-See help("Deprecated") and help("multcomp-deprecated"). 
-> 
-> ## Keywords: 'datasets'.
-> 
-> 
 > cleanEx(); ..nameEx <- "simint"
 > ###--- >>> `simint' <<<----- Simultaneous Intervals
 > 
@@ -656,7 +566,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > 
 > 
 > cat("Time elapsed: ", proc.time() - get("ptime", env = .CheckExEnv),"\n")
-Time elapsed:  12.796 0.24 13.044 0 0 
+Time elapsed:  11.892 0.06 12.542 0 0 
 > dev.off(); quit('no')
 null device 
           1 

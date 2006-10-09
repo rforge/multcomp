@@ -14,10 +14,10 @@ pqglht <- function(object)
     dim <- ncol(cr)
 
     ### p value function
-    pfunction <- function(type = c("univariate", "Bonferroni", "adjusted"), 
+    pfunction <- function(type = c("univariate", "adjusted", p.adjust.methods), 
                           ...) {
 
-        type <- match.arg(type) 
+        type <- match.arg(type)
 
         pfct <- function(q) {
             switch(object$alternative, "two.sided" = {
@@ -47,9 +47,6 @@ pqglht <- function(object)
         if (type == "univariate")
             return(pvals)
 
-        if (type == "Bonferroni")
-            return(pmin(1, dim * pvals))
-
         if (type == "adjusted") {
             ret <- numeric(length(tstat))
             error <- 0
@@ -63,6 +60,8 @@ pqglht <- function(object)
             attr(ret, "error") <- error
             return(ret)
         }
+
+        return(p.adjust(pvals, method = type))
     }
 
     ### quantile function
@@ -157,21 +156,10 @@ Ftest <- function() global("F")
 Chisqtest <- function() global("Chisq")
 
 ### p values adjusted for simultaneous inference
-adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"), 
+adjusted <- function(type = c("free", "Shaffer", "Westfall", p.adjust.methods), 
                      ...) 
 {
     type <- match.arg(type)
-
-    ### simple Bonferroni-adjustment
-    if (type == "Bonferroni") {
-        return(function(object) {
-            RET <- pqglht(object)
-            RET$pvalues <- RET$pfunction("Bonferroni")
-            RET$type <- "Bonferroni"
-            class(RET) <- "summary.glht"
-            RET
-        })
-    }
 
     ### usual max-type adjustment over all linear hypotheses
     if (type == "free") {
@@ -187,36 +175,47 @@ adjusted <- function(type = c("free", "Bonferroni", "Shaffer", "Westfall"),
     ### Westfall (1997, JASA): constraints and correlations 
     ### or
     ### Shaffer (1886, JASA): constraints
+    if (type %in% c("Shaffer", "Westfall")) {
+        return(function(object) {
+            RET <- pqglht(object)
+            m <- coef(object, rhs = TRUE)
+            tstat <- switch(object$alternative, 
+                            "less" = RET$tstat,
+                            "greater" = -RET$tstat,
+                            "two.sided" = -abs(RET$tstat))
+            C <- object$linfct
+            Corder <- C[order(tstat), , drop = FALSE]
+            Cm <- m[order(tstat)]
+            ms <- maxsets(Corder)
+            error <- 0
+            p <- sapply(ms, function(x) {
+               max(sapply(x, function(s) {
+                   object$linfct <- Corder[s, , drop = FALSE]
+                   object$rhs <- Cm[s]
+                   tmp <- pqglht(object)$pfunction(ifelse(type == "Westfall", 
+                                                   "adjusted", "bonferroni"), 
+                                                   ...)
+                   tmperr <- attr(tmp, "error")
+                   if (!is.null(tmperr) && tmperr > error)
+                       error <<- tmperr
+                   min(tmp)
+               }))
+            })
+            for (i in 2:length(p))
+                p[i] <- max(p[i-1], p[i])
+            ### <FIXME> what happens in case of ties??? </FIXME> ###
+            RET$pvalues <- p[rank(tstat)]
+            attr(RET$pvalues, "error") <- error
+            RET$type <- type
+            class(RET) <- "summary.glht"
+            RET
+        })
+    }
+
+    ### compute adjustment via p.adjust
     return(function(object) {
         RET <- pqglht(object)
-        m <- coef(object, rhs = TRUE)
-        tstat <- switch(object$alternative, 
-                        "less" = RET$tstat,
-                        "greater" = -RET$tstat,
-                        "two.sided" = -abs(RET$tstat))
-        C <- object$linfct
-        Corder <- C[order(tstat), , drop = FALSE]
-        Cm <- m[order(tstat)]
-        ms <- maxsets(Corder)
-        error <- 0
-        p <- sapply(ms, function(x) {
-           max(sapply(x, function(s) {
-                object$linfct <- Corder[s, , drop = FALSE]
-                object$rhs <- Cm[s]
-                tmp <- pqglht(object)$pfunction(ifelse(type == "Westfall", 
-                                                   "adjusted", "Bonferroni"), 
-                                            ...)
-                tmperr <- attr(tmp, "error")
-                if (!is.null(tmperr) && tmperr > error)
-                    error <<- tmperr
-                min(tmp)
-            }))
-        })
-        for (i in 2:length(p))
-            p[i] <- max(p[i-1], p[i])
-        ### <FIXME> what happens in case of ties??? </FIXME> ###
-        RET$pvalues <- p[rank(tstat)]
-        attr(RET$pvalues, "error") <- error
+        RET$pvalues <- RET$pfunction(type)
         RET$type <- type
         class(RET) <- "summary.glht"
         RET

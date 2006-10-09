@@ -51,7 +51,7 @@
 
   ### cf. Westfall (1997, Table 2)
   summary(Kht, test = univariate())
-  summary(Kht, test = adjusted("Bonferroni"))
+  summary(Kht, test = adjusted("bonferroni"))
   summary(Kht, test = adjusted("Shaffer"))
   summary(Kht, test = adjusted("Westfall"))
   summary(Kht, test = adjusted("free"))

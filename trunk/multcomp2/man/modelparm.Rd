@@ -2,7 +2,7 @@
 \alias{modelparm}
 \title{ Generic Accessor Function for Model Parameters }
 \description{
-  Extract coefficients and their covariance matrix as well as 
+  Extract model parameters and their covariance matrix as well as 
   degrees of freedom (if available) from a fitted model.
 }
 \usage{
@@ -12,9 +12,9 @@ modelparm(model, coef., vcov., df, ...)
   \item{model}{a fitted (generalized) linear model,
                for example an object returned by \code{\link{lm}},
                \code{\link{glm}}, \code{\link{aov}} etc.  }
-  \item{coef.}{ an accessor function for the model coefficients. }
+  \item{coef.}{ an accessor function for the model parameters. }
   \item{vcov.}{ an accessor function for the covariance matrix of the
-                model coefficients. }
+                model parameters. }
   \item{df}{ an optional specification of the degrees of freedom to be used in
              subsequent computations. }
   \item{\dots}{ additional arguments, currently ignored. }
@@ -40,8 +40,8 @@ modelparm(model, coef., vcov., df, ...)
 }
 \value{
   An object of class \code{modelparm} with elements
-  \item{coef}{model coefficients}
-  \item{vcov}{covariance matrix of model coefficients}
+  \item{coef}{model parameters}
+  \item{vcov}{covariance matrix of model parameters}
   \item{df}{degrees of freedom}
 }
 \keyword{misc}

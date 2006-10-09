@@ -8,8 +8,8 @@
 \title{ General Linear Hypotheses }
 \description{
   General linear hypotheses and multiple comparisons 
-  for generalized linear models, 
-  linear mixed effects models and Cox models.
+  for parametric models, inlcuding generalized linear models, 
+  linear mixed effects models, and survival models.
 }
 \usage{
 \method{glht}{matrix}(model, linfct, 
@@ -69,8 +69,10 @@ mcp(...)
 
   1) The \code{matrix} of coefficients $K$ can be specified directly
   via the \code{linfct} argument. In this case,
-  the number of columns needs to correspond to the number of
-  parameters estimated by \code{model}. 
+  the number of columns of this matrix needs to correspond to the number of
+  parameters estimated by \code{model}. It is assumed that
+  appropriate \code{coef} and \code{vcov} methods are available
+  for \code{model} (\code{\link{modelparm}} deals with some exceptions). 
 
   2) A symbolic description,
   either a \code{character} or \code{expression} vector passed to \code{glht}
@@ -84,11 +86,12 @@ mcp(...)
   refer to \code{"two.sided"}, \code{<=} means
   \code{"greater"} and \code{>=} indicates 
   \code{"less"}). Numeric vectors of length one
-  are valid for the right hand side.
+  are valid value for the right hand side.
   
   3) Multiple comparisons of means are defined by objects
   of class \code{mcp} as returned by the \code{mcp} function.
-  For each factor serving as independent variable in \code{model},
+  For each factor, which is included in \code{model} 
+  as independent variable,
   a contrast matrix or a symbolic description of the contrasts
   can be specified as arguments to \code{mcp}. A symbolic
   description may be a \code{character} or \code{expression} 

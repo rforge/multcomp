@@ -23,7 +23,7 @@ contrMat(n, type=c("Dunnett", "Tukey", "Sequen", "AVE",
   Computes the requested matrix of contrasts.
 }
 \value{
-  The matrix of contrasts with appropriate rownames is returned. 
+  The matrix of contrasts with appropriate row names is returned. 
 }
 \references{
   Frank Bretz, Alan Genz and Ludwig A. Hothorn (2001), On the numerical 

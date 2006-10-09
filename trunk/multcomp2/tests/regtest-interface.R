@@ -31,3 +31,13 @@ tmp <- multcomp2:::chrlinfct2matrix(c(l1 = "x1 - x2 = 2",
 
 stopifnot(max(abs(tmp$K - rbind(c(1, -1, 0), c(0, 1, 3)))) < sqrt(.Machine$double.eps))
 stopifnot(max(abs(tmp$m - c(2, 1))) < sqrt(.Machine$double.eps))
+
+### coef.survreg and vcov.survreg need special tuning
+### thx to Z for pointing this out
+if (require("survival")) {
+    smod <- survreg(Surv(futime, fustat) ~ ecog.ps + rx, 
+                    data = ovarian, dist = 'weibull')
+    K <- diag(length(coef(smod)))
+    rownames(K) <- names(coef(smod))
+    glht(smod, linfct = K)
+}
