@@ -1,5 +1,6 @@
 
 library("multcomp2")
+set.seed(290875)
 
 testdata <- data.frame(y = rnorm(21), 
                        f1 <- factor(c(rep(c("A", "B", "C"), 7))),

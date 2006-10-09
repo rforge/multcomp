@@ -18,6 +18,7 @@ Type 'q()' to quit R.
 > 
 > library("multcomp2")
 Loading required package: mvtnorm
+> set.seed(290875)
 > 
 > testdata <- data.frame(y = rnorm(21), 
 +                        f1 <- factor(c(rep(c("A", "B", "C"), 7))),
@@ -27,7 +28,7 @@ Loading required package: mvtnorm
 > # one-way ANOVA
 > coef(amod <- aov(y ~ f1, data = testdata))
 (Intercept)         f1B         f1C 
--0.18382924  0.24436055 -0.02395611 
+ -0.4394751   0.5151680   0.6886101 
 > glht(amod, linfct = mcp(f1 = "Dunnett"))
 
 	 General Linear Hypotheses
@@ -37,14 +38,14 @@ Multiple Comparisons of Means: Dunnett Contrasts
 
 Linear Hypotheses:
            Estimate
-B - A == 0  0.24436
-C - A == 0 -0.02396
+B - A == 0   0.5152
+C - A == 0   0.6886
 
 > 
 > # and a continuous covariable: ANCOVA
 > coef(lmod <- lm(y ~ f1 + x, data = testdata))
-(Intercept)         f1B         f1C           x 
- -0.2915701   0.3748814   0.1519563  -0.2442602 
+ (Intercept)          f1B          f1C            x 
+-0.434528566  0.509444592  0.686181780 -0.009491201 
 > glht(lmod, linfct = mcp(f1 = "Dunnett"))
 
 	 General Linear Hypotheses
@@ -54,14 +55,14 @@ Multiple Comparisons of Means: Dunnett Contrasts
 
 Linear Hypotheses:
            Estimate
-B - A == 0   0.3749
-C - A == 0   0.1520
+B - A == 0   0.5094
+C - A == 0   0.6862
 
 > 
 > # ANCOVA with an additional factor as covariable
 > coef(lmod <- lm(y ~ f1 + f2 + x, data = testdata))
 (Intercept)         f1B         f1C         f2E           x 
- -0.2011299   0.4475132   0.2361751  -0.2751997  -0.3066115 
+-0.40849498  0.51296437  0.69200699 -0.05266965 -0.01613183 
 > glht(lmod, linfct = mcp(f1 = "Dunnett"))
 
 	 General Linear Hypotheses
@@ -71,16 +72,16 @@ Multiple Comparisons of Means: Dunnett Contrasts
 
 Linear Hypotheses:
            Estimate
-B - A == 0   0.4475
-C - A == 0   0.2362
+B - A == 0    0.513
+C - A == 0    0.692
 
 > 
 > # and with interaction terms
 > coef(lmod <- lm(y ~ f1 + f2 + f2:f1 + x, data = testdata))
 (Intercept)         f1B         f1C         f2E           x     f1B:f2E 
- -0.2237520   0.3567436   0.4278252  -0.2640438  -0.3470589   0.1938810 
+-0.44532319  0.70282663  0.65613337  0.05552324 -0.03443721 -0.37862471 
     f1C:f2E 
- -0.2871999 
+ 0.02753451 
 > glht(lmod, linfct = mcp(f1 = "Dunnett"))
 
 	 General Linear Hypotheses
@@ -90,8 +91,8 @@ Multiple Comparisons of Means: Dunnett Contrasts
 
 Linear Hypotheses:
            Estimate
-B - A == 0   0.4537
-C - A == 0   0.2842
+B - A == 0   0.5135
+C - A == 0   0.6699
 
 > 
 > # with contrasts as expressions
@@ -104,8 +105,8 @@ Multiple Comparisons of Means: User-defined Contrasts
 
 Linear Hypotheses:
            Estimate
-B - A == 0   0.4537
-C - A == 0   0.2842
+B - A == 0   0.5135
+C - A == 0   0.6699
 
 > 
 > tmp <- multcomp2:::chrlinfct2matrix(c(l1 = "x1 - x2 = 2", 
