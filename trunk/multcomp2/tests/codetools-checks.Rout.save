@@ -1,5 +1,5 @@
 
-R version 2.4.0 alpha (2006-09-06 r39158)
+R version 2.4.0 (2006-10-03)
 Copyright (C) 2006 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -23,8 +23,5 @@ Type 'q()' to quit R.
 + }
 Loading required package: codetools
 Loading required package: mvtnorm
-Loading required package: MASS
-Loading required package: survival
-Loading required package: splines
 NULL
 > 
