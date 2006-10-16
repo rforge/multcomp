@@ -6,13 +6,15 @@ print.glht <- function(x, digits = max(3, getOption("digits") - 3), ...)
     if (!is.null(x$type))
         cat("Multiple Comparisons of Means:", x$type, "Contrasts\n\n\n")
     beta <- coef(x)
-    x <- matrix(beta, ncol = 1)
-    colnames(x) <- "Estimate"
-    rownames(x) <- names(beta)
+    lh <- matrix(beta, ncol = 1)
+    colnames(lh) <- "Estimate"
+    alt <- switch(x$alternative,
+                  "two.sided" = "==", "less" = ">=", "greater" = "<=")
+    rownames(lh) <- paste(names(beta), alt, x$rhs)
     cat("Linear Hypotheses:\n")
-    print(x, digits = digits)
+    print(lh, digits = digits)
     cat("\n")
-    invisible(x)
+    invisible(lh)
 }
 
 print.summary.glht <- function(x, digits = max(3, getOption("digits") - 3), 
@@ -44,6 +46,9 @@ print.summary.glht <- function(x, digits = max(3, getOption("digits") - 3),
         sig <- .Machine$double.eps
     }
     cat("Linear Hypotheses:\n")
+    alt <- switch(x$alternative,
+                  "two.sided" = "==", "less" = ">=", "greater" = "<=")
+    rownames(mtests) <- paste(rownames(mtests), alt, x$rhs)
     printCoefmat(mtests, digits = digits, 
                  has.Pvalue = TRUE, P.values = TRUE, eps.Pvalue = sig)
     switch(type, 
@@ -78,6 +83,9 @@ print.confint.glht <- function(x, digits = max(3, getOption("digits") - 3),
     cat("Estimated Quantile =", round(attr(x$confint, "calpha"), digits))
     cat("\n\n")
     cat("Linear Hypotheses:\n")
+    alt <- switch(x$alternative,
+                  "two.sided" = "==", "less" = ">=", "greater" = "<=")
+    rownames(x$confint) <- paste(rownames(x$confint), alt, x$rhs)
     print(format(x$confint, nsmall = digits, digits = digits), quote = FALSE)
     cat("\n")
     cat(paste(level * 100, 

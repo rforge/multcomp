@@ -20,13 +20,13 @@ glht.matrix <- function(model, linfct,
     if (is.null(colnames(linfct)))
         colnames(linfct) <- names(mpar$coef)
 
-    if (is.null(rownames(linfct))) {
+    if (is.null(rownames(linfct))) # {
         rownames(linfct) <- 1:nrow(linfct)
-    } else {
-        alt <- switch(alternative, 
-            "two.sided" = "==", "less" = ">=", "greater" = "<=")
-        rownames(linfct) <- paste(rownames(linfct), alt, rhs)
-    }
+#    } else {
+        ### alt <- switch(alternative, 
+        ###    "two.sided" = "==", "less" = ">=", "greater" = "<=")
+        ### rownames(linfct) <- paste(rownames(linfct), alt, rhs)
+#    }
 
     if (length(rhs) == 1) rhs <- rep(rhs, nrow(linfct))
     if (length(rhs) != nrow(linfct))

@@ -233,17 +233,17 @@ Fit: NULL
 Estimated Quantile = 2.8409
 
 Linear Hypotheses:
-                Estimate lwr     upr    
-2times - 1time   3.4430  -0.6575  7.5435
-4times - 1time   6.5928   2.4923 10.6933
-drugD - 1time    9.5792   5.4787 13.6797
-drugE - 1time   15.1655  11.0651 19.2660
-4times - 2times  3.1498  -0.9507  7.2503
-drugD - 2times   6.1362   2.0357 10.2367
-drugE - 2times  11.7226   7.6221 15.8230
-drugD - 4times   2.9864  -1.1141  7.0869
-drugE - 4times   8.5727   4.4722 12.6732
-drugE - drugD    5.5864   1.4859  9.6868
+                     Estimate lwr     upr    
+2times - 1time == 0   3.4430  -0.6575  7.5435
+4times - 1time == 0   6.5928   2.4923 10.6933
+drugD - 1time == 0    9.5792   5.4787 13.6797
+drugE - 1time == 0   15.1655  11.0651 19.2660
+4times - 2times == 0  3.1498  -0.9507  7.2503
+drugD - 2times == 0   6.1362   2.0357 10.2367
+drugE - 2times == 0  11.7226   7.6221 15.8230
+drugD - 4times == 0   2.9864  -1.1141  7.0869
+drugE - 4times == 0   8.5727   4.4722 12.6732
+drugE - drugD == 0    5.5864   1.4859  9.6868
 
 95% family-wise confidence level
  
@@ -263,17 +263,17 @@ Multiple Comparisons of Means: user-defined Contrasts
 Fit: NULL
 
 Linear Hypotheses:
-                Estimate Std. Error t value p value    
-2times - 1time     3.443      1.443   2.385   0.138    
-4times - 1time     6.593      1.443   4.568   <0.01 ***
-drugD - 1time      9.579      1.443   6.637   <0.01 ***
-drugE - 1time     15.166      1.443  10.507   <0.01 ***
-4times - 2times    3.150      1.443   2.182   0.203    
-drugD - 2times     6.136      1.443   4.251   <0.01 ***
-drugE - 2times    11.723      1.443   8.122   <0.01 ***
-drugD - 4times     2.986      1.443   2.069   0.255    
-drugE - 4times     8.573      1.443   5.939   <0.01 ***
-drugE - drugD      5.586      1.443   3.870   <0.01 ** 
+                     Estimate Std. Error t value p value    
+2times - 1time == 0     3.443      1.443   2.385   0.138    
+4times - 1time == 0     6.593      1.443   4.568   <0.01 ***
+drugD - 1time == 0      9.579      1.443   6.637   <0.01 ***
+drugE - 1time == 0     15.166      1.443  10.507   <0.01 ***
+4times - 2times == 0    3.150      1.443   2.182   0.203    
+drugD - 2times == 0     6.136      1.443   4.251   <0.01 ***
+drugE - 2times == 0    11.723      1.443   8.122   <0.01 ***
+drugD - 4times == 0     2.986      1.443   2.069   0.255    
+drugE - 4times == 0     8.573      1.443   5.939   <0.01 ***
+drugE - drugD == 0      5.586      1.443   3.870   <0.01 ** 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported)
@@ -566,7 +566,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > 
 > 
 > cat("Time elapsed: ", proc.time() - get("ptime", env = .CheckExEnv),"\n")
-Time elapsed:  11.892 0.06 12.542 0 0 
+Time elapsed:  9.468 0.012 9.509 0 0 
 > dev.off(); quit('no')
 null device 
           1 

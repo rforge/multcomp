@@ -65,13 +65,17 @@ pqglht <- function(object)
     }
 
     ### quantile function
-    qfunction <- function(conf.level, ...) {
+    qfunction <- function(conf.level, adjusted = TRUE, ...) {
 
         tail <- switch(object$alternative, "two.sided" = "both.tails",
                                     "less"      = "upper.tail",
                                     "greater"   = "lower.tail")
-        calpha <- qmvt(conf.level, df = df, corr = cr, tail = tail, 
-                       ...)
+        if (adjusted) {
+            calpha <- qmvt(conf.level, df = df, corr = cr, tail = tail, 
+                           ...)
+        } else {
+            calpha <- qmvt(conf.level, df = df, corr = matrix(1), tail = tail, ...)
+        }
         error <- calpha$estim.prec
         calpha <- calpha$quantile
 
