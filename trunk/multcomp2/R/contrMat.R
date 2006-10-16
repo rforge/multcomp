@@ -2,7 +2,7 @@
 
 contrMat <- function(n, type = c("Dunnett", "Tukey", "Sequen", "AVE",
                                  "Changepoint", "Williams", "Marcus",
-                                 "McDermott", "Tetrade"), base = 1, m = NULL) {
+                                 "McDermott"), base = 1, m = NULL) {
 
     if (length(n) < 2) stop("less than 2 groups")
     type <- match.arg(type)

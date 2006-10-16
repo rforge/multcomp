@@ -7,7 +7,7 @@
 \usage{
 contrMat(n, type=c("Dunnett", "Tukey", "Sequen", "AVE", 
                    "Changepoint", "Williams", "Marcus", 
-                   "McDermott", "Tetrade"), base = 1, m = NULL)
+                   "McDermott"), base = 1, m = NULL)
 }
 \arguments{
   \item{n}{ a (possibly named) vector of sample sizes for each group or a
@@ -44,6 +44,5 @@ contrMat(n, type=c("Dunnett", "Tukey", "Sequen", "AVE",
  contrMat(n, type = "Williams")
  contrMat(n, type = "Marcus")
  contrMat(n, type = "McDermott")
- contrMat(n, type = "Tetrade", m = n)
 }
 \keyword{misc}
