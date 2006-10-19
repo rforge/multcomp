@@ -13,9 +13,9 @@
 #
 ################################################################
 
-library("multcomp2")
+library("multcomp")
 set.seed(290875)
-load(system.file("MCMT/MCMT.rda", package = "multcomp2"))
+load(system.file("MCMT/MCMT.rda", package = "multcomp"))
 
 ### weights loss data, page 47
 
