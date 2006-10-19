@@ -2,25 +2,22 @@
 \alias{contrMat}
 \title{ Contrast Matrices }
 \description{
-  Computes contrast matrices for several multiple comparision procedures.
+  Computes contrast matrices for several multiple comparison procedures.
 }
 \usage{
 contrMat(n, type=c("Dunnett", "Tukey", "Sequen", "AVE", 
                    "Changepoint", "Williams", "Marcus", 
-                   "McDermott"), base = 1, m = NULL)
+                   "McDermott"), base = 1)
 }
 \arguments{
   \item{n}{ a (possibly named) vector of sample sizes for each group or a
             vector of factor levels. }
   \item{type}{ type of contrast. }
-  \item{m}{ number of levels of two factors (for \code{type="Tetrade"}
-                  only).}
   \item{base}{ an integer specifying which group is considered the baseline
-          group for Dunnett contrasts. Ignored if \code{contrasts} is \code{FALSE}.}
-
+          group for Dunnett contrasts.}
 }
 \details{
-  Computes the requested matrix of contrasts.
+  Computes the requested matrix of contrasts for comparisons of mean levels.
 }
 \value{
   The matrix of contrasts with appropriate row names is returned. 
@@ -32,8 +29,6 @@ contrMat(n, type=c("Dunnett", "Tukey", "Sequen", "AVE",
 } 
 \examples{
  n <- c(10,20,30,40)
- a <- 2
- b <- 3
  names(n) <- paste("group", 1:4, sep="")
  contrMat(n)	# Dunnett is default
  contrMat(n, base = 2)	# use second level as baseline

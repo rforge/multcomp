@@ -8,7 +8,7 @@
 \title{ General Linear Hypotheses }
 \description{
   General linear hypotheses and multiple comparisons 
-  for parametric models, inlcuding generalized linear models, 
+  for parametric models, including generalized linear models, 
   linear mixed effects models, and survival models.
 }
 \usage{
@@ -21,9 +21,9 @@
 mcp(...)
 }
 \arguments{
-  \item{model}{ a fitted (generalized) linear model, 
+  \item{model}{ a fitted model, 
                for example an object returned by \code{\link{lm}}, 
-               \code{\link{glm}}, \code{\link{aov}} etc. It is 
+               \code{\link{glm}}, or \code{\link{aov}} etc. It is 
                assumed that \code{\link{coef}} and 
                \code{\link{vcov}} methods are available for 
                \code{model}. For multiple comparisons of
@@ -46,12 +46,12 @@ mcp(...)
                 multiple comparisons are defined by 
                 matrices or symbolic descriptions specifying contrasts
                 of factor levels where the arguments correspond
-                to factors.}
+                to factor names.}
 }
 \details{
 
   A general linear hypothesis refers to null hypotheses of the form
-  \eqn{H_0: K \beta = m} for some (generalized) linear model
+  \eqn{H_0: K \beta = m} for some parametric model
   \code{model} with parameter estimates \code{coef(model)}. 
 
   The null hypothesis is specified by a linear function $K \beta$, 
@@ -77,7 +77,7 @@ mcp(...)
   2) A symbolic description,
   either a \code{character} or \code{expression} vector passed to \code{glht}
   via its \code{linfct} argument, can be used to define
-  the null hypothesis. A symbolic description must be a valid
+  the null hypothesis. A symbolic description must be interpretable as a valid
   R expression consisting of both the left and right hand side 
   of a linear hypothesis.
   Only the names of \code{coef(beta)} must be used as variable
@@ -86,7 +86,7 @@ mcp(...)
   refer to \code{"two.sided"}, \code{<=} means
   \code{"greater"} and \code{>=} indicates 
   \code{"less"}). Numeric vectors of length one
-  are valid value for the right hand side.
+  are valid values for the right hand side.
   
   3) Multiple comparisons of means are defined by objects
   of class \code{mcp} as returned by the \code{mcp} function.
@@ -106,20 +106,21 @@ mcp(...)
   exact multivariate $t$ distrubtion is evaluated. For all other
   models, results rely on the normal approximation. Alternatively, the 
   degrees of freedom to be used for the evalutation of multivariate
-  $t$ distributions can be given by the additional \code{df} argument.
+  $t$ distributions can be given by the additional \code{df} argument to
+  \code{\link{modelparm}} specified via \code{\dots}.
 
-  \code{glht} methods returns a specification of the null hypothesis
+  \code{glht} methods return a specification of the null hypothesis
   \eqn{H_0: K \beta = m}. The value of the linear function
   $K \beta$ can be extracted using the \code{\link{coef}} method and
   the corresponding covariance matrix is available from the 
-  \code{\link{vcov}} method. Simultaneous tests and confidence intervals
-  are available from \code{summary} and \code{\link{confint}} methods,
-  respectively.
+  \code{\link{vcov}} method. Various simultaneous and univariate tests and 
+  confidence intervals are available from \code{\link{summary.glht}}
+  and \code{\link{confint.glht}} methods, respectively.
 
 }
 \value{
 
-  An object of class \code{glht} with \code{print}, \code{summary}, 
+  An object of class \code{glht} with \code{print}, \code{\link{summary}}, 
   \code{\link{confint}}, \code{\link{coef}} and \code{\link{vcov}} 
   methods being available.
 
@@ -161,7 +162,7 @@ mcp(...)
 
   ### set up all-pair comparisons for factor `tension'
   ### using a symbolic description (`type' argument 
-  ### to contrMat())
+  ### to `contrMat()')
   glht(amod, linfct = mcp(tension = "Tukey"))
 
   ### alternatively, describe differences symbolically

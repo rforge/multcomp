@@ -2,9 +2,10 @@
 
 contrMat <- function(n, type = c("Dunnett", "Tukey", "Sequen", "AVE",
                                  "Changepoint", "Williams", "Marcus",
-                                 "McDermott"), base = 1, m = NULL) {
+                                 "McDermott"), base = 1) {
 
     if (length(n) < 2) stop("less than 2 groups")
+    m <- NULL
     type <- match.arg(type)
     k <- length(n)
     if (base < 1 || base > k) stop("base is not between 1 and ", k)

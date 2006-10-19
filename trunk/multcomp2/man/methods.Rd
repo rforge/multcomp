@@ -37,7 +37,8 @@ Chisqtest()
   \item{...}{ additional arguments, such as \code{maxpts}, 
               \code{abseps} or \code{releps} to
               \code{\link[mvtnorm]{pmvnorm}} in \code{adjusted} or 
-              \code{\link[mvtnorm]{qmvnorm}} in \code{confint}.}
+              \code{\link[mvtnorm]{qmvnorm}} and \code{adjusted = FALSE} 
+              in \code{confint}.}
 }
 \details{
 
@@ -59,11 +60,14 @@ Chisqtest()
   \code{"free"} implements adjusted p values based on the joint
   normal or $t$ distribution of the linear function, and
   \code{"Shaffer"} and \code{"Westfall"} implement logically constraint 
-  multiplicity adjustments. In addition, all adjustment methods
+  multiplicity adjustments (Shaffer, 1986; Westfall, 1997). 
+  In addition, all adjustment methods
   implemented in \code{\link{p.adjust}} are available as well.
 
   Simultanous confidence intervals for linear functions can be computed
-  using method \code{\link{confint}}.
+  using method \code{\link{confint}}. Univariate confidence intervals
+  can be computed by specifying the additional argument \code{adjusted = FALSE}
+  to \code{confint}.
 
   All simultaneous inference procedures implemented here control
   the family-wise error rate (FWER). Multivariate
@@ -75,7 +79,7 @@ Chisqtest()
 \value{
 
   \code{summary} computes (adjusted) p values for general linear hypotheses,
-  \code{\link{confint}} computes adjusted confidence intervals. 
+  \code{\link{confint}} computes (adjusted) confidence intervals. 
   \code{\link{coef}} returns estimates of the linear function $K \beta$
   and \code{\link{vcov}} its covariance. 
 

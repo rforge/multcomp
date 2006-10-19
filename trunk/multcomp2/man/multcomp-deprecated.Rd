@@ -10,10 +10,10 @@
 \alias{simtest.formula}
 \alias{simtest.lm}
 \alias{csimtest}
-\title{ Deprecated Function multcomp Package }
+\title{ Deprecated Functions multcomp Package }
 \description{
   These functions are provided for compatibility with older versions of
-  \code{multcomp} only, and may be defunct as soon as the next release.
+  \code{multcomp} only, and may be defunct in the next release.
 }
 \usage{
 csimint(estpar, df, covm, cmatrix=NULL, ctype="user-defined",

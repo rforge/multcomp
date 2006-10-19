@@ -4,28 +4,31 @@
 \title{ Litter Weights Data Set }
 \usage{data("litter")}
 \description{
-  Dose response of litter weights in rats; data set taken from Westfall et al. (1999, p. 109). 
-  Specific dose comparisons in a dose response experiment with two covariates. 
+  Dose response of litter weights in rats.
 }
 \format{
   This data frame contains the following variables
   \describe{
-    \item{dose}{Dosages at 4 levels: \code{0}, \code{5}, \code{50}, 
+    \item{dose}{dosages at four levels: \code{0}, \code{5}, \code{50}, 
                 \code{500}.}
-    \item{gesttime}{Gestation time as covariate.}
-    \item{number}{Number of animals in litter as covariate.}
-    \item{weight}{Response variable: average post-birth weights 
+    \item{gesttime}{gestation time as covariate.}
+    \item{number}{number of animals in litter as covariate.}
+    \item{weight}{response variable: average post-birth weights 
                   in the entire litter.}
   }
 }
 \details{
-  See Westfall et al. (1999, p. 109)
+
+  Pregnant mice were divided into four groups and the compound in four
+  different doses was administered during pregnancy. Their litters
+  were evaluated for birth weights.
+
 }
 \source{
 
   P. H. Westfall, R. D. Tobias, D. Rom, R. D. Wolfinger, Y. Hochberg (1999).
   \emph{Multiple Comparisons and Multiple Tests Using the SAS System}.
-  Cary, NC: SAS Institute Inc.  
+  Cary, NC: SAS Institute Inc., page 109.
 
   P. H. Westfall (1997). Multiple Testing of General Contrasts Using
   Logical Constraints and Correlations. \emph{Journal of the American
@@ -33,8 +36,6 @@
 
 }
 \examples{
-
-  data("litter")
 
   ### fit ANCOVA model to data
   amod <- aov(weight ~ dose + gesttime + number, data = litter)

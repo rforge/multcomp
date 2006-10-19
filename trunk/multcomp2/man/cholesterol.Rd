@@ -4,36 +4,35 @@
 \title{ Cholesterol Reduction Data Set }
 \usage{data("cholesterol")}
 \description{
- Cholesterol reduction for five treatments; data set taken from 
- Westfall et al. (1999, p. 153). All pairwise comparisons according 
- to Tukey in a balanced one-way layout.
+ Cholesterol reduction for five treatments.
 }
 \format{
   This data frame contains the following variables
   \describe{
-    \item{trt}{Treatment at 5 levels, see below.}
-    \item{response}{Response variable.}
+    \item{trt}{treatment groups, a factor at levels \code{1time}, \code{2times},
+               \code{4times}, \code{drugD} and \code{drugE}.}
+    \item{response}{cholesterol reduction.}
   }
 }
 \details{
 
-  See Westfall et al. (1999, p. 153). The treatment formulations 
-  are defined as: 20mg once a day (\code{1time}), 10mg twice a day
-  (\code{2times}) and 5mg four times a day (\code{4times}). 
-  In addition, two competing drugs were used as control: (\code{drugD}) 
-  and (\code{drugE}).
+  A clinical study was conducted to assess the effect of three formulations
+  of the same drug on reducing cholesterol. The formulations were
+  20mg at once (\code{1time}), 10mg twice a day (\code{2times}), and 5mg
+  four times a day (\code{4times}). In addition, two competing drugs
+  were used as control group (\code{drugD} and \code{drugE}). The purpose of 
+  the study was to find which of the formulations, if any, is efficacious and how
+  these formulations compare with the existing drugs.
 
 }
 \source{
 
   P. H. Westfall, R. D. Tobias, D. Rom, R. D. Wolfinger, Y. Hochberg (1999).
   \emph{Multiple Comparisons and Multiple Tests Using the SAS System}.
-  Cary, NC: SAS Institute Inc.  
+  Cary, NC: SAS Institute Inc., page 153.
 
 }
 \examples{
-
-  data("cholesterol")
 
   ### adjusted p-values for all-pairwise comparisons in a one-way layout 
   ### set up ANOVA model  
@@ -57,6 +56,5 @@
   amod <- aov(response ~ trt - 1, data = cholesterol)
   summary(glht(amod, linfct = mcp(trt = Ksub[,5:1])), 
           test = adjusted("Westfall"))
-
 }
 \keyword{datasets}
