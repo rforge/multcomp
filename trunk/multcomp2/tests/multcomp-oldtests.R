@@ -22,7 +22,7 @@ assign("ptime", proc.time(), env = .CheckExEnv)
 postscript("multcomp-Examples.ps")
 assign("par.postscript", par(no.readonly = TRUE), env = .CheckExEnv)
 options(contrasts = c(unordered = "contr.treatment", ordered = "contr.poly"))
-library('multcomp2')
+library('multcomp')
 cleanEx(); ..nameEx <- "MultipleEndpoints"
 ###--- >>> `MultipleEndpoints' <<<----- Multiple Endpoints Data Set
 
@@ -85,7 +85,7 @@ x <- cbind(1,
                     rep(1, 10)), nrow = 50))
 y <- cholesterol$response
 
-xpxi   <- multcomp2:::MPinv(t(x) %*% x)$MPinv
+xpxi   <- multcomp:::MPinv(t(x) %*% x)$MPinv
 rankx  <- sum(diag((xpxi %*% (t(x) %*% x))))
 n      <- nrow(x)
 p      <- ncol(x)

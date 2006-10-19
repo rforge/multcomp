@@ -1,5 +1,5 @@
 
-library("multcomp2")
+library("multcomp")
 tol <- sqrt(.Machine$double.eps)
 set.seed(29081975)
 

@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 
 > invisible(options(echo = TRUE))
 > 
-> library("multcomp2")
+> library("multcomp")
 Loading required package: mvtnorm
 > 
 > set.seed(290875)

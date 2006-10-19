@@ -1,5 +1,5 @@
 
-library("multcomp2")
+library("multcomp")
 
 set.seed(290875)
 

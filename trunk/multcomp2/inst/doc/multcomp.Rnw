@@ -2,7 +2,7 @@
 \documentclass{article}
 
 %%\VignetteIndexEntry{Simultaneous Inference Procedures for General Linear Hypotheses}
-%%\VignetteDepends{multcomp2}
+%%\VignetteDepends{multcomp}
 
 \usepackage[utf-8]{inputenc}
 
@@ -42,7 +42,7 @@
 <<setup, echo = FALSE, results = hide>>=
 dig <- 4
 options(width = 65, digits = dig)
-library("multcomp2")
+library("multcomp")
 set.seed(290875)
 @
 
@@ -168,14 +168,14 @@ sapply(abs(z), function(x) 1 - pmvt(-rep(x, 2), rep(x, 2), corr = Cor, df = df.c
 Note that the $p$ value of the global test is the minimum $p$ value of the partial tests.
 
 The computations above can be performed much more conveniently using the functionality
-implemented in package \Rpackage{multcomp2}. The function \Rcmd{glht} just takes a fitted 
+implemented in package \Rpackage{multcomp}. The function \Rcmd{glht} just takes a fitted 
 model and a matrix defining the linear functions, and thus hypotheses,
 to be tested:
 <<lm-K, echo = FALSE>>=
 rownames(K) <- names(betahat)
 @
 <<lm-mcp, echo = TRUE>>=
-library("multcomp2")
+library("multcomp")
 cars.ht <- glht(lm.cars, linfct = K)
 summary(cars.ht)
 @
@@ -316,7 +316,7 @@ More generally, inference on linear functions of parameters which can be
 interpreted as `means' are known as \emph{multiple comparison procedures} 
 (MCP). For some of the more prominent special cases, the corresponding
 linear functions can be computed by convenience functions part
-of \Rpackage{multcomp2}. For example, Tukey all-pair comparisons
+of \Rpackage{multcomp}. For example, Tukey all-pair comparisons
 for the factor \Robject{x} can be set up using
 <<aov-Tukey>>=
 glht(aov.ex2, linfct = mcp(x = "Tukey"))
@@ -351,7 +351,7 @@ via its \Rcmd{test} argument:
 
 \section{Quality Assurance}
 
-The analyses shown in \cite{Westfall1999} can be reproduced using \Rpackage{multcomp2}
+The analyses shown in \cite{Westfall1999} can be reproduced using \Rpackage{multcomp}
 by running the \RR{} transcript file in \file{inst/MCMT}.
 
 \bibliographystyle{plainnat}

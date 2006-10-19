@@ -1,5 +1,5 @@
 
-library("multcomp2")
+library("multcomp")
 set.seed(290875)
 
 testdata <- data.frame(y = rnorm(21), 
@@ -26,7 +26,7 @@ glht(lmod, linfct = mcp(f1 = "Dunnett"))
 # with contrasts as expressions
 glht(lmod, linfct = mcp(f1 = c("B - A = 0", "C - A = 0")))
 
-tmp <- multcomp2:::chrlinfct2matrix(c(l1 = "x1 - x2 = 2", 
+tmp <- multcomp:::chrlinfct2matrix(c(l1 = "x1 - x2 = 2", 
                                       l2 = "x2 + 3 * x3 = 1"), 
                                       paste("x", 1:3, sep = ""))
 
