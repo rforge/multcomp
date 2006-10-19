@@ -34,6 +34,7 @@
 \newcommand{\Roperator}[1]{\texttt{#1}}
 \newcommand{\Rarg}[1]{\texttt{#1}}
 \newcommand{\Rlevel}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\hbox{\rm\texttt{#1}}}
 
 
 \begin{document}
@@ -348,7 +349,10 @@ via its \Rcmd{test} argument:
   all adjustment methods implemented in \Rcmd{p.adjust} can be specified as well.
 \end{itemize}
 
+\section{Quality Assurance}
 
+The analyses shown in \code{Westfall1999} can be reproduced using \Rpackage{multcomp2}
+by running the \RR{} transcript file in \file{inst/MCMT}.
 
 \bibliographystyle{plainnat}
 \bibliography{multcomp}
