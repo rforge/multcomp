@@ -64,7 +64,7 @@ Chisqtest()
   In addition, all adjustment methods
   implemented in \code{\link{p.adjust}} are available as well.
 
-  Simultanous confidence intervals for linear functions can be computed
+  Simultaneous confidence intervals for linear functions can be computed
   using method \code{\link{confint}}. Univariate confidence intervals
   can be computed by specifying the additional argument \code{adjusted = FALSE}
   to \code{confint}.

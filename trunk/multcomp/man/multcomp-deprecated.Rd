@@ -70,12 +70,12 @@ the normal approximation should be used.}
   \item{whichf}{if more than one factor is given in the right hand side of  
 \code{formula}, \code{whichf} can be used to defined the factor to compute
 contrasts of.}
-  \item{ttype}{Specifies whether the logical contraint method of Westfall (1997) will be used,   
-or whether the uncontrained method will be used.}
+  \item{ttype}{Specifies whether the logical constraint method of Westfall (1997) will be used,   
+or whether the unconstrained method will be used.}
  \item{estpar}{ estimated parameter vector. }
   \item{df}{ degrees of freedom. }
   \item{covm}{ estimated covariance matrix of \code{estpar}. }
-  \item{ctype}{ a string decribing the kind of contrast matrix used.}
+  \item{ctype}{ a string describing the kind of contrast matrix used.}
   \item{object}{ a fitted model.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }

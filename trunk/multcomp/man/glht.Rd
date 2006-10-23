@@ -103,9 +103,9 @@ mcp(...)
 
   \code{glht} extracts the number of degrees of freedom
   for models of class \code{lm} (via \code{\link{modelparm}}) and the
-  exact multivariate $t$ distrubtion is evaluated. For all other
+  exact multivariate $t$ distribution is evaluated. For all other
   models, results rely on the normal approximation. Alternatively, the 
-  degrees of freedom to be used for the evalutation of multivariate
+  degrees of freedom to be used for the evaluation of multivariate
   $t$ distributions can be given by the additional \code{df} argument to
   \code{\link{modelparm}} specified via \code{\dots}.
 
