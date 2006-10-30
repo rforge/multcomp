@@ -1,0 +1,551 @@
+
+PT J
+AU Liu, W
+   Jamshidian, M
+   Zhang, Y
+   Bretz, F
+   Han, XL
+TI Some new methods for the comparison of two linear regression models
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Article
+DE confidence bands; linear regression; multiple comparisons; simultaneous
+   inference; statistical simulation
+ID EXACT CONFIDENCE-BOUNDS
+AB The frequently used approach to the comparison of two linear regression
+   models is to use the partial F test. It is pointed out in this paper
+   that the partial F test has in fact a naturally associated two-sided
+   simultaneous confidence band, which is much more informative than the
+   test itself. But this confidence band is over the entire range of all
+   the covariates. As regression models are true or of interest often only
+   over a restricted region of the covariates, the part of this confidence
+   band outside this region is therefore useless and to ensure 1 - alpha
+   simultaneous coverage probability is therefore wasteful of resources.
+   It is proposed that a narrower and hence more efficient confidence band
+   over a restricted region of the covariates should be used. The critical
+   constant required in the construction of this confidence band can be
+   calculated by Monte Carlo simulation. While this two-sided confidence
+   band is suitable for two-sided comparisons of two linear regression
+   models, a more efficient one-sided confidence band can be constructed
+   in a similar way if one is only interested in assessing whether the
+   mean response of one regression model is higher (or lower) than that of
+   the other in the region. The methodologies are illustrated with two
+   examples. (c) 2005 Elsevier B.V. All rights reserved.
+C1 Calif State Univ Fullerton, Dept Maths, Fullerton, CA 92834 USA.
+   Univ Southampton, Stat Sci Res Inst, Southampton SO17 1BJ, Hants, England.
+   Univ Southampton, Sch Math, Southampton SO17 1BJ, Hants, England.
+   Univ Iowa, Dept Biostat, Iowa City, IA 52242 USA.
+   Univ Hannover, Res Unit Bioinformat, D-30419 Hannover, Germany.
+   Shanghai Univ Finance & Econ, Dept Stat, Shanghai, Peoples R China.
+RP Jamshidian, M, Calif State Univ Fullerton, Dept Maths, Fullerton, CA
+   92834 USA.
+EM mori@exchange.fullerton.edu
+NR 9
+TC 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD JAN 1
+PY 2007
+VL 137
+IS 1
+BP 57
+EP 67
+PG 11
+SC Statistics & Probability
+GA 092LT
+UT ISI:000241099000006
+ER
+
+PT J
+AU Tamhane, AC
+   Shi, K
+   Strassburger, K
+TI Power and sample size determination for a stepwise test procedure for
+   finding the maximum safe dose
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Article
+DE design of dose-response experiments; multiple testing; multivariate
+   normal distribution; toxicology
+AB This paper addresses the problem of power and sample size calculation
+   for a stepwise multiple test procedure (SD2PC) proposed in Tamhane et
+   al. [2001. Multiple test procedures for identifying the maximum safe
+   dose. J. Amer. Statist. Assoc. 96, 835-843] to identify the maximum
+   safe dose of a compound. A general expression for the power of this
+   procedure is derived. It is used to find the minimum overall power and
+   minimum power under the constraint that the dose response function is
+   bounded from below by a linear response function. It is shown that the
+   two minima are attained under step and linear response functions,
+   respectively. The sample sizes necessary on the zero dose control and
+   each of the positive doses to guarantee a specified power requirement
+   are calculated under these two least favorable configurations. A
+   technique involving a continuous approximation to the sample sizes is
+   used to reduce the number of quantities that need to be tabled, and to
+   derive the asymptotically optimal allocation of the total. sample size
+   between the zero dose and the positive doses. An example is given to
+   illustrate use of the tables. Extensions of the basic formulation are
+   noted. (c) 2005 Elsevier B.V. All rights reserved.
+C1 Northwestern Univ, Dept IE MS, Evanston, IL 60208 USA.
+   Northwestern Univ, Dept Stat, Evanston, IL 60208 USA.
+   German Diabet Ctr, Inst Biometr & Epidemiol, Dusseldorf, Germany.
+RP Tamhane, AC, Northwestern Univ, Dept IE MS, Evanston, IL 60208 USA.
+EM ajit@iems.northwestern.edu
+NR 7
+TC 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD JUL 1
+PY 2006
+VL 136
+IS 7
+BP 2163
+EP 2181
+PG 19
+SC Statistics & Probability
+GA 029LP
+UT ISI:000236564400013
+ER
+
+PT J
+AU Bortnick, SM
+   Dean, AM
+   Hsu, JC
+TI Efficiency of block designs for simultaneous comparison of two test
+   treatments with a control
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Article
+DE block design; simultaneous confidence intervals; Dunnett method;
+   multiple comparisons; treatment versus control; optimal design
+ID ALLOCATION; TABLES
+AB In an experiment for comparing two test treatments with a control
+   treatment, simultaneous confidence bounds for the amount by which each
+   test treatment differs from the control is generally required. When the
+   experiment is arranged as a block design, the optimal allocation of
+   experimental units within the blocks to the individual test treatments
+   and to the control needs to be determined. The optimality criterion of
+   interest is the minimization of the expected average allowance (EAA) or
+   the expected maximum allowance (EMA), where an allowance represents the
+   "plus and/or minus" attached to point estimates and is the product of a
+   standard error and the critical value. Lower bounds for the EAA and EMA
+   values are provided for both one-sided and two-sided confidence
+   intervals. A search algorithm for obtaining efficient designs is
+   described. (C) 2004 Elsevier B.V. All rights reserved.
+C1 Ohio State Univ, Dept Stat, Columbus, OH 43210 USA.
+   JP Morgan Chase, Columbus, OH 43240 USA.
+RP Bortnick, SM, Ohio State Univ, Dept Stat, Columbus, OH 43210 USA.
+EM dean.9@osu.edu
+NR 28
+TC 1
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD FEB 15
+PY 2005
+VL 129
+IS 1-2
+BP 109
+EP 124
+PG 16
+SC Statistics & Probability
+GA 886JE
+UT ISI:000226222300008
+ER
+
+PT J
+AU Tamhane, AC
+   Westfall, PH
+TI Special issue on multiple comparisons - Preface
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Editorial Material
+C1 Northwestern Univ, Dept IE MS, Evanston, IL 60208 USA.
+   Texas Tech Univ, Dept Informat Syst & Quantitat Sci, Lubbock, TX 79409 USA.
+RP Tamhane, AC, Northwestern Univ, Dept IE MS, 2006 Sheridan Rd, Evanston,
+   IL 60208 USA.
+EM ajit@iems.northwestern.edu
+   westfall@ba.ttu.edu
+NR 0
+TC 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD OCT 1
+PY 2004
+VL 125
+IS 1-2
+BP 1
+EP 1
+PG 1
+SC Statistics & Probability
+GA 847JH
+UT ISI:000223388000001
+ER
+
+PT J
+AU Pollard, KS
+   van der Laan, MJ
+TI Choice of a null distribution in resampling-based multiple testing
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Article
+DE multiple testing; strong control; type I error; permutation; bootstrap
+ID FALSE DISCOVERY RATE; TEST STATISTICS
+AB This paper investigates different choices of test statistic null
+   distribution for resampling-based multiple testing in the context of
+   single parameter hypotheses. We show that the test statistic null
+   distribution for strongly controlling type I error may be obtained by
+   projecting the true test statistic distribution onto the space of mean
+   zero distributions. For common choices of test statistics, this
+   distribution is asymptotically multivariate normal with the covariance
+   of the vector influence curve for the parameter estimator. Applying the
+   ordinary non-parametric or model-based bootstrap to mean zero centered
+   test statistics produces an estimated test statistic null distribution
+   which provides asymptotic strong control. In contrast, the usual
+   practice of obtaining an estimated test statistic null distribution via
+   an estimated data null distribution (e.g. null restricted bootstrap)
+   only provides an asymptotically correct test statistic null
+   distribution if the covariance of the vector influence curve is the
+   same under the chosen data null distribution as under the true data
+   distribution. This condition is the formal analogue of the subset
+   pivotality condition (Westfall and Young, Resampling-based Multiple
+   Testing: Examples and Methods for p-value adjustment, Wiley, New York,
+   1993). We demonstrate the use of our proposed ordinary bootstrap null
+   distribution with a single-step multiple testing method which is
+   equivalent to constructing an error-specific confidence region for the
+   true parameter and checking if it contains the hypothesized value. We
+   also study the two sample problem and show that the permutation method
+   produces an asymptotically correct null distribution if (i) the sample
+   sizes are equal or (ii) the populations have the same covariance
+   structure. (C) 2004 Elsevier B.V. All rights reserved.
+C1 Univ Calif Berkeley, Sch Publ Hlth, Div Biostat, Berkeley, CA 94720 USA.
+RP Pollard, KS, Univ Calif Berkeley, Sch Publ Hlth, Div Biostat, Earl
+   Warren Hall 7360, Berkeley, CA 94720 USA.
+NR 13
+TC 6
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD OCT 1
+PY 2004
+VL 125
+IS 1-2
+BP 85
+EP 100
+PG 16
+SC Statistics & Probability
+GA 847JH
+UT ISI:000223388000007
+ER
+
+PT J
+AU Lin, L
+   Lee, CIC
+   Peng, JN
+TI Max-min multiple comparison procedure for isotonic dose-response curves
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Article
+DE isotonic regression curve; simultaneous confidence intervals;
+   studentized range technique
+ID SUCCESSIVE COMPARISONS
+AB Suppose (Y) over bar (1), (Y) over bar (2),..., (Y) over bar (k) are
+   normal random variables with ordered means mu(1) less than or equal to
+   mu(2) less than or equal to ... less than or equal to mu(k). simple
+   novel procedure that modifies Tukey's studentized range technique is
+   proposed for constructing simultaneous confidence intervals for
+   pairwise comparisons of means pi by utilizing the ordering of pi. The
+   procedure makes substantial improvement over its predecessor. (C) 2002
+   Elsevier Science B.V. All rights reserved.
+C1 Mem Univ Newfoundland, Dept Math & Stat, St Johns, NF A1C 5S7, Canada.
+NR 12
+TC 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD SEP 1
+PY 2002
+VL 107
+IS 1-2
+BP 133
+EP 141
+PG 9
+SC Statistics & Probability
+GA 594QJ
+UT ISI:000178061800008
+ER
+
+PT J
+AU Kuriki, S
+   Shimodaira, H
+   Hayter, T
+TI On the isotonic range statistic for testing against an ordered
+   alternative
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Article
+DE analysis of variance; order restricted inference; isotonic estimates;
+   multiple comparisons; recursive integration; modified Williams
+   statistic; simultaneous inference; monotone contrasts
+ID INFERENCE; MODELS
+AB Consider the balanced one-way layout for comparing k treatment effects
+   mu(i), 1 less than or equal to i less than or equal to k. Marcus
+   (Biometrika 63 (1976) 177) considers a test procedure for testing the
+   null hypothesis H-0: mu(1) = mu(2) = (...) = mu(k) against the simple
+   ordered alternative H-A: mu(1) less than or equal to mu(2) less than or
+   equal to (...) less than or equal to mu(k) with at least one strict
+   inequality based upon the range (&mu;) over cap (k) - (&mu;) over cap
+   (1) of the isotonic estimates of the treatment effects. This test
+   statistic was originally proposed in Williams (Biometrics 27 (1971)
+   103) and is sometimes referred to as the modified Williams statistic.
+   It has many useful applications in biostatistical studies. In this
+   article, we present an algorithm for calculating the distribution
+   function of this isotonic range statistic for a general number of
+   treatments k using recursive integration techniques and we provide
+   tables of critical points for this test procedure. This allows the full
+   implementation of this test procedure. We also show how this procedure
+   can be used to construct a set of simultaneous confidence intervals for
+   a set of monotone contrasts of the treatment effects and compare it
+   with other multiple comparisons procedures. (C) 2001 Elsevier Science
+   B.V. All rights reserved.
+C1 Inst Stat Math, Minato Ku, Tokyo 1068569, Japan.
+   Georgia Inst Technol, Sch Ind & Syst Engn, Atlanta, GA 30332 USA.
+NR 17
+TC 2
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD JUL 1
+PY 2002
+VL 105
+IS 2
+BP 347
+EP 362
+PG 16
+SC Statistics & Probability
+GA 564ZA
+UT ISI:000176342400005
+ER
+
+PT J
+AU Chen, YI
+   Chi, YC
+TI Multiple comparisons between successive treatments for randomly
+   right-censored survival data
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Article
+DE Monte Carlo study; multiple comparisons; one-way layout; right-censored
+   data
+ID KAPLAN-MEIER STATISTICS
+AB In this paper we are concerned with the problem of comparing adjacent
+   ordered treatments in a one-way layout where survival data are subject
+   to random right censorship. Multiple testing procedures based on
+   two-sample statistics, each comparing an individual treatment with the
+   previous one, are proposed for determining the pattern of the treatment
+   effects. The two-sample statistics under consideration are weighted
+   logrank statistics (Fleming and Harrington, 1991, Counting Process and
+   Survival Analysis. Wiley, New York) and weighted Kaplan-Meier
+   statistics (Pepe and Fleming, 1989. Biometrics 45, 497-507; 1991. J.
+   Roy. Statist, Sec. B 53, 341-352). An illustrated numerical example is
+   reported. Finally, the comparative results of a Monte Carlo error rate
+   and power study for small sample sizes are presented. (C) 2000 Elsevier
+   Science B.V. All rights reserved. MSC: 62J15; 62N05.
+C1 Natl Cent Univ, Inst Stat, Chungli 32054, Taiwan.
+   Natl Cheng Kung Univ, Dept Stat, Tainan 70101, Taiwan.
+NR 16
+TC 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD JAN 1
+PY 2000
+VL 83
+IS 1
+BP 137
+EP 151
+PG 15
+SC Statistics & Probability
+GA 263WT
+UT ISI:000084148800010
+ER
+
+PT J
+AU Benjamini, Y
+   Hothorn, L
+   Sen, PK
+TI Special issue on multiple comparisons - Preface
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Editorial Material
+NR 0
+TC 3
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD DEC 1
+PY 1999
+VL 82
+IS 1-2
+BP 1
+EP 4
+PG 4
+SC Statistics & Probability
+GA 253WT
+UT ISI:000083580500001
+ER
+
+PT J
+AU Gut, A
+   Schwabe, R
+TI Some remarks on repeated significance tests for linear contrasts
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Article
+DE log-likelihood; marginal test statistic; multiple test; linear
+   contrast; pairwise comparison; stopping time; law of large numbers;
+   central limit theorem
+AB We review some results obtained in an earlier paper on the relation
+   between some standard multidimensional test statistics and their
+   corresponding one-dimensional versions in a sequential setup. One
+   conclusion is that, in general, no one-dimensional (marginal) null
+   hypothesis can be rejected even though the multidimensional null
+   hypothesis is. An alternative method based on a multiple maximum
+   modulus test is proposed with a somewhat better conclusion. The results
+   are extended to the case of general linear contrasts, in particular to
+   pairwise comparisons. (C) 1999 Elsevier Science B.V. All rights
+   reserved. MSC: primary: 62J15; 62L10; secondary: 60F05; 60F15; 60G40;
+   60G50.
+C1 Uppsala Univ, Dept Math, S-75106 Uppsala, Sweden.
+   Free Univ Berlin, Inst Math 1, D-14195 Berlin, Germany.
+NR 11
+TC 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD DEC 1
+PY 1999
+VL 82
+IS 1-2
+BP 25
+EP 34
+PG 10
+SC Statistics & Probability
+GA 253WT
+UT ISI:000083580500003
+ER
+
+PT J
+AU Tamhane, AC
+   Dunnett, CW
+TI Stepwise multiple test procedures with biometric applications
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Article
+DE multiple comparisons; stepwise test procedures; familywise error rate;
+   biometric applications
+ID PLACEBO CONTROLS; DRUG
+AB We provide an overview of the recent developments in normal theory
+   stepwise multiple test procedures for non-hierarchical families and
+   describe several biometric applications where these procedures are
+   useful. (C) 1999 Elsevier Science B.V. All rights reserved. MSC: 62J15;
+   62P10.
+C1 Northwestern Univ, Dept Stat, Evanston, IL 60208 USA.
+   McMaster Univ, Dept Math & Stat, Hamilton, ON L8S 4K1, Canada.
+NR 31
+TC 3
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD DEC 1
+PY 1999
+VL 82
+IS 1-2
+BP 55
+EP 68
+PG 14
+SC Statistics & Probability
+GA 253WT
+UT ISI:000083580500005
+ER
+
+PT J
+AU Koch, HF
+   Hothorn, LA
+TI Exact unconditional distributions for dichotomous data in many-to-one
+   comparisons
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+LA English
+DT Article
+DE many-to-one design; binary data; exact unconditional test; step-down
+   procedure
+ID 2 BINOMIAL PROPORTIONS; MULTIPLE COMPARISONS; TESTS
+AB The exact conditional distribution of a statistic for the many-to-one
+   design with dichotomous response variables was firstly given by
+   Williams (1988). His approach is expanded to other maximum statistics,
+   and their exact conditional distributions are compared. As an
+   alternative to the conditional approach, the exact unconditional
+   binomial distribution is presented for two maximum statistics. For
+   these distributions algorithms are described to compute the exact
+   unconditional p-values and critical values. As an application of the
+   exact unconditional distribution, a new simultaneous step-down
+   procedure is suggested. This procedure is based on the exact
+   unconditional distribution and is compared to the alpha-adjustment
+   procedure according to Bonferroni-Holm and Hommel when p-values result
+   from Fisher's exact test and Barnard's test. (C) 1999 Elsevier Science
+   B.V. All rights reserved. MSC: 62J15; 62E15.
+C1 Solvay Pharmaceut BV, Weesp, Netherlands.
+NR 22
+TC 5
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-3758
+J9 J STATIST PLAN INFER
+JI J. Stat. Plan. Infer.
+PD DEC 1
+PY 1999
+VL 82
+IS 1-2
+BP 83
+EP 99
+PG 17
+SC Statistics & Probability
+GA 253WT
+UT ISI:000083580500007
+ER
