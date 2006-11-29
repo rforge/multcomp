@@ -5,3 +5,4 @@
 
   o  is qmvt()$estim.prec the right error estimate?
 
+  o  allow to specify the quantile to confint
