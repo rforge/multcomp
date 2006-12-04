@@ -1,4 +1,9 @@
 
+		CHANGES in `multcomp' VERSION 0.991-4
+
+    o    Depends: stats
+
+
 		CHANGES in `multcomp' VERSION 0.991-3
 
     Implement feature requests by Rich Heiberger <rmh@temple.edu>:
