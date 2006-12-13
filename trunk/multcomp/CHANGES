@@ -11,6 +11,11 @@
          `mcp'). For the time being, we fire a warning and the user can 
          modify `linfct' manually.
 
+    o    add mcp(<name> = "Means"), contribution by Richard M. Heiberger
+         <rmh@temple.edu>
+
+    o    add Rich to DESCRIPTION file
+
 
 		CHANGES in `multcomp' VERSION 0.991-5
 

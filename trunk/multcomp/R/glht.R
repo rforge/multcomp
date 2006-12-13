@@ -86,3 +86,15 @@ glht.mcp <- function(model, linfct, ...) {
     ret$focus <- names(linfct)
     return(ret)
 }
+
+### call Rich' function for raw means ...
+glht.means <- function(model, linfct, ...) {
+
+    args <- list(model = model, 
+                 linfct = meanslinfct(model, focus = names(linfct), ...))
+    args <- c(args, list(...))
+    ret <- do.call("glht", args)
+    ret$type <- "Mean"
+    ret$focus <- names(linfct)
+    return(ret)
+}
