@@ -134,13 +134,22 @@ mcp2matrix <- function(model, linfct) {
             Kinter <- c()
             for (i in which(pos)[-1]) {
                 k <- sum(attr(mm, "assign") == i) / ncol(Kstar)
+                ivar <- rownames(factors)[factors[ ,i] == 1]
+                ivar <- ivar[ivar != nm]
+                classes <- sapply(mf[, ivar, drop = FALSE], is.factor)
+                if (all(classes)) {
+                    fact <- 1 / (k + 1)
+                } else {
+                    fact <- 1
+                    warning("covariate interactions found -- please choose appropriate contrast")
+                }
                 if (sum(factors[1:which(rownames(factors) == nm), i]) == 1) {
                     Kinter <- cbind(Kinter, 
-                        Kstar[,rep(1:ncol(Kstar), k), drop = FALSE] / (k + 1))
+                        Kstar[,rep(1:ncol(Kstar), k), drop = FALSE] * fact)
                 } else {
                     Kinter <- cbind(Kinter, 
                         Kstar[,rep(1:ncol(Kstar), rep(k, ncol(Kstar))), 
-                              drop = FALSE] / (k + 1))
+                              drop = FALSE] * fact)
                 }
             }
             Kstar <- cbind(Kstar, Kinter)

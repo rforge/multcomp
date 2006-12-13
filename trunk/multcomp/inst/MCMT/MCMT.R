@@ -125,11 +125,14 @@ load(system.file("MCMT/MCMT.rda", package = "multcomp"))
   amod <- aov(score ~ therapy * since + age, data = alz)
 
   gh <- glht(amod, linfct = mcp(therapy = "Tukey"))
-  gh$linfct[,8:11] <- gh$linfct[,8:11] * 20
-  gh$linfct[,"age"] <- mean(alz$age)
-  gh$linfct[,"since"] <- 10
 
-  confint(gh) ### -- FIXME
+  ### choose comparisons at since = 10
+  gh$linfct[,8:11] <- gh$linfct[,8:11] * 10
+  confint(gh)
+
+  ### choose comparisons at since = 20
+  gh$linfct[,8:11] <- gh$linfct[,8:11] * 2
+  confint(gh)
 
 
 ### litter data, page 109

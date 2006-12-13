@@ -13,6 +13,16 @@ glht.matrix <- function(model, linfct,
     if (!is.numeric(rhs))
         stop(sQuote("rhs"), " is not a numeric vector")
 
+    if (!all(mpar$estimable)) {
+        ignoreOK <- all(colSums(abs(linfct[, !mpar$estimable, 
+                                           drop = FALSE])) == 0)
+        if (!ignoreOK)
+            stop("some linear functions are not estimable")
+        linfct <- linfct[, mpar$estimable, drop = FALSE]
+        warning(sum(!mpar$estimable), " out of ", length(mpar$estimable), 
+                " coefficients not estimable in ", sQuote("model"))
+    }
+
     if (ncol(linfct) != length(mpar$coef))
         stop(sQuote("ncol(linfct)"), " is not equal to ", 
              sQuote("length(coef(model))"))

@@ -1,7 +1,7 @@
 Package: multcomp
 Title: Simultaneous Inference for General Linear Hypotheses
-Version: 0.991-5
-Date: $Date$
+Version: 0.991-6
+Date: $Date$ $Revision$
 Author: Torsten Hothorn, Frank Bretz and Peter Westfall
 Description: Simultaneous tests and confidence intervals
   for general linear hypotheses in parametric models, including 
