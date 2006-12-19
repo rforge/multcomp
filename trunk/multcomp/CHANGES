@@ -1,5 +1,5 @@
 
-		CHANGES in `multcomp' VERSION 0.991-6
+		CHANGES in `multcomp' VERSION 0.991-7
 
     o    try to deal with non-estimable coefficients in `model': if the
          correspondings columns of `linfct' are zero anyway, we silently
