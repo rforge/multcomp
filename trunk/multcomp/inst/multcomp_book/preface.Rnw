@@ -1,0 +1,14 @@
+
+\pagestyle{headings}
+\pagestyle{empty}
+\chapter*{Preface}
+This book is intended as ...
+
+\cite{PKG:multcomp}
+
+
+\begin{flushright}
+\textbf{Frank Bretz, Torsten Hothorn and Peter Westfall} \\
+Basel, Erlangen and Lubbock, 2007
+
+\end{flushright}

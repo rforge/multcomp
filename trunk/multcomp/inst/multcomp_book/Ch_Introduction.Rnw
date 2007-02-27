@@ -1,0 +1,215 @@
+
+\SweaveOpts{prefix.string=figures/HSAUR,eps=FALSE}
+<<setup, echo = FALSE, results = tex>>=
+source("../LaTeXBibTeX/setup.R")
+@
+
+\chapter{Introduction}
+\label{chap:intro}
+
+Many scientific experiments subject to rigorous statistical
+analyses involve the evaluation of more than one experimental
+question. Clinical trials, for example, may consider the
+comparison of more than two treatments or dose levels, the
+assessment of several endpoints, the measurement at several time
+points, the analysis of subgroups or any combination of these and
+related questions, while inference is to be done simultaneous
+across all existing experimental questions. Similar problems may
+arise in agricultural field experiments, such as the simultaneous
+comparison of irrigation systems, the dose response assessment of
+a fertilizer, time course experiments involving the growth of a
+particular culture, etc. Recently, highdimensional screening
+studies became widely available in molecular biology and its
+applications. Such screenings studies, as, for example, gene
+expression experiments, high throughput screenings in early drug
+development or the area of proteomics, have in common that a
+relatively small subset of significant variables (genes,
+compounds, proteins) are to be identified from a huge set of
+candidate variables. Thus, well designed experiments involving a
+multitude of questions to be investigated may be regarded as
+common in scientific research.
+
+In common hypotheses testing problems involving a single null
+hypothesis $H$ the statistical tests are chosen such that they
+control the type I error of incorrectly rejecting $H$ at a
+pre-specified level $\alpha$. If multiple hypotheses, $k$ say, are
+tested simultaneously and the final inferences should be valid
+across all experimental questions of interest, the probability of
+declaring non-existing effects significant increases in $k$.
+Assume, for example, that $k=2$ hypotheses $H_{1}$ and $H_{2}$ are
+tested each at level $\alpha =0.05$ using independent test
+statistics. For example, let $H_i, i=1, 2$, denote the null
+hypotheses that a drug does not show a beneficial effect over
+placebo for two primary outcome variables. Assume further that
+both $H_{1}$ and $H_{2}$ are true. Then the probability of
+retaining both hypotheses is $(1-\alpha)^2 = 0.9025$. The
+complementary probability of incorrectly rejecting at least one
+null hypothesis is $2\alpha-\alpha^2 = 0.0975$, which is
+substantially larger than the initial level of 5\%. For larger
+number $k$ of hypotheses this increase in probability is even more
+pronounced. In other words, if $k=20$ truly null hypotheses are
+tested, one false positive result is expected, i.e., one of the 20
+true null hypotheses is expected to be (incorrectly) rejected.
+Thus repeated testing can increase the likelihood of observing
+false positives results.
+
+The problem of multiplicity can be characterized in various ways.
+The practical concern of any scientific experiment is on the
+validity of the conclusions drawn from it, that is, whether the
+reported effects are replicable. Multiplicity can lead to the lack
+of replication in at least three ways: \textit{(i)} the condition
+under investigation (treatment, gene, ...) is in reality
+ineffective, despite being declared effective based on the
+experiment's results, \textit{(ii)} the condition has in reality
+an effect in the opposite direction than observed in the
+experiment, and \textit{(iii)} the true effect size is
+substantially smaller than it is in the experiment. Such failures
+to replicate can result from flawed experimental designs and
+various types of biases, and are commonly attributed to such
+problems, but multiplicity is as likely a culprit. Accordingly,
+multiplicity and selection effects can thus cause the following
+three types of problems.
+
+\textit{Errors of declaring effects when none exist.} The
+classical characterization is in terms of the `1 in 20'
+significance criterion: In 20 tests of hypotheses, all of which
+are (unbeknownst to the analyst) truly null, we expect to see one
+false positive result. Thus, repeated testing can increase the
+likelihood of false positives.
+
+\textit{Errors of declaring effects in the `wrong direction'.} One
+might not believe point-zero null hypotheses can truly exist, in
+which case the `1 in 20' explanation has little impact. Another
+point of view, similar to the testing point of view, is that it is
+likely that directions of the claims can be erroneous when
+multiple tests are used without multiplicity adjustment. For
+example, if a test of a two-sided hypothesis is done at the 0.05
+level, then there is (at most) a 0.025 probability that the test
+will be declared significant, but in the wrong direction. When
+multiple tests are performed, this probability accumulates, so
+that if 40 tests are performed, we may expect 1 directional error
+(in a worst case).
+
+\emph{Errors of declaring inflated effect sizes.} A third
+characterization of the multiplicity problem is in terms of
+selection effects. In this scenario, we need not postulate
+directional errors, in fact we may believe with a priori certainty
+that all effects are in their expected directions. Nevertheless,
+when a single, `most significant' comparison is isolated from this
+collection, one can only presume that the effect size is biased
+upward due to selection effects.
+
+While problems of lack of replication are often explained as
+resulting from poor designs and data collection procedures, it is
+as plausible that they result from selection effects related to
+the multiplicity problem. In many cases such effects can be
+subtle. Consider, for example, a clinical efficacy measure to be
+taken one month after administration of the drug. The efficacy can
+be determined \textit{(a)} using the raw measure, \textit{(b)}
+using the percentage change from baseline, \textit{(c)} using the
+actual change from baseline or \textit{(d)} using the baseline
+covariate-adjusted raw measure. If an aggressive strategy were to
+choose the `best' (and most significant) measure, then the
+reported effect size measure will clearly be inflated, because the
+maximal statistic capitalizes (unfairly) on random variations in
+the data. In such a case, it is not surprising that follow-up
+studies may produce less stellar results; this phenomenon is
+simply an example of regression to the mean.
+
+In all three characterizations above, there is a concern that the
+presentation of the scientific findings from an experiment may be
+exaggerated. In some areas (especially in health care environment)
+this problem is recognized by regulatory agencies and
+corresponding international guidelines have been issued to ensure
+a good statistical practice. In 1998, the International Conference
+on Harmonization has published a tripartite guideline for
+statistical principles in clinical trials (ICH, 1998), which also
+reflects concerns over the multiplicity problem:
+
+\textit{`When multiplicity is present, the usual frequentist
+approach to the analysis of clinical trial data may necessitate an
+adjustment to the Type I error. Multiplicity may arise, for
+example, from multiple primary variables, multiple comparisons
+of treatments, repeated evaluation over time, and/or interim
+analyses details of any adjustment procedure or an explanation
+of why adjustment is not thought to be necessary should be set out
+in the analysis plan.'}
+
+More recently, the European Agency for the Evaluation of Medicinal
+Products in its Comittee for Proprietary Medicinal Products (CPMP)
+draft `Points to Consider on Multiplicity Issues in Clinical
+Trials' (EMEA, 2002), states that
+
+\textit{`... multiplicity can have a substantial influence on the
+rate of false positive conclusions whenever there is an
+opportunity to choose the most favorable results from two or more
+analyses ...'}
+
+and later echoes the ICH recommendation for stating details of the
+multiple comparisons procedure in the analysis plan. While these
+documents allow that multiplicity adjustment might not be
+necessary, they also request justifications for such action. As a
+result, pharmaceutical companies have routinely begun to
+incorporate adequate multiple comparison procedures in their
+statistical analyses. But even if guidelines are not available or
+do not apply, control of multiplicity is to the experimenter's
+advantage for a better decision making and to safeguard against
+incorrect decisions.
+
+Given the need for a suitable multiplicity control, multiple
+comparison procedures aim at performing simultaneous inference
+while controlling an adequate error rate at a pre-specified level
+$\alpha$. As described in the later chapters, several error rates
+may be defined and used in the multiple testing environment, for
+each of which a plethora of procedures with particular advantages
+and disadvantages exists. It is the aim of this book to give an
+easy and quick introduction to multiple comparison procedures and
+their implementations in \R. The book is therefore to serve as an
+example-based, undergraduate textbook. It is not intended to
+include an in-depth coverage about multiple comparison procedures.
+It will also contain some glaring omissions, since some topics are
+yet not covered in \R, in particular the evaluation adaptive
+designs. For a detailed theoretical treatise of multiple
+comparison procedures we refer to HT, Hsu, and to DTB in
+connection with clinical trials.
+
+This book is addressed to statistics students and to scientists
+who need to use multiple comparisons procedures, including
+biometricians, clinicians, medical doctors, molecular
+biologistics, agricultural analysts, etc. It is primarily oriented
+towards those users (i) who have only little knowledge about
+multiple comparison procedures but who want to apply those
+techniques in \R, and (ii) who are already familiar with multiple
+comparison procedures but not with the \R{} software and its
+features.
+
+The book is organized as follows. Chapter~\ref{chap:theo} reviews
+important concepts in multiple hypothesis testing. Different error
+rates are described and standard terminology is introduced.
+Additionally, basic multiple comparison procedures are covered,
+which are repeatedly used in the subsequent chapters. These
+methods include closed test procedures and multiple comparison
+procedures relying on either the Bonferroni inequality or the
+Simes test. Chapter~\ref{chap:theo} is central for the
+understanding of the multiple comparisons procedures and their
+implementations in \R{} considered in the remaining chapters.
+Readers familiar to multiple comparisons procedures, however, may
+skip this chapter. Chapters~\ref{chap:1way} through \ref{chap:fdr}
+can mostly be read independently from each other. Readers in a
+hurry may thus turn their attention directly to the chapter(s) of
+interest. Chapter~\ref{chap:1way} applies the general theory
+described in Chapter~\ref{chap:theo} and introduces common
+multiple comparison procedures in one-factorial fixed-effects
+models. Topics include the Dunnett test, Tukey's all pairwise
+comparisons and general multiple contrast tests. A complete
+description of the related \Rpackage{multcomp} package is provided.
+Chapter~\ref{chap:glm} extends the methods of
+Chapter~\ref{chap:1way} to general linear models and presents a
+number of specific applications. Chapter~\ref{chap:wy} introduces
+resampling based multiple comparisons. The methods are illustrated
+by means of a gene expression data example using the related \Rpackage{multtest}
+package. Further multiple comparisons methods together with their
+respective implementations in \R{} are reviewed in
+Chapter~\ref{chap:misc}.
+
+Some acknowledgements ...
