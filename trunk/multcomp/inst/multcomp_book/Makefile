@@ -21,11 +21,10 @@ texs: $(tex)
 
 clean:
 	rm -f $(tex)
-	rm -f $(pdf)
 	rm -f *.pdf
 	rm -f *~
 
-texclean:
+texclean: clean
 	rm -rf *.csv
 	rm -rf *.rda
 	rm -rf *.out
@@ -35,4 +34,13 @@ texclean:
 	rm -rf *.bbl
 	rm -rf *.blg
 	rm -rf *.ind
-
+	rm -rf *.idx
+	rm -rf *.ilg
+	rm -rf *.lof
+	rm -rf *.lot
+	rm -rf *.toc
+	
+archive: texclean
+	rm multcomp_book.tgz
+	tar --exclude=*svn* -czvf multcomp_book.tgz ../multcomp_book ../LaTeXBibTeX
+	

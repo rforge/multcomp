@@ -116,7 +116,7 @@ $R>0$ and $Q=0$ otherwise. The \textit{false discovery rate}
 \begin{eqnarray*}
 FDR &=& E(Q) \\
 &=& E\left( \left. \frac{V}{R} \right| R > 0 \right) P(R
-> 0) + 0·P(R = 0) \\
+> 0) + 0 P(R = 0) \\
 &=&  E\left( \left. \frac{V}{R} \right| R > 0 \right) P(R > 0)
 \end{eqnarray*}
 is then the weighted expected proportion of false-positives among
@@ -226,7 +226,7 @@ gives the probability of rejecting all false null hypotheses. Note
 that the last two power concepts have also been referred to as
 minimal and maximal (or complete) power, respectively, but since
 $\pi^{dis} \geq \pi^{con}$ this terminology often leads to
-confusions´. When the family of tests consists of pairwise mean
+confusions. When the family of tests consists of pairwise mean
 comparisons, these quantities have been called per-pair power,
 any-pair power, and all-pairs power (Ramsey, 1978). In the spirit
 of the FDR, one could also define power as $E(S=R|R>0)P(R> 0)$. We
