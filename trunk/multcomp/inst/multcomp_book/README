@@ -1,0 +1,35 @@
+
+  		Multiple Comparisons in R
+
+	Frank Bretz, Torsten Hothorn and Peter Westfall
+
+
+  o  Generate PDF under UNIX (or with gnutools installed)
+
+	>$ make
+
+  o  Generate PDF under Windows:
+
+	R> source("compile.R")
+
+  o  General Rules
+
+     - put references in LaTeXBibTeX/references.in (NOT: references.bib)
+       and run `make' on it (requires HSAUR package)
+
+     - use macros defined in LaTeXBibTeX/bookhead.tex
+
+     - don't use any special characters, only plain LaTeX (files will be
+       UTF-8 encoded)
+
+  o  Markup
+
+     - sub- and superscripts in text, i.e. \pi^\text{ave}
+
+     - Names in formulae in text, i.e. \text{FWER} (maybe define a macro)
+
+     - cite references with \cite{label} or \citep{label} (and label is
+       defined in LaTeXBibTeX/references.bib)
+
+     - don't put colored text into document. Use \marginpar{comment}
+       to comment on something.
