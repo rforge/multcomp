@@ -1,6 +1,6 @@
 Package: multcomp
 Title: Simultaneous Inference for General Linear Hypotheses
-Version: 0.991-9
+Version: 0.992-1
 Date: $Date$
 Author: Torsten Hothorn, Frank Bretz and Peter Westfall with
   contributions by Richard M. Heiberger
