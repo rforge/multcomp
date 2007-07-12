@@ -10,4 +10,4 @@ Description: Simultaneous tests and confidence intervals
 Maintainer: Torsten Hothorn <Torsten.Hothorn@R-project.org>
 Depends: stats, graphics, mvtnorm (>= 0.7-5)
 LazyData: yes
-License: GPL
+License: GPL-2
