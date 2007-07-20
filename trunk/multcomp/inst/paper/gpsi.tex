@@ -1,0 +1,155 @@
+
+\documentclass{article}
+\input{header}
+
+\title{Generalized Parametric Simultaneous Inference}
+\author{Torsten Hothorn, Frank Bretz, Peter Westfall}
+
+\begin{document}
+
+\maketitle
+
+\section{Model and Estimation}
+
+Let $\M(\Z, \vartheta, \nu)$ denote a statistical model
+for observations $\Z = (\Z_1, \dots, \Z_n)$, fix 
+parameters of interest $\vartheta \in \R^p$ and other (random or nuisance)
+parameters $\nu$. We are provided with an estimate $\hat{\vartheta} \in \R^p$
+of the parameter vector $\vartheta$.
+
+The covariance matrix $\Sigma = \V(\hat{\vartheta}) \in \R^{p,p}$ is 
+either known or an estimate is available. The 
+corresponding correlation matrix $\Cor(\Sigma)$ is 
+computed from the covariance matrix.
+
+We assume that the distribution of the 
+standardized deviations of the estimates from the true 
+parameter vector
+\begin{eqnarray*}
+\frac{\hat{\vartheta} - \vartheta}{\sqrt{\diag(\Sigma)}}
+\end{eqnarray*}
+are as follows
+
+\paragraph{Exact Normal}: $\hat{\vartheta}$ is multivariate normal and $\Sigma$ is known:
+\begin{eqnarray*}
+\frac{\hat{\vartheta} - \vartheta}{\sqrt{\diag(\Sigma)}} \sim \N_p(0, \Cor(\Sigma))
+\end{eqnarray*}
+
+\paragraph{Exact $T$}: $\hat{\vartheta}$ is multivariate normal but $\Sigma$ was estimated
+at $\df$ degrees of freedom:
+\begin{eqnarray*}
+\frac{\hat{\vartheta} - \vartheta}{\sqrt{\diag(\Sigma)}} \sim 
+    \T_p(0, \Cor(\hat{\Sigma}), \df)
+\end{eqnarray*}
+
+\paragraph{Asymptotic Normal}: $\hat{\vartheta}$ tends to a multivariate normal in distribution
+and $\Sigma$ was estimated:
+\begin{eqnarray*}
+\frac{\hat{\vartheta} - \vartheta}{\sqrt{\diag(\Sigma)}} \rightarrow
+    \N_p(0, \Cor(\hat{\Sigma}))
+\end{eqnarray*}
+
+\section{Linear Functions}
+
+Consider some linear functions of the true parameter vector $\vartheta \in \R^p$
+described by a matrix $\K \in \R^{k,p}$, i.e., $\K \vartheta \in \R^k$.
+
+It now holds that
+
+\paragraph{Exact Normal}: $\K \hat{\vartheta}$ is multivariate normal (potentially singular)
+and $\Sigma$ is known:
+\begin{eqnarray*}
+\frac{\K \hat{\vartheta} - \K \vartheta}{\sqrt{\diag(\K \Sigma \K^\top)}} \sim \N_k(0, \Cor(\K \Sigma \K^\top))
+\end{eqnarray*}
+
+\paragraph{Exact $T$}: $\K \hat{\vartheta}$ is multivariate normal (potentially singular)
+but $\Sigma$ was estimated at $\df$ degrees of freedom:
+\begin{eqnarray*}
+\frac{\K \hat{\vartheta} - \K \vartheta}{\sqrt{\diag(\K \Sigma \K^\top)}} \sim 
+    \T_k(0, \Cor(\K \Sigma \K^\top), \df)
+\end{eqnarray*}
+
+\paragraph{Asymptotic Normal}: $\K \hat{\vartheta}$ tends
+to a multivariate normal (potentially singular) in distribution and $\Sigma$ was estimated:
+\begin{eqnarray*}
+\frac{\K \hat{\vartheta} - \K \vartheta}{\sqrt{\diag(\K \hat{\Sigma}) \K^\top}} \rightarrow
+    \N_k(0, \Cor(\K \Sigma \K^\top))
+\end{eqnarray*}
+
+Let $q_{1 - \alpha/2}$ denote the quantile of one of the $k$-variate normal or
+$t$ distributions. Clearly,
+\begin{eqnarray*}
+\K \hat{\vartheta} \pm q_{1 - \alpha/2} \sqrt{\diag(\K \hat{\Sigma} \K^\top)}
+\end{eqnarray*}
+is a (exact or approximate) $(1 - \alpha) \times 100\%$ simultaneous confidence set.
+
+\section{Multiple Tests}
+
+Consider $\delta \in \R^k$ with $\delta = \K \vartheta - \m$. Because
+of $\m = \K \vartheta - \delta$ it immediately
+follows that
+\paragraph{Exact Normal}
+\begin{eqnarray*}
+\frac{\K \hat{\vartheta} - \m}{\sqrt{\diag(\K \Sigma \K^\top)}} \sim \N_k(\delta, \Cor(\K \Sigma \K^\top))
+\end{eqnarray*}
+
+\paragraph{Exact $T$}
+\begin{eqnarray*}
+\frac{\K \hat{\vartheta} - \m}{\sqrt{\diag(\K \Sigma \K^\top)}} \sim 
+    \T_k(\delta, \Cor(\K \Sigma \K^\top), \df)
+\end{eqnarray*}
+
+\paragraph{Asymptotic Normal}
+\begin{eqnarray*}
+\frac{\K \hat{\vartheta} - \m}{\sqrt{\diag(\K \Sigma \K^\top}} \rightarrow
+    \N_k(\delta, \Cor(\K \Sigma \K^\top))
+\end{eqnarray*}
+
+These distributions can be used to construct test procedures and power 
+functions for the test problem
+\begin{eqnarray*}
+H_0: \delta = 0 \text{ vs. } H_1: \delta \neq 0. \\
+H_0^j: \delta_j = 0 \text{ vs. } H_1^j: \delta_j \neq 0 \quad j = 1, \dots, k
+\end{eqnarray*}
+
+\subsection{Global Inference}
+\begin{eqnarray*}
+\chi & = & (\K \hat{\vartheta} - \m)^\top (\K \Sigma \K^\top)^+ (\K \hat{\vartheta} - \m) \\
+F & = & \frac{\chi}{\Rg(\K \Sigma \K^\top)}
+\end{eqnarray*}
+where $\chi \sim \chi^2_{\delta, \Rg(\K \Sigma \K^\top)}$ (exact or asymptotically)
+and $F \sim \F_{\delta, \text{df}, \Rg(\K \Sigma \K^\top)}$.
+
+\subsection{Simultaneous Inference}
+
+\begin{eqnarray*}
+T = \frac{|\K \hat{\vartheta} - \m|}{\sqrt{\diag(\K \Sigma \K^\top)}} \in \R^k
+\end{eqnarray*}
+with test statistic $T_j$ for $H_0^j (j = 1, \dots, k)$ and $\max(T)$ for $H_0$.
+
+\section{Applications}
+
+\subsection{One-way ANOVA}
+
+One-way ANOVA for three groups:
+$Y_{ij} = \mu + \alpha_{j} + \varepsilon_{ij}, j = 1, 2, 3$,
+with $\vartheta = (\mu, \alpha_2 - \alpha_1, \alpha_3 - \alpha_1)$.
+
+Dunnett: 
+\begin{eqnarray*}
+\K = (0, \diag(2))
+\end{eqnarray*}
+and $\K \vartheta = (\alpha_2 - \alpha_1, \alpha_3 - \alpha_1)$.
+
+\subsection{GLM}
+
+\subsection{(N)LME}
+
+\subsection{Cox, Weibull, ...}
+
+\subsection{Robust}
+
+Use sandwich estimator and asymptotic normal.
+
+\end{document}
+
