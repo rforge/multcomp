@@ -1,4 +1,9 @@
 
+		CHANGES in `multcomp' VERSION 0.992-6
+
+    o    add support for lme4::(g)lmer2 objects (thanks to Manuel Eugster)
+
+
 		CHANGES in `multcomp' VERSION 0.992-5
 
     o    remove non_function entries in Rd files
