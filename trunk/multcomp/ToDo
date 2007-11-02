@@ -7,6 +7,7 @@
 
   o  restructure objects for `test' and `calpha' arguments
 
+  o  Ftest and Chisqtest need <object>$df.residual which is not portable...
 
 #####################################################
 
