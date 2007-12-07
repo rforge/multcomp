@@ -1,8 +1,9 @@
 
-\documentclass{article}
+\documentclass[12pt]{article}
+\usepackage{a4wide}
 \input{header}
 
-\title{Generalized Parametric Simultaneous Inference}
+\title{Generalized Simultaneous Inference \\ in Parametric Models}
 \author{Torsten Hothorn, Frank Bretz, Peter Westfall}
 
 \begin{document}
@@ -11,121 +12,134 @@
 
 \section{Model and Estimation}
 
-Let $\M(\Z, \vartheta, \nu)$ denote a statistical model
-for observations $\Z = (\Z_1, \dots, \Z_n)$, fix 
-parameters of interest $\vartheta \in \R^p$ and other (random or nuisance)
-parameters $\nu$. We are provided with an estimate $\hat{\vartheta} \in \R^p$
-of the parameter vector $\vartheta$.
+Let $\M(\Z_n, \vartheta, \eta)$ denote a (semi-)parametric statistical model
+for observations $\Z_n = (\Z_1, \dots, \Z_n)$ with fixed
+but unknown parameters of interest $\vartheta \in \R^p$ 
+and other (random or nuisance) parameters $\eta$. We are provided 
+with an estimate $\hat{\vartheta} \in \R^p$ of the parameter 
+vector $\vartheta$ and are interested in a linear
+function $f_{\K, \m}(\vartheta) = \K \vartheta - \m$
+of the parameters defined by finite constants $\K \in \R^{k, p}$
+and $\m \in \R^k$.
 
-The covariance matrix $\Sigma = \V(\hat{\vartheta}) \in \R^{p,p}$ is 
-either known or an estimate is available. The 
-corresponding correlation matrix $\Cor(\Sigma)$ is 
-computed from the covariance matrix.
+\paragraph{Model assumptions.}
 
-We assume that the distribution of the 
-standardized deviations of the estimates from the true 
-parameter vector
+We assume that the parameter estimates $\hat{\vartheta}$ converge in law
+to a $p$-dimensional multivariate normal distribution:
+\begin{eqnarray} \label{normality}
+\hat{\vartheta} \cL \N_p(\vartheta, \Sigma)
+\end{eqnarray}
+with constant and finite covariance matrix $\Sigma \in \R^{p,p}$.
+Since the covariance matrix is usually unknown, we assume 
+that we are given a consistent estimate $\hat{\Sigma} \cP \Sigma$.
+
+\paragraph{Limiting distribution of $f_{\K,\m}(\hat{\vartheta})$.}
+
+The linear function $f_{\K, \m}$ is continuous and differentiable in
+$\vartheta$ with Jacobian $\K$ and thus, by Cram{\'e}r's Theorem, 
+the linear function $f$ of the parameter estimates
+converges in law to a (possibly singular) $k$-dimensional normal distribution:
+\begin{eqnarray} \label{dist_f}
+f_{\K, \m}(\hat{\vartheta}) = \K \hat{\vartheta} - \m 
+\cL \N_k(\K \vartheta - \m, \K \Sigma \K^\top).
+\end{eqnarray}
+Furthermore, it follows from the same theorem that we can 
+consistently estimate the unknown covariance matrix $\K \Sigma \K^\top$ utilizing
+the consistent estimate $\hat{\Sigma}$ of the covariance matrix:
 \begin{eqnarray*}
-\frac{\hat{\vartheta} - \vartheta}{\sqrt{\diag(\Sigma)}}
-\end{eqnarray*}
-are as follows
-
-\paragraph{Exact Normal}: $\hat{\vartheta}$ is multivariate normal and $\Sigma$ is known:
-\begin{eqnarray*}
-\frac{\hat{\vartheta} - \vartheta}{\sqrt{\diag(\Sigma)}} \sim \N_p(0, \Cor(\Sigma))
-\end{eqnarray*}
-
-\paragraph{Exact $T$}: $\hat{\vartheta}$ is multivariate normal but $\Sigma$ was estimated
-at $\df$ degrees of freedom:
-\begin{eqnarray*}
-\frac{\hat{\vartheta} - \vartheta}{\sqrt{\diag(\Sigma)}} \sim 
-    \T_p(0, \Cor(\hat{\Sigma}), \df)
-\end{eqnarray*}
-
-\paragraph{Asymptotic Normal}: $\hat{\vartheta}$ tends to a multivariate normal in distribution
-and $\Sigma$ was estimated:
-\begin{eqnarray*}
-\frac{\hat{\vartheta} - \vartheta}{\sqrt{\diag(\Sigma)}} \rightarrow
-    \N_p(0, \Cor(\hat{\Sigma}))
-\end{eqnarray*}
-
-\section{Linear Functions}
-
-Consider some linear functions of the true parameter vector $\vartheta \in \R^p$
-described by a matrix $\K \in \R^{k,p}$, i.e., $\K \vartheta \in \R^k$.
-
-It now holds that
-
-\paragraph{Exact Normal}: $\K \hat{\vartheta}$ is multivariate normal (potentially singular)
-and $\Sigma$ is known:
-\begin{eqnarray*}
-\frac{\K \hat{\vartheta} - \K \vartheta}{\sqrt{\diag(\K \Sigma \K^\top)}} \sim \N_k(0, \Cor(\K \Sigma \K^\top))
+\hat{\S} := \K \hat{\Sigma} \K^\top \cP \K \Sigma \K^\top =: \S.
 \end{eqnarray*}
 
-\paragraph{Exact $T$}: $\K \hat{\vartheta}$ is multivariate normal (potentially singular)
-but $\Sigma$ was estimated at $\df$ degrees of freedom:
+\paragraph{Test statistic and limiting distribution}
+
+Let $\T := \hat{\D} (\K \hat{\vartheta} - \m) \in \R^k$ denote
+the $k$-dimensional test statistic where $\hat{\D}$ is the diagonal
+matrix of standard deviations
 \begin{eqnarray*}
-\frac{\K \hat{\vartheta} - \K \vartheta}{\sqrt{\diag(\K \Sigma \K^\top)}} \sim 
-    \T_k(0, \Cor(\K \Sigma \K^\top), \df)
+\hat{\D} := \text{diag}\left(\text{diag}(\hat{S})^{-1/2}\right) \cP 
+\text{diag}\left(\text{diag}(S)^{-1/2}\right) =: \D \in \R^{k,k}
+\end{eqnarray*}
+In order to show that also $\T$ converges in law to a $k$-dimensional multivariate
+normal distribution
+\begin{eqnarray*}
+\T \cL \N_k(\D(\K \vartheta - \m), \D \S \D^\top)
+\end{eqnarray*}
+we utilize the Cram{\'e}r-Wold device and show that for some $\u \in \R^k$ 
+the linear function $\u^\top \T$ is univariate normal. Consider
+\begin{eqnarray*}
+\u^\top \T & = & \u^\top \hat{\D} (\K \hat{\vartheta} - \m) \\
+& = & \left(u_1 \hat{\S}_{11}^{-1/2}, \dots, u_k \hat{\S}_{kk}^{-1/2}\right)^\top(\K \hat{\vartheta} - \m).
+\end{eqnarray*}
+Since $\hat{\S}$ is a consistent estimate of $\S$ it 
+is clear that $u_j \hat{\S}_{jj}^{-1/2} \cP u_j \S_{jj}^{-1/2}$.
+Together with (\ref{dist_f}) we can apply Slutsky's theorem to show that
+\begin{eqnarray*}
+u_j \hat{S}_{jj}^{-1/2} (\K \hat{\vartheta} - \m)_j & \cL &  
+\N_1(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2 \S_{jj}^{-1} \S_{jj}) \\
+& = & \N_1(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2)
+\end{eqnarray*}
+Because the above holds for every $\u \in \R^k$, the asymptotic multivariate
+normaliy of $\T$ follows from the Cram{\'e}r-Wold device. In summary,
+the vector of test statistics $\T$ converges in law to a multivariate
+normal distribution with correlation matrix $\Cor := \D \S \D^\top \in \R^{k,k}$.
+
+\section{Simultaneous Inference}
+
+Under the hypothesis
+\begin{eqnarray*}
+H_0: \K \vartheta = \m
+\end{eqnarray*}
+$\T \cL \N_k(0, \Cor)$ holds true. At this point it is worth
+considering two special cases. A stronger assumption than asymptotic normality
+of $\hat{\vartheta}$ (\ref{normality}) is exact normality:
+$\hat{\vartheta} \sim \N_p(\vartheta, \Sigma)$. Under the unrealistic
+further assumption of the covariance matrix being known, it
+is easy to show that $\T \sim \N_k(0, \Cor)$. 
+When $\Sigma$ is unknown (the typical situtation of linear models
+with normal iid errors and constant variance), the
+exact distribution of $\T$ is a $k$-dimensional multivariate $\mathcal{T}$
+distribution with $df$ degrees of freedom (df $ = n - p - 1$ for linear models).
+
+Now, the distribution function of $\T$ can be calculated or approximated
+by evaluating the $k$-dimensional exact or limiting distributions:
+\begin{eqnarray*}
+& & \Prob(\max(\T) \le t)  \approx \int\limits_{-\infty}^t \cdots \int\limits_{-\infty}^t 
+\varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k \quad \text{("less")}\\
+& & \Prob(\max(|\T|) \le t)  \approx  \int\limits_{-t}^t \cdots \int\limits_{t}^t 
+\varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k \quad \text{("two sided")}\\
+& & \Prob(\min(\T) \ge t) \approx  \int\limits_{t}^\infty \cdots \int\limits_{t}^\infty 
+\varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k \quad \text{("greater")}\\
+\end{eqnarray*}
+where $\varphi_k$ is either the density function of the limiting multivariate
+normal (df $ = 1$) or exact multivariate $\mathcal{T}$-distribution (df $ > 1$).
+Since $\Cor$ is usually unknown, we plug-in an consistent estimate
+$\hat{\Cor} := \hat{\D} \hat{\S} \hat{\D}^\top$.
+
+\paragraph{Simultaneous Tests.}
+
+An adjusted $p$-value for the $j$th partial hypothesis 
+\begin{eqnarray*}
+H_0^j: (\K \vartheta)_j = \m_j
+\end{eqnarray*}
+is given by $1 - \Prob(\max(|\T|) \le |t_j|)$ when the test statistic 
+$\t  = (t_1, \dots, t_k)$
+has been observed. The global $p$-value for $H_0$ is $1 - \Prob(\max(|\T|) \le \max|t_j|)$.
+Alternatively, a quadratic form based on the Moore-Penrose inverse $\hat{\S}^+$ of 
+$\hat{\S}$ or the usual $F$-test (assuming exact normality of $\hat{\vartheta}$) 
+can be utilized to construct a global test:
+\begin{eqnarray*}
+X^2 & = & (\K \hat{\vartheta} - \m)^\top \hat{\S}^+ (\K \hat{\vartheta} - \m) \cL \chi^2_{\Rg(\hat{\S})} \\
+F & = &  \frac{X^2}{\Rg(\hat{\S})} \sim \F_{\text{df}, \Rg(\hat{\S})}
 \end{eqnarray*}
 
-\paragraph{Asymptotic Normal}: $\K \hat{\vartheta}$ tends
-to a multivariate normal (potentially singular) in distribution and $\Sigma$ was estimated:
-\begin{eqnarray*}
-\frac{\K \hat{\vartheta} - \K \vartheta}{\sqrt{\diag(\K \hat{\Sigma}) \K^\top}} \rightarrow
-    \N_k(0, \Cor(\K \Sigma \K^\top))
-\end{eqnarray*}
+\paragraph{Simultaneous confidence sets.}
 
-Let $q_{1 - \alpha/2}$ denote the quantile of one of the $k$-variate normal or
-$t$ distributions. Clearly,
-\begin{eqnarray*}
-\K \hat{\vartheta} \pm q_{1 - \alpha/2} \sqrt{\diag(\K \hat{\Sigma} \K^\top)}
-\end{eqnarray*}
-is a (exact or approximate) $(1 - \alpha) \times 100\%$ simultaneous confidence set.
-
-\section{Multiple Tests}
-
-Consider $\delta \in \R^k$ with $\delta = \K \vartheta - \m$. Because
-of $\m = \K \vartheta - \delta$ it immediately
-follows that
-\paragraph{Exact Normal}
-\begin{eqnarray*}
-\frac{\K \hat{\vartheta} - \m}{\sqrt{\diag(\K \Sigma \K^\top)}} \sim \N_k(\delta, \Cor(\K \Sigma \K^\top))
-\end{eqnarray*}
-
-\paragraph{Exact $T$}
-\begin{eqnarray*}
-\frac{\K \hat{\vartheta} - \m}{\sqrt{\diag(\K \Sigma \K^\top)}} \sim 
-    \T_k(\delta, \Cor(\K \Sigma \K^\top), \df)
-\end{eqnarray*}
-
-\paragraph{Asymptotic Normal}
-\begin{eqnarray*}
-\frac{\K \hat{\vartheta} - \m}{\sqrt{\diag(\K \Sigma \K^\top}} \rightarrow
-    \N_k(\delta, \Cor(\K \Sigma \K^\top))
-\end{eqnarray*}
-
-These distributions can be used to construct test procedures and power 
-functions for the test problem
-\begin{eqnarray*}
-H_0: \delta = 0 \text{ vs. } H_1: \delta \neq 0. \\
-H_0^j: \delta_j = 0 \text{ vs. } H_1^j: \delta_j \neq 0 \quad j = 1, \dots, k
-\end{eqnarray*}
-
-\subsection{Global Inference}
-\begin{eqnarray*}
-\chi & = & (\K \hat{\vartheta} - \m)^\top (\K \Sigma \K^\top)^+ (\K \hat{\vartheta} - \m) \\
-F & = & \frac{\chi}{\Rg(\K \Sigma \K^\top)}
-\end{eqnarray*}
-where $\chi \sim \chi^2_{\delta, \Rg(\K \Sigma \K^\top)}$ (exact or asymptotically)
-and $F \sim \F_{\delta, \text{df}, \Rg(\K \Sigma \K^\top)}$.
-
-\subsection{Simultaneous Inference}
-
-\begin{eqnarray*}
-T = \frac{|\K \hat{\vartheta} - \m|}{\sqrt{\diag(\K \Sigma \K^\top)}} \in \R^k
-\end{eqnarray*}
-with test statistic $T_j$ for $H_0^j (j = 1, \dots, k)$ and $\max(T)$ for $H_0$.
+A simultaneous $(1 - 2\alpha) \times 100\%$ 
+confidence set for $\K \vartheta$ is given by 
+$\K \hat{\vartheta} \pm q_\alpha \text{diag}(\hat{\S})^{-1/2}$
+where $q_\alpha$ is the $1 - \alpha$ 
+quantile of the distribution of $\T$ 
+such that $\Prob(\max{\T} \le q_\alpha) \ge 1 - \alpha$.
 
 \section{Applications}
 
