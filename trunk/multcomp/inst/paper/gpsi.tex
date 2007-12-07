@@ -12,8 +12,9 @@
 
 \section{Model and Estimation}
 
-Let $\M(\Z_n, \vartheta, \eta)$ denote a (semi-)parametric statistical model
-for observations $\Z_n = (\Z_1, \dots, \Z_n)$ with fixed
+Let $\M(\Z_n, \vartheta, \eta)$ denote a (semi-)parametric statistical model.
+The vector of $n$ observations is denoted by $\Z_n = (\Z_1, \dots, \Z_n)$. 
+The model is equipped with fixed
 but unknown parameters of interest $\vartheta \in \R^p$ 
 and other (random or nuisance) parameters $\eta$. We are provided 
 with an estimate $\hat{\vartheta} \in \R^p$ of the parameter 
@@ -27,7 +28,7 @@ and $\m \in \R^k$.
 We assume that the parameter estimates $\hat{\vartheta}$ converge in law
 to a $p$-dimensional multivariate normal distribution:
 \begin{eqnarray} \label{normality}
-\hat{\vartheta} \cL \N_p(\vartheta, \Sigma)
+\hat{\vartheta} \cL \N_p\left(\vartheta, \Sigma\right)
 \end{eqnarray}
 with constant and finite covariance matrix $\Sigma \in \R^{p,p}$.
 Since the covariance matrix is usually unknown, we assume 
@@ -41,7 +42,7 @@ the linear function $f$ of the parameter estimates
 converges in law to a (possibly singular) $k$-dimensional normal distribution:
 \begin{eqnarray} \label{dist_f}
 f_{\K, \m}(\hat{\vartheta}) = \K \hat{\vartheta} - \m 
-\cL \N_k(\K \vartheta - \m, \K \Sigma \K^\top).
+\cL \N_k\left(\K \vartheta - \m, \K \Sigma \K^\top\right).
 \end{eqnarray}
 Furthermore, it follows from the same theorem that we can 
 consistently estimate the unknown covariance matrix $\K \Sigma \K^\top$ utilizing
@@ -62,7 +63,7 @@ matrix of standard deviations
 In order to show that also $\T$ converges in law to a $k$-dimensional multivariate
 normal distribution
 \begin{eqnarray*}
-\T \cL \N_k(\D(\K \vartheta - \m), \D \S \D^\top)
+\T \cL \N_k\left(\D(\K \vartheta - \m), \D \S \D^\top\right)
 \end{eqnarray*}
 we utilize the Cram{\'e}r-Wold device and show that for some $\u \in \R^k$ 
 the linear function $\u^\top \T$ is univariate normal. Consider
@@ -75,8 +76,8 @@ is clear that $u_j \hat{\S}_{jj}^{-1/2} \cP u_j \S_{jj}^{-1/2}$.
 Together with (\ref{dist_f}) we can apply Slutsky's theorem to show that
 \begin{eqnarray*}
 u_j \hat{S}_{jj}^{-1/2} (\K \hat{\vartheta} - \m)_j & \cL &  
-\N_1(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2 \S_{jj}^{-1} \S_{jj}) \\
-& = & \N_1(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2)
+\N_1\left(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2 \S_{jj}^{-1} \S_{jj}\right) \\
+& = & \N_1\left(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2\right)
 \end{eqnarray*}
 Because the above holds for every $\u \in \R^k$, the asymptotic multivariate
 normaliy of $\T$ follows from the Cram{\'e}r-Wold device. In summary,
