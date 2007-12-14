@@ -6,9 +6,12 @@
 library("multcomp")
 library("survival")
 library("sandwich")
+library("lme4")
 data("alpha", package = "coin")
 data("bodyfat", package = "mboost")
 data("alzheimer", package = "coin")
+###data("trees513", package = "multcomp")
+load("../../data/trees513.rda")
 if (!file.exists("AML_Bullinger.rda"))
     load(url("http://www.imbe.med.uni-erlangen.de/~hothorn/AML_Bullinger.rda", open = "r"))
 risk <- rep(0, nrow(clinical))
@@ -183,4 +186,20 @@ and `high': all other forms).
 bmod <- survreg(Surv(time, event) ~ Sex*(Age + WBC + LDH + risk), data = clinical)
 summary(glht(bmod, linfct = mcp(risk = "Tukey")))
 summary(glht(bmod, linfct = mcp(risk = "Tukey")), vcov = sandwich)
+@
+
+\paragraph{Game damage}
+
+<<trees, echo = TRUE>>=
+trees513 <- subset(trees513, !species %in% c("Tanne", "sonst. Nadelh."))
+trees513$species <- trees513$species[,drop = TRUE]
+pmod <- lmer(damage ~ species - 1 + (1 | lattice + plot), data = trees513,
+                 family = binomial())
+fe <- fixef(pmod)
+K <- diag(length(fe))
+colnames(K) <- rownames(K) <- names(fe)
+K <- K[grep("species", names(fe)),]
+myglht <- glht(pmod, K)
+linv <- binomial()$linkinv
+print(1 - linv(confint(myglht)$confint))
 @
