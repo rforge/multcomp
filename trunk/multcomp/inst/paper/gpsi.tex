@@ -65,10 +65,10 @@ normal distribution
 \begin{eqnarray*}
 \T \cL \N_k\left(\D(\K \vartheta - \m), \D \S \D^\top\right)
 \end{eqnarray*}
-we utilize the Cram{\'e}r-Wold device and show that for some $\u \in \R^k$ 
-the linear function $\u^\top \T$ is univariate normal. Consider
+we utilize the Cram{\'e}r-Wold device and show that for some $\uu \in \R^k$ 
+the linear function $\uu^\top \T$ is univariate normal. Consider
 \begin{eqnarray*}
-\u^\top \T & = & \u^\top \hat{\D} (\K \hat{\vartheta} - \m) \\
+\uu^\top \T & = & \uu^\top \hat{\D} (\K \hat{\vartheta} - \m) \\
 & = & \left(u_1 \hat{\S}_{11}^{-1/2}, \dots, u_k \hat{\S}_{kk}^{-1/2}\right)^\top(\K \hat{\vartheta} - \m).
 \end{eqnarray*}
 Since $\hat{\S}$ is a consistent estimate of $\S$ it 
@@ -79,7 +79,7 @@ u_j \hat{S}_{jj}^{-1/2} (\K \hat{\vartheta} - \m)_j & \cL &
 \N_1\left(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2 \S_{jj}^{-1} \S_{jj}\right) \\
 & = & \N_1\left(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2\right)
 \end{eqnarray*}
-Because the above holds for every $\u \in \R^k$, the asymptotic multivariate
+Because the above holds for every $\uu \in \R^k$, the asymptotic multivariate
 normaliy of $\T$ follows from the Cram{\'e}r-Wold device. In summary,
 the vector of test statistics $\T$ converges in law to a multivariate
 normal distribution with correlation matrix $\Cor := \D \S \D^\top \in \R^{k,k}$.
@@ -123,7 +123,7 @@ An adjusted $p$-value for the $j$th partial hypothesis
 H_0^j: (\K \vartheta)_j = \m_j
 \end{eqnarray*}
 is given by $1 - \Prob(\max(|\T|) \le |t_j|)$ when the test statistic 
-$\t  = (t_1, \dots, t_k)$
+$\tt  = (t_1, \dots, t_k)$
 has been observed. The global $p$-value for $H_0$ is $1 - \Prob(\max(|\T|) \le \max|t_j|)$.
 Alternatively, a quadratic form based on the Moore-Penrose inverse $\hat{\S}^+$ of 
 $\hat{\S}$ or the usual $F$-test (assuming exact normality of $\hat{\vartheta}$) 
@@ -165,6 +165,12 @@ and $\K \vartheta = (\alpha_2 - \alpha_1, \alpha_3 - \alpha_1)$.
 \subsection{Robust}
 
 Use sandwich estimator and asymptotic normal.
+
+\input{illustrations}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
 
 \end{document}
 

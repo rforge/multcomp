@@ -1,0 +1,186 @@
+
+\SweaveOpts{engine=R, eps=FALSE}
+
+
+<<setup, echo = FALSE, results = hide>>=
+library("multcomp")
+library("survival")
+library("sandwich")
+data("alpha", package = "coin")
+data("bodyfat", package = "mboost")
+data("alzheimer", package = "coin")
+if (!file.exists("AML_Bullinger.rda"))
+    load(url("http://www.imbe.med.uni-erlangen.de/~hothorn/AML_Bullinger.rda", open = "r"))
+risk <- rep(0, nrow(clinical))
+rlev <- levels(clinical[, "Cytogenetic.group"])
+risk[clinical[, "Cytogenetic.group"] %in% rlev[c(7,8,4)]] <- "low"
+risk[clinical[, "Cytogenetic.group"] %in% rlev[c(5, 9)]] <- "intermediate"
+risk[clinical[, "Cytogenetic.group"] %in% rlev[-c(4,5, 7,8,9)]] <- "high"
+risk <- as.factor(risk)
+
+@
+
+\section{Illustrations}
+
+\paragraph{Independent $K$-Samples: Genetic Components of Alcoholism.}
+
+Various studies have linked alcohol dependence phenotypes to chromosome 4.
+One candidate gene is \textit{NACP} (non-amyloid component of plaques),   
+coding for alpha synuclein. 
+\cite{Boenscheta2005} found longer alleles of
+\textit{NACP}-REP1 in alcohol-dependent patients compared with healthy controls
+and report that the allele lengths show some
+association with levels of expressed alpha synuclein mRNA in
+alcohol-dependent subjects (see Figure~\ref{alpha-box}). Allele length is
+measured as a sum score built from additive dinucleotide repeat length and
+categorized into three groups: short ($0-4$, $n = 24$), intermediate ($5-9$,
+$n = 58$), and long ($10-12$, $n = 15$).
+
+\setkeys{Gin}{width=0.7\textwidth}
+\begin{figure}
+\begin{center}
+<<alpha-data-figure, echo = FALSE, fig = TRUE, width = 7, height = 5>>=
+n <- table(alpha$alength)
+par(cex.lab = 1.3, cex.axis = 1.3)
+boxplot(elevel ~ alength, data = alpha, ylab = "Expression Level",
+        xlab = "NACP-REP1 Allele Length", varwidth = TRUE)
+axis(3, at = 1:3, labels = paste("n = ", n))
+rankif <- function(data) trafo(data, numeric_trafo = rank)
+@
+\caption{\Robject{alpha} data: Distribution of levels of expressed alpha synuclein mRNA
+         in three groups defined by the \textit{NACP}-REP1 allele lengths.
+         \label{alpha-box}}
+\end{center}
+\end{figure}
+
+<<alpha-aov-tukey, echo = TRUE>>=
+amod <- aov(elevel ~ alength, data = alpha)
+confint(glht(amod, linfct = mcp(alength = "Tukey")))
+@
+
+<<alpha-aov-tukey-sandwich, echo = TRUE>>=
+class(amod) <- "lm"
+confint(glht(amod, linfct = mcp(alength = "Tukey"), 
+        vcov = sandwich))
+@
+
+\paragraph{Illustration: Prediction of total body fat}
+
+\citet{garcia2005} report on the development of predictive regression equations
+for body fat content by means of $p = 9$ common anthropometric
+measurements which were obtained for $n = 71$ healthy German women.
+In addition, the women's body composition was measured by
+Dual Energy X-Ray Absorptiometry (DXA). This reference method
+is very accurate in measuring body fat but finds little applicability
+in practical environments, mainly because of high costs and the
+methodological efforts needed. Therefore, a simple regression equation
+for predicting DXA measurements of body fat is of special interest for the practitioner.
+Backward-elimination was applied to select
+important variables from the available anthropometrical measurements and
+\citet{garcia2005} report a final linear model utilizing
+hip circumference, knee breadth and a compound covariate which is defined as
+the sum of log chin skinfold, log triceps skinfold and log subscapular skinfold:
+
+<<bodyfat-lm-fit, echo = TRUE>>=
+bmod <- lm(DEXfat ~ ., data = bodyfat)
+summary(bmod)
+@
+
+<<bodyfat-lm-maxtest, echo = TRUE>>=
+p <- length(coef(bmod))
+K <- diag(p)[-1,]
+rownames(K) <- names(coef(bmod))[-1]
+summary(glht(bmod, lin = K))
+@
+
+<<bodyfat-lm-Ftest, echo = TRUE>>=
+summary(bmod, test = Ftest())
+@
+
+\paragraph{Contingency Tables: Smoking and Alzheimer's Disease.}
+
+<<alzheimer-demographics, echo = FALSE>>=
+total <- nrow(alzheimer)
+stopifnot(total == 538) 
+male <- sum(alzheimer$gender == "Male")
+stopifnot(male == 200)
+female <- sum(alzheimer$gender == "Female")
+stopifnot(female == 338)
+disease <- table(alzheimer$disease)
+smoked <- sum(alzheimer$smoking != "None")
+atab <- xtabs(~ smoking + + disease + gender, data = alzheimer)
+### there is a discrepancy between Table 1 (32% smokers of 117 women
+### suffering from other diagnoses) and Table 4 (63% non-smokers).  
+### We used the data as given in Table 4.
+@
+
+\cite{SalibHillier1997}
+report results of a case-control study on Alzheimer's disease
+and smoking behavior of $\Sexpr{disease["Alzheimer's"]}$ female
+and male Alzheimer patients and 
+$\Sexpr{disease[names(disease) != "Alzheimer's"]}$ controls.
+The \Robject{alzheimer} data 
+%% shown in Table~\ref{alzheimertab}
+have been 
+re-constructed from Table~4 in \cite{SalibHillier1997}.
+%% and are depicted in Figure~\ref{alz-plot}.
+The authors conclude that cigarette smoking is less frequent in
+men with Alzheimer's disease.' 
+
+
+<<alzheimer-prob, echo = TRUE, fig = TRUE>>=
+data("alzheimer", package = "coin")
+y <- alzheimer$disease == "Alzheimer's"
+
+gmod <- glm(y ~ smoking * gender, data = alzheimer, family = binomial())
+
+a <- cbind(levels(alzheimer$smoking), "Female")
+b <- cbind(levels(alzheimer$smoking), "Male")
+d <- rbind(a, b)
+colnames(d) <- c("smoking", "gender")
+rownames(d) <- paste(d[,1], d[,2], sep = ":")
+d <- as.data.frame(d)
+
+K <- model.matrix(~ smoking * gender, data = d)
+
+ci <- confint(glht(gmod, linfct = K))
+ci$confint <- apply(ci$confint, 2, binomial()$linkinv)
+plot(ci, xlab = "Probability")
+@
+
+
+\subsection{Acute Myeloid Leukemia \label{AML}}
+
+The treatment of patients suffering from acute myeloid leukemia (AML) is
+determined by a tumor classification scheme taking the status of various
+cytogenetic aberrations into account. \cite{Bullingeretal2004} investigate an
+extended tumor classification scheme incorporating molecular subgroups of the disease
+obtained by gene expression profiling. A combination of unsupervised and   
+supervised techniques is applied to define a binary outcome predictor (good
+vs.~poor prognosis) taking into account the expression measures of $133$ selected genes
+which are represented by $149$ cDNAs (complementary-DNAs).
+This binary surrogate variable is shown to discriminate between
+patients with short and longer survival in an independent sample of patients.
+
+
+Instead of using a binary variable summarizing expression levels of $149$  
+cDNAs, random forest and $L_2$-boosting are applied to construct predictors
+based on both the clinical data and the expression levels of 
+the genes selected by \cite{Bullingeretal2004}. The results reported here
+are based on clinical and gene expression data published online at 
+\url{http://www.ncbi.nlm.nih.gov/geo}, accession number GSE425. The
+overall survival time and censoring indicator as well as the   
+clinical variables age, sex, lactic dehydrogenase level (LDH), 
+white blood cell count (WBC), and treatment group are taken from Supplementary
+Table 1 in \cite{Bullingeretal2004}. In
+addition, this table provides two molecular markers, the fms-like tyrosine kinase 3 (FLT3) and
+the mixed-lineage leukemia (MLL) gene, as well as 
+cytogenetic information helpful to define a risk score (`low': karyotype
+t(8;21), t(15;17) and inv(16); `intermediate': normal karyotype and t(9;11);   
+and `high': all other forms).
+
+<<bullinger-survreg, echo = TRUE>>=
+bmod <- survreg(Surv(time, event) ~ Sex*(Age + WBC + LDH + risk), data = clinical)
+summary(glht(bmod, linfct = mcp(risk = "Tukey")))
+summary(glht(bmod, linfct = mcp(risk = "Tukey")), vcov = sandwich)
+@

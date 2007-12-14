@@ -15,5 +15,4 @@ summary(gh)
 confint(gh)
 plot(confint(gh))
 
-data("photocar", package = "coin")
 
