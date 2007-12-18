@@ -1,4 +1,10 @@
 
+		CHANGES in `multcomp' VERSION 0.992-8
+
+    o    add model.frame and model.matrix methods for class `lme'
+         (feature request by Antonio Rausell <arausell@cnio.es>)
+
+
 		CHANGES in `multcomp' VERSION 0.992-7
 
     o    new contrasts `UmbrellaWilliams' and `GrandMean'
