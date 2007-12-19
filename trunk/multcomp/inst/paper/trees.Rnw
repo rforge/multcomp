@@ -1,0 +1,48 @@
+
+\SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE}
+
+
+<<setup, echo = FALSE, results = hide>>=
+options(prompt = "R> ")
+options(SweaveHooks = list(mai = function() par(mai = par("mai") * c(1, 3, 1, 1))))
+library("multcomp")
+library("lme4")
+###data("trees513", package = "multcomp")
+load("../../data/trees513.rda")
+@
+
+
+\paragraph{Game damage}
+
+<<trees-setup, echo = FALSE, results = hide>>=
+trees513 <- subset(trees513, !species %in% c("fir", "softwood (other)"))
+trees513$species <- trees513$species[,drop = TRUE]
+@
+
+<<trees-lmer, echo = TRUE>>=
+### plot is nested within lattice!
+pmod <- lmer(damage ~ species - 1 + (1 | lattice:plot) + (1 | lattice), 
+             data = trees513, family = binomial())
+K <- diag(length(fixef(pmod)))
+@
+
+<<trees-K-cosmetics, echo = FALSE, results = hide>>=
+colnames(K) <- rownames(K) <- 
+    paste(gsub("species", "", names(fixef(pmod))), 
+          " (", table(trees513$species), ")", sep = "")
+@
+
+<<trees-ci, echo = FALSE>>=
+ci <- confint(glht(pmod, linfct = K))
+ci$confint <- 1 - binomial()$linkinv(ci$confint)
+ci$confint[,2:3] <- ci$confint[,3:2]
+@
+
+\begin{figure}
+\begin{center}
+<<trees-plot, echo = FALSE, mai = TRUE, fig = TRUE, width = 7, height = 5>>=
+plot(ci, xlab = "Probability of Damage Caused by Game Animals", xlim = c(0, 1))
+@
+\caption{\Robject{trees513} data: Trees}
+\end{center}
+\end{figure}
