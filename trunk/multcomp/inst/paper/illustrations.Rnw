@@ -23,9 +23,9 @@ risk <- as.factor(risk)
 vcov.lmrob <- function(object) object$cov
 @
 
-\section{Illustrations}
+\section{Illustrations} \label{illustrations}
 
-\paragraph{Genetic Components of Alcoholism.}
+\paragraph{Genetic components of alcoholism.}
 
 Various studies have linked alcohol dependence phenotypes to chromosome 4.
 One candidate gene is \textit{NACP} (non-amyloid component of plaques),   
@@ -164,7 +164,7 @@ model, the results coincde rather nicely:
 summary(glht(lmrob(DEXfat ~ ., data = bodyfat), linfct = K))
 @
 
-\paragraph{Smoking and Alzheimer's Disease.}
+\paragraph{Smoking and Alzheimer's disease.}
 
 <<alzheimer-demographics, echo = FALSE>>=
 total <- nrow(alzheimer)
@@ -267,7 +267,7 @@ the probability to suffer from Alzheimer's disease. \label{alzheimer-plot}}
 \end{center}
 \end{figure}
 
-\paragraph{Acute Myeloid Leukemia. \label{AML}}
+\paragraph{Acute myeloid leukemia. \label{AML}}
 
 The treatment of patients suffering from acute myeloid leukemia (AML) is
 determined by a tumor classification scheme taking the status of various

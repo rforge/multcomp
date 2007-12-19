@@ -20,11 +20,22 @@ Lubbock, TX 79409, U.S.A}
 
 \maketitle
 
-\section{Model and Estimation}
+\begin{abstract}
+Abstract
+\end{abstract}
+
+\textbf{Key words}: multiple tests, multiple comparisons, confidence intervals,
+adjusted $p$-values, multivariate normal distribution, robust statistics.
+
+\newpage
+
+\section{Introduction}
+
+\section{Model and Estimation} \label{model}
 
 Let $\M(\Z_n, \vartheta, \eta)$ denote a (semi-)parametric statistical model.
 The vector of $n$ observations is denoted by $\Z_n = (\Z_1, \dots, \Z_n)$. 
-The model is equipped with fixed
+The model is equiped with fixed
 but unknown parameters of interest $\vartheta \in \R^p$ 
 and other (random or nuisance) parameters $\eta$. We are provided 
 with an estimate $\hat{\vartheta} \in \R^p$ of the parameter 
@@ -56,7 +67,7 @@ f_{\K, \m}(\hat{\vartheta}) = \K \hat{\vartheta} - \m
 \end{eqnarray}
 Furthermore, it follows from the same theorem that we can 
 consistently estimate the unknown covariance matrix $\K \Sigma \K^\top$ utilizing
-the consistent estimate $\hat{\Sigma}$ of the covariance matrix:
+the consistent estimate $\hat{\Sigma}$ of the covariance matrix $\Sigma$:
 \begin{eqnarray*}
 \hat{\S} := \K \hat{\Sigma} \K^\top \cP \K \Sigma \K^\top =: \S.
 \end{eqnarray*}
@@ -64,16 +75,16 @@ the consistent estimate $\hat{\Sigma}$ of the covariance matrix:
 \paragraph{Test statistic and limiting distribution.}
 
 Let $\T := \hat{\D} (\K \hat{\vartheta} - \m) \in \R^k$ denote
-the $k$-dimensional test statistic where $\hat{\D}$ is the diagonal
+the $k$-dimensional standardized test statistic where $\hat{\D}$ is the diagonal
 matrix of standard deviations
 \begin{eqnarray*}
-\hat{\D} := \text{diag}\left(\text{diag}(\hat{S})^{-1/2}\right) \cP 
-\text{diag}\left(\text{diag}(S)^{-1/2}\right) =: \D \in \R^{k,k}
+\hat{\D} := \text{diag}\left(\text{diag}(\hat{\S})^{-1/2}\right) \cP 
+\text{diag}\left(\text{diag}(\S)^{-1/2}\right) =: \D \in \R^{k,k}
 \end{eqnarray*}
 In order to show that also $\T$ converges in law to a $k$-dimensional multivariate
 normal distribution
 \begin{eqnarray*}
-\T \cL \N_k\left(\D(\K \vartheta - \m), \D \S \D^\top\right)
+\T \cL \N_k\left(\D(\K \vartheta - \m), \Cor := \D \S \D^\top\right)
 \end{eqnarray*}
 we utilize the Cram{\'e}r-Wold device and show that for some $\uu \in \R^k$ 
 the linear function $\uu^\top \T$ is univariate normal. Consider
@@ -82,51 +93,56 @@ the linear function $\uu^\top \T$ is univariate normal. Consider
 & = & \left(u_1 \hat{\S}_{11}^{-1/2}, \dots, u_k \hat{\S}_{kk}^{-1/2}\right)^\top(\K \hat{\vartheta} - \m).
 \end{eqnarray*}
 Since $\hat{\S}$ is a consistent estimate of $\S$ it 
-is clear that $u_j \hat{\S}_{jj}^{-1/2} \cP u_j \S_{jj}^{-1/2}$.
+is follows that $u_j \hat{\S}_{jj}^{-1/2} \cP u_j \S_{jj}^{-1/2}$.
 Together with (\ref{dist_f}) we can apply Slutsky's theorem to show that
 \begin{eqnarray*}
-u_j \hat{S}_{jj}^{-1/2} (\K \hat{\vartheta} - \m)_j & \cL &  
+u_j \hat{\S}_{jj}^{-1/2} (\K \hat{\vartheta} - \m)_j & \cL &  
 \N_1\left(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2 \S_{jj}^{-1} \S_{jj}\right) \\
 & = & \N_1\left(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2\right)
 \end{eqnarray*}
 Because the above holds for every $\uu \in \R^k$, the asymptotic multivariate
-normaliy of $\T$ follows from the Cram{\'e}r-Wold device. In summary,
+normaliy of $\T$ follows from the Cram{\'e}r-Wold device. Note that
+all elements of $\T$ have mean zero and variance $1$. In summary,
 the vector of test statistics $\T$ converges in law to a multivariate
-normal distribution with correlation matrix $\Cor := \D \S \D^\top \in \R^{k,k}$.
+normal distribution with correlation matrix 
+$\Cor := \D \S \D^\top \in \R^{k,k}$.
 
 \section{Simultaneous Inference}
 
-Under the hypothesis
+Under the global hypothesis
 \begin{eqnarray*}
 H_0: \K \vartheta = \m
 \end{eqnarray*}
+it has been shown in Section~\ref{model} that 
 $\T \cL \N_k(0, \Cor)$ holds true. At this point it is worth
 considering two special cases. A stronger assumption than asymptotic normality
-of $\hat{\vartheta}$ (\ref{normality}) is exact normality:
+of $\hat{\vartheta}$ (\ref{normality}) is exact normality, i.e., 
 $\hat{\vartheta} \sim \N_p(\vartheta, \Sigma)$. Under the unrealistic
-further assumption of the covariance matrix being known, it
-is easy to show that $\T \sim \N_k(0, \Cor)$. 
-When $\Sigma$ is unknown (the typical situtation of linear models
+further assumption of the covariance matrix $\Sigma$ being known, it
+follows by standard arguments that $\T \sim \N_k(0, \Cor)$. 
+When $\Sigma$ is unknown (the typical situation of linear models
 with normal iid errors and constant variance), the
 exact distribution of $\T$ is a $k$-dimensional multivariate $\mathcal{T}$
 distribution with $df$ degrees of freedom (df $ = n - p - 1$ for linear models).
+\marginpar{Ref}
 
 Now, the distribution function of $\T$ can be calculated or approximated
 by evaluating the $k$-dimensional exact or limiting distributions:
 \begin{eqnarray*}
-& & \Prob(\max(\T) \le t)  \approx \int\limits_{-\infty}^t \cdots \int\limits_{-\infty}^t 
+& & \Prob(\max(\T) \le t)  \cong\int\limits_{-\infty}^t \cdots \int\limits_{-\infty}^t 
 \varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k \quad \text{("less")}\\
-& & \Prob(\max(|\T|) \le t)  \approx  \int\limits_{-t}^t \cdots \int\limits_{t}^t 
+& & \Prob(\max(|\T|) \le t)  \cong  \int\limits_{-t}^t \cdots \int\limits_{t}^t 
 \varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k \quad \text{("two sided")}\\
-& & \Prob(\min(\T) \ge t) \approx  \int\limits_{t}^\infty \cdots \int\limits_{t}^\infty 
+& & \Prob(\min(\T) \ge t) \cong  \int\limits_{t}^\infty \cdots \int\limits_{t}^\infty 
 \varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k \quad \text{("greater")}\\
 \end{eqnarray*}
 where $\varphi_k$ is either the density function of the limiting multivariate
-normal (df $ = 1$) or exact multivariate $\mathcal{T}$-distribution (df $ > 1$).
-Since $\Cor$ is usually unknown, we plug-in an consistent estimate
+normal (df $ = 1$ and `$\approx$') or exact multivariate $\mathcal{T}$-distribution (df $ > 1$
+and `"="').
+Since $\Cor$ is usually unknown, we plug-in a consistent estimate
 $\hat{\Cor} := \hat{\D} \hat{\S} \hat{\D}^\top$.
 
-\paragraph{Simultaneous Tests.}
+\paragraph{Simultaneous tests.}
 
 An adjusted $p$-value for the $j$th partial hypothesis 
 \begin{eqnarray*}
@@ -154,27 +170,91 @@ such that $\Prob(\max{\T} \le q_\alpha) \ge 1 - \alpha$.
 
 \section{Applications}
 
-\subsection{One-way ANOVA}
+The framework described above is rather general and applicable 
+to a wide range of models since most estimates are at least asymptotically
+normal and a consistent estimate of their covariance matrix
+is usually available and readily implemented. Most prominent
+representatives are models fitted by maximum likelihood, M-estimation,
+restricted maximum likelihood etc. \marginpar{more!}
+It should be noted that there we didn't make assumptions on the form
+of $\K$ whatsoever and thus a rather straightforward construction 
+principle for new simultaneous inference procedures is available. In
+what follows, we assume $\m = 0$ but this is not a restriction.
+In the following we will highlight a subjectiv selection of 
+some special cases of practical importance.
 
-One-way ANOVA for three groups:
-$Y_{ij} = \mu + \alpha_{j} + \varepsilon_{ij}, j = 1, 2, 3$,
-with $\vartheta = (\mu, \alpha_2 - \alpha_1, \alpha_3 - \alpha_1)$.
+\paragraph{One-way ANOVA.}
 
-Dunnett: 
+Consider a one-way ANOVA model for a factor measured at three levels
+with a continuous response and normal errors $\varepsilon_{ij} \sim \N_1(0, \sigma^2)$, 
+i.e., the model
 \begin{eqnarray*}
-\K = (0, \diag(2))
+Y_{ij} = \mu + \alpha_{j} + \varepsilon_{ij}, j = 1, 2, 3, i = 1, \dots, n_j.
 \end{eqnarray*}
-and $\K \vartheta = (\alpha_2 - \alpha_1, \alpha_3 - \alpha_1)$.
+The model is overparameterized and thus only the parameters
+$\vartheta = (\mu, \alpha_2 - \alpha_1, \alpha_3 - \alpha_1)$ are 
+estimated by classical least-squares. (Note that other contrasts can be used
+but theses so-called `treatment contrasts' are the most prominent ones and,
+for example, the default in \RR.) 
+Most of the classical approaches
+to multiple comparisons can be embedded into this simple framework and 
+the two most prominent ones are Dunnett's many-to-one procedure and
+Tukey's honest significant differences. For Dunnett's procedures,
+the differences of all coefficients with $\alpha_1$ under test, i.e.,
+a linear function
+\begin{eqnarray*}
+\K_\text{Dunnett} = (0, \diag(2))
+\end{eqnarray*}
+with so called `contrasts' $\K_\text{Dunnett} \vartheta = (\alpha_2 - \alpha_1, \alpha_3 - \alpha_1)$.
+For Tukey's honest significant differences the interest is in inference on
+all possible differences of the model parameters $\alpha_1, \alpha_2, \alpha_3$, i.e., 
+the matrix
+\begin{eqnarray*}
+\K_\text{Tukey} = \left( 
+\begin{array}{rrr} 0 & 1 & 0 \\
+0 & 0 & 1 \\
+0 & 1 & -1 
+\end{array} \right)
+\end{eqnarray*}
+with $\K_\text{Tukey} \vartheta = (\alpha_2 - \alpha_1, \alpha_3 - \alpha_1, \alpha_2 - \alpha_3)$.
+Many other contrasts have been studies in the past, such as Williams, McDermott, Marcus,
+Sequential, Changepoints etc. pp. \marginpar{Ref!} and all can be formulated in terms
+of a linear function $\K \vartheta$.
 
-\subsection{GLM}
+Under the standard assumptions of ANOVA models, i.e., iid normal errors with constant
+variance, the vector of test statistics $\T$ follows an exact $\mathcal{T}$-distribution and
+thus, simultaneous tests and confidence intervals are `exact' as well.
 
-\subsection{(N)LME}
+\paragraph{GLM, (N)LME and survival models.}
 
-\subsection{Cox, Weibull, ...}
+In generalized linear models, the exact distribution of the parameter estimates
+is usually unknown and thus the asymptotic normal distribution is the basis for all
+inference procedures. When we are interested in inference about model
+parameters corresponding to levels of a certain factor, the same multiple 
+comparison procedures as sketched above are available. 
 
-\subsection{Robust}
+Linear and non-linear mixed effects models fitted by REML provide
+the data analyst with asymptotically normal errors and a consistent
+covariance matrix as well so that all assumptions of our framework
+are met and one can set up simultaneous inference procedures
+for these models as well.
 
-Use sandwich estimator and asymptotic normal.
+The same is true for the Cox model or other parametric survival models
+such as the Weibull model.
+
+\paragraph{Robust simultaneous inference.}
+
+An interesting possibility is to move to robust variants of the above
+mentioned models. One obvious possibility is the application
+of sandwich estimators $\hat{\Sigma}$ of the covariance matrix $\Sigma$, 
+for example when the variance homogenity in linear models is violated.
+An even more robust approach is to use robust linear models, for example
+fitted using MM.
+
+The reader is referred to Section~\ref{illustrations} for some practical
+instances of these ideas.
+
+\section{Implementation}
 
 \input{illustrations}
 
@@ -182,7 +262,6 @@ Use sandwich estimator and asymptotic normal.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
-
 
 \end{document}
 
