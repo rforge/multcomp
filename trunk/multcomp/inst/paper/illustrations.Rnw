@@ -260,7 +260,7 @@ heavy smoking men compared to all other configurations.
 \begin{figure}
 \begin{center}
 <<alzheimer-plot, echo = FALSE, fig = TRUE, mai = TRUE, width = 6, height = 4>>=
-plot(gmod_ci, xlab = "Probability", xlim = c(0, 1))
+plot(gmod_ci, xlab = "Probability", xlim = c(0, 1), plot = "")
 @
 \caption{\Robject{alzheimer} data: Simultaneous confidence intervals for 
 the probability to suffer from Alzheimer's disease. \label{alzheimer-plot}}
