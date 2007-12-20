@@ -7,8 +7,7 @@ options(prompt = "R> ")
 options(SweaveHooks = list(mai = function() par(mai = par("mai") * c(1, 3, 1, 1))))
 library("multcomp")
 library("lme4")
-###data("trees513", package = "multcomp")
-load("../../data/trees513.rda")
+data("trees513", package = "multcomp")
 @
 
 \paragraph{Forest Regeneration.}
@@ -27,7 +26,8 @@ of the game management district number 513 `Unterer Aischgrund'
 (located in Frankonia between Erlangen and H\"ochstadt). The data
 of \Sexpr{nrow(trees513)} trees include the species and a binary
 variable inicating whether or not the tree suffers from damage caused
-by deer browsing. We fit a mixed logistic regression model
+by deer browsing. We fit a mixed logistic regression model 
+\citep[using package \Rpackage{lme4}][]{pkg:lme4, Rnews:Bates:2005}
 without intercept and with random effects accounting for the spatial variation
 of the trees. For each plot nested within a set of five plots
 orientated on a 100m line (the location of the line
@@ -41,8 +41,8 @@ in:
 trees513 <- subset(trees513, !species %in% c("fir", "softwood (other)"))
 trees513$species <- trees513$species[,drop = TRUE]
 @
+
 <<trees-lmer, echo = TRUE>>=
-### plot is nested within lattice!
 pmod <- lmer(damage ~ species - 1 + (1 | lattice:plot) + (1 | lattice), 
              data = trees513, family = binomial())
 K <- diag(length(fixef(pmod)))
@@ -66,12 +66,13 @@ is less frequent in hardwood but especially small oak trees are severely
 at risk. Consequently, the number of roe deers to be harvested in the
 following years has been increased.
 The large confidence interval for ash, maple, elm and lime
-trees is cause by the small sample size.
+trees is caused by the small sample size.
 
 \begin{figure}
 \begin{center}
 <<trees-plot, echo = FALSE, mai = TRUE, fig = TRUE, width = 7, height = 5>>=
-plot(ci, xlab = "Probability of Damage Caused by Browsing", xlim = c(0, 1), main = "")
+plot(ci, xlab = "Probability of Damage Caused by Browsing", xlim = c(0, 1), main = "",
+     ylim = c(0.5, 6.5))
 @
 \caption{\Robject{trees513} data: Probability of damage caused by roe deer browsing 
    for six tree species. Sample sizes are given in brackets. \label{browsing}}

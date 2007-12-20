@@ -20,6 +20,7 @@ risk[clinical[, "Cytogenetic.group"] %in% rlev[c(7,8,4)]] <- "low"
 risk[clinical[, "Cytogenetic.group"] %in% rlev[c(5, 9)]] <- "intermediate"
 risk[clinical[, "Cytogenetic.group"] %in% rlev[-c(4,5, 7,8,9)]] <- "high"
 risk <- as.factor(risk)
+names(clinical)[6] <- "FLT3"
 vcov.lmrob <- function(object) object$cov
 @
 
@@ -58,17 +59,25 @@ rankif <- function(data) trafo(data, numeric_trafo = rank)
 \end{center}
 \end{figure}
 
-A simple one-way ANOVA model is fitted to the data and $\K$
-corresponding to Tukey all-pair comparisons is set up
+Thus, we fit a simple one-way ANOVA model to the data and 
+define $\K$ such that $\K \vartheta$ contains all three 
+group differences:
 <<alpha-aov-tukey, echo = TRUE>>=
+data("alpha", package = "coin")
 amod <- aov(elevel ~ alength, data = alpha)
 amod_glht <- glht(amod, linfct = mcp(alength = "Tukey"))
 amod_glht$linfct
 @
 The \Robject{amod\_glht} object now contains information
-about estimated parameters, their covariance matrix and
-the linear functions defined under test. The \Rcmd{summary}
-and \Rcmd{confint} methods can be used to compute a
+about the estimated linear function $\K \hat{\vartheta}$ and 
+their covariance matrix $\hat{\S}$ which can be inspected
+via the \Rcmd{coef()} and \Rcmd{vcov()} methods:
+<<alpha-aov-coefvcov, echo = TRUE>>=
+coef(amod_glht)
+vcov(amod_glht)
+@
+The \Rcmd{summary()}
+and \Rcmd{confint()} methods can be used to compute a
 summary statistic including adjusted $p$-values and 
 simultaneous confidence intervals, respectively:
 <<alpha-aov-results, echo = TRUE>>=
@@ -82,7 +91,7 @@ with the validity of the above results stating that there
 is not difference between any combination of the three
 allele lengths. A sandwich estimator $\hat{\Sigma}$ 
 might be more appropriate in this situation, and
-the \Rarg{vcov} argument of \Rcmd{glht} can be used
+the \Rarg{vcov} argument of \Rcmd{glht()} can be used
 to specify a function to compute some alternative 
 estimator $\hat{\Sigma}$ as follows:
 <<alpha-aov-tukey-sandwich, echo = TRUE>>=
@@ -90,6 +99,9 @@ amod_glht_sw <- glht(amod, linfct = mcp(alength = "Tukey"),
                      vcov = sandwich)
 summary(amod_glht_sw)
 @
+We used the \Rcmd{sandwich()} function from package \Rpackage{sandwich}
+\cite{Zeileis2004, Zeileis2006} which provides us with a 
+heteroskedasticity-consistent estimator of the covariance matrix.
 This result is more in line with previously published findings
 obtained from non-parametric test procedures such as the
 Kruskal-Wallis test. A comparison of the simultaneous 
@@ -104,8 +116,10 @@ par(mai = par("mai") * c(1, 2.2, 1, 1))
 layout(matrix(1:2, ncol = 2))
 ci1 <- confint(glht(amod, linfct = mcp(alength = "Tukey")))
 ci2 <- confint(glht(amod, linfct = mcp(alength = "Tukey"), vcov = sandwich))
-plot(ci1, xlim = c(-0.6, 2.6), main = "Tukey", xlab = "Difference")
-plot(ci2, xlim = c(-0.6, 2.6), main = "Tukey with Sandwich", xlab = "Difference")
+plot(ci1, xlim = c(-0.6, 2.6), main = expression(paste("Tukey HSD (ordinary ", hat(Sigma), ")")), 
+    xlab = "Difference", ylim = c(0.5, 3.5))
+plot(ci2, xlim = c(-0.6, 2.6), main = expression(paste("Tukey HSD (sandwich ", hat(Sigma), ")")), 
+    xlab = "Difference", ylim = c(0.5, 3.5))
 @
 \caption{\Robject{alpha} data: Simultaneous confidence intervals based
     on the ordinary covariance matrix (left) and a sandwich estimator (right). 
@@ -135,6 +149,7 @@ over all $t$-statistics to select important variables based on
 adjusted $p$-values. The linear model including all covariates and
 the classical unadjusted $p$-values are given by
 <<bodyfat-lm-fit, echo = TRUE>>=
+data("bodyfat", package = "mboost")
 summary(bmod <- lm(DEXfat ~ ., data = bodyfat))
 @
 The linear function $\K$ is basically the identity matrix, except 
@@ -157,8 +172,10 @@ via
 summary(bmod_glht)
 @
 Only two covariates, waist and hip circumference, seem to be important
-and caused the rejected of $H_0$. Alternatively, an MM-estimator
-\citep{Yohai1987} can be used to fit a robust version of the above linear
+and caused the rejection of $H_0$. Alternatively, an MM-estimator
+\citep{Yohai1987} as implemented by \Rcmd{lmrob()} from package 
+\Rpackage{lmrob} \citep{pkg:robustbase} 
+can be used to fit a robust version of the above linear
 model, the results coincde rather nicely:
 <<bodyfat-robust, echo = TRUE>>=
 summary(glht(lmrob(DEXfat ~ ., data = bodyfat), linfct = K))
@@ -191,11 +208,11 @@ The \Robject{alzheimer} data
 have been 
 re-constructed from Table~4 in \cite{SalibHillier1997}.
 %% and are depicted in Figure~\ref{alz-plot}.
-The authors conclude that cigarette smoking is less frequent in
+The authors conclude that `cigarette smoking is less frequent in
 men with Alzheimer's disease.'
-We are interested to assess whether there is any association
-between smoking and Alzheimer's (or other dementia) diseases and, in a
-second step, how a potential association can be described \citep[see][for
+Originally, one was interested to assess whether there is any association
+between smoking and Alzheimer's (or other dementia) diseases. Here, we 
+focus on how a potential association can be described \citep[see][for
 a non-parametric approach]{Hothorn:2006:AmStat}. 
 
 First, we fit a logistic regression model including both main effects
@@ -204,7 +221,8 @@ is a binary variable giving the diagnosis of the patient (either suffering
 from Alzheimer's disease or other dementias):
 <<alzheimer-glm, echo = TRUE>>=
 data("alzheimer", package = "coin")
-y <- alzheimer$disease == "Alzheimer's"
+y <- factor(alzheimer$disease == "Alzheimer's", 
+    labels = c("other", "Alzheimer"))
 gmod <- glm(y ~ smoking * gender, data = alzheimer, family = binomial())
 summary(gmod)
 @
@@ -215,9 +233,9 @@ corresponding $p$-values only. Therefore, confidence intervals
 on the probability scale for the different `risk groups' are interesing 
 and can be computed as follows. For each combination of gender and 
 smoking behaviour, the probability of suffering from Alzheimer's
-disease can be computed by computing the logit function 
+disease can be estimated by computing the logit function 
 of the linear predictor from model \Robject{gmod}. Using
-the \Rcmd{predict} method for generalized linear models
+the \Rcmd{predict()} method for generalized linear models
 is a convenient way to compute these probability estimates. Alternatively,
 we can set up a linear function $\K$ such that $\left(1 + \exp(- \K \hat{\vartheta})\right)^{-1}$
 is the vector of estimated probabilities with simultaneous confidence intervals
@@ -240,13 +258,15 @@ attr(K, "assign") <- NULL
 attr(K, "contrasts") <- NULL
 @
 
-For our model, $\K$ is given by a matrix
+For our model, $\K$ is given by the following matrix (essentially
+the design matrix of \Robject{gmod} for eight persons with different
+smoking behaviour from both genders)
 \small
 <<alzheimer-K, echo = TRUE>>=
 K
 @
 \normalsize
-and can easily be used to compute the above confidence intervals
+and can easily be used to compute the confidence intervals described above
 <<alzheimer-probci, echo = TRUE>>=
 gmod_ci <- confint(glht(gmod, linfct = K))
 gmod_ci$confint <- apply(gmod_ci$confint, 2, binomial()$linkinv)
@@ -255,12 +275,12 @@ plot(gmod_ci, xlab = "Probability", xlim = c(0, 1))
 The simultaneous confidence intervals are depicted in 
 Figure~\ref{alzheimer-plot}. Using this representation of the results,
 it is obvious that Alzheimer's disease is less frequent in non-smoking and
-heavy smoking men compared to all other configurations.
+heavy smoking men compared to all other configurations of the two covariates.
 
 \begin{figure}
 \begin{center}
 <<alzheimer-plot, echo = FALSE, fig = TRUE, mai = TRUE, width = 6, height = 4>>=
-plot(gmod_ci, xlab = "Probability", xlim = c(0, 1), plot = "")
+plot(gmod_ci, xlab = "Probability", xlim = c(0, 1), main = "", ylim = c(0.5, 8.5))
 @
 \caption{\Robject{alzheimer} data: Simultaneous confidence intervals for 
 the probability to suffer from Alzheimer's disease. \label{alzheimer-plot}}
@@ -288,11 +308,11 @@ t(8;21), t(15;17) and inv(16); `intermediate': normal karyotype and t(9;11);
 and `high': all other forms). One interesting question might be the
 usefulness of this risk score. Here, we fit a Weibull survival model
 to the data including all above mentioned covariates as well
-as their interactions with the patient's gender. Tukey all-pair comparisons
-highlight that there seems to be a difference between `low' and `hight' scores
-but that a futher `intermediate' score might be less important.
+as their interactions with the patient's gender. Tukey's all-pair comparisons
+highlight that there seems to be a difference between `high' scores
+and both `low' and `intermediate' ones but the latter two aren't distinguishable:
 <<bullinger-survreg, echo = TRUE>>=
-bmod <- survreg(Surv(time, event) ~ Sex * (Age + WBC + LDH + risk), 
+bmod <- survreg(Surv(time, event) ~ Sex * (Age + WBC + LDH + FLT3 + risk), 
                 data = clinical)
 summary(glht(bmod, linfct = mcp(risk = "Tukey")))
 @
