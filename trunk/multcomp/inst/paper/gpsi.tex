@@ -1,7 +1,24 @@
 
 \documentclass[12pt]{article}
 \usepackage{a4wide}
+\usepackage[lists,heads,nomarkers]{endfloat}
+
 \input{header}
+
+\hypersetup{%
+  pdftitle = {Generalized Simultaneous Inference in Parametric Models},
+  pdfsubject = {Manuscript},
+  pdfauthor = {Torsten Hothorn and Frank Bretz and Peter Westfall},
+%% change colorlinks to false for pretty printing
+  colorlinks = {true},
+  linkcolor = {blue}, 
+  citecolor = {blue}, 
+  urlcolor = {red},   
+  hyperindex = {true},
+  linktocpage = {true},
+}
+ 
+
 
 \title{Generalized Simultaneous Inference \\ in Parametric Models}
 \author{\textbf{Torsten Hothorn} \\
@@ -70,7 +87,7 @@ procedures. An overview on the most important applications
 of the methodology is given in Section~\ref{applications} followed
 by a short discussion of a software implementation in Section~\ref{implementation}.
 Most interesting from a practical point of view is 
-Section~\ref{illustrations} where we analyse four rather challenging
+Section~\ref{illustrations} where we analyze four rather challenging
 problems with the tools developed in this paper.
 
 \section{Model and Estimation} \label{model}
@@ -143,7 +160,7 @@ u_j \hat{\S}_{jj}^{-1/2} (\K \hat{\vartheta} - \m)_j & \cL &
 & = & \N_1\left(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2\right)
 \end{eqnarray*}
 Because the above holds for every $\uu \in \R^k$, the asymptotic multivariate
-normaliy of $\T$ follows from the Cram{\'e}r-Wold device. Note that
+normality of $\T$ follows from the Cram{\'e}r-Wold device. Note that
 all elements of $\T$ have mean zero and variance $1$. In summary,
 the vector of test statistics $\T$ converges in law to a multivariate
 normal distribution with correlation matrix 
@@ -151,7 +168,7 @@ $\Cor := \D \S \D^\top \in \R^{k,k}$.
 
 \section{Simultaneous Inference} \label{siminf}
 
-Under the global hypothesis
+Under the general linear hypothesis \citep{Searle1971}
 \begin{eqnarray*}
 H_0: \K \vartheta = \m
 \end{eqnarray*}
@@ -181,7 +198,12 @@ where $\varphi_k$ is either the density function of the limiting multivariate
 normal (df $ = 1$ and `$\approx$') or exact multivariate $\mathcal{T}$-distribution (df $ > 1$
 and `='). 
 Since $\Cor$ is usually unknown, we plug-in a consistent estimate
-$\hat{\Cor} := \hat{\D} \hat{\S} \hat{\D}^\top$.
+$\hat{\Cor} := \hat{\D} \hat{\S} \hat{\D}^\top$. Efficient methods
+for approximating the above multivariate normal and $\mathcal{T}$ 
+probabilities are described in \cite{Genz1992,GenzBretz1999,BretzGenzHothorn2001}
+and \cite{GenzBretz2002}. Alan Genz' implementations of these algorithms
+are available in \RR{} from package \Rpackage{mvtnorm} 
+\citep{pkg:mvtnorm,Rnews:Hothorn+Bretz+Genz:2001}.
 
 \paragraph{Simultaneous tests.}
 
@@ -191,7 +213,7 @@ H_0^j: (\K \vartheta)_j = \m_j
 \end{eqnarray*}
 is given by $1 - \Prob(\max(|\T|) \le |t_j|)$ when the test statistic 
 $\tt  = (t_1, \dots, t_k)$
-has been observed. More precicely, the adjusted $p$-values for different
+has been observed. More precisely, the adjusted $p$-values for different
 directions of the alternative $H_1$ are given as follows:
 \begin{eqnarray*}
 & & H_0: \K \vartheta = \m \text{ vs. } H_1: \K \vartheta \not = \m \quad \Rightarrow \quad p_j  =  1 - \Prob(\max(|\T|) \le t) \quad \text{("two.sided")} \\
@@ -199,6 +221,7 @@ directions of the alternative $H_1$ are given as follows:
 & & H_0: \K \vartheta \le \m \text{ vs. } H_1: \K \vartheta > \m \quad \Rightarrow \quad p_j  =  1 - \Prob(\min(\T) \ge t) \quad \text{("greater")} \\
 \end{eqnarray*}
 The global $p$-value for a two-sided test problem is $1 - \Prob(\max(|\T|) \le \max|t_j|)$.
+
 
 Alternatively, a quadratic form based on the Moore-Penrose inverse $\hat{\S}^+$ of 
 $\hat{\S}$ or the usual $F$-test (assuming exact normality of $\hat{\vartheta}$) 
@@ -230,7 +253,7 @@ It should be noted that we didn't make assumptions on the form
 of $\K$ whatsoever and thus a rather straightforward construction 
 principle for new simultaneous inference procedures is available. In
 what follows, we assume $\m = 0$ only for the sake of simplicity.
-The next paragraphs highlight a subjectiv selection of 
+The next paragraphs highlight a subjective selection of 
 some special cases of practical importance.
 
 \paragraph{One-way ANOVA.}
@@ -298,7 +321,7 @@ such as the Weibull model.
 An interesting possibility is to move to robust variants of the above
 mentioned models. One obvious possibility is the application
 of sandwich estimators $\hat{\Sigma}$ of the covariance matrix $\Sigma$, 
-for example when the variance homogenity in linear models is violated.
+for example when the variance homogeneity in linear models is violated.
 An even more robust approach is to use robust linear models, for example
 fitted using MM.
 
@@ -309,11 +332,11 @@ instances of these ideas.
 
 The general framework for simultaneous inference in 
 (semi-)parametric models described in Section~\ref{model}
-opens up the way to a unified implementation of simultenous inference
-procedures for abitrary models meeting the model assumptions 
-(\ref{normality}). We provide an \RR package called 
+opens up the way to a unified implementation of simultaneous inference
+procedures for arbitrary models meeting the model assumptions 
+(\ref{normality}). We provide an \RR{} \citep{R2007} package called 
 \Rpackage{multcomp} \citep{pkg:multcomp} implementing
-simultenous tests and confidence intervals for a wide range of models.
+simultaneous tests and confidence intervals for a wide range of models.
 
 In \RR, estimated model coefficients $\hat{\vartheta}$ and their covariance 
 matrix $\hat{\Sigma}$ are accessible by the model's \Rcmd{coef()} 
@@ -351,8 +374,9 @@ of the alternative (see Section~\ref{model}) and $\m$, respectively.
 Objects of class \Rclass{glht} returned by \Rcmd{glht()} are equiped with
 \Rcmd{coef()} and \Rcmd{vcov()} methods for computing
 $\K \hat{\vartheta}$ and $\hat{\S}$. Furthermore, a \Rcmd{summary()} method
-is available for computing various flavours of tests (maximum-type, $X^2$ and $F$
-tests) and adjusted $p$-values. \marginpar{Ref!}
+is available for computing various flavors of tests (maximum-type, $X^2$ and $F$
+tests) and adjusted $p$-values including those taking 
+logical constraints into account \citep{Shaffer1986, Westfall1997}.
 In addition, the \Rcmd{confint()} method applied to objects of class 
 \Robject{glht} returns simultaneous confidence intervals and allows
 for a graphical representation of the results.
@@ -367,9 +391,9 @@ with package \Rpackage{multcomp}.
 
 \input{trees}
 
+\section{Discussion}
+
 \bibliographystyle{plainnat}
 \bibliography{references}
 
 \end{document}
-
-

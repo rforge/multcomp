@@ -3,6 +3,7 @@
 
 
 <<setup, echo = FALSE, results = hide>>=
+set.seed(290875)
 options(prompt = "R> ")
 options(SweaveHooks = list(mai = function() par(mai = par("mai") * c(1, 2, 1, 1))))
 library("multcomp")
@@ -111,8 +112,8 @@ sandwich estimator is given in Figure~\ref{alpha-ci}.
 \setkeys{Gin}{width=0.95\textwidth}
 \begin{figure}
 \begin{center}
-<<alpha-confint-plot, echo = FALSE, fig = TRUE, width = 9, height = 4>>=
-par(mai = par("mai") * c(1, 2.2, 1, 1))
+<<alpha-confint-plot, echo = FALSE, fig = TRUE, width = 8, height = 3.5>>=
+par(mai = par("mai") * c(1, 2.1, 1, 0.5))
 layout(matrix(1:2, ncol = 2))
 ci1 <- confint(glht(amod, linfct = mcp(alength = "Tukey")))
 ci2 <- confint(glht(amod, linfct = mcp(alength = "Tukey"), vcov = sandwich))
@@ -176,7 +177,7 @@ and caused the rejection of $H_0$. Alternatively, an MM-estimator
 \citep{Yohai1987} as implemented by \Rcmd{lmrob()} from package 
 \Rpackage{lmrob} \citep{pkg:robustbase} 
 can be used to fit a robust version of the above linear
-model, the results coincde rather nicely:
+model, the results coincide rather nicely:
 <<bodyfat-robust, echo = TRUE>>=
 summary(glht(lmrob(DEXfat ~ ., data = bodyfat), linfct = K))
 @
@@ -230,9 +231,9 @@ The negative regression coefficient for heavy smoking males indicates
 that Alzheimer's disease might be less frequent in this group, but the model
 is still difficult to interpret based on the coefficients and 
 corresponding $p$-values only. Therefore, confidence intervals
-on the probability scale for the different `risk groups' are interesing 
+on the probability scale for the different `risk groups' are interesting 
 and can be computed as follows. For each combination of gender and 
-smoking behaviour, the probability of suffering from Alzheimer's
+smoking behavior, the probability of suffering from Alzheimer's
 disease can be estimated by computing the logit function 
 of the linear predictor from model \Robject{gmod}. Using
 the \Rcmd{predict()} method for generalized linear models
@@ -260,7 +261,7 @@ attr(K, "contrasts") <- NULL
 
 For our model, $\K$ is given by the following matrix (essentially
 the design matrix of \Robject{gmod} for eight persons with different
-smoking behaviour from both genders)
+smoking behavior from both genders)
 \small
 <<alzheimer-K, echo = TRUE>>=
 K
@@ -270,7 +271,8 @@ and can easily be used to compute the confidence intervals described above
 <<alzheimer-probci, echo = TRUE>>=
 gmod_ci <- confint(glht(gmod, linfct = K))
 gmod_ci$confint <- apply(gmod_ci$confint, 2, binomial()$linkinv)
-plot(gmod_ci, xlab = "Probability", xlim = c(0, 1))
+plot(gmod_ci, xlab = "Probability of Developing Alzheimer", 
+     xlim = c(0, 1))
 @
 The simultaneous confidence intervals are depicted in 
 Figure~\ref{alzheimer-plot}. Using this representation of the results,
@@ -279,8 +281,9 @@ heavy smoking men compared to all other configurations of the two covariates.
 
 \begin{figure}
 \begin{center}
-<<alzheimer-plot, echo = FALSE, fig = TRUE, mai = TRUE, width = 6, height = 4>>=
-plot(gmod_ci, xlab = "Probability", xlim = c(0, 1), main = "", ylim = c(0.5, 8.5))
+<<alzheimer-plot, echo = FALSE, fig = TRUE, mai = TRUE, width = 7, height = 5>>=
+plot(gmod_ci, xlab = "Probability of Developing Alzheimer", 
+     xlim = c(0, 1), main = "", ylim = c(0.5, 8.5))
 @
 \caption{\Robject{alzheimer} data: Simultaneous confidence intervals for 
 the probability to suffer from Alzheimer's disease. \label{alzheimer-plot}}
