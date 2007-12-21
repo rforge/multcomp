@@ -1,6 +1,10 @@
 
 \SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE}
 
+<<warning, echo = FALSE, results = tex>>=
+cat("\n\n\t%%%% DON'T EDIT THIS FILE\n\n")
+@
+
 
 <<setup, echo = FALSE, results = hide>>=
 options(prompt = "R> ")
@@ -43,21 +47,21 @@ trees513$species <- trees513$species[,drop = TRUE]
 @
 
 <<trees-lmer, echo = TRUE>>=
-pmod <- lmer(damage ~ species - 1 + (1 | lattice:plot) + (1 | lattice), 
+mmod <- lmer(damage ~ species - 1 + (1 | lattice:plot) + (1 | lattice), 
              data = trees513, family = binomial())
-K <- diag(length(fixef(pmod)))
+K <- diag(length(fixef(mmod)))
 @
 
 <<trees-K-cosmetics, echo = FALSE, results = hide>>=
 colnames(K) <- rownames(K) <- 
-    paste(gsub("species", "", names(fixef(pmod))), 
+    paste(gsub("species", "", names(fixef(mmod))), 
           " (", table(trees513$species), ")", sep = "")
 @
 
 Based on $\K$, we first compute simultaneous confidence intervals
 for $\K \vartheta$ and transform these into probabilities:
 <<trees-ci, echo = TRUE>>=
-ci <- confint(glht(pmod, linfct = K))
+ci <- confint(glht(mmod, linfct = K))
 ci$confint <- 1 - binomial()$linkinv(ci$confint)
 ci$confint[,2:3] <- ci$confint[,3:2]
 @

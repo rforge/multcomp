@@ -1,6 +1,10 @@
 
 \SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE}
 
+<<warning, echo = FALSE, results = tex>>=
+cat("\n\n\t%%%% DON'T EDIT THIS FILE\n\n")
+@
+
 
 <<setup, echo = FALSE, results = hide>>=
 set.seed(290875)
@@ -101,9 +105,10 @@ amod_glht_sw <- glht(amod, linfct = mcp(alength = "Tukey"),
 summary(amod_glht_sw)
 @
 We used the \Rcmd{sandwich()} function from package \Rpackage{sandwich}
-\cite{Zeileis2004, Zeileis2006} which provides us with a 
+\citep{Zeileis2004, Zeileis2006} which provides us with a 
 heteroskedasticity-consistent estimator of the covariance matrix.
 This result is more in line with previously published findings
+for this study
 obtained from non-parametric test procedures such as the
 Kruskal-Wallis test. A comparison of the simultaneous 
 confidence intervals calculated based on the ordinary and
@@ -151,26 +156,26 @@ adjusted $p$-values. The linear model including all covariates and
 the classical unadjusted $p$-values are given by
 <<bodyfat-lm-fit, echo = TRUE>>=
 data("bodyfat", package = "mboost")
-summary(bmod <- lm(DEXfat ~ ., data = bodyfat))
+summary(lmod <- lm(DEXfat ~ ., data = bodyfat))
 @
 The linear function $\K$ is basically the identity matrix, except 
 for the intercept which is omitted. Once the matrix $\K$ has been 
 defined, it can be used to set up the general linear hypotheses:
 <<bodyfat-lm-maxtest, echo = TRUE>>=
-K <- cbind(0, diag(length(coef(bmod)) - 1))
-rownames(K) <- names(coef(bmod))[-1]
-bmod_glht <- glht(bmod, linfct = K)
+K <- cbind(0, diag(length(coef(lmod)) - 1))
+rownames(K) <- names(coef(lmod))[-1]
+lmod_glht <- glht(lmod, linfct = K)
 @
 Classically, one would perform an $F$-test to check if
 any of the regression coefficients is non-zero:
 <<bodyfat-lm-Ftest, echo = TRUE>>=
-summary(bmod_glht, test = Ftest())
+summary(lmod_glht, test = Ftest())
 @
 but the source of the deviation from the global null-hypothesis
 can only be inspected by the corresponding maximum-test, i.e., 
 via
 <<bodyfat-lm-maxtest, echo = TRUE>>=
-summary(bmod_glht)
+summary(lmod_glht)
 @
 Only two covariates, waist and hip circumference, seem to be important
 and caused the rejection of $H_0$. Alternatively, an MM-estimator
@@ -315,7 +320,7 @@ as their interactions with the patient's gender. Tukey's all-pair comparisons
 highlight that there seems to be a difference between `high' scores
 and both `low' and `intermediate' ones but the latter two aren't distinguishable:
 <<bullinger-survreg, echo = TRUE>>=
-bmod <- survreg(Surv(time, event) ~ Sex * (Age + WBC + LDH + FLT3 + risk), 
+smod <- survreg(Surv(time, event) ~ Sex * (Age + WBC + LDH + FLT3 + risk), 
                 data = clinical)
-summary(glht(bmod, linfct = mcp(risk = "Tukey")))
+summary(glht(smod, linfct = mcp(risk = "Tukey")))
 @

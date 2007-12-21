@@ -1,7 +1,7 @@
 
 \documentclass[12pt]{article}
 \usepackage{a4wide}
-\usepackage[lists,heads,nomarkers]{endfloat}
+\usepackage[lists,heads]{endfloat}
 
 \input{header}
 
@@ -18,8 +18,6 @@
   linktocpage = {true},
 }
  
-
-
 \title{Generalized Simultaneous Inference \\ in Parametric Models}
 \author{\textbf{Torsten Hothorn} \\
 Institut f{\"u}r Statistik \\
@@ -33,9 +31,35 @@ CH-4002 Basel, Switzerland \\
 Texas Tech University \\
 Lubbock, TX 79409, U.S.A}
 
+%% ToDo
+
+%% Introduction: more elaborate formulations
+%% add some references to recently published technology
+
+%% Section 2  / 3: Model & Inference
+%% check
+%% reference for multivariate T distribution and
+%% its applications
+
+%% Section 4: Applications
+%% references for M, S, REML etc. estimation
+
+%% Section 5: Implementation
+%% check
+
+%% Section 6: Illustrations:
+%% check
+
+%% Section 7: Discussion
+%% some comments on why we saved the world today.
+%% maybe some more references
+
 \begin{document}
 
+
 \maketitle
+\thispagestyle{empty}
+\setcounter{page}{0}
 
 \begin{abstract}
 Abstract
@@ -69,14 +93,17 @@ comparisons with the average, changepoint analysis, Williams',
 Marcus', or McDermott's contrasts. These procedures are
 all defined for the classical balanced one- or two-way ANOVA model
 with iid normal errors and constant variance.
+\marginpar{FB, PW: \\more elaborations?}
 
-The general framework for simultaneous inference improves
+The general framework for simultaneous inference presented here improves
 upon contemporary methodology with respect to the following
 issues: (i) model assumptions like normality and homoscedasticity
 are relaxed which opens up the way to simultaneous inference
 in arbitrary models, such as generalized linear models, mixed models,
 survival models etc. (ii) arbitrary linear functions of the
-parameters are allowed, not just contrasts. (iii)
+parameters are allowed, not just contrasts. (iii) 
+the reference distribution is trackable for arbitrary designs, not
+just for the balanced case and (iv)
 a unified implementation allowing for a fast transition of the
 theoretical results to the desks of data analysts interested
 in honest inference for multiple hypotheses is provided.
@@ -106,7 +133,8 @@ and $\m \in \R^k$.
 \paragraph{Model assumptions.}
 
 We assume that the parameter estimates $\hat{\vartheta}$ converge in law
-to a $p$-dimensional multivariate normal distribution:
+to a $p$-dimensional multivariate normal distribution as the sample
+size $n$ tends to infinity:
 \begin{eqnarray} \label{normality}
 \hat{\vartheta} \cL \N_p\left(\vartheta, \Sigma\right)
 \end{eqnarray}
@@ -164,7 +192,9 @@ normality of $\T$ follows from the Cram{\'e}r-Wold device. Note that
 all elements of $\T$ have mean zero and variance $1$. In summary,
 the vector of test statistics $\T$ converges in law to a multivariate
 normal distribution with correlation matrix 
-$\Cor := \D \S \D^\top \in \R^{k,k}$.
+$\Cor := \D \S \D^\top \in \R^{k,k}$. This limiting distribution
+will be used as the reference distribution when constructing
+simultaneous inference procedures in the next section.
 
 \section{Simultaneous Inference} \label{siminf}
 
@@ -182,8 +212,8 @@ follows by standard arguments that $\T \sim \N_k(0, \Cor)$.
 When $\Sigma$ is unknown (the typical situation of linear models
 with normal iid errors and constant variance), the
 exact distribution of $\T$ is a $k$-dimensional multivariate $\mathcal{T}$
-distribution with $df$ degrees of freedom (df $ = n - p - 1$ for linear models).
-\marginpar{Ref}
+distribution with df degrees of freedom (df $ = n - p - 1$ for linear models).
+\marginpar{FB: Ref}
 
 Now, the distribution function of $\T$ can be calculated or approximated
 by evaluating the $k$-dimensional exact or limiting distributions for some $t \in R$:
@@ -203,22 +233,23 @@ for approximating the above multivariate normal and $\mathcal{T}$
 probabilities are described in \cite{Genz1992,GenzBretz1999,BretzGenzHothorn2001}
 and \cite{GenzBretz2002}. Alan Genz' implementations of these algorithms
 are available in \RR{} from package \Rpackage{mvtnorm} 
-\citep{pkg:mvtnorm,Rnews:Hothorn+Bretz+Genz:2001}.
+\citep{pkg:mvtnorm,Rnews:Hothorn+Bretz+Genz:2001}. The procedures
+are applicable to small and moderate problems with up to $k < 100$ hypotheses.
 
 \paragraph{Simultaneous tests.}
 
-An adjusted $p$-value for the $j$th partial hypothesis 
+A two-sided adjusted $p$-value for the $j$th partial hypothesis 
 \begin{eqnarray*}
-H_0^j: (\K \vartheta)_j = \m_j
+H_0^j: (\K \vartheta)_j = \m_j \quad j = 1, \dots, k.
 \end{eqnarray*}
 is given by $1 - \Prob(\max(|\T|) \le |t_j|)$ when the test statistic 
 $\tt  = (t_1, \dots, t_k)$
-has been observed. More precisely, the adjusted $p$-values for different
+has been observed. More general, the adjusted $p$-values for three different
 directions of the alternative $H_1$ are given as follows:
 \begin{eqnarray*}
 & & H_0: \K \vartheta = \m \text{ vs. } H_1: \K \vartheta \not = \m \quad \Rightarrow \quad p_j  =  1 - \Prob(\max(|\T|) \le t) \quad \text{("two.sided")} \\
 & & H_0: \K \vartheta \ge \m \text{ vs. } H_1: \K \vartheta < \m  \quad \Rightarrow \quad p_j  =  1 - \Prob(\max(\T) \le t) \quad \text{("less")} \\
-& & H_0: \K \vartheta \le \m \text{ vs. } H_1: \K \vartheta > \m \quad \Rightarrow \quad p_j  =  1 - \Prob(\min(\T) \ge t) \quad \text{("greater")} \\
+& & H_0: \K \vartheta \le \m \text{ vs. } H_1: \K \vartheta > \m \quad \Rightarrow \quad p_j  =  1 - \Prob(\min(\T) \ge t) \quad \text{("greater")}
 \end{eqnarray*}
 The global $p$-value for a two-sided test problem is $1 - \Prob(\max(|\T|) \le \max|t_j|)$.
 
@@ -231,6 +262,9 @@ X^2 & = & (\K \hat{\vartheta} - \m)^\top \hat{\S}^+ (\K \hat{\vartheta} - \m) \c
 \quad \text{for } \hat{\vartheta} \cL \N_p(\vartheta, \Sigma) \\
 F & = &  \frac{X^2}{\Rg(\hat{\S})} \sim \F_{\text{df}, \Rg(\hat{\S})} \quad \text{for } \hat{\vartheta} \sim \N_p(\vartheta, \Sigma)
 \end{eqnarray*}
+In contrast to the maximum-test $\max(|\T|)$, these global tests don't shed light 
+on the question which of the $k$ partial hypotheses $H_0^j, j = 1, \dots, k$ 
+lead to the rejection of the global hypothesis $H_0$. 
 
 \paragraph{Simultaneous confidence sets.}
 
@@ -239,16 +273,17 @@ confidence set for $\K \vartheta$ is given by
 $\K \hat{\vartheta} \pm q_\alpha \text{diag}(\hat{\S})^{-1/2}$
 where $q_\alpha$ is the $1 - \alpha$ 
 quantile of the distribution of $\T$ 
-such that $\Prob(\max{\T} \le q_\alpha) \ge 1 - \alpha$.
+such that $\Prob(\max{|\T|} \le q_\alpha) \ge 1 - \alpha$.
 
 \section{Applications} \label{applications}
 
 The framework described above is rather general and applicable 
-to a wide range of models since most estimates are at least asymptotically
-normal and a consistent estimate of their covariance matrix
-is usually available and readily implemented. Most prominent
+to a wide range of models since most estimation techniques provide us with 
+at least asymptotically normal estimates of the parameters 
+and a consistent estimate of their covariance matrix. Most prominent
 representatives are models fitted by maximum likelihood, M-estimation,
-restricted maximum likelihood etc. \marginpar{more!}
+restricted maximum likelihood etc. 
+\marginpar{more + Refs}
 It should be noted that we didn't make assumptions on the form
 of $\K$ whatsoever and thus a rather straightforward construction 
 principle for new simultaneous inference procedures is available. In
@@ -256,13 +291,43 @@ what follows, we assume $\m = 0$ only for the sake of simplicity.
 The next paragraphs highlight a subjective selection of 
 some special cases of practical importance.
 
+\paragraph{Multiple Linear Models.}
+
+For regression models, the observations $\Z_i$ consist of a response
+variable $Y_i$ and a vector of covariates $\X_i = (X_{i1}, \dots, X_{iq})$, 
+i.e., $\Z_i = (Y_i, \X_i)$. The response is modelled by a linear
+combination of the covariates with normal error and constant variance $\sigma^2$:
+\begin{eqnarray*}
+Y_i = \beta_0 + \sum_{i = 1}^q \beta_i X_{ij} + \sigma \varepsilon_i \quad 
+      \varepsilon \sim \N(0, 1).
+\end{eqnarray*}
+The parameter vector of interest is $\vartheta = (\beta_0, \beta_1, \dots, \beta_q)$
+usually estimated by 
+\begin{eqnarray*}
+\hat{\vartheta} = \left(\X^\top\X\right)^{-1} \X^\top \Y 
+\sim \N_{q+1}\left(\vartheta, \sigma^2 \left(\X^\top\X\right)^{-1}\right)
+\end{eqnarray*}
+with design matrix $\X = (1, (X_{ij}))_{ij}, i = 1, \dots, n, j = 1, \dots, q$ and
+vector of responses $\Y = (Y_1, \dots, Y_n)$. Thus,
+for every matrix $\K \in \R^{k,q+1}$ is holds that
+\begin{eqnarray*}
+\K \hat{\vartheta} \sim \N_k(\K \vartheta, \sigma^2 \K \left(\X^\top\X\right)^{-1} \K^\top)
+\end{eqnarray*}
+and under the hypothesis $\K \vartheta = 0$ the standardized test statistics
+\begin{eqnarray*}
+\T = \hat{\D} \K \hat{\vartheta} \sim \T_{n - q}(0, \Cor)
+\end{eqnarray*}
+where $\hat{\D}$ is the diagonal matrix of the inverse estimated 
+standard deviations of $\K \hat{\vartheta}$ and $\Cor$ is the correlation matrix
+as given in Section~\ref{siminf}.
+
 \paragraph{One-way ANOVA.}
 
 Consider a one-way ANOVA model for a factor measured at $q$ levels
 with a continuous response and normal errors $\varepsilon_{ij} \sim \N_1(0, \sigma^2)$, 
 i.e., the model
 \begin{eqnarray*}
-Y_{ij} = \mu + \alpha_{j} + \varepsilon_{ij}, j = 1,\dots,q \, i = 1, \dots, n_j.
+Y_{ij} = \mu + \alpha_{j} + \varepsilon_{ij}, j = 1,\dots,q; \quad i = 1, \dots, n_j.
 \end{eqnarray*}
 The model is overparameterized and thus only the parameters
 $\vartheta = (\mu, \alpha_2 - \alpha_1, \alpha_3 - \alpha_1, \dots, \alpha_q - \alpha_1)$ 
@@ -343,8 +408,8 @@ matrix $\hat{\Sigma}$ are accessible by the model's \Rcmd{coef()}
 and \Rcmd{vcov()} methods. Thus, it is sufficient to assume both
 methods being available for the model of interest. The \underline{g}eneral
 \underline{l}inear \underline{h}ypo\underline{t}hesis for a model 
-\Robject{model} and a representation of the linear function $\K$
-called \Robject{linfct} is set up using \Rcmd{glht()}:
+`\Robject{model}' and a representation of the matrix $\K$
+is set up using \Rcmd{glht()}:
 \begin{Sinput}
 glht(model, linfct, alternative = c("two.sided", "less", "greater"), 
      rhs = 0, ...)
@@ -359,7 +424,7 @@ The matrix $\K$ can be described in three ways
 \end{itemize}
 The latter one is convenient when contrasts of levels of a factor are
 to be compared and the model contrasts used to define the design matrix
-of the model have to be taking into account. The \Rcmd{mcp()} function
+of the model have to be taken into account. The \Rcmd{mcp()} function
 takes the name of the factor under test as argument and a character 
 defining the type of comparisons as its value. For example,
 \Rcmd{mcp(type = "Tukey")} sets up a matrix $\K$ for Tukey's honest
@@ -369,17 +434,20 @@ of \Robject{model}. In this particular case, we need to assume
 that \Rcmd{model.frame()} and \Rcmd{model.matrix()} methods for 
 \Robject{model} are available as well. The two remaining arguments
 \Rarg{alternative} and \Rarg{rhs} define the direction
-of the alternative (see Section~\ref{model}) and $\m$, respectively.
+of the alternative (see Section~\ref{siminf}) and $\m$, respectively.
 
 Objects of class \Rclass{glht} returned by \Rcmd{glht()} are equiped with
 \Rcmd{coef()} and \Rcmd{vcov()} methods for computing
 $\K \hat{\vartheta}$ and $\hat{\S}$. Furthermore, a \Rcmd{summary()} method
-is available for computing various flavors of tests (maximum-type, $X^2$ and $F$
-tests) and adjusted $p$-values including those taking 
+is available for performing various flavors of tests (maximum-type, $\chi^2$ and 
+$F$-tests) and adjusted $p$-values including those taking 
 logical constraints into account \citep{Shaffer1986, Westfall1997}.
 In addition, the \Rcmd{confint()} method applied to objects of class 
-\Robject{glht} returns simultaneous confidence intervals and allows
-for a graphical representation of the results.
+\Rclass{glht} returns simultaneous confidence intervals and allows
+for a graphical representation of the results. Adjusted $p$-values and
+simultaneous confidence intervals implemented in \Rpackage{multcomp}
+are continuously checked against results reported by
+\cite{Westfall1999}.
 
 The technical details of the implementation are not very interesting
 at this point and we hope that the basic principles become much
