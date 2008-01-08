@@ -72,50 +72,52 @@ adjusted $p$-values, multivariate normal distribution, robust statistics.
 
 \section{Introduction}
 
+Multiplicity is an intrinsic problem of any simultaneous inference. 
+If each of $k$, say, null hypotheses is tested at nominal level $\alpha$, 
+the overall type I error rate can be substantially larger than $\alpha$.
+That is, the probability of at least one erroneous rejection is larger than $\alpha$ for 
+$k \geq 2$. Common multiple testing and comparison procedures adjust for multiplicity and thus 
+ensure that the overall type I error remains below the pre-specified significance level.
+Example of such multiple comparison procedures include Dunnett's many-to-one comparisons,
+Tukey's all-pairwise differences, sequential pairwise contrasts, comparisons with the 
+average, changepoint analyses, dose-response contrasts, etc. These procedures are
+all well established for classical regression and ANOVA models allowing for covariates 
+and/or factorial treatment structures with i.i.d.~normal errors and constant 
+variance, see ??? and the references therein. For a general reading 
+on multiple comparison procedures we refer to 
+\cite{HochbergTamhane1987} and \cite{Hsu1996}.
 
-The multiplicity problem arises when several inferences are considered
-simultaneously as a group.  If each inference has a $5\%$ error rate,   
-then the error rate over the entire group can be much higher than $5\%$.
-In this paper we aim at a unified treatment of simultaneous
-inference procedures in parametric and semi-parametric
-models where parameter estimates are generally correlated.
-Each partial hypothesis is described by a linear
+In this paper we aim at a unified description of simultaneous
+inference procedures in parametric models with generally correlated parameter estimates.
+Each individual null hypothesis is specified through a linear
 combination of the model parameters and we allow
-for $k$ of such hypotheses to be tested simultaneously,
-either using $p$-values or confidence intervals
-for the linear functions. Maybe the most prominent
-and practially interesting applications are multiple
-comparison procedures where the model parameters
-refer to groups such as treatments, for example.
-Popular approaches include Dunnett's many-to-one comparisons,
-Tukey's honest significant differences, sequential pairwise contrasts, 
-comparisons with the average, changepoint analysis, Williams', 
-Marcus', or McDermott's contrasts. These procedures are
-all defined for the classical balanced one- or two-way ANOVA model
-with iid normal errors and constant variance.
-\marginpar{FB, PW: \\more elaborations?}
-
-The general framework for simultaneous inference presented here improves
-upon contemporary methodology with respect to the following
-issues: (i) model assumptions like normality and homoscedasticity
-are relaxed which opens up the way to simultaneous inference
-in arbitrary models, such as generalized linear models, mixed models,
-survival models etc. (ii) arbitrary linear functions of the
-parameters are allowed, not just contrasts. (iii) 
-the reference distribution is trackable for arbitrary designs, not
-just for the balanced case and (iv)
-a unified implementation allowing for a fast transition of the
+for $k$ of such null hypotheses to be tested simultaneously.
+The general framework described here extends the current canonical theory 
+with respect to the following aspects: (i) model assumptions, such as normality 
+and homoscedasticity
+are relaxed, thus allowing for simultaneous inference
+in generalized linear models, mixed-effects models,
+survival models, etc.; (ii) arbitrary linear functions of the
+parameters are allowed, not just contrasts of means in AN(C)OVA models; (iii)
+computing the reference distribution is feasible for arbitrary designs,
+especially unbalanced designs; and (iv)
+a unified implementation is provided which allows for a fast transition of the
 theoretical results to the desks of data analysts interested
-in honest inference for multiple hypotheses is provided.
+in simultaneous inferences for multiple hypotheses.
 
-The paper is organized as follows. In Sections~\ref{model} and \ref{siminf} we
-describe a unified framework for generalized simultaneous inference
-procedures. An overview on the most important applications
+Accordingly, the paper is organized as follows. 
+The first Section defines the general model and obtains 
+the asymptotic or exact distribution of linear functions
+of model parameters under rather weak conditions. 
+In Section~\ref{siminf} we
+describe the framework for simultaneous inference
+procedures in general parametric models. An overview about important applications
 of the methodology is given in Section~\ref{applications} followed
-by a short discussion of a software implementation in Section~\ref{implementation}.
-Most interesting from a practical point of view is 
+by a short discussion of the software implementation in Section~\ref{implementation}.
+Most interesting from a practical point of view is
 Section~\ref{illustrations} where we analyze four rather challenging
 problems with the tools developed in this paper.
+
 
 \section{Model and Estimation} \label{model}
 
@@ -142,6 +144,22 @@ with constant and finite covariance matrix $\Sigma \in \R^{p,p}$.
 Since the covariance matrix is usually unknown, we assume 
 that we are given a consistent estimate $\hat{\Sigma} \cP \Sigma$.
 
+Because we only assume asymptotic normality of the parameter estimates
+and consistent information about their covariance matrix,
+a huge class of classical and modern statistical models, from the linear
+regression model and ANOVA models to generalised linear models, linear mixed
+effects models, the Cox model, robust linear models etc.~pp.~, are 
+covered. Standard software packages can be used to fit such models
+and obtain estimates $\hat{\vartheta}$ and $\hat{\Sigma}$ which
+are the only two quantities that are needed for what follows.
+It should be noted that the model parameters are not necessarily
+interpreted as means or differences of means in AN(C)OVA models
+and thus not only simultaneous contrasts of such means, the corresponding
+inference procedures are known as \emph{multiple comparisons}, 
+are under test here. Therefore we use the more general term
+\emph{simultaneous inference} in Section~\ref{siminf}.
+
+
 \paragraph{Limiting distribution of $f_{\K,\m}(\hat{\vartheta})$.}
 
 The linear function $f_{\K, \m}$ is continuous and differentiable in
@@ -152,7 +170,9 @@ converges in law to a (possibly singular) $k$-dimensional normal distribution:
 f_{\K, \m}(\hat{\vartheta}) = \K \hat{\vartheta} - \m 
 \cL \N_k\left(\K \vartheta - \m, \K \Sigma \K^\top\right).
 \end{eqnarray}
-Furthermore, it follows from the same theorem that we can 
+Furthermore, because the quadratic form $\K \hat{\Sigma} \K^\top$
+is continuous and, by assumption, $\hat{\Sigma} \cP \Sigma$, 
+it follows from the continuous mapping theorem that we can 
 consistently estimate the unknown covariance matrix $\K \Sigma \K^\top$ utilizing
 the consistent estimate $\hat{\Sigma}$ of the covariance matrix $\Sigma$:
 \begin{eqnarray*}
@@ -188,41 +208,50 @@ u_j \hat{\S}_{jj}^{-1/2} (\K \hat{\vartheta} - \m)_j & \cL &
 & = & \N_1\left(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2\right)
 \end{eqnarray*}
 Because the above holds for every $\uu \in \R^k$, the asymptotic multivariate
-normality of $\T$ follows from the Cram{\'e}r-Wold device. Note that
-all elements of $\T$ have mean zero and variance $1$. In summary,
-the vector of test statistics $\T$ converges in law to a multivariate
-normal distribution with correlation matrix 
-$\Cor := \D \S \D^\top \in \R^{k,k}$. This limiting distribution
-will be used as the reference distribution when constructing
-simultaneous inference procedures in the next section.
+normality of $\T$ follows from the Cram{\'e}r-Wold device. 
+
 
 \section{Simultaneous Inference} \label{siminf}
 
-Under the general linear hypothesis \citep{Searle1971}
+We are primarily interested in inference, both tests and confidence
+intervals, about linear functions $\K \vartheta$ of the parameter vector
+$\vartheta$ and consider the general linear hypothesis \citep{Searle1971}
 \begin{eqnarray*}
 H_0: \K \vartheta = \m
 \end{eqnarray*}
-it has been shown in Section~\ref{model} that 
-$\T \cL \N_k(0, \Cor)$ holds true. At this point it is worth
+as global hypothesis with $k$ partial hypotheses defined by the
+$j$th row of $\K$:
+\begin{eqnarray*}
+H_0^j: (\K\vartheta)_j = \m_j \text{ with } H_0 = \bigcap_{j = 1}^k H_0^j
+\end{eqnarray*}
+Under the conditions of $H_0$ it follows from Section~\ref{model} that 
+$\T \cL \N_k(0, \Cor)$ holds true. This limiting distribution
+will now be used as the reference distribution when constructing
+simultaneous inference procedures.
+
+At this point it is worth
 considering two special cases. A stronger assumption than asymptotic normality
 of $\hat{\vartheta}$ (\ref{normality}) is exact normality, i.e., 
 $\hat{\vartheta} \sim \N_p(\vartheta, \Sigma)$. Under the unrealistic
 further assumption of the covariance matrix $\Sigma$ being known, it
 follows by standard arguments that $\T \sim \N_k(0, \Cor)$. 
-When $\Sigma$ is unknown (the typical situation of linear models
+When $\Sigma = \sigma^2 \A$ with $\A$ fix and known 
+but $\sigma^2$ is not given (the typical situation of linear models
 with normal iid errors and constant variance), the
 exact distribution of $\T$ is a $k$-dimensional multivariate $\mathcal{T}$
 distribution with df degrees of freedom (df $ = n - p - 1$ for linear models).
 \marginpar{FB: Ref}
 
-Now, the distribution function of $\T$ can be calculated or approximated
+\paragraph{Simultaneous tests.}
+
+A suitable scalar test statistic for testing the two-sided global hypothesis 
+$H_0$ is $\max(|\T|)$ leading to the so-called \emph{maximum-test}. 
+The distribution of this statistic under the conditions of $H_0$
+can be calculated or approximated
 by evaluating the $k$-dimensional exact or limiting distributions for some $t \in R$:
 \begin{eqnarray*}
-& & \Prob(\max(|\T|) \le t)  \cong  \int\limits_{-t}^t \cdots \int\limits_{t}^t 
-\varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k \quad \text{ ("two sided")}\\
-& & \Prob(\max(\T) \le t)  \cong\int\limits_{-\infty}^t \cdots \int\limits_{-\infty}^t 
-\varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k \quad \text{("less")}\\
-& & \Prob(\min(\T) \ge t) \cong  \int\limits_{t}^\infty \cdots \int\limits_{t}^\infty \varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k \quad \text{("greater")}\\
+\Prob(\max(|\T|) \le t)  \cong  \int\limits_{-t}^t \cdots \int\limits_{t}^t 
+\varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k 
 \end{eqnarray*}
 where $\varphi_k$ is either the density function of the limiting multivariate
 normal (df $ = 1$ and `$\approx$') or exact multivariate $\mathcal{T}$-distribution (df $ > 1$
@@ -236,22 +265,32 @@ are available in \RR{} from package \Rpackage{mvtnorm}
 \citep{pkg:mvtnorm,Rnews:Hothorn+Bretz+Genz:2001}. The procedures
 are applicable to small and moderate problems with up to $k < 100$ hypotheses.
 
-\paragraph{Simultaneous tests.}
-
-A two-sided adjusted $p$-value for the $j$th partial hypothesis 
+Thus, two-sided adjusted $p$-value for the $j$th partial hypothesis 
 \begin{eqnarray*}
 H_0^j: (\K \vartheta)_j = \m_j \quad j = 1, \dots, k.
 \end{eqnarray*}
 is given by $1 - \Prob(\max(|\T|) \le |t_j|)$ when the test statistic 
 $\tt  = (t_1, \dots, t_k)$
-has been observed. More general, the adjusted $p$-values for three different
+has been observed. The global $p$-value for a two-sided test problem is 
+$1 - \Prob(\max(|\T|) \le \max|\tt|)$.
+
+More general, the adjusted $p$-values for three different
 directions of the alternative $H_1$ are given as follows:
 \begin{eqnarray*}
-& & H_0: \K \vartheta = \m \text{ vs. } H_1: \K \vartheta \not = \m \quad \Rightarrow \quad p_j  =  1 - \Prob(\max(|\T|) \le t) \quad \text{("two.sided")} \\
-& & H_0: \K \vartheta \ge \m \text{ vs. } H_1: \K \vartheta < \m  \quad \Rightarrow \quad p_j  =  1 - \Prob(\max(\T) \le t) \quad \text{("less")} \\
-& & H_0: \K \vartheta \le \m \text{ vs. } H_1: \K \vartheta > \m \quad \Rightarrow \quad p_j  =  1 - \Prob(\min(\T) \ge t) \quad \text{("greater")}
+& & H_0: \K \vartheta = \m \text{ vs. } H_1: \K \vartheta \not = \m \quad \Rightarrow \quad p_j  =  1 - \Prob(\max(|\T|) \le
+|t_j|)) \quad \text{("two.sided")} \\
+& & H_0: \K \vartheta \ge \m \text{ vs. } H_1: \K \vartheta < \m  \quad \Rightarrow \quad p_j  =  1 - \Prob(\max(\T) \le
+t_j) \quad \text{("less")} \\
+& & H_0: \K \vartheta \le \m \text{ vs. } H_1: \K \vartheta > \m \quad \Rightarrow \quad p_j  =  1 - \Prob(\min(\T) \ge
+t_j) \quad \text{("greater")}
 \end{eqnarray*}
-The global $p$-value for a two-sided test problem is $1 - \Prob(\max(|\T|) \le \max|t_j|)$.
+where the latter two probabilities are calculated as 
+\begin{eqnarray*}
+& & \Prob(\max(\T) \le t)  \cong\int\limits_{-\infty}^t \cdots \int\limits_{-\infty}^t 
+\varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k \quad \text{("less")}\\
+& & \Prob(\min(\T) \ge t) \cong  \int\limits_{t}^\infty \cdots \int\limits_{t}^\infty \varphi_k(x_1, \dots, x_k; \Cor, \text{df}) \, dx_1 \cdots dx_k \quad \text{("greater")}\\
+\end{eqnarray*}
+
 
 
 Alternatively, a quadratic form based on the Moore-Penrose inverse $\hat{\S}^+$ of 
@@ -269,11 +308,14 @@ lead to the rejection of the global hypothesis $H_0$.
 \paragraph{Simultaneous confidence sets.}
 
 A simultaneous $(1 - 2\alpha) \times 100\%$ 
-confidence set for $\K \vartheta$ is given by 
-$\K \hat{\vartheta} \pm q_\alpha \text{diag}(\hat{\S})^{-1/2}$
+confidence set for $\K \vartheta$ is given by
+\begin{eqnarray*} 
+\K \hat{\vartheta} \pm q_\alpha \text{diag}(\hat{\S})^{-1/2}
+\end{eqnarray*}
 where $q_\alpha$ is the $1 - \alpha$ 
 quantile of the distribution of $\T$ 
-such that $\Prob(\max{|\T|} \le q_\alpha) \ge 1 - \alpha$.
+such that $\Prob(\max{|\T|} \le q_\alpha) \ge 1 - \alpha$. The corresponding
+one-sided version are defined analogeously.
 
 \section{Applications} \label{applications}
 
@@ -319,7 +361,9 @@ and under the hypothesis $\K \vartheta = 0$ the standardized test statistics
 \end{eqnarray*}
 where $\hat{\D}$ is the diagonal matrix of the inverse estimated 
 standard deviations of $\K \hat{\vartheta}$ and $\Cor$ is the correlation matrix
-as given in Section~\ref{siminf}.
+as given in Section~\ref{siminf}. The body fat prediction example
+presented in Subsection \ref{bodyfat} illustrates the use of simultenous
+inference procedures for variable selection.
 
 \paragraph{One-way ANOVA.}
 
@@ -327,10 +371,11 @@ Consider a one-way ANOVA model for a factor measured at $q$ levels
 with a continuous response and normal errors $\varepsilon_{ij} \sim \N_1(0, \sigma^2)$, 
 i.e., the model
 \begin{eqnarray*}
-Y_{ij} = \mu + \alpha_{j} + \varepsilon_{ij}, j = 1,\dots,q; \quad i = 1, \dots, n_j.
+Y_{ij} = \mu + \gamma_{j} + \varepsilon_{ij}, j = 1,\dots,q; \quad i = 1, \dots, n_j.
 \end{eqnarray*}
 The model is overparameterized and thus only the parameters
-$\vartheta = (\mu, \alpha_2 - \alpha_1, \alpha_3 - \alpha_1, \dots, \alpha_q - \alpha_1)$ 
+$\vartheta = (\mu, \gamma_2 - \gamma_1, \gamma_3 - \gamma_1, \dots, \gamma_q -
+\gamma_1)$ 
 are  estimated by classical least-squares. (Note that other contrasts can be used
 but theses so-called `treatment contrasts' are the most prominent ones and,
 for example, the default in \RR.) 
@@ -338,15 +383,16 @@ Most of the classical approaches
 to multiple comparisons can be embedded into this simple framework and 
 the two most prominent ones are Dunnett's many-to-one procedure and
 Tukey's honest significant differences. For Dunnett's procedures,
-the differences of all coefficients with $\alpha_1$ are under test, i.e.,
+the differences of all coefficients with $\gamma_1$ are under test, i.e.,
 a linear function
 \begin{eqnarray*}
 \K_\text{Dunnett} = (0, \diag(q))
 \end{eqnarray*}
-with so called `contrasts' 
-$\K_\text{Dunnett} \vartheta = (\alpha_2 - \alpha_1, \alpha_3 - \alpha_1, \dots, \alpha_q - \alpha_1)$.
+with contrasts
+$\K_\text{Dunnett} \vartheta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1, \dots,
+\gamma_q - \gamma_1)$.
 For Tukey's honest significant differences the interest is in inference on
-all possible differences of the model parameters $\alpha_1, \dots, \alpha_q$, i.e., 
+all possible differences of the model parameters $\gamma_1, \dots, \gamma_q$, i.e., 
 the matrix (here for $q = 3$)
 \begin{eqnarray*}
 \K_\text{Tukey} = \left( 
@@ -355,31 +401,41 @@ the matrix (here for $q = 3$)
 0 & 1 & -1 
 \end{array} \right)
 \end{eqnarray*}
-with $\K_\text{Tukey} \vartheta = (\alpha_2 - \alpha_1, \alpha_3 - \alpha_1, \alpha_2 - \alpha_3)$.
-Many other contrasts have been studies in the past, such as Williams, McDermott, Marcus,
-Sequential, Changepoints etc. pp. \marginpar{Ref!} and all can be formulated in terms
-of a linear function $\K \vartheta$.
+with $\K_\text{Tukey} \vartheta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1,
+\gamma_2 - \gamma_3)$.
 
-Under the standard assumptions of ANOVA models, i.e., iid normal errors with constant
-variance, the vector of test statistics $\T$ follows an exact $\mathcal{T}$-distribution and
-thus, simultaneous tests and confidence intervals are `exact' as well.
+Many further multiple comparison procedures have been investigated in the past, 
+which all fit into this framework. We refer to \cite{BretzGenzHothorn2001} for a related 
+comprehensive list. Note that under the standard ANOVA assumptions of
+i.i.d.~normal errors with constant variance the vector of test statistics $\T$ 
+follows a multivariate $\T$ distribution. Thus, related simultaneous tests and 
+confidence intervals do not rely on asymptotics and can be computed analytically 
+instead, as shown in Section~\ref{siminf}.
 
-\paragraph{GLM, (N)LME and survival models.}
+All-pair comparisons of expression levels for various genetic conditions 
+based on an ANOVA model are illustrated in Subsection~\ref{alpha}.
 
-In generalized linear models, the exact distribution of the parameter estimates
+\paragraph{Further parametric models.}
+
+In \emph{generalized linear models}, the exact distribution of the parameter estimates
 is usually unknown and thus the asymptotic normal distribution is the basis for all
 inference procedures. When we are interested in inference about model
 parameters corresponding to levels of a certain factor, the same multiple 
 comparison procedures as sketched above are available. 
-
-Linear and non-linear mixed effects models fitted by REML provide
+\emph{Linear and non-linear mixed effects} models fitted by restricted
+maximum-likelihood provide
 the data analyst with asymptotically normal errors and a consistent
 covariance matrix as well so that all assumptions of our framework
 are met and one can set up simultaneous inference procedures
 for these models as well.
-
-The same is true for the Cox model or other parametric survival models
+The same is true for the \emph{Cox model} or other parametric survival models
 such as the Weibull model.
+
+We use logistic regression models to estimated the probability of suffering
+from Alzheimer's disease in Subsection~\ref{alzheimer}, compare several risk
+factors for survival of leukemia patients by means of a Weibull model in
+Subsection~\ref{AML} and obtain probability estimates of deer browsing for
+various tree species from mixed models in Subsection~\ref{forest}.
 
 \paragraph{Robust simultaneous inference.}
 
@@ -390,8 +446,8 @@ for example when the variance homogeneity in linear models is violated.
 An even more robust approach is to use robust linear models, for example
 fitted using MM.
 
-The reader is referred to Section~\ref{illustrations} for some practical
-instances of these ideas.
+The reader is referred to Section~\ref{illustrations} for examples of
+robustified simultaneous inference.
 
 \section{Implementation} \label{implementation}
 
@@ -405,15 +461,21 @@ simultaneous tests and confidence intervals for a wide range of models.
 
 In \RR, estimated model coefficients $\hat{\vartheta}$ and their covariance 
 matrix $\hat{\Sigma}$ are accessible by the model's \Rcmd{coef()} 
-and \Rcmd{vcov()} methods. Thus, it is sufficient to assume both
+and \Rcmd{vcov()} methods. Examples include objects of class \Rclass{lm},
+\Rclass{glm}, \Rclass{coxph}, \Rclass{nlme}, \Rclass{survreg} and many more.
+Thus, it is sufficient to assume both
 methods being available for the model of interest. The \underline{g}eneral
 \underline{l}inear \underline{h}ypo\underline{t}hesis for a model 
-`\Robject{model}' and a representation of the matrix $\K$
+`\Robject{model}' and a representation of the matrix $\K$ (via its
+\Robject{linfct} argument)
 is set up using \Rcmd{glht()}:
 \begin{Sinput}
 glht(model, linfct, alternative = c("two.sided", "less", "greater"), 
      rhs = 0, ...)
 \end{Sinput}
+The two remaining arguments
+\Rarg{alternative} and \Rarg{rhs} define the direction
+of the alternative (see Section~\ref{siminf}) and $\m$, respectively.
 The matrix $\K$ can be described in three ways
 \begin{itemize}
 \item by a matrix with \Rcmd{length(coef(model))} columns,
@@ -432,9 +494,7 @@ significant differences in all levels of a factor \Robject{type}
 which has to be part of right hand side of the model formula
 of \Robject{model}. In this particular case, we need to assume
 that \Rcmd{model.frame()} and \Rcmd{model.matrix()} methods for 
-\Robject{model} are available as well. The two remaining arguments
-\Rarg{alternative} and \Rarg{rhs} define the direction
-of the alternative (see Section~\ref{siminf}) and $\m$, respectively.
+\Robject{model} are available as well. 
 
 Objects of class \Rclass{glht} returned by \Rcmd{glht()} are equiped with
 \Rcmd{coef()} and \Rcmd{vcov()} methods for computing

@@ -14,7 +14,7 @@ library("lme4")
 data("trees513", package = "multcomp")
 @
 
-\paragraph{Forest Regeneration.}
+\subsection{Forest Regeneration} \label{forest}
 
 In most parts of Germany, the natural or artificial 
 regeneration of forests is difficult due to a high browsing

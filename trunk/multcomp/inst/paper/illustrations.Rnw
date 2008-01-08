@@ -31,7 +31,7 @@ vcov.lmrob <- function(object) object$cov
 
 \section{Illustrations} \label{illustrations}
 
-\paragraph{Genetic components of alcoholism.}
+\subsection{Genetic components of alcoholism} \label{alpha}
 
 Various studies have linked alcohol dependence phenotypes to chromosome 4.
 One candidate gene is \textit{NACP} (non-amyloid component of plaques),   
@@ -134,7 +134,7 @@ plot(ci2, xlim = c(-0.6, 2.6), main = expression(paste("Tukey HSD (sandwich ", h
 \end{figure}
 
 
-\paragraph{Prediction of total body fat.}
+\subsection{Prediction of total body fat} \label{bodyfat}
 
 \citet{garcia2005} report on the development of predictive regression equations
 for body fat content by means of $p = 9$ common anthropometric
@@ -187,7 +187,7 @@ model, the results coincide rather nicely:
 summary(glht(lmrob(DEXfat ~ ., data = bodyfat), linfct = K))
 @
 
-\paragraph{Smoking and Alzheimer's disease.}
+\subsection{Smoking and Alzheimer's disease} \label{alzheimer}
 
 <<alzheimer-demographics, echo = FALSE>>=
 total <- nrow(alzheimer)
@@ -295,7 +295,7 @@ the probability to suffer from Alzheimer's disease. \label{alzheimer-plot}}
 \end{center}
 \end{figure}
 
-\paragraph{Acute myeloid leukemia. \label{AML}}
+\subsection{Acute myeloid leukemia} \label{AML}
 
 The treatment of patients suffering from acute myeloid leukemia (AML) is
 determined by a tumor classification scheme taking the status of various
