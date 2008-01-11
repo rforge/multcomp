@@ -169,16 +169,19 @@ are under test here. Therefore we use the more general term
 \paragraph{Limiting distribution of $f_{\K,\m}(\hat{\vartheta})$.}
 
 The linear function $f_{\K, \m}$ is continuous and differentiable in
-$\vartheta$ with Jacobian $\K$ and thus, by Cram{\'e}r's Theorem, 
+$\vartheta$ and thus, by Theorem 5.1.5 in \cite{Lehmann1999} and
+standard arguments for linear transformations of multivariate normal
+variables,
 the linear function $f$ of the parameter estimates
-converges in law to a (possibly singular) $k$-dimensional normal distribution:
+converges in law to a (possibly singular) $k$-dimensional normal 
+distribution:
 \begin{eqnarray} \label{dist_f}
 f_{\K, \m}(\hat{\vartheta}) = \K \hat{\vartheta} - \m 
 \cL \N_k\left(\K \vartheta - \m, \K \Sigma \K^\top\right).
 \end{eqnarray}
 Furthermore, because the quadratic form $\K \hat{\Sigma} \K^\top$
 is continuous and, by assumption, $\hat{\Sigma} \cP \Sigma$, 
-it follows from the continuous mapping theorem that we can 
+it follows from Theorem 5.1.1 in \cite{Lehmann1999} that we can 
 consistently estimate the unknown covariance matrix $\K \Sigma \K^\top$ utilizing
 the consistent estimate $\hat{\Sigma}$ of the covariance matrix $\Sigma$:
 \begin{eqnarray*}
@@ -199,7 +202,8 @@ normal distribution
 \begin{eqnarray*}
 \T \cL \N_k\left(\D(\K \vartheta - \m), \Cor := \D \S \D^\top\right)
 \end{eqnarray*}
-we utilize the Cram{\'e}r-Wold device and show that for some $\uu \in \R^k$ 
+we utilize the Cram{\'e}r-Wold device \citep[e.g., Theorem 5.1.8
+in][]{Lehmann1999} and show that for some $\uu \in \R^k$ 
 the linear function $\uu^\top \T$ is univariate normal. Consider
 \begin{eqnarray*}
 \uu^\top \T & = & \uu^\top \hat{\D} (\K \hat{\vartheta} - \m) \\
@@ -207,7 +211,8 @@ the linear function $\uu^\top \T$ is univariate normal. Consider
 \end{eqnarray*}
 Since $\hat{\S}$ is a consistent estimate of $\S$ it 
 is follows that $u_j \hat{\S}_{jj}^{-1/2} \cP u_j \S_{jj}^{-1/2}$.
-Together with (\ref{dist_f}) we can apply Slutsky's theorem to show that
+Together with (\ref{dist_f}) we can apply Slutsky's theorem \citep[Theorem 2.3.3
+in][]{Lehmann1999} to show that
 \begin{eqnarray*}
 u_j \hat{\S}_{jj}^{-1/2} (\K \hat{\vartheta} - \m)_j & \cL &  
 \N_1\left(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2 \S_{jj}^{-1} \S_{jj}\right) \\
@@ -215,7 +220,6 @@ u_j \hat{\S}_{jj}^{-1/2} (\K \hat{\vartheta} - \m)_j & \cL &
 \end{eqnarray*}
 Because the above holds for every $\uu \in \R^k$, the asymptotic multivariate
 normality of $\T$ follows from the Cram{\'e}r-Wold device. 
-
 
 \section{Global and Simultaneous Inference} \label{siminf}
 
