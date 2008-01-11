@@ -186,6 +186,8 @@ model, the results coincide rather nicely:
 <<bodyfat-robust, echo = TRUE>>=
 summary(glht(lmrob(DEXfat ~ ., data = bodyfat), linfct = K))
 @
+and the general result reported above holds under very mild 
+model assumptions.
 
 \subsection{Smoking and Alzheimer's disease} \label{alzheimer}
 
@@ -324,3 +326,5 @@ smod <- survreg(Surv(time, event) ~ Sex * (Age + WBC + LDH + FLT3 + risk),
                 data = clinical)
 summary(glht(smod, linfct = mcp(risk = "Tukey")))
 @
+Again, a sandwich estimator of the covariance matrix $\hat{\Sigma}$ can
+be plugged-in but the results stay very much the same in this case.
