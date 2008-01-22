@@ -31,10 +31,10 @@ of the game management district number 513 `Unterer Aischgrund'
 of \Sexpr{nrow(trees513)} trees include the species and a binary
 variable indicating whether or not the tree suffers from damage caused
 by deer browsing. We fit a mixed logistic regression model 
-\citep[using package \Rpackage{lme4}][]{pkg:lme4, Rnews:Bates:2005}
+\citep[using package \Rpackage{lme4},][]{pkg:lme4, Rnews:Bates:2005}
 without intercept and with random effects accounting for the spatial variation
 of the trees. For each plot nested within a set of five plots
-orientated on a 100m line (the location of the line
+orientated on a 100m transect (the location of the transect
 is determined by a predefined equally spaced lattice of the area under test), 
 a random intercept is included in the model. We are interested
 in probability estimates and confidence intervals for each tree species.
@@ -67,7 +67,7 @@ ci$confint[,2:3] <- ci$confint[,3:2]
 @
 The result is shown in Figure~\ref{browsing}. Browsing
 is less frequent in hardwood but especially small oak trees are severely
-at risk. Consequently, the number of roe deers to be harvested in the
+at risk and, as a consequence, the number of roe deers to be harvested in the
 following years has been increased.
 The large confidence interval for ash, maple, elm and lime
 trees is caused by the small sample size.
