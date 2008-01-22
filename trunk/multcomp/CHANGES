@@ -1,4 +1,10 @@
 
+		CHANGES in `multcomp' VERSION 0.992-9
+
+    o    remove deprecated functions simint and simtest (the files
+         are still available from multcomp/inst/deprecated)
+
+
 		CHANGES in `multcomp' VERSION 0.992-8
 
     o    add model.frame and model.matrix methods for class `lme'

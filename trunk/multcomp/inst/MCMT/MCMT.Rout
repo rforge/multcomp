@@ -17,30 +17,30 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-R> 
-R> ################################################################
-R> #
-R> #  Reproduction of examples presented in
-R> #
-R> #  Multiple Comparisons and Multiple Tests
-R> #  Using the SAS System
-R> #
-R> #  by P. Westfall, R. D. Tobias, D. Rom, R. D. Wolfinger 
-R> #  and Y. Hochberg
-R> #
-R> #  SAS Institute Inc., Cary, NC, 1999
-R> #
-R> ################################################################
-R> 
-R> library("multcomp")
+> 
+> ################################################################
+> #
+> #  Reproduction of examples presented in
+> #
+> #  Multiple Comparisons and Multiple Tests
+> #  Using the SAS System
+> #
+> #  by P. Westfall, R. D. Tobias, D. Rom, R. D. Wolfinger 
+> #  and Y. Hochberg
+> #
+> #  SAS Institute Inc., Cary, NC, 1999
+> #
+> ################################################################
+> 
+> library("multcomp")
 Loading required package: mvtnorm
-R> set.seed(290875)
-R> load(system.file("MCMT/MCMT.rda", package = "multcomp"))
-R> 
-R> ### weights loss data, page 47
-R> 
-R>   amod <- aov(wloss ~ diet, data = wloss)
-R>   amod
+> set.seed(290875)
+> load(system.file("MCMT/MCMT.rda", package = "multcomp"))
+> 
+> ### weights loss data, page 47
+> 
+>   amod <- aov(wloss ~ diet, data = wloss)
+>   amod
 Call:
    aov(formula = wloss ~ diet, data = wloss)
 
@@ -51,11 +51,11 @@ Deg. of Freedom       4        45
 
 Residual standard error: 0.9967057 
 Estimated effects may be unbalanced
-R> 
-R>   gh <- glht(amod, mcp(diet = "Tukey"))
-R> 
-R>   # page 49 / 50 -- OK
-R>   confint(gh)
+> 
+>   gh <- glht(amod, mcp(diet = "Tukey"))
+> 
+>   # page 49 / 50 -- OK
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -82,14 +82,14 @@ E - D == 0  2.9000   1.6334  4.1666
 95% family-wise confidence level
  
 
-R> 
-R>   amod <- aov(wloss ~ diet - 1, data = wloss)
-R>   K <- diag(nlevels(wloss$diet))
-R>   rownames(K) <- levels(wloss$diet)
-R>   gh <- glht(amod, K)
-R> 
-R>   # page 61 -- OK
-R>   confint(gh)
+> 
+>   amod <- aov(wloss ~ diet - 1, data = wloss)
+>   K <- diag(nlevels(wloss$diet))
+>   rownames(K) <- levels(wloss$diet)
+>   gh <- glht(amod, K)
+> 
+>   # page 61 -- OK
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -108,12 +108,12 @@ E == 0 12.1700  11.3266 13.0134
 95% family-wise confidence level
  
 
-R> 
-R> 
-R> ### tox data, page 56
-R> 
-R>   amod <- aov(gain ~ g, data = tox)
-R>   amod
+> 
+> 
+> ### tox data, page 56
+> 
+>   amod <- aov(gain ~ g, data = tox)
+>   amod
 Call:
    aov(formula = gain ~ g, data = tox)
 
@@ -124,10 +124,10 @@ Deg. of Freedom        6        21
 
 Residual standard error: 14.49154 
 Estimated effects may be unbalanced
-R> 
-R>   # page 56 -- OK
-R>   gh <- glht(amod, mcp(g = "Dunnett"))
-R>   confint(gh)
+> 
+>   # page 56 -- OK
+>   gh <- glht(amod, mcp(g = "Dunnett"))
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -150,10 +150,10 @@ g6 - g0 == 0 -31.1400 -59.7385  -2.5415
 95% family-wise confidence level
  
 
-R> 
-R>   # page 59 -- OK
-R>   gh <- glht(amod, mcp(g = "Dunnett"), alternative = "less")
-R>   confint(gh)
+> 
+>   # page 59 -- OK
+>   gh <- glht(amod, mcp(g = "Dunnett"), alternative = "less")
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -176,19 +176,19 @@ g6 - g0 >= 0 -31.1400     -Inf  -6.0504
 95% family-wise confidence level
  
 
-R> 
-R> 
-R> ### coupon data, page 62
-R> 
-R>   amod <- aov(purchase ~ discount , data = coupon)
-R> 
-R>   gh <- glht(amod, linfct = mcp(discount = rbind(
+> 
+> 
+> ### coupon data, page 62
+> 
+>   amod <- aov(purchase ~ discount , data = coupon)
+> 
+>   gh <- glht(amod, linfct = mcp(discount = rbind(
 +                                     linear = c(-3, -1,  1,  3),
 +                                     quad =  c(-2,  2,  2, -2),
 +                                     cubic = c(-1,  3, -3,  1))))
-R> 
-R>   # page 63 -- OK (t^2 = F stats)
-R>   summary(gh)
+> 
+>   # page 63 -- OK (t^2 = F stats)
+>   summary(gh)
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -206,16 +206,16 @@ cubic == 0    -0.802     18.109  -0.044  1.0000
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported)
 
-R> 
-R> 
-R> ### recover data, page 66
-R> 
-R>   amod <- aov(minutes ~ blanket, data = recover)
-R> 
-R>   gh <- glht(amod, mcp(blanket = "Tukey"))
-R> 
-R>   # page 68 -- OK (small differences due to simuation accurary)
-R>   confint(gh)
+> 
+> 
+> ### recover data, page 66
+> 
+>   amod <- aov(minutes ~ blanket, data = recover)
+> 
+>   gh <- glht(amod, mcp(blanket = "Tukey"))
+> 
+>   # page 68 -- OK (small differences due to simuation accurary)
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -238,9 +238,9 @@ b3 - b2 == 0   5.8000   1.4547  10.1453
 95% family-wise confidence level
  
 
-R> 
-R>   # page 76 -- OK
-R>   summary(gh)
+> 
+>   # page 76 -- OK
+>   summary(gh)
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -261,11 +261,11 @@ b3 - b2 == 0   5.8000     1.6383   3.540 0.00528 **
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported)
 
-R> 
-R>   gh <- glht(amod, mcp(blanket = "Dunnett"))
-R> 
-R>   # page 78 -- OK
-R>   confint(gh)
+> 
+>   gh <- glht(amod, mcp(blanket = "Dunnett"))
+> 
+>   # page 78 -- OK
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -285,9 +285,9 @@ b3 - b0 == 0  -1.6667  -3.8686   0.5353
 95% family-wise confidence level
  
 
-R> 
-R>   # page 79 -- OK
-R>   summary(gh)
+> 
+>   # page 79 -- OK
+>   summary(gh)
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -305,11 +305,11 @@ b3 - b0 == 0  -1.6667     0.8848  -1.884   0.182
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported)
 
-R> 
-R>   gh <- glht(amod, mcp(blanket = "Dunnett"), alternative = "less")
-R> 
-R>   # page 80 -- OK
-R>   confint(gh, level = 0.9)
+> 
+>   gh <- glht(amod, mcp(blanket = "Dunnett"), alternative = "less")
+> 
+>   # page 80 -- OK
+>   confint(gh, level = 0.9)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -329,9 +329,9 @@ b3 - b0 >= 0 -1.66667     -Inf -0.03635
 90% family-wise confidence level
  
 
-R> 
-R>   # page 80 -- OK
-R>   summary(gh)
+> 
+>   # page 80 -- OK
+>   summary(gh)
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -349,24 +349,24 @@ b3 - b0 >= 0  -1.6667     0.8848  -1.884  0.0926 .
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported)
 
-R> 
-R>   # page 80 -- OK (univariate confints!!!)
-R>   amod <- aov(minutes ~ blanket - 1, data = recover)
-R>   confint(amod, level = 0.9)
+> 
+>   # page 80 -- OK (univariate confints!!!)
+>   amod <- aov(minutes ~ blanket - 1, data = recover)
+>   confint(amod, level = 0.9)
                 5 %      95 %
 blanketb0 13.822802 15.777198
 blanketb1 10.143553 15.189781
 blanketb2  4.810219  9.856447
 blanketb3 12.004962 14.261704
-R> 
-R> 
-R> ### house prices, page 84
-R> 
-R>   amod <- aov(price ~ location + sqfeet + age, data = house)
-R>   gh <- glht(amod, mcp(location = "Tukey"))
-R> 
-R>   # page 85 -- OK ( * -1)
-R>   confint(gh)
+> 
+> 
+> ### house prices, page 84
+> 
+>   amod <- aov(price ~ location + sqfeet + age, data = house)
+>   gh <- glht(amod, mcp(location = "Tukey"))
+> 
+>   # page 85 -- OK ( * -1)
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -393,9 +393,9 @@ E - D == 0  -3.0741 -11.1245   4.9763
 95% family-wise confidence level
  
 
-R> 
-R>   # page 96 -- OK ( * -1)
-R>   summary(gh)
+> 
+>   # page 96 -- OK ( * -1)
+>   summary(gh)
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -420,7 +420,7 @@ E - D == 0  -3.0741     2.8802  -1.067  0.8153
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported)
 
-R>   summary(gh, test = univariate())
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -445,16 +445,16 @@ E - D == 0  -3.0741     2.8802  -1.067   0.2903
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R> 
-R> 
-R> ### rat growth data, page 99
-R> 
-R>   amod <- aov(w4 ~ ., data = ratgrwth)
-R> 
-R>   gh <- glht(amod, mcp(trt = "Dunnett"), alternative = "less")
-R> 
-R>   # page 100 -- OK
-R>   summary(gh)
+> 
+> 
+> ### rat growth data, page 99
+> 
+>   amod <- aov(w4 ~ ., data = ratgrwth)
+> 
+>   gh <- glht(amod, mcp(trt = "Dunnett"), alternative = "less")
+> 
+>   # page 100 -- OK
+>   summary(gh)
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -471,7 +471,7 @@ Thyroxin - Control >= 0     -2.113      3.196  -0.661 0.42184
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported)
 
-R>   confint(gh)
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -490,20 +490,20 @@ Thyroxin - Control >= 0   -2.1128     -Inf  4.4699
 95% family-wise confidence level
  
 
-R> 
-R> 
-R> ### Alzheimer data, page 103
-R> 
-R>   amod <- aov(score ~ therapy * since + age, data = alz)
-R> 
-R>   gh <- glht(amod, linfct = mcp(therapy = "Tukey"))
+> 
+> 
+> ### Alzheimer data, page 103
+> 
+>   amod <- aov(score ~ therapy * since + age, data = alz)
+> 
+>   gh <- glht(amod, linfct = mcp(therapy = "Tukey"))
 Warning message:
 In mcp2matrix(model, linfct = linfct) :
   covariate interactions found -- please choose appropriate contrast
-R> 
-R>   ### choose comparisons at since = 10
-R>   gh$linfct[,8:11] <- gh$linfct[,8:11] * 10
-R>   confint(gh)
+> 
+>   ### choose comparisons at since = 10
+>   gh$linfct[,8:11] <- gh$linfct[,8:11] * 10
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -530,25 +530,25 @@ t5 - t4 == 0   2.6720 -14.5908  19.9347
 95% family-wise confidence level
  
 
-R> 
-R> 
-R> 
-R> ### litter data, page 109
-R> 
-R>   amod <- aov(weight ~ dose + gesttime + number, data = litter)
-R> 
-R>   K <- rbind("cont-low"  = c(1, -1,  0,  0),
+> 
+> 
+> 
+> ### litter data, page 109
+> 
+>   amod <- aov(weight ~ dose + gesttime + number, data = litter)
+> 
+>   K <- rbind("cont-low"  = c(1, -1,  0,  0),
 +              "cont-mid"  = c(1,  0, -1,  0),
 +              "cont-high" = c(1,  0,  0, -1),
 +               otrend = c(1.5, 0.5, -0.5, -1.5) / 2,
 +               atrend = c(0, 5, 50, 500) - mean(c(0, 5, 50, 500)),
 +               ltrend = -(log(1:4) - mean(log(1:4))))
-R>   K["atrend",] <- K["atrend",] / -max(K["atrend",])
-R> 
-R>   gh <- glht(amod, linfct = mcp(dose = K))
-R> 
-R>   # page 110 -- OK
-R>   summary(gh, test = univariate())
+>   K["atrend",] <- K["atrend",] / -max(K["atrend",])
+> 
+>   gh <- glht(amod, linfct = mcp(dose = K))
+> 
+>   # page 110 -- OK
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -569,10 +569,10 @@ ltrend == 0      1.9400     0.9616   2.018  0.0476 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R> 
-R>   # page 111 -- OK
-R>   gh$alternative <- "greater"
-R>   summary(gh, test = univariate())
+> 
+>   # page 111 -- OK
+>   gh$alternative <- "greater"
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -593,7 +593,7 @@ ltrend <= 0      1.9400     0.9616   2.018 0.02379 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R>   summary(gh)
+>   summary(gh)
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -614,7 +614,7 @@ ltrend <= 0      1.9400     0.9616   2.018  0.0773 .
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported)
 
-R>   confint(gh)
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -637,10 +637,10 @@ ltrend <= 0     1.9400  -0.1948     Inf
 95% family-wise confidence level
  
 
-R> 
-R>   # page 174 -- OK
-R>   gh$alternative <- "greater"
-R>   summary(gh, test = adjusted("Westfall"))
+> 
+>   # page 174 -- OK
+>   gh$alternative <- "greater"
+>   summary(gh, test = adjusted("Westfall"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -661,20 +661,20 @@ ltrend <= 0      1.9400     0.9616   2.018  0.0396 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Westfall method)
 
-R> 
-R> 
-R> ### house data -- regression line
-R> 
-R>   houseA <- subset(house, location == "A")
-R> 
-R>   lmod <- lm(price ~ sqfeet, data = houseA)
-R>   K <- cbind(1, grid <- seq(from = 1000, to = 3000, by = 200))
-R>   rownames(K) <- paste("sqfeet *", grid)
-R> 
-R>   gh <- glht(lmod, linfct = K)
-R> 
-R>   # page 123 -- OK
-R>   confint(gh)
+> 
+> 
+> ### house data -- regression line
+> 
+>   houseA <- subset(house, location == "A")
+> 
+>   lmod <- lm(price ~ sqfeet, data = houseA)
+>   K <- cbind(1, grid <- seq(from = 1000, to = 3000, by = 200))
+>   rownames(K) <- paste("sqfeet *", grid)
+> 
+>   gh <- glht(lmod, linfct = K)
+> 
+>   # page 123 -- OK
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -699,38 +699,38 @@ sqfeet * 3000 == 0 153.9672 142.4741 165.4602
 95% family-wise confidence level
  
 
-R> 
-R> 
-R> ### patient satisfaction, page 125
-R> 
-R>   pat_sat <- pat_sat[order(pat_sat$severe),]
-R>   lmod <- lm(satisf ~ age + severe + anxiety, data = pat_sat)
-R>   K <- cbind(1, mean(pat_sat$age), pat_sat$severe, mean(pat_sat$anxiety))
-R> 
-R>   gh <- glht(lmod, linfct = K)
-R> 
-R>   ci <- confint(gh)
-R> 
-R>   # page 127 -- OK
-R>   plot(pat_sat$severe, ci$confint[,"Estimate"], 
+> 
+> 
+> ### patient satisfaction, page 125
+> 
+>   pat_sat <- pat_sat[order(pat_sat$severe),]
+>   lmod <- lm(satisf ~ age + severe + anxiety, data = pat_sat)
+>   K <- cbind(1, mean(pat_sat$age), pat_sat$severe, mean(pat_sat$anxiety))
+> 
+>   gh <- glht(lmod, linfct = K)
+> 
+>   ci <- confint(gh)
+> 
+>   # page 127 -- OK
+>   plot(pat_sat$severe, ci$confint[,"Estimate"], 
 +        xlab = "Severity", ylab = "Satisfaction", type = "b", 
 +        ylim = c(30, 80), xlim = c(45, 60))
-R>   lines(pat_sat$severe, ci$confint[,"lwr"], lty = 2)
-R>   lines(pat_sat$severe, ci$confint[,"upr"], lty = 2)
-R> 
-R> 
-R> ### tire data, page 127
-R> 
-R>   amod <- aov(cost ~ make + make:mph - 1, data = tire)
-R> 
-R>   x <- seq(from = 10, to = 70, by = 5)
-R>   K <- cbind(1, -1, x, -x)
-R>   rownames(K) <- x
-R> 
-R>   gh <- glht(amod, linfct = K)
-R> 
-R>   # page 129 -- OK
-R>   confint(gh)
+>   lines(pat_sat$severe, ci$confint[,"lwr"], lty = 2)
+>   lines(pat_sat$severe, ci$confint[,"upr"], lty = 2)
+> 
+> 
+> ### tire data, page 127
+> 
+>   amod <- aov(cost ~ make + make:mph - 1, data = tire)
+> 
+>   x <- seq(from = 10, to = 70, by = 5)
+>   K <- cbind(1, -1, x, -x)
+>   rownames(K) <- x
+> 
+>   gh <- glht(amod, linfct = K)
+> 
+>   # page 129 -- OK
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -757,7 +757,7 @@ Linear Hypotheses:
 95% family-wise confidence level
  
 
-R>   summary(gh, test = univariate())
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -782,7 +782,7 @@ Linear Hypotheses:
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R>   summary(gh, test = adjusted())
+>   summary(gh, test = adjusted())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -807,17 +807,17 @@ Linear Hypotheses:
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported)
 
-R> 
-R> 
-R> 
-R> ### cholesterol data, page 153
-R> 
-R>   amod <- aov(response ~ trt - 1, data = cholesterol)
-R>   
-R>   gh <- glht(amod, linfct = mcp(trt = "Tukey"))
-R> 
-R>   # page 171 -- OK
-R>   summary(gh, test = univariate())
+> 
+> 
+> 
+> ### cholesterol data, page 153
+> 
+>   amod <- aov(response ~ trt - 1, data = cholesterol)
+>   
+>   gh <- glht(amod, linfct = mcp(trt = "Tukey"))
+> 
+>   # page 171 -- OK
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -842,7 +842,7 @@ E - D == 0   -3.443      1.443  -2.385 0.021333 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R>   summary(gh, test = adjusted("Shaffer"))
+>   summary(gh, test = adjusted("Shaffer"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -867,7 +867,7 @@ E - D == 0   -3.443      1.443  -2.385 0.042666 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Shaffer method)
 
-R>   summary(gh, test = adjusted("Westfall"))
+>   summary(gh, test = adjusted("Westfall"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -892,15 +892,15 @@ E - D == 0   -3.443      1.443  -2.385  0.0420 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Westfall method)
 
-R> 
-R>   gh <- glht(amod, linfct = mcp(trt = c("B - A = 0",
+> 
+>   gh <- glht(amod, linfct = mcp(trt = c("B - A = 0",
 +                                         "C - A = 0",
 +                                         "C - B = 0",
 +                                         "3 * D - A - B - C = 0",
 +                                         "3 * E - A - B - C = 0")))
-R> 
-R>   # page 172 -- OK
-R>   summary(gh, test = univariate())
+> 
+>   # page 172 -- OK
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -920,7 +920,7 @@ C - B == 0               -2.986      1.443  -2.069 0.044316 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R>   summary(gh, test = adjusted("Shaffer"))
+>   summary(gh, test = adjusted("Shaffer"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -940,7 +940,7 @@ C - B == 0               -2.986      1.443  -2.069 0.044316 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Shaffer method)
 
-R>   summary(gh, test = adjusted("Westfall"))
+>   summary(gh, test = adjusted("Westfall"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -960,14 +960,14 @@ C - B == 0               -2.986      1.443  -2.069  0.0443 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Westfall method)
 
-R> 
-R> 
-R> ### waste data, page 177
-R> 
-R>   amod <- aov(waste ~ temp * envir, data = waste)
-R> 
-R>   # page 179 -- OK ( * -1)
-R>   confint(glht(amod, linfct = mcp(temp = "Tukey")))
+> 
+> 
+> ### waste data, page 177
+> 
+>   amod <- aov(waste ~ temp * envir, data = waste)
+> 
+>   # page 179 -- OK ( * -1)
+>   confint(glht(amod, linfct = mcp(temp = "Tukey")))
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -987,7 +987,7 @@ t3 - t2 == 0  2.2560   0.9973  3.5147
 95% family-wise confidence level
  
 
-R>   confint(glht(amod, linfct = mcp(envir = "Tukey")))
+>   confint(glht(amod, linfct = mcp(envir = "Tukey")))
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -1014,11 +1014,11 @@ e5 - e4 == 0  0.73500 -1.19737  2.66737
 95% family-wise confidence level
  
 
-R> 
-R>   gh <- glht(amod, linfct = mcp(envir = "Tukey", temp = "Tukey"))
-R>  
-R>   # page 181 -- OK
-R>   summary(gh, test = univariate())
+> 
+>   gh <- glht(amod, linfct = mcp(envir = "Tukey", temp = "Tukey"))
+>  
+>   # page 181 -- OK
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1046,7 +1046,7 @@ temp: t3 - t2 == 0    2.2560     0.4847   4.654 0.000312 ***
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R>   summary(gh, test = adjusted("Shaffer"))
+>   summary(gh, test = adjusted("Shaffer"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1074,7 +1074,7 @@ temp: t3 - t2 == 0    2.2560     0.4847   4.654 0.00405 **
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Shaffer method)
 
-R>   summary(gh, test = adjusted("Westfall"))
+>   summary(gh, test = adjusted("Westfall"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1102,14 +1102,14 @@ temp: t3 - t2 == 0    2.2560     0.4847   4.654 0.00330 **
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Westfall method)
 
-R>   
-R> 
-R>   # page 186 -- OK
-R>   amod <- aov(waste ~ temp + envir, 
+>   
+> 
+>   # page 186 -- OK
+>   amod <- aov(waste ~ temp + envir, 
 +               data = waste[seq(from = 1, to = 29, by = 2),])
-R> 
-R>   gh <- glht(amod, linfct = mcp(envir = "Tukey", temp = "Tukey"))
-R>   summary(gh, test = univariate())
+> 
+>   gh <- glht(amod, linfct = mcp(envir = "Tukey", temp = "Tukey"))
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1138,7 +1138,7 @@ temp: t3 - t2 == 0    2.7040     0.9305   2.906  0.0197 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R>   summary(gh, test = adjusted("Shaffer"))
+>   summary(gh, test = adjusted("Shaffer"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1165,7 +1165,7 @@ temp: t3 - t1 == 0    2.7120     0.9305   2.914   0.253
 temp: t3 - t2 == 0    2.7040     0.9305   2.906   0.253
 (Adjusted p values reported -- Shaffer method)
 
-R>   summary(gh, test = adjusted("Westfall"))
+>   summary(gh, test = adjusted("Westfall"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1192,14 +1192,14 @@ temp: t3 - t1 == 0    2.7120     0.9305   2.914   0.135
 temp: t3 - t2 == 0    2.7040     0.9305   2.906   0.135
 (Adjusted p values reported -- Westfall method)
 
-R> 
-R> 
-R> ### drug data, page 187
-R> 
-R>   amod <- aov(response ~ drug * disease, data = drug)
-R> 
-R>   # page 188
-R>   confint(glht(amod, linfct = mcp(drug = "Tukey")))
+> 
+> 
+> ### drug data, page 187
+> 
+>   amod <- aov(response ~ drug * disease, data = drug)
+> 
+>   # page 188
+>   confint(glht(amod, linfct = mcp(drug = "Tukey")))
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -1222,16 +1222,16 @@ d4 - d3 == 0   3.8000  -7.0413  14.6413
 95% family-wise confidence level
  
 
-R> 
-R> 
-R> ### detergents data, page 189
-R> 
-R>   amod <- aov(plates ~ block + detergent, data = detergent)
-R> 
-R>   gh <- glht(amod, linfct = mcp(detergent = "Tukey"))
-R> 
-R>   # page 190 -- OK
-R>   confint(gh)
+> 
+> 
+> ### detergents data, page 189
+> 
+>   amod <- aov(plates ~ block + detergent, data = detergent)
+> 
+>   gh <- glht(amod, linfct = mcp(detergent = "Tukey"))
+> 
+>   # page 190 -- OK
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -1258,9 +1258,9 @@ d5 - d4 == 0  -6.5333  -9.1921  -3.8745
 95% family-wise confidence level
  
 
-R> 
-R>   # page 192 -- OK
-R>   summary(gh, test = univariate())
+> 
+>   # page 192 -- OK
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1285,7 +1285,7 @@ d5 - d4 == 0  -6.5333     0.8679  -7.527 1.21e-06 ***
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R>   summary(gh, test = adjusted("Shaffer"))
+>   summary(gh, test = adjusted("Shaffer"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1310,7 +1310,7 @@ d5 - d4 == 0  -6.5333     0.8679  -7.527 7.26e-06 ***
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Shaffer method)
 
-R>   summary(gh, test = adjusted("Westfall"))
+>   summary(gh, test = adjusted("Westfall"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1335,19 +1335,19 @@ d5 - d4 == 0  -6.5333     0.8679  -7.527 < 0.001 ***
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Westfall method)
 
-R> 
-R> 
-R> ### pigs data, page 195
-R> 
-R>   amod <- aov(gain ~ pen + feed * sex + initial, data = pigs)
-R> 
-R>   S <- matrix(c(1, -1), ncol = 2, dimnames = list("F-M", c("F", "M")))
-R>   gh <- glht(amod, linfct = mcp(feed = "Tukey", sex = S))
-R>   gh$linfct <- rbind(gh$linfct, "initial" = as.numeric(names(coef(amod)) == "initial"))
-R>   gh$rhs <- c(gh$rhs, 0)
-R> 
-R>   # page 194 -- OK
-R>   confint(gh)
+> 
+> 
+> ### pigs data, page 195
+> 
+>   amod <- aov(gain ~ pen + feed * sex + initial, data = pigs)
+> 
+>   S <- matrix(c(1, -1), ncol = 2, dimnames = list("F-M", c("F", "M")))
+>   gh <- glht(amod, linfct = mcp(feed = "Tukey", sex = S))
+>   gh$linfct <- rbind(gh$linfct, "initial" = as.numeric(names(coef(amod)) == "initial"))
+>   gh$rhs <- c(gh$rhs, 0)
+> 
+>   # page 194 -- OK
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -1369,9 +1369,9 @@ initial == 0        0.08888  0.02198  0.15577
 95% family-wise confidence level
  
 
-R> 
-R>   # page 195 -- OK
-R>   summary(gh, test = univariate())
+> 
+>   # page 195 -- OK
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1391,7 +1391,7 @@ initial == 0        0.08888    0.02392   3.715 0.00147 **
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R>   summary(gh, test = adjusted("Shaffer"))
+>   summary(gh, test = adjusted("Shaffer"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1411,7 +1411,7 @@ initial == 0        0.08888    0.02392   3.715 0.00734 **
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Shaffer method)
 
-R>   summary(gh, test = adjusted("Westfall"))
+>   summary(gh, test = adjusted("Westfall"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1431,55 +1431,55 @@ initial == 0        0.08888    0.02392   3.715 0.00677 **
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Westfall method)
 
-R> 
-R> 
-R> ### respiratory, page 196, program 9.14
-R> 
-R>   amod <- aov(score ~ treatment:agegroup:inithealth - 1, data = respiratory)
-R>        
-R>   CA  <- c(13,  0, 11,  0, 13,  0, 17,  0)
-R>   CP  <- c( 0, 14,  0, 12,  0, 19,  0, 12)
-R>   CA  <- CA/sum(CA)
-R>   CP  <- CP/sum(CP)
-R>   C1  <- CP-CA	
-R> 
-R>   CAO <- c(13,  0,  0,  0, 13,  0,  0,  0) 
-R>   CPO <- c( 0, 14,  0,  0,  0, 19,  0,  0) 
-R>   CAO <- CAO/sum(CAO)
-R>   CPO <- CPO/sum(CPO)
-R>   C2  <- CPO - CAO
-R> 
-R>   CAY <- c(0,  0, 11,  0,  0,  0, 17,  0) 
-R>   CPY <- c(0,  0,  0, 12,  0,  0,  0, 12) 
-R>   CAY <- CAY/sum(CAY)
-R>   CPY <- CPY/sum(CPY)
-R>   C3  <- CPY - CAY
-R> 
-R>   CAG <- c(13,  0, 11,  0,  0,  0,  0,  0) 
-R>   CPG <- c( 0, 14,  0, 12,  0,  0,  0,  0) 
-R>   CAG <- CAG/sum(CAG)
-R>   CPG <- CPG/sum(CPG)
-R>   C4  <- CPG - CAG
-R> 
-R>   CAP <- c(0,  0,  0,  0, 13,  0, 17,  0 ) 
-R>   CPP <- c(0,  0,  0,  0,  0, 19,  0, 12 ) 
-R>   CAP <- CAP/sum(CAP)
-R>   CPP <- CPP/sum(CPP)
-R>   C5  <- CPP - CAP
-R> 
-R>   C6  <- c(-1,  1,  0,  0,  0,  0,  0,  0)
-R>   C7  <- c( 0,  0,  0,  0, -1,  1,  0,  0)
-R>   C8  <- c( 0,  0, -1,  1,  0,  0,  0,  0)
-R>   C9  <- c( 0,  0,  0,  0,  0,  0, -1,  1)
-R> 
-R>   C <- rbind(C1, C2, C3, C4, C5, C6, C7, C8, C9)   
-R>   rownames(C) <- c("Overall", "Older", "Younger", "Good Init", "Poor Init",
+> 
+> 
+> ### respiratory, page 196, program 9.14
+> 
+>   amod <- aov(score ~ treatment:agegroup:inithealth - 1, data = respiratory)
+>        
+>   CA  <- c(13,  0, 11,  0, 13,  0, 17,  0)
+>   CP  <- c( 0, 14,  0, 12,  0, 19,  0, 12)
+>   CA  <- CA/sum(CA)
+>   CP  <- CP/sum(CP)
+>   C1  <- CP-CA	
+> 
+>   CAO <- c(13,  0,  0,  0, 13,  0,  0,  0) 
+>   CPO <- c( 0, 14,  0,  0,  0, 19,  0,  0) 
+>   CAO <- CAO/sum(CAO)
+>   CPO <- CPO/sum(CPO)
+>   C2  <- CPO - CAO
+> 
+>   CAY <- c(0,  0, 11,  0,  0,  0, 17,  0) 
+>   CPY <- c(0,  0,  0, 12,  0,  0,  0, 12) 
+>   CAY <- CAY/sum(CAY)
+>   CPY <- CPY/sum(CPY)
+>   C3  <- CPY - CAY
+> 
+>   CAG <- c(13,  0, 11,  0,  0,  0,  0,  0) 
+>   CPG <- c( 0, 14,  0, 12,  0,  0,  0,  0) 
+>   CAG <- CAG/sum(CAG)
+>   CPG <- CPG/sum(CPG)
+>   C4  <- CPG - CAG
+> 
+>   CAP <- c(0,  0,  0,  0, 13,  0, 17,  0 ) 
+>   CPP <- c(0,  0,  0,  0,  0, 19,  0, 12 ) 
+>   CAP <- CAP/sum(CAP)
+>   CPP <- CPP/sum(CPP)
+>   C5  <- CPP - CAP
+> 
+>   C6  <- c(-1,  1,  0,  0,  0,  0,  0,  0)
+>   C7  <- c( 0,  0,  0,  0, -1,  1,  0,  0)
+>   C8  <- c( 0,  0, -1,  1,  0,  0,  0,  0)
+>   C9  <- c( 0,  0,  0,  0,  0,  0, -1,  1)
+> 
+>   C <- rbind(C1, C2, C3, C4, C5, C6, C7, C8, C9)   
+>   rownames(C) <- c("Overall", "Older", "Younger", "Good Init", "Poor Init",
 +                    "Old x Good", "Old x Poor", "Young x Good", "Young x Poor") 
-R> 
-R>   gh <- glht(amod, linfct = -C, alternative = "greater")
-R> 
-R>   # page 198 -- OK
-R>   summary(gh, test = univariate())
+> 
+>   gh <- glht(amod, linfct = -C, alternative = "greater")
+> 
+>   # page 198 -- OK
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1500,7 +1500,7 @@ Young x Poor <= 0   0.8696     0.3788   2.296 0.011864 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R>   summary(gh, test = adjusted("Shaffer"))
+>   summary(gh, test = adjusted("Shaffer"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1521,7 +1521,7 @@ Young x Poor <= 0   0.8696     0.3788   2.296 0.05932 .
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Shaffer method)
 
-R>   summary(gh, test = adjusted("Westfall"))
+>   summary(gh, test = adjusted("Westfall"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1542,26 +1542,26 @@ Young x Poor <= 0   0.8696     0.3788   2.296  0.0485 *
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Westfall method)
 
-R> 
-R> ### wine data, page 199
-R> 
-R>   amod <- glm(purchase ~ customertype + light + music + customertype:light + 
+> 
+> ### wine data, page 199
+> 
+>   amod <- glm(purchase ~ customertype + light + music + customertype:light + 
 +               customertype:music + light:music + customertype:light:music + 
 +               handle + examine, data = wine, family = binomial())
-R> 
-R>   # page 200: FIXME (SS3???)
-R> 
-R> ### wloss data, page 205
-R> 
-R>   library("lme4")
+> 
+>   # page 200: FIXME (SS3???)
+> 
+> ### wloss data, page 205
+> 
+>   library("lme4")
 Loading required package: Matrix
 Loading required package: lattice
-R>   lmod <- lmer(wloss ~ diet + (1 | i), data = wloss, model = TRUE)
-R>   
-R>   gh <- glht(lmod, mcp(diet = "Tukey"))
-R> 
-R>   # page 205 -- FIXME: df???
-R>   confint(gh)
+>   lmod <- lmer(wloss ~ diet + (1 | i), data = wloss, model = TRUE)
+>   
+>   gh <- glht(lmod, mcp(diet = "Tukey"))
+> 
+>   # page 205 -- FIXME: df???
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -1588,9 +1588,9 @@ E - D == 0  2.90000  1.74166  4.05834
 95% family-wise confidence level
  
 
-R> 
-R>   # page 207 / 208 -- FIXME: df???
-R>   summary(gh)
+> 
+>   # page 207 / 208 -- FIXME: df???
+>   summary(gh)
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1615,17 +1615,17 @@ E - D == 0   2.9000     0.4247   6.829  <0.001 ***
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported)
 
-R> 
-R> 
-R> ### detergent data, page 211
-R> 
-R>   lmod <- lmer(plates ~ detergent + (1 | block), data = detergent, 
+> 
+> 
+> ### detergent data, page 211
+> 
+>   lmod <- lmer(plates ~ detergent + (1 | block), data = detergent, 
 +                model = TRUE)
-R> 
-R>   gh <- glht(lmod, mcp(detergent = "Tukey"), df = 17.6)
-R> 
-R>   # page 211 -- FIXME: df??? / inaccuracies?
-R>   confint(gh)
+> 
+>   gh <- glht(lmod, mcp(detergent = "Tukey"), df = 17.6)
+> 
+>   # page 211 -- FIXME: df??? / inaccuracies?
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -1653,17 +1653,17 @@ d5 - d4 == 0  -6.7059  -9.2839  -4.1280
 95% family-wise confidence level
  
 
-R> 
-R> 
-R> ### waste data
-R> 
-R>   lmod <- lmer(waste ~ temp + (1 | envir) + (1 | envir : temp),
+> 
+> 
+> ### waste data
+> 
+>   lmod <- lmer(waste ~ temp + (1 | envir) + (1 | envir : temp),
 +                data = waste)
-R> 
-R>   gh <- glht(lmod, mcp(temp = "Tukey"), df = 8)
-R> 
-R>   # page 213 -- OK
-R>   confint(gh)
+> 
+>   gh <- glht(lmod, mcp(temp = "Tukey"), df = 8)
+> 
+>   # page 213 -- OK
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -1684,17 +1684,17 @@ t3 - t2 == 0  2.25600  0.09468  4.41732
 95% family-wise confidence level
  
 
-R> 
-R> 
-R> ### halothane data, page 214
-R> 
-R>   lmod <- lmer(rate ~ treatment + (1 | dog), data = halothane, 
+> 
+> 
+> ### halothane data, page 214
+> 
+>   lmod <- lmer(rate ~ treatment + (1 | dog), data = halothane, 
 +                model = TRUE)
-R> 
-R>   gh <- glht(lmod, linfct = mcp(treatment = "Tukey"), df = 18)
-R> 
-R>   # page 215 -- FIXME: df???
-R>   confint(gh)
+> 
+>   gh <- glht(lmod, linfct = mcp(treatment = "Tukey"), df = 18)
+> 
+>   # page 215 -- FIXME: df???
+>   confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -1718,15 +1718,15 @@ LP - LA == 0   98.2632   58.8512  137.6751
 95% family-wise confidence level
  
 
-R> 
-R>   gh <- glht(lmod, 
+> 
+>   gh <- glht(lmod, 
 +       linfct = mcp(treatment = c("Tukey", 
 +             Halo = "-0.5 * HA - 0.5 * HP + 0.5 * LA + 0.5 * LP = 0",
 +             CO2 = "0.5 * HA -0.5 * HP + 0.5 * LA -0.5 * LP = 0",
 +             Interaction = "HA - HP - LA + LP = 0")))
-R> 
-R>   # page 217 -- FIXME: df?
-R>   summary(gh, test = univariate())
+> 
+>   # page 217 -- FIXME: df?
+>   summary(gh, test = univariate())
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1761,7 +1761,7 @@ HA - HP - LA + LP == 0                           0.51681
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Univariate p values reported)
 
-R>   summary(gh, test = adjusted("Shaffer"))
+>   summary(gh, test = adjusted("Shaffer"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1796,7 +1796,7 @@ HA - HP - LA + LP == 0                           0.51681
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Shaffer method)
 
-R>   summary(gh, test = adjusted("Westfall"))
+>   summary(gh, test = adjusted("Westfall"))
 
 	 Simultaneous Tests for General Linear Hypotheses
 
@@ -1831,32 +1831,32 @@ HA - HP - LA + LP == 0                          0.51681
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Westfall method)
 
-R>   
-R> 
-R> ### multipleendpoints data, page 218
-R> 
-R>   ### lmod <- lmer(y ~ treatment:endpoint + (1 | subject), 
-R>   ###             data = multipleendpoints, model = TRUE)
-R>   ### Leading minor of order 9 in downdated X'X is not positive definite
-R> 
-R> 
-R> ### obesity, page 220
-R> 
-R> ### heart, 222
-R> 
-R> ### _____________________________________________________________________
-R> 
-R> ### add additional examples below (because of the seed)
-R> 
-R> 
-R> ### choose comparisons at since = 20, page 104
-R> amod <- aov(score ~ therapy * since + age, data = alz)
-R> gh <- glht(amod, linfct = mcp(therapy = "Tukey"))
+>   
+> 
+> ### multipleendpoints data, page 218
+> 
+>   ### lmod <- lmer(y ~ treatment:endpoint + (1 | subject), 
+>   ###             data = multipleendpoints, model = TRUE)
+>   ### Leading minor of order 9 in downdated X'X is not positive definite
+> 
+> 
+> ### obesity, page 220
+> 
+> ### heart, 222
+> 
+> ### _____________________________________________________________________
+> 
+> ### add additional examples below (because of the seed)
+> 
+> 
+> ### choose comparisons at since = 20, page 104
+> amod <- aov(score ~ therapy * since + age, data = alz)
+> gh <- glht(amod, linfct = mcp(therapy = "Tukey"))
 Warning message:
 In mcp2matrix(model, linfct = linfct) :
   covariate interactions found -- please choose appropriate contrast
-R> gh$linfct[,8:11] <- gh$linfct[,8:11] * 2
-R> confint(gh)
+> gh$linfct[,8:11] <- gh$linfct[,8:11] * 2
+> confint(gh)
 
 	 Simultaneous Confidence Intervals for General Linear Hypotheses
 
@@ -1883,7 +1883,7 @@ t5 - t4 == 0  11.1040 -18.5382  40.7462
 95% family-wise confidence level
  
 
-R> 
-R> proc.time()
+> 
+> proc.time()
    user  system elapsed 
-620.734   7.436 686.318 
+436.811   1.292 441.081 

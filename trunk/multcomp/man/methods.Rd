@@ -24,7 +24,7 @@
 \method{plot}{confint.glht}(x, xlim, xlab, ...)
 \method{plot}{glht}(x, ...)
 univariate()
-adjusted(type = c("free", "Shaffer", "Westfall", p.adjust.methods), 
+adjusted(type = c("single-step", "Shaffer", "Westfall", p.adjust.methods), 
          ...)
 Ftest()
 Chisqtest()
@@ -68,7 +68,7 @@ univariate_calpha()
   values for each of the linear hypotheses are implemented 
   in function \code{adjusted}. The \code{type}
   argument to \code{adjusted} specifies the method to be applied:
-  \code{"free"} implements adjusted p values based on the joint
+  \code{"single-step"} implements adjusted p values based on the joint
   normal or $t$ distribution of the linear function, and
   \code{"Shaffer"} and \code{"Westfall"} implement logically constraint 
   multiplicity adjustments (Shaffer, 1986; Westfall, 1997). 

@@ -143,13 +143,13 @@ Ftest <- function() global("F")
 Chisqtest <- function() global("Chisq")
 
 ### p values adjusted for simultaneous inference
-adjusted <- function(type = c("free", "Shaffer", "Westfall", p.adjust.methods), 
+adjusted <- function(type = c("single-step", "Shaffer", "Westfall", p.adjust.methods), 
                      ...) 
 {
     type <- match.arg(type)
 
     ### usual max-type adjustment over all linear hypotheses
-    if (type == "free") {
+    if (type == "single-step") {
         return(function(object) {
             RET <- pqglht(object)
             RET$pvalues <- RET$pfunction("adjusted", ...)
