@@ -146,20 +146,19 @@ simultaneous inference procedures described in Section~\ref{siminf}.
 
 Let $\M(\Z_n, \vartheta, \eta)$ denote a (semi-)parametric statistical
 model.
-The vector of $n$ observations is described by $\Z_n = (\Z_1, \dots, \Z_n)$.
+The set of $n$ observations is described by $\Z_n = (\Z_1, \dots, \Z_n)$.
 The model contains fixed
 but unknown parameters of interest $\vartheta \in \R^p$
 and other (random or nuisance) parameters $\eta$.
 We are interested in the linear
-functions $f_{\K, \m}(\vartheta) = \K \vartheta - \m$
-of the parameter vector $\vartheta$ as specified through the finite
-constants $\K \in \R^{k, p}$
-and $\m \in \R^k$.
+functions $\K \vartheta$
+of the parameter vector $\vartheta$ as specified through the constant matrix
+$\K \in \R^{k, p}$.
 
 Assume that we are given
 an estimate $\hat{\vartheta} \in \R^p$ of the parameter
 vector $\vartheta$. In what follows we describe the underlying model assumptions,
-the limiting distribution of $f_{\K,\m}(\hat{\vartheta})$ as well as the 
+the limiting distribution of $\K\hat{\vartheta}$ as well as the 
 corresponding test statistics and their limiting joint distribution.
 
 
@@ -170,14 +169,15 @@ We assume that the parameter estimates $\hat{\vartheta}$ converge in law
 to a $p$-dimensional normal distribution as the sample
 size $n$ tends to infinity, that is,
 \begin{eqnarray} \label{normality}
-\hat{\vartheta} \cL \N_p\left(\vartheta, \Sigma\right)
+\sqrt{n}\left(\hat{\vartheta} - \vartheta\right) \cL \N_p\left(0, \Sigma\right)
 \end{eqnarray}
 with constant and finite covariance matrix $\Sigma \in \R^{p,p}$.
 Since the covariance matrix is usually unknown, we assume
 that we are given a consistent estimate $\hat{\Sigma} \cP \Sigma$.
 
-Since in the following we only assume that the parameters estimates are asymptotically normal
-distributed with a consistent estimate of the associated covariance matrix
+Since in the following we only assume that the parameters estimates are
+asymptotically normally distributed with
+a consistent estimate of the associated covariance matrix
 being available, our
 framework covers a large class of statistical models, including linear
 regression and ANOVA models, generalized linear models, linear mixed
@@ -193,18 +193,18 @@ Specific examples for $\K$ and $\vartheta$ will be given later in Section~\ref{i
 
 
 
-\paragraph{Limiting distribution of $f_{\K,\m}(\hat{\vartheta})$.}
+\paragraph{Limiting distribution of $\K\hat{\vartheta}$.}
 
-The linear function $f_{\K, \m}$ is continuous and differentiable in
+The linear function $\K \vartheta$ is continuous and differentiable in
 $\vartheta$ and thus, by Theorem 5.1.5 in \cite{Lehmann1999} and
 standard arguments for linear transformations of multivariate normal
 variables,
-the linear function $f$ of the parameter estimates
+the linear function $\K \vartheta$ of the parameter estimates
 converges in law to a (possibly singular) $k$-dimensional normal
 distribution:
 \begin{eqnarray} \label{dist_f}
-f_{\K, \m}(\hat{\vartheta}) = \K \hat{\vartheta} - \m
-\cL \N_k\left(\K \vartheta - \m, \K \Sigma \K^\top\right).
+\sqrt{n} \left(\K \hat{\vartheta} - \K \vartheta\right)
+\cL \N_k\left(0, \K \Sigma \K^\top\right).
 \end{eqnarray}
 Furthermore, because the quadratic form $\K \hat{\Sigma} \K^\top$
 is continuous and, by assumption, $\hat{\Sigma} \cP \Sigma$,
@@ -214,10 +214,13 @@ a consistent estimate $\hat{\Sigma}$ of the covariance matrix $\Sigma$:
 \begin{eqnarray*}
 \hat{\S} := \K \hat{\Sigma} \K^\top \cP \K \Sigma \K^\top =: \S.
 \end{eqnarray*}
+Anticipating that asymptotically non-degenerate linear functions of the
+data are of interest, we assume that the diagonal elements of $S$ are
+strictly positive.
 
 \paragraph{A multivariate statistic and its limiting distribution.}
 
-Let $\T := \hat{\D} (\K \hat{\vartheta} - \m) \in \R^k$ denote
+Let $\T := \sqrt{n} \hat{\D} (\K \hat{\vartheta} - \K \vartheta) \in \R^k$ denote
 the $k$-dimensional standardized statistic, where $\hat{\D}$ is the diagonal
 matrix of standard deviations, that is,
 \begin{eqnarray*}
@@ -227,24 +230,25 @@ matrix of standard deviations, that is,
 Note that $\T$ converges in law to a $k$-dimensional multivariate
 normal distribution, that is,
 \begin{eqnarray*}
-\T \cL \N_k\left(\D(\K \vartheta - \m), \Cor\right),
+\T \cL \N_k\left(0, \Cor\right),
 \end{eqnarray*}
 where $ \Cor := \D \S \D^\top$. To see this we utilize the
 Cram{\'e}r-Wold device \citep[e.g., Theorem 5.1.8
-in][]{Lehmann1999} and show that for some $\uu \in \R^k$
+in][]{Lehmann1999} and show that for any $\uu \in \R^k$
 the linear function $\uu^\top \T$ is univariate normal. Consider
 \begin{eqnarray*}
-\uu^\top \T & = & \uu^\top \hat{\D} (\K \hat{\vartheta} - \m) \\
-& = & \left(u_1 \hat{\S}_{11}^{-1/2}, \dots, u_k \hat{\S}_{kk}^{-1/2}\right)^\top(\K \hat{\vartheta} - \m).
+\uu^\top \T & = & \uu^\top \sqrt{n} \hat{\D} (\K \hat{\vartheta} - \K \vartheta) \\
+& = & \sqrt{n} \left(u_1 \hat{\S}_{11}^{-1/2}, \dots, u_k \hat{\S}_{kk}^{-1/2}\right)^\top(\K \hat{\vartheta} -
+\K \vartheta).
 \end{eqnarray*}
 Since $\hat{\S}$ is a consistent estimate of $\S$ it
-is follows that $u_j \hat{\S}_{jj}^{-1/2} \cP u_j \S_{jj}^{-1/2}$.
+follows that $u_j \hat{\S}_{jj}^{-1/2} \cP u_j \S_{jj}^{-1/2}$.
 Together with (\ref{dist_f}) we can apply Slutsky's theorem \citep[Theorem 2.3.3
 in][]{Lehmann1999} to show that
 \begin{eqnarray*}
-u_j \hat{\S}_{jj}^{-1/2} (\K \hat{\vartheta} - \m)_j & \cL &
-\N_1\left(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2 \S_{jj}^{-1} \S_{jj}\right) \\
-& = & \N_1\left(u_j \S_{jj}^{-1/2} (\K \vartheta - \m)_j, u_j^2\right).
+\sqrt{n} u_j \hat{\S}_{jj}^{-1/2} (\K \hat{\vartheta} - \K \vartheta)_j & \cL &
+\N_1\left(0, u_j^2 \S_{jj}^{-1} \S_{jj}\right) \\
+& = & \N_1\left(0, u_j^2\right).
 \end{eqnarray*}
 Because the above holds for every $\uu \in \R^k$, the asymptotic multivariate
 normality of $\T$ follows from the Cram{\'e}r-Wold device. 
@@ -262,7 +266,8 @@ hypothesis \citep{Searle1971}
 H_0: \K \vartheta = \m.
 \end{eqnarray*}
 Under the conditions of $H_0$ it follows from Section~\ref{model} that
-$\T \cL \N_k(0, \Cor)$. This limiting distribution
+$\T = \sqrt{n} \hat{\D} (\K \hat{\vartheta} - \m) \cL \N_k(0, \Cor)$. 
+This limiting distribution
 will now be used as the reference distribution when constructing the
 inference procedures.
 The global hypothesis $H_0$ can be tested using standard global tests, such as
@@ -281,7 +286,8 @@ familywise error rate, as discussed in Subsection~\ref{simtest}
 At this point it is worth
 considering two special cases. A stronger assumption than asymptotic normality
 of $\hat{\vartheta}$ (\ref{normality}) is exact normality, i.e.,
-$\hat{\vartheta} \sim \N_p(\vartheta, \Sigma)$. If the covariance matrix $\Sigma$ is known, it
+$\sqrt{n} (\hat{\vartheta} - \vartheta) \sim \N_p(0, \Sigma)$. 
+If the covariance matrix $\Sigma$ is known, it
 follows by standard arguments that $\T \sim \N_k(0, \Cor)$.
 Otherwise, if $\Sigma = \sigma^2 \A$, where $\A$ is fixed and known
 but $\sigma^2$ is an unknown constant (which is the typical situation of linear models
