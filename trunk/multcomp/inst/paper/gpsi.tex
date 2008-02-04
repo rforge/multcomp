@@ -157,32 +157,30 @@ as the corresponding test statistics and their limiting joint distribution.
 
 \paragraph{Large Sample Assumptions.}
 
-Suppose $\K^\top=[a_{1}|\ldots |a_{k}]$ with $a_{j}\in \R^{p}$. The
-parametric functions of interest to the researcher are $\psi_{j}=a_{j}^\top \vartheta $. 
-Define 
-%% $\Psi =\K\vartheta $,  was not used
-$\hat{\psi}_{j,n}=a_{j}^\top \hat{\vartheta}_n$.
-%%,  $\widehat{\Psi }:=\K\hat{\vartheta}.$%
-\ Supposing an estimated covariance matrix  $\hat{\Sigma}_n$ of
-$\hat{\vartheta}_n$
-is available, define the normalized statistics $Z_{j,n}=(\hat{\psi}_{j,n}-
-\psi_{j})/(a_{j}^\top \hat{\Sigma}_na_{j})^{1/2}$. We assume
-that $Z_{j,n} \cL \N_1(0, 1)$.
-\ Let $%
-\Z_{n}^\top=(Z_{1,n},\ldots ,Z_{k,n}),$ $\D_{n}=\text{diag}(\K\hat{\Sigma}\K%
-^\top),$ and $\boldsymbol{\hat{\rho}}_{n}=\D_{n}^{-1/2}\K\hat{\Sigma}\K%
-^\top \D_{n}^{-1/2}$. \ We assume sufficient regularity conditions on the
+Suppose $\K^{\prime }=[a_{1}|\ldots |a_{k}]$ with $a_{i}\in \R^{p}$. \ The
+parametric functions of interest to the researcher are $\psi
+_{j}=a_{j}^{\prime }\vartheta $. Define $\Psi =\K\vartheta $,  $\hat{\psi}%
+_{j}=a_{j}^{\prime }\hat{\vartheta}$,  $\widehat{\Psi
+}:=\K\hat{\vartheta}.$%
+\ Supposing an estimated covariance matrix  $\hat{\Sigma}$ of
+$\hat{\vartheta%
+}$ is available, define the normalized statistics $z_{j,n}=(\hat{\psi}%
+_{j}-\psi _{j})/(a_{j}^{\prime }\hat{\Sigma}a_{j})^{1/2}$. \ Let $%
+Z_{n}^{\prime }=(z_{1,n},\ldots ,z_{k,n}),$ $D_{n}=diag(\K\hat{\Sigma}\K%
+^{\prime }),$ and $\boldsymbol{\hat{\rho}}_{n}=D_{n}^{-1/2}\K\hat{\Sigma}\K%
+^{\prime }D_{n}^{-1/2}$. \ We assume sufficient regularity conditions on the
 model such that, as $n\rightarrow \infty $,%
 \[
-\boldsymbol{\hat{\rho}}_{n} \cP \boldsymbol{\rho },
+\boldsymbol{\hat{\rho}}_{n}\rightarrow _{p}\boldsymbol{\rho },
 \]%
-where $\boldsymbol{\rho }$ is non-negative definite; and that 
+where $\boldsymbol{\rho }$ is non-negative definite; and that
 \[
-\Z_{n}\cL\N_{k}\left( 0,\boldsymbol{\rho }\right) .
+Z_{n}\cL\N_{k}\left( 0,\boldsymbol{\rho }\right) .
 \]%
-In this case we can treat the vector $\Z_{n}$ as having an approximately
+In this case we can treat the vector $Z_{n}$ as having an approximately
 normal distribution with mean vector zero and covariance matrix  $%
 \boldsymbol{\hat{\rho}}_{n}$,
+
 
 \bigskip 
 
@@ -191,6 +189,67 @@ typical GLMs, including logistic rgeression etc., again under suitable
 regularity conditions. \ Then much of the following can go ) \bigskip 
 
 \bigskip 
+
+\paragraph{TH new:}
+
+We assume that we are provided with an estimate $\hat{\vartheta}_n$ 
+of the model parameters
+$\vartheta$ and a multivariate central limit theorem stating
+\begin{eqnarray} \label{assume}
+\sqrt{n} (\hat{\vartheta}_n - \vartheta) \cL \N_p(0, \S(\vartheta))
+\end{eqnarray}
+where $\S(\vartheta) \in \R^{p,p}$ is a, typically unknown, covariance
+matrix.
+In the notation of \cite{Serfling1980}, this is equivalent to
+\begin{eqnarray*}
+\hat{\vartheta}_n - \vartheta \text{ is } \AN_p(0, n^{-1} \S(\vartheta))
+\end{eqnarray*}
+\citep[Section 1.5.5][]{Serfling1980}. By Theorem 3.3.A in
+\cite{Serfling1980} the linear function 
+\begin{eqnarray*}
+\K (\hat{\vartheta}_n - \vartheta) \text{ is } \AN_k(0, n^{-1} \K \S(\vartheta) \K^\top)
+\end{eqnarray*}
+and, by the same theorem, with $\D(\vartheta) = \text{diag}(\K \S(\vartheta) \K^\top)^{-1/2}$
+\begin{eqnarray} \label{as}
+\D(\vartheta) \K (\hat{\vartheta}_n - \vartheta) \text{ is } 
+\AN_k(0, n^{-1} \underbrace{\D(\vartheta) \K \S(\vartheta) \K^\top
+\D(\vartheta)^\top}_{=: \boldsymbol{\rho}(\vartheta)})
+\end{eqnarray}
+
+
+We assume that an estimate $\hat{\Sigma}(\hat{\vartheta}_n) \cP 0$ 
+of the covariance matrix $\hat{\Sigma}(\hat{\vartheta}_n) =
+\text{cov}(\hat{\vartheta}_n)$ of $\hat{\vartheta}_n$ is available such that
+the empirical version
+\begin{eqnarray*}
+\hat{\D}(\hat{\vartheta}_n) = \text{diag}(\K \hat{\Sigma}(\hat{\vartheta}_n) \K^\top)^{-1/2}
+\end{eqnarray*}
+of $\D$ satisfies
+\begin{eqnarray*}
+\hat{\boldsymbol{\rho}}(\hat{\vartheta}_n) = \hat{\D}(\hat{\vartheta}_n) \K
+\hat{\Sigma}(\hat{\vartheta}_n) \K^\top \hat{\D}(\hat{\vartheta}_n)^\top \cP 
+\boldsymbol{\rho}(\vartheta)
+\end{eqnarray*}
+and $\hat{\D}(\hat{\vartheta}_n) \cP \sqrt{n} \D(\vartheta)$.
+Then, by Slutzky's Theorem \citep[Theorem 1.5.4][]{Serfling1980}, 
+\begin{eqnarray*}
+\T_n := \hat{\D}(\hat{\vartheta}_n) \K (\hat{\vartheta}_n - \vartheta) \cL
+\D(\vartheta) \K (\hat{\vartheta}_n - \vartheta) \text{ which is } \AN_k(0,
+n^{-1} \boldsymbol{\rho}(\vartheta))
+\end{eqnarray*}
+With (\ref{as}), and in the convential notation, we have
+\begin{eqnarray*}
+\T_n \cL \N_k(0, \boldsymbol{\rho}(\vartheta))
+\end{eqnarray*}
+In this case we can treat the vector $\T_{n}$ as having an approximately
+normal distribution with mean vector zero and correlation matrix  $%
+\boldsymbol{\hat{\rho}}(\hat{\vartheta}_n)$.
+
+The imposed assumption (\ref{assume}) is rather standard, and, for example,
+holds for all ML estimates with $\S(\vartheta)$ being the inverse of the
+Fisher information matrix.
+
+
 
 Since in the following we only assume that the parameters estimates are
 asymptotically normally distributed with a consistent estimate of the

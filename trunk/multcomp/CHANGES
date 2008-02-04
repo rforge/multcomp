@@ -4,6 +4,9 @@
     o    remove deprecated functions simint and simtest (the files
          are still available from multcomp/inst/deprecated)
 
+    o    better error message when factors specified in mcp() aren't
+         found in model
+
 
 		CHANGES in `multcomp' VERSION 0.992-8
 
