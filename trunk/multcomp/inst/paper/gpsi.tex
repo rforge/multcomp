@@ -133,7 +133,7 @@ Most interesting from a practical point of view is Section~\ref%
 {illustrations} where we analyze four rather challenging problems with the
 tools developed in this paper.
 
-\section{Model and Estimation}
+\section{Model and Parameters}
 
 \label{model}
 
@@ -142,191 +142,98 @@ some asymptotic results necessary in the subsequent sections. The results
 from this section form the basis for the simultaneous inference procedures
 described in Section~\ref{siminf}.
 
-Let $\M(\Obs, \vartheta, \eta)$ denote a (semi-)parametric statistical
-model. The set of $n$ observations is described by $\Obs = (\Obs_1, \dots,
-\Obs%
-_n)$. The model contains fixed but unknown parameters of interest $\vartheta
+Let $\M(\Z, \theta, \eta)$ denote a (semi-)parametric statistical
+model. The set of $n$ observations is described by $\Z = (\Z_1, \dots,
+\Z_n)$. The model contains fixed but unknown parameters of interest $\theta
 \in \R^p$ and other (random or nuisance) parameters $\eta$. We are
-interested in the linear functions $\K \vartheta$ of the parameter vector $%
+interested in the linear functions $\vartheta = \K \theta$ of the parameter vector $%
 \vartheta$ as specified through the constant matrix $\K \in \R^{k, p}$.
-
-Assume that we are given an estimate $\hat{\vartheta}_n \in \R^p$ of the
+Assume that we are given an estimate $\hat{\theta}_n \in \R^p$ of the
 parameter vector $\vartheta$. In what follows we describe the underlying
 model assumptions, the limiting distribution of $\K\hat{\vartheta}_n$ as well
 as the corresponding test statistics and their limiting joint distribution.
 
-\paragraph{Large Sample Assumptions.}
-
-Suppose $\K^{\prime }=[a_{1}|\ldots |a_{k}]$ with $a_{i}\in \R^{p}$. \ The
-parametric functions of interest to the researcher are $\psi
-_{j}=a_{j}^{\prime }\vartheta $. Define $\Psi =\K\vartheta $,  $\hat{\psi}%
-_{j}=a_{j}^{\prime }\hat{\vartheta}$,  $\widehat{\Psi
-}:=\K\hat{\vartheta}.$%
-\ Supposing an estimated covariance matrix  $\hat{\Sigma}$ of
-$\hat{\vartheta%
-}$ is available, define the normalized statistics $z_{j,n}=(\hat{\psi}%
-_{j}-\psi _{j})/(a_{j}^{\prime }\hat{\Sigma}a_{j})^{1/2}$. \ Let $%
-Z_{n}^{\prime }=(z_{1,n},\ldots ,z_{k,n}),$ $D_{n}=diag(\K\hat{\Sigma}\K%
-^{\prime }),$ and $\boldsymbol{\hat{\rho}}_{n}=D_{n}^{-1/2}\K\hat{\Sigma}\K%
-^{\prime }D_{n}^{-1/2}$. \ We assume sufficient regularity conditions on the
-model such that, as $n\rightarrow \infty $,%
-\[
-\boldsymbol{\hat{\rho}}_{n}\rightarrow _{p}\boldsymbol{\rho },
-\]%
-where $\boldsymbol{\rho }$ is non-negative definite; and that
-\[
-Z_{n}\cL\N_{k}\left( 0,\boldsymbol{\rho }\right) .
-\]%
-In this case we can treat the vector $Z_{n}$ as having an approximately
-normal distribution with mean vector zero and covariance matrix  $%
-\boldsymbol{\hat{\rho}}_{n}$,
-
-
-\bigskip 
-
-(Now some comment on the notion that these assumptions are justified in
-typical GLMs, including logistic rgeression etc., again under suitable
-regularity conditions. \ Then much of the following can go ) \bigskip 
-
-\bigskip 
-
-\paragraph{TH new:}
-
-We assume that we are provided with an estimate $\hat{\vartheta}_n$ 
-of the model parameters
-$\vartheta$ and a multivariate central limit theorem stating
+Suppose $\hat{\theta}_n \in \R^p$ is an estimate of $\theta$ and
+$\S_n(\theta) \in \R^{p,p}$ is an estimate of $\cov(\hat{\theta}_n)$ with
+\begin{eqnarray} \label{cov}
+a_n \S_n(\vartheta) \cP \Sigma(\vartheta) \in \R^{p,p}
+\end{eqnarray}
+for some positive, nondecreasing sequence $a_n$.
+Furthermore, we assume that a multivariate central limit theorem holds,
+i.e.,
+\begin{eqnarray} \label{clt}
+a_n^{1/2} (\hat{\theta}_n - \theta) \cL \N_p(0, \Sigma(\vartheta)).
+\end{eqnarray}
+If both (\ref{cov}) and (\ref{clt}) are fulfilled we write $\hat{\theta}_n \an
+\N_p(\theta, \S_n(\theta))$. Then, by Theorem 3.3.A in
+\cite{Serfling1980}, the linear function $\hat{\vartheta}_n = \K \hat{\theta}_n$
+of parameters of interest also follows an approximate multivariate normal 
+distribution
+\begin{eqnarray*}
+\hat{\vartheta}_n = \K \hat{\theta}_n \an \N_k(\vartheta, \S_n(\vartheta) := \K \S_n(\theta) \K^\top)
+\end{eqnarray*}
+for any fixed matrix $\K \in \R^{k,p}$. Thus we need not distinguish
+between elemental parameters $\theta$ or derived parameters $\vartheta = \K \theta$ 
+that may be of interest to the researcher, such as the parameters $\K \theta$ representing
+all pairwise comparisons of elemental parameters. Instead we simply assume 
+for the moment that we have 
 \begin{eqnarray} \label{assume}
-\sqrt{n} (\hat{\vartheta}_n - \vartheta) \cL \N_p(0, \S(\vartheta))
+\hat{\vartheta}_n \an \N_k(\vartheta, \S_n(\vartheta)) \text{ with } 
+\S_n(\vartheta) \cP \Sigma(\vartheta) \in \R^{k,k}
 \end{eqnarray}
-where $\S(\vartheta) \in \R^{p,p}$ is a, typically unknown, covariance
-matrix.
-In the notation of \cite{Serfling1980}, this is equivalent to
-\begin{eqnarray*}
-\hat{\vartheta}_n - \vartheta \text{ is } \AN_p(0, n^{-1} \S(\vartheta))
-\end{eqnarray*}
-\citep[Section 1.5.5][]{Serfling1980}. By Theorem 3.3.A in
-\cite{Serfling1980} the linear function 
-\begin{eqnarray*}
-\K (\hat{\vartheta}_n - \vartheta) \text{ is } \AN_k(0, n^{-1} \K \S(\vartheta) \K^\top)
-\end{eqnarray*}
-and, by the same theorem, with $\D(\vartheta) = \text{diag}(\K \S(\vartheta) \K^\top)^{-1/2}$
-\begin{eqnarray} \label{as}
-\D(\vartheta) \K (\hat{\vartheta}_n - \vartheta) \text{ is } 
-\AN_k(0, n^{-1} \underbrace{\D(\vartheta) \K \S(\vartheta) \K^\top
-\D(\vartheta)^\top}_{=: \boldsymbol{\rho}(\vartheta)})
+and that the $k$ parameters in $\vartheta$ are themselves the 
+parameters of interest to the researcher.
+
+Then, the standardized estimator $\hat{\vartheta}_n$ is again approximately normally
+distributed
+\begin{eqnarray} \label{test}
+\frac{\hat{\vartheta}_n - \vartheta}{\sqrt{\diag(\S_n(\vartheta))}} = \D_n^{-1/2}
+(\hat{\vartheta}_n - \vartheta) \an \N_k(0, \Cor_n)
 \end{eqnarray}
-
-
-We assume that an estimate $\hat{\Sigma}(\hat{\vartheta}_n) \cP 0$ 
-of the covariance matrix $\hat{\Sigma}(\hat{\vartheta}_n) =
-\text{cov}(\hat{\vartheta}_n)$ of $\hat{\vartheta}_n$ is available such that
-the empirical version
+with $\D_n = \diag(\S_n(\vartheta))$ being the diagonal elements of
+$\S_n(\vartheta)$ and
+$\Cor_n = \D_n^{-1/2} \S_n(\vartheta) \D_n^{-1/2}$. To demonstrate (3), let $\tilde{a}_n
+\equiv 1$ 
+denote a positive, nondecreasing sequence such that
 \begin{eqnarray*}
-\hat{\D}(\hat{\vartheta}_n) = \text{diag}(\K \hat{\Sigma}(\hat{\vartheta}_n) \K^\top)^{-1/2}
+\tilde{a}_n \Cor_n = \D_n^{-1/2} \S_n(\vartheta) \D_n^{-1/2} = (a_n \D_n)^{-1/2} (a_n
+\S_n(\vartheta)) (a_n \D_n)^{-1/2}.
 \end{eqnarray*}
-of $\D$ satisfies
+With (\ref{cov}) and (\ref{assume}) we have $a_n \S_n(\vartheta) \cP \Sigma(\vartheta)$ and $a_n \D_n \cP
+\diag(\Sigma(\vartheta))$ and with Slutzky's Theorem \citep[Theorem
+1.5.4,][]{Serfling1980} it follows that
 \begin{eqnarray*}
-\hat{\boldsymbol{\rho}}(\hat{\vartheta}_n) = \hat{\D}(\hat{\vartheta}_n) \K
-\hat{\Sigma}(\hat{\vartheta}_n) \K^\top \hat{\D}(\hat{\vartheta}_n)^\top \cP 
-\boldsymbol{\rho}(\vartheta)
+\tilde{a}_n \Cor_n = (a_n \D_n)^{-1/2} (a_n \S_n(\vartheta)) (a_n \D_n)^{-1/2} \cP 
+\diag(\Sigma(\vartheta))^{-1/2} \, \Sigma(\vartheta) \,
+\diag(\Sigma(\vartheta))^{-1/2} := \Cor
 \end{eqnarray*}
-and $\hat{\D}(\hat{\vartheta}_n) \cP \sqrt{n} \D(\vartheta)$.
-Then, by Slutzky's Theorem \citep[Theorem 1.5.4][]{Serfling1980}, 
+and therefore (\ref{test}) holds. To finish note that
 \begin{eqnarray*}
-\T_n := \hat{\D}(\hat{\vartheta}_n) \K (\hat{\vartheta}_n - \vartheta) \cL
-\D(\vartheta) \K (\hat{\vartheta}_n - \vartheta) \text{ which is } \AN_k(0,
-n^{-1} \boldsymbol{\rho}(\vartheta))
+\D_n^{-1/2} (\hat{\vartheta}_n - \vartheta) = (a_n \D_n)^{-1/2}
+a_n^{1/2} (\hat{\vartheta}_n - \vartheta) \cL \N(0, \Cor).
 \end{eqnarray*}
-With (\ref{as}), and in the convential notation, we have
-\begin{eqnarray*}
-\T_n \cL \N_k(0, \boldsymbol{\rho}(\vartheta))
-\end{eqnarray*}
-In this case we can treat the vector $\T_{n}$ as having an approximately
-normal distribution with mean vector zero and correlation matrix  $%
-\boldsymbol{\hat{\rho}}(\hat{\vartheta}_n)$.
 
-The imposed assumption (\ref{assume}) is rather standard, and, for example,
-holds for all ML estimates with $\S(\vartheta)$ being the inverse of the
-Fisher information matrix.
+For the purposes of multiple comparisons, we need convergence of
+multivariate probabilities calculated for the vector $\T_{n}$ when $\Cor_n$ 
+is treated as if it were the true correlation matrix. 
+However, probabilities $\Prob(\max(|\T_n| \le t)$
+are simple linear functions of $\Cor_n$ and critical value $t$ which converge by
+$\Cor_n \cP \Cor$.
 
-
-
-Since in the following we only assume that the parameters estimates are
-asymptotically normally distributed with a consistent estimate of the
+Since we only assume that the parameters estimates are
+asymptotically normaldistributed with a consistent estimate of the
 associated covariance matrix being available, our framework covers a large
 class of statistical models, including linear regression and ANOVA models,
 generalized linear models, linear mixed effects models, the Cox model,
 robust linear models, etc. Standard software packages can be used to fit
-such models and obtain the estimates $\hat{\vartheta}$ and $\hat{\Sigma}$
+such models and obtain the estimates $\hat{\theta}_n$ and $\S_n(\theta)$
 which are essentially the only two quantities that are needed for what
-follows. It should be noted that the model parameters $\vartheta $ are not
+follows. It should be noted that the parameters of interest $\vartheta$ are not
 necessarily means or differences of means in AN(C)OVA models. Also, we do
 not restrict our attention to contrasts of such means, but allow for any set
-of constants leading to the linear functions $\K\vartheta $ of interest.
+of constants leading to the linear functions $\vartheta = \K\theta $ of interest.
 Specific examples for $\K$ and $\vartheta $ will be given later in Section~%
 \ref{illustrations}.
-
-\paragraph{Limiting distribution of $\K\hat{\protect\vartheta}$.}
-
-The linear function $\K \vartheta$ is continuous and differentiable in $%
-\vartheta$ and thus, by Theorem 5.1.5 in \cite{Lehmann1999} and standard
-arguments for linear transformations of multivariate normal variables, the
-linear function $\K \vartheta$ of the parameter estimates converges in law
-to a (possibly singular) $k$-dimensional normal distribution: 
-\begin{eqnarray}  \label{dist_f}
-\sqrt{n} \left(\K \hat{\vartheta} - \K \vartheta\right) \cL \N_k\left(0, \K %
-\Sigma \K^\top\right).
-\end{eqnarray}
-Furthermore, because the quadratic form $\K \hat{\Sigma} \K^\top$ is
-continuous and, by assumption, $\hat{\Sigma} \cP \Sigma$, it follows from
-Theorem 5.1.1 in \cite{Lehmann1999} that we can consistently estimate the
-unknown covariance matrix $\K \Sigma \K^\top$ utilizing a consistent
-estimate $\hat{\Sigma}$ of the covariance matrix $\Sigma$: 
-\begin{eqnarray*}
-\hat{\S } := \K \hat{\Sigma} \K^\top \cP \K \Sigma \K^\top =: \S .
-\end{eqnarray*}
-Anticipating that asymptotically non-degenerate linear functions of the data
-are of interest, we assume that the diagonal elements of $S$ are strictly
-positive.
-
-\paragraph{A multivariate statistic and its limiting distribution.}
-
-Let $\T := \sqrt{n} \hat{\D} (\K \hat{\vartheta} - \K \vartheta) \in \R^k$
-denote the $k$-dimensional standardized statistic, where $\hat{\D}$ is the
-diagonal matrix of standard deviations, that is, 
-\begin{eqnarray*}
-\hat{\D} := \text{diag}\left(\text{diag}(\hat{\S })^{-1/2}\right) \cP \text{%
-diag}\left(\text{diag}(\S )^{-1/2}\right) =: \D \in \R^{k,k}.
-\end{eqnarray*}
-Note that $\T$ converges in law to a $k$-dimensional multivariate normal
-distribution, that is, 
-\begin{eqnarray*}
-\T \cL \N_k\left(0, \Cor\right),
-\end{eqnarray*}
-where $\Cor := \D \S \D^\top$. To see this we utilize the Cram{\'e}r-Wold
-device \citep[e.g., Theorem 5.1.8
-in][]{Lehmann1999} and show that for any $\uu \in \R^k$ the linear function $%
-\uu^\top \T$ is univariate normal. Consider 
-\begin{eqnarray*}
-\uu^\top \T & = & \uu^\top \sqrt{n} \hat{\D} (\K \hat{\vartheta} - \K %
-\vartheta) \\
-& = & \sqrt{n} \left(u_1 \hat{\S }_{11}^{-1/2}, \dots, u_k \hat{\S }%
-_{kk}^{-1/2}\right)^\top(\K \hat{\vartheta} - \K \vartheta).
-\end{eqnarray*}
-Since $\hat{\S }$ is a consistent estimate of $\S $ it follows that $u_j 
-\hat{\S }_{jj}^{-1/2} \cP u_j \S _{jj}^{-1/2}$. Together with (\ref{dist_f})
-we can apply Slutsky's theorem \citep[Theorem 2.3.3
-in][]{Lehmann1999} to show that 
-\begin{eqnarray*}
-\sqrt{n} u_j \hat{\S }_{jj}^{-1/2} (\K \hat{\vartheta} - \K \vartheta)_j & %
-\cL & \N_1\left(0, u_j^2 \S _{jj}^{-1} \S _{jj}\right) \\
-& = & \N_1\left(0, u_j^2\right).
-\end{eqnarray*}
-Because the above holds for every $\uu \in \R^k$, the asymptotic
-multivariate normality of $\T$ follows from the Cram{\'e}r-Wold device.
-Based on the statistic $\T$ we will derive test statistics and utilize its
-limiting distribution as reference distribution when constructing
-simultaneous inference procedures in the next section.
 
 \section{Global and Simultaneous Inference}
 
@@ -336,10 +243,13 @@ Based on the results from Section~\ref{model}, we now focus on the
 derivation of suitable inference procedures. We start considering the
 general linear hypothesis \citep{Searle1971} 
 \begin{eqnarray*}
-H_0: \K \vartheta = \m.
+H_0: \vartheta := \K \theta = \m.
 \end{eqnarray*}
-Under the conditions of $H_0$ it follows from Section~\ref{model} that $\T = 
-\sqrt{n} \hat{\D} (\K \hat{\vartheta} - \m) \cL \N_k(0, \Cor)$. This
+Under the conditions of $H_0$ it follows from Section~\ref{model} that 
+\begin{eqnarray*}
+\T_n = \D_n^{-1/2} (\hat{\vartheta}_n - \m) \cL \N_k(0, \Cor). 
+\end{eqnarray*}
+This
 limiting distribution will now be used as the reference distribution when
 constructing the inference procedures. The global hypothesis $H_0$ can be
 tested using standard global tests, such as the $F$- or the $\chi^2$-test.
@@ -348,7 +258,7 @@ An alternative approach is to use maximum tests, as explained in Subsection~%
 H_0$ does not give further indication about the nature of the significant
 result. Therefore, one is often interested in the individual null hypotheses 
 \begin{eqnarray*}
-H_0^j: (\K\vartheta)_j = \m_j.
+H_0^j: \vartheta_j = \m_j.
 \end{eqnarray*}
 (Note that $H_0 = \bigcap_{j = 1}^k H_0^j$.) Testing the hypotheses set $%
 \{H_0^1, \ldots, H_0^k\}$ simultaneously thus requires the individual
@@ -356,15 +266,15 @@ assessments while maintaining the familywise error rate, as discussed in
 Subsection~\ref{simtest}
 
 At this point it is worth considering two special cases. A stronger
-assumption than asymptotic normality of $\hat{\vartheta}$ (\ref{normality})
-is exact normality, i.e., $\sqrt{n} (\hat{\vartheta} - \vartheta) \sim \N%
-_p(0, \Sigma)$. If the covariance matrix $\Sigma$ is known, it follows by
-standard arguments that $\T \sim \N_k(0, \Cor)$. Otherwise, if $\Sigma =
-\sigma^2 \A$, where $\A$ is fixed and known but $\sigma^2$ is an unknown
+assumption than asymptotic normality of $\hat{\theta}_n$ (\ref{normality})
+is exact normality, i.e., $\hat{\theta}_n \sim \N_p(\theta, \Sigma(\theta))$. 
+If the covariance matrix $\Sigma(\theta)$ is known, it follows by
+standard arguments that $\T_n \sim \N_k(0, \Cor)$. Otherwise, if
+$\Sigma(\theta) = \sigma^2 \A$, where $\A$ is fixed and known but $\sigma^2$ is an unknown
 constant (which is the typical situation of linear models with normal
-i.i.d.~errors and constant variance), the exact distribution of $\T$ is a $k$%
+i.i.d.~errors and constant variance), the exact distribution of $\T_n$ is a $k$%
 -dimensional multivariate $t_p(\nu, \Cor)$ distribution with $\nu$ degrees
-of freedom ($\nu = n - p - 1$ for linear models) see \citep{Tong1990}.
+of freedom ($\nu = n - p - 1$ for linear models), see \citep{Tong1990}.
 
 \subsection{Global Inference}
 
@@ -373,37 +283,41 @@ of freedom ($\nu = n - p - 1$ for linear models) see \citep{Tong1990}.
 The $F$- and the $\chi^2$-test are classical approaches to assess the global
 null hypothesis $H_0$. Standard results ensure that 
 \begin{eqnarray*}
-X^2 & = & (\K \hat{\vartheta} - \m)^\top \hat{\S }^+ (\K \hat{\vartheta} - \m%
-) \cL \chi^2(\Rg(\hat{\S })) \quad \text{for } \hat{\vartheta} \cL \N%
-_p(\vartheta, \Sigma), \text{ and } \\
-F & = & \frac{X^2}{\Rg(\hat{\S })} \sim \F(\nu, \Rg(\hat{\S })) \quad \text{%
-for } \hat{\vartheta} \sim \N_p(\vartheta, \Sigma),
+X^2 & = & (\hat{\vartheta}_n - \m)^\top \D_n^{-1/2} \Cor_n^+
+\D_n^{-1/2}(\hat{\vartheta}_n - \m) 
+\cL \chi^2(\Rg(\Cor_n)) \quad \text{when } \hat{\theta}_n \an
+\N_p(\theta, \S_n(\theta)) \\
+F & = & \frac{(\hat{\vartheta}_n - \m)^\top \D_n^{-1/2} \Cor^+
+\D_n^{-1/2}(\hat{\vartheta}_n - \m)}{\Rg(\Cor)} \sim \F(\nu, \Rg(\Cor)) \quad \text{%
+when } \hat{\theta}_n \sim \N_p(\theta, \Sigma(\theta)),
 \end{eqnarray*}
-where $\Rg(\hat{\S })$ and $\nu$ are the corresponding degrees of freedom
-and $\hat{\S }^+$ is the Moore-Penrose inverse of $\hat{\S }$.
+where $\Rg(\Cor_n)$, $\Rg(\Cor)$ and $\nu$ are the corresponding degrees of freedom
+and $\Cor_n^+$ is the Moore-Penrose inverse of $\Cor_n$.
 
 Another suitable scalar test statistic for testing the global hypothesis $H_0
-$ is to consider the maximum of the individual test statistics $T_1, \dots,
-T_k$ of the statistic $\T = (T_1, \dots, T_k)$, leading to a max-$t$ type
-test statistic $\max(|\T|)$. The distribution of this statistic under the
+$ is to consider the maximum of the individual test statistics $T_{1,n}, \dots,
+T_{k,n}$ of the statistic $\T_n = (T_{1,n}, \dots, T_{k,n})$, leading to a max-$t$ type
+test statistic $\max(|\T_n|)$. The distribution of this statistic under the
 conditions of $H_0$ can be handled through the $k$-dimensional distribution 
 \begin{eqnarray}  \label{maxt}
-\Prob(\max(|\T|) \le t) \cong \int\limits_{-t}^t \cdots \int\limits_{t}^t
+\Prob(\max(|\T_n|) \le t) \cong \int\limits_{-t}^t \cdots \int\limits_{t}^t
 \varphi_k(x_1, \dots, x_k; \Cor, \nu) \, dx_1 \cdots dx_k
 \end{eqnarray}
 for some $t \in \R$, where $\varphi_k$ is the density function of either the
 limiting $k$-dimensional multivariate normal (with $\nu = \infty$ and the `$%
 \approx$' operator) or the exact multivariate $t_p(\nu, \Cor)$-distribution
-(with $\nu < \infty$ and the `$=$' operator). Since $\Cor$ is usually
-unknown, we plug-in the consistent estimate $\hat{\Cor} := \hat{\D} \hat{\S }
-\hat{\D}^\top$. The resulting global $p$-value for $H_0$ is $1 - \Prob(\max(|%
-\T|) \le \max|\mathtt{|)}$ when $\T = $ has been observed. Efficient methods
+(with $\nu < \infty$ and the `$=$' operator). 
+%%Since $\Cor$ is usually
+%%unknown, we plug-in the consistent estimate $\Cor_m$. 
+The resulting global $p$-value for $H_0$ is $1 - \Prob(\max(|%
+\T_n|) \le \max|\tt|)$ when $\T = \tt$ has been observed. Efficient methods
 for approximating the above multivariate normal and $t$ probabilities are
 described in \cite{Genz1992,GenzBretz1999,BretzGenzHothorn2001} and \cite%
 {GenzBretz2002}. %The procedures
 %are applicable to small and moderate problems with up to $k < 100$ hypotheses.
 
-In contrast to the global $F$- or $\chi^2$-test, the max-$t$ test $\max(|\T|)
+In contrast to the global $F$- or $\chi^2$-test, the max-$t$ test
+$\max(|\T_n|)
 $ also provide information, which of the $k$ individual null hypotheses $%
 H_0^j, j = 1, \dots, k$ is significant as shown in the next subsection.
 
@@ -419,10 +333,10 @@ follows we use adjusted $p$-values to describe the decision rules. Adjusted $%
 p$-values are defined as the smallest significance level for which one still
 rejects an individual hypothesis $H_0^j$, given a particular multiple test
 procedure. In the present context, the adjusted $p$-value for the $j$th
-individual two-sided hypothesis $H_0^j: (\K \vartheta)_j = \m_j, j = 1,
+individual two-sided hypothesis $H_0^j: \vartheta_j = \m_j, j = 1,
 \dots, k, $ is given by 
 \begin{eqnarray*}
-p_j = 1 - \Prob(\max(|\T|) \le |t_j|),
+p_j = 1 - \Prob(\max(|\T_n|) \le |t_j|),
 \end{eqnarray*}
 where $t_1, \dots, t_k$ denote the observed test statistics. By
 construction, we can reject an elementary null hypothesis $H_0^j$, $j= 1,
@@ -434,17 +348,17 @@ Similar results also hold for one-sided testing problems. The adjusted $p$%
 -values for the two different directions of the alternative hypothesis are
 given by 
 \begin{eqnarray*}
-& & H_0: \K \vartheta \ge \m \text{ vs. } H_1: \K \vartheta < \m \quad
-\Rightarrow \quad p_j = 1 - \Prob(\max(\T) \le t_j) \quad \text{("less")}, \\
-& & H_0: \K \vartheta \le \m \text{ vs. } H_1: \K \vartheta > \m \quad
-\Rightarrow \quad p_j = 1 - \Prob(\min(\T) \ge t_j) \quad \text{("greater")}.
+& & H_0: \vartheta \ge \m \text{ vs. } H_1: \vartheta < \m \quad
+\Rightarrow \quad p_j = 1 - \Prob(\max(\T_n) \le t_j) \quad \text{("less")}, \\
+& & H_0: \vartheta \le \m \text{ vs. } H_1: \vartheta > \m \quad
+\Rightarrow \quad p_j = 1 - \Prob(\min(\T_n) \ge t_j) \quad \text{("greater")}.
 \end{eqnarray*}
 As before, these probabilities can be calculated from 
 \begin{eqnarray*}
-& & \Prob(\max(\T) \le t) \cong\int\limits_{-\infty}^t \cdots
+& & \Prob(\max(\T_n) \le t) \cong\int\limits_{-\infty}^t \cdots
 \int\limits_{-\infty}^t \varphi_k(x_1, \dots, x_k; \nu, \Cor) \, dx_1 \cdots
 dx_k \quad \text{("less")}, \\
-& & \Prob(\min(\T) \ge t) \cong \int\limits_{t}^\infty \cdots
+& & \Prob(\min(\T_n) \ge t) \cong \int\limits_{t}^\infty \cdots
 \int\limits_{t}^\infty \varphi_k(x_1, \dots, x_k; \nu, \Cor) \, dx_1 \cdots
 dx_k \quad \text{("greater")}.
 \end{eqnarray*}
@@ -454,12 +368,12 @@ Again, we refer to \cite{Genz1992,GenzBretz1999,BretzGenzHothorn2001} and
 %\paragraph{Simultaneous confidence intervals.}
 
 In addition to a simultaneous test procedure, a simultaneous $(1 - 2\alpha)
-\times 100\%$ confidence interval for $\K \vartheta$ is given by 
+\times 100\%$ confidence interval for $\vartheta$ is given by 
 \begin{eqnarray*}
-\K \hat{\vartheta} \pm q_\alpha \text{diag}(\hat{\S })^{-1/2}
+\hat{\vartheta}_n \pm q_\alpha \D_n^{1/2}
 \end{eqnarray*}
-where $q_\alpha$ is the $1 - \alpha$ quantile of the distribution of $\T$
-such that $\Prob(\max{|\T|} \le q_\alpha) \ge 1 - \alpha$. The corresponding
+where $q_\alpha$ is the $1 - \alpha$ quantile of the distribution of $\T_n$
+such that $\Prob(\max{|\T_n|} \le q_\alpha) \ge 1 - \alpha$. The corresponding
 one-sided versions are defined analogously.
 
 It should be noted that the simultaneous inference procedures described so
@@ -507,27 +421,27 @@ normal error $\varepsilon_i$ and constant variance $\sigma^2$,
 Y_i = \beta_0 + \sum_{i = 1}^q \beta_i X_{ij} + \sigma \varepsilon_i,
 \end{eqnarray*}
 where $\varepsilon = (\varepsilon_1, \dots, \varepsilon_n)^\top \sim \N_n(0, 
-\mathbf{I}_n).$ The parameter vector of interest is $\vartheta = (\beta_0,
+\mathbf{I}_n).$ The parameter vector of interest is $\theta = (\beta_0,
 \beta_1, \dots, \beta_q)$, which is usually estimated by 
 \begin{eqnarray*}
-\hat{\vartheta} = \left(\X^\top\X\right)^{-1} \X^\top \Y \sim \N%
-_{q+1}\left(\vartheta, \sigma^2 \left(\X^\top\X\right)^{-1}\right),
+\hat{\theta}_n = \left(\X^\top\X\right)^{-1} \X^\top \Y \sim \N%
+_{q+1}\left(\theta, \sigma^2 \left(\X^\top\X\right)^{-1}\right),
 \end{eqnarray*}
 where $\Y = (Y_1, \dots, Y_n)$ denotes the response vector and $\X
 = (1, (X_{ij}))_{ij}$ denotes the design matrix, $i = 1, \dots, n, j = 1,
 \dots, q$. Thus, for every matrix $\K \in \R^{k,q+1}$ of constants
 determining the experimental questions of interest we have 
 \begin{eqnarray*}
-\K \hat{\vartheta} \sim \N_k(\K \vartheta, \sigma^2 \K \left(\X^\top\X%
+\hat{\vartheta}_n = \K \hat{\theta}_n \sim \N_k(\K \theta, \sigma^2 \K \left(\X^\top\X%
 \right)^{-1} \K^\top).
 \end{eqnarray*}
-Under the null hypothesis $\K \vartheta = 0$ the standardized test
+Under the null hypothesis $\vartheta = 0$ the standardized test
 statistics 
 \begin{eqnarray*}
-\T = \hat{\D} \K \hat{\vartheta} \sim t_{q+1}(n - q, \Cor),
+\T = \D_n^{-1/2} \hat{\vartheta}_n \sim t_{q+1}(n - q, \Cor),
 \end{eqnarray*}
-where $\hat{\D}$ is the diagonal matrix of the inverse estimated standard
-deviations of $\K \hat{\vartheta}$ and $\Cor$ is the correlation matrix as
+where $\D_n = \hat{\sigma}^2 \diag(\K \left(\X^\top\X \right)^{-1} \K^\top)$ is the diagonal matrix of the estimated variances 
+of $\K \hat{\theta}$ and $\Cor$ is the correlation matrix as
 given in Section~\ref{siminf}. The body fat prediction example presented in
 Subsection \ref{bodyfat} illustrates the application of simultaneous
 inference procedures in the context of variable selection in linear
@@ -558,7 +472,7 @@ Section~\ref{model} we thus have
 \end{eqnarray*}
 resulting in the linear functions 
 \begin{eqnarray*}
-\K_\text{Dunnett} \vartheta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1,
+\vartheta_\text{Dunnett} = \K_\text{Dunnett} \theta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1,
 \dots, \gamma_q - \gamma_1)
 \end{eqnarray*}
 of interest. For Tukey's procedure, the interest is in all-pairwise
@@ -575,7 +489,7 @@ example, we have
 \end{eqnarray*}
 with 
 \begin{eqnarray*}
-\K_\text{Tukey} \vartheta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1,
+\K_\text{Tukey} \theta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1,
 \gamma_2 - \gamma_3).
 \end{eqnarray*}
 
@@ -638,8 +552,8 @@ all be analyzed using the \Rpackage{multcomp} package. In this section we
 briefly introduce the \Rpackage{multcomp} package and refer the reader to
 the online documentation of the package for the technical details.
 
-Estimated model coefficients $\hat{\vartheta}$ and their covariance matrix $%
-\hat{\Sigma}$ are accessible in \RR{} with \Rcmd{coef()} and \Rcmd{vcov()}
+Estimated model coefficients $\hat{\theta}_n$ and their covariance matrix $%
+\S_n(\theta)$ are accessible in \RR{} with \Rcmd{coef()} and \Rcmd{vcov()}
 methods available for most statistical models in \RR, such as objects of
 class \Rclass{lm}, \Rclass{glm}, \Rclass{coxph}, \Rclass{nlme}, or %
 \Rclass{survreg}. Having this information, the \Rcmd{glht()} function sets
@@ -678,8 +592,8 @@ need to assume that \Rcmd{model.frame()} and \Rcmd{model.matrix()} methods
 for \Robject{model} are available as well.
 
 Objects of class \Rclass{glht} returned by \Rcmd{glht()} include %
-\Rcmd{coef()} and \Rcmd{vcov()} methods to compute $\K \hat{\vartheta}$ and $%
-\hat{\S }$. Furthermore, a \Rcmd{summary()} method is available to perform
+\Rcmd{coef()} and \Rcmd{vcov()} methods to compute $\hat{\vartheta}_n$ and $%
+\S_n(\vartheta)$. Furthermore, a \Rcmd{summary()} method is available to perform
 different tests (max $t$, $\chi^2$ and $F$-tests) and $p$-value adjustments,
 including those taking logical constraints into account \citep{Shaffer1986,
 Westfall1997}. In addition, the \Rcmd{confint()} method applied to objects
@@ -701,9 +615,9 @@ this paper we have extended the theory to a broader class of parametric and
 semi-parametric statistical models, which allows a unified treatise of
 multiple comparisons and other simultaneous inference procedures in
 generalized linear models, mixed models, survival models, robust models etc.
-In essence, all what is required is a parameter estimate $\hat{\vartheta}$
+In essence, all what is required is a parameter estimate $\hat{\theta}_n$
 following an asymptotic multivariate normal distribution, and a consistent
-estimate $\hat{\Sigma}$ of its covariance matrix. Standard software packages
+estimate of its covariance matrix. Standard software packages
 can be used to compute these quantities. As shown in this paper, these
 quantities are sufficient to derive powerful simultaneous inference
 procedures, which are tailored to the experimental questions under

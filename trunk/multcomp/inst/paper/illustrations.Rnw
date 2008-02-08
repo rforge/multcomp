@@ -65,7 +65,7 @@ rankif <- function(data) trafo(data, numeric_trafo = rank)
 \end{figure}
 
 Thus, we fit a simple one-way ANOVA model to the data and 
-define $\K$ such that $\K \vartheta$ contains all three 
+define $\K$ such that $\K \theta$ contains all three 
 group differences (Tukey's all-pair differences):
 <<alpha-aov-tukey, echo = TRUE>>=
 data("alpha", package = "coin")
@@ -74,8 +74,8 @@ amod_glht <- glht(amod, linfct = mcp(alength = "Tukey"))
 amod_glht$linfct
 @
 The \Robject{amod\_glht} object now contains information
-about the estimated linear function $\K \hat{\vartheta}$ and 
-their covariance matrix $\hat{\S}$ which can be inspected
+about the estimated linear function $\hat{\vartheta}_n$ and 
+their covariance matrix $\S_n(\vartheta)$ which can be inspected
 via the \Rcmd{coef()} and \Rcmd{vcov()} methods:
 <<alpha-aov-coefvcov, echo = TRUE>>=
 coef(amod_glht)
@@ -245,11 +245,11 @@ disease can be estimated by computing the logit function
 of the linear predictor from model \Robject{gmod}. Using
 the \Rcmd{predict()} method for generalized linear models
 is a convenient way to compute these probability estimates. Alternatively,
-we can set up a linear function $\K$ such that $\left(1 + \exp(- \K \hat{\vartheta})\right)^{-1}$
+we can set up a linear function $\K$ such that $\left(1 + \exp(- \hat{\vartheta}_n)\right)^{-1}$
 is the vector of estimated probabilities with simultaneous confidence intervals
 \begin{eqnarray*}
-\left(\left(1 + \exp\left(- \left(\K \hat{\vartheta} - q_\alpha \text{diag}\left(\hat{\S}^{-1/2}\right)\right)\right) \right)^{-1},
-\left(1 + \exp\left(- \left(\K \hat{\vartheta} + q_\alpha \text{diag}\left(\hat{\S}^{-1/2}\right)\right)\right)\right)^{-1}\right)
+\left(\left(1 + \exp\left(- \left(\hat{\vartheta}_n - q_\alpha \D_n^{1/2}\right)\right)\right)^{-1},
+\left(1 + \exp\left(- \left(\hat{\vartheta}_n + q_\alpha \D_n^{1/2}\right)\right)\right)^{-1}\right)
 \end{eqnarray*}
 
 <<alzheimer-K, echo = FALSE>>=  
