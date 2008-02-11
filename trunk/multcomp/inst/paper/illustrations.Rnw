@@ -106,7 +106,7 @@ summary(amod_glht_sw)
 @
 We used the \Rcmd{sandwich()} function from package \Rpackage{sandwich}
 \citep{Zeileis2004, Zeileis2006} which provides us with a 
-heteroskedasticity-consistent estimator of the covariance matrix.
+heteroscedasticity-consistent estimator of the covariance matrix.
 This result is more in line with previously published findings
 for this study
 obtained from non-parametric test procedures such as the
