@@ -31,7 +31,7 @@ of the game management district number 513 `Unterer Aischgrund'
 of \Sexpr{nrow(trees513)} trees include the species and a binary
 variable indicating whether or not the tree suffers from damage caused
 by deer browsing. We fit a mixed logistic regression model 
-\citep[using package \Rpackage{lme4},][]{pkg:lme4, Rnews:Bates:2005}
+\citep[using package \Rpackage{lme4},][]{Rnews:Bates:2005,pkg:lme4}
 without intercept and with random effects accounting for the spatial variation
 of the trees. For each plot nested within a set of five plots
 orientated on a 100m transect (the location of the transect
@@ -59,7 +59,7 @@ colnames(K) <- rownames(K) <-
 @
 
 Based on $\K$, we first compute simultaneous confidence intervals
-for $\K \vartheta$ and transform these into probabilities:
+for $\K \theta$ and transform these into probabilities:
 <<trees-ci, echo = TRUE>>=
 ci <- confint(glht(mmod, linfct = K))
 ci$confint <- 1 - binomial()$linkinv(ci$confint)

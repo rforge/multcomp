@@ -94,11 +94,11 @@ Because of the variance heterogeneity
 that can be observed in Figure~\ref{alpha-box}, one might be concerned 
 with the validity of the above results stating that there
 is not difference between any combination of the three
-allele lengths. A sandwich estimator $\hat{\Sigma}$ 
+allele lengths. A sandwich estimator $\S_n(\theta)$ 
 might be more appropriate in this situation, and
 the \Rarg{vcov} argument of \Rcmd{glht()} can be used
 to specify a function to compute some alternative 
-estimator $\hat{\Sigma}$ as follows:
+estimator $\S_n(\theta)$ as follows:
 <<alpha-aov-tukey-sandwich, echo = TRUE>>=
 amod_glht_sw <- glht(amod, linfct = mcp(alength = "Tukey"), 
                      vcov = sandwich)
@@ -122,9 +122,9 @@ par(mai = par("mai") * c(1, 2.1, 1, 0.5))
 layout(matrix(1:2, ncol = 2))
 ci1 <- confint(glht(amod, linfct = mcp(alength = "Tukey")))
 ci2 <- confint(glht(amod, linfct = mcp(alength = "Tukey"), vcov = sandwich))
-plot(ci1, xlim = c(-0.6, 2.6), main = expression(paste("Tukey HSD (ordinary ", hat(Sigma), ")")), 
+plot(ci1, xlim = c(-0.6, 2.6), main = expression(paste("Tukey HSD (ordinary ", bold(S)[n](theta), ")")), 
     xlab = "Difference", ylim = c(0.5, 3.5))
-plot(ci2, xlim = c(-0.6, 2.6), main = expression(paste("Tukey HSD (sandwich ", hat(Sigma), ")")), 
+plot(ci2, xlim = c(-0.6, 2.6), main = expression(paste("Tukey HSD (sandwich ", bold(S)[n](theta), ")")), 
     xlab = "Difference", ylim = c(0.5, 3.5))
 @
 \caption{\Robject{alpha} data: Simultaneous confidence intervals based
@@ -326,5 +326,5 @@ smod <- survreg(Surv(time, event) ~ Sex * (Age + WBC + LDH + FLT3 + risk),
                 data = clinical)
 summary(glht(smod, linfct = mcp(risk = "Tukey")))
 @
-Again, a sandwich estimator of the covariance matrix $\hat{\Sigma}$ can
+Again, a sandwich estimator of the covariance matrix $\S_n(\theta)$ can
 be plugged-in but the results stay very much the same in this case.

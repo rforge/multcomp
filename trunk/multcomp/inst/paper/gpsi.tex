@@ -16,7 +16,7 @@
 %% maybe some more references
 
 
-\documentclass[12pt]{article}
+\documentclass[12pt,a4paper]{article}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{a4wide}
 \usepackage[lists,heads]{endfloat}
@@ -70,7 +70,7 @@ pre-specified significance level. Simultaneous inference procedures have to
 be used which adjust for multiplicity and thus control the overall type I
 error rate. In this paper we describe simultaneous inference procedures in
 general parametric models, where the experimental questions are specified
-through a linear combination of the model parameters. The framework
+through a linear combination of elemental model parameters. The framework
 described here is quite general and extends the canonical theory of multiple
 comparison procedures in ANOVA models to linear regression problems,
 generalized linear models, linear mixed effects models, the Cox model,
@@ -109,13 +109,14 @@ we refer to \cite{HochbergTamhane1987} and \cite{Hsu1996}.
 In this paper we aim at a unified description of simultaneous inference
 procedures in parametric models with generally correlated parameter
 estimates. Each individual null hypothesis is specified through a linear
-combination of the model parameters and we allow for $k$ of such null
-hypotheses to be tested simultaneously. The general framework described here
+combination of elemental model parameters and we allow for $k$ of such null
+hypotheses to be tested simultaneously, regardless of the number of 
+elemental model parameters $p$. The general framework described here
 extends the current canonical theory with respect to the following aspects:
 (i) model assumptions, such as normality and homoscedasticity are relaxed,
 thus allowing for simultaneous inference in generalized linear models,
 mixed-effects models, survival models, etc.; (ii) arbitrary linear functions
-of the parameters are allowed, not just contrasts of means in AN(C)OVA
+of the elemental parameters are allowed, not just contrasts of means in AN(C)OVA
 models; (iii) computing the reference distribution is feasible for arbitrary
 designs, especially unbalanced designs; and (iv) a unified implementation is
 provided which allows for a fast transition of the theoretical results to
@@ -124,7 +125,7 @@ multiple hypotheses.
 
 Accordingly, the paper is organized as follows. Section~\ref{model} defines
 the general model and obtains the asymptotic or exact distribution of linear
-functions of model parameters under rather weak conditions. In Section~\ref%
+functions of elemental model parameters under rather weak conditions. In Section~\ref%
 {siminf} we describe the framework for simultaneous inference procedures in
 general parametric models. An overview about important applications of the
 methodology is given in Section~\ref{applications} followed by a short
@@ -142,39 +143,42 @@ some asymptotic results necessary in the subsequent sections. The results
 from this section form the basis for the simultaneous inference procedures
 described in Section~\ref{siminf}.
 
-Let $\M(\Z, \theta, \eta)$ denote a (semi-)parametric statistical
-model. The set of $n$ observations is described by $\Z = (\Z_1, \dots,
-\Z_n)$. The model contains fixed but unknown parameters of interest $\theta
+Let $\M((\Z_1, \dots, \Z_n), \theta, \eta)$ denote a (semi-)parametric statistical
+model. The set of $n$ observations is described by $(\Z_1, \dots, \Z_n)$. 
+The model contains fixed but unknown elemental parameters $\theta
 \in \R^p$ and other (random or nuisance) parameters $\eta$. We are
-interested in the linear functions $\vartheta = \K \theta$ of the parameter vector $%
-\vartheta$ as specified through the constant matrix $\K \in \R^{k, p}$.
+interested in the linear functions $\vartheta = \K \theta$ of the parameter vector 
+$\theta$ as specified through the constant matrix $\K \in \R^{k, p}$.
 Assume that we are given an estimate $\hat{\theta}_n \in \R^p$ of the
-parameter vector $\vartheta$. In what follows we describe the underlying
-model assumptions, the limiting distribution of $\K\hat{\vartheta}_n$ as well
+vector of elemental parameters $\theta$. In what follows we describe the underlying
+model assumptions, the limiting distribution of estimates of our parameters of 
+interest $\vartheta := \K \theta$ as well
 as the corresponding test statistics and their limiting joint distribution.
 
 Suppose $\hat{\theta}_n \in \R^p$ is an estimate of $\theta$ and
 $\S_n(\theta) \in \R^{p,p}$ is an estimate of $\cov(\hat{\theta}_n)$ with
 \begin{eqnarray} \label{cov}
-a_n \S_n(\vartheta) \cP \Sigma(\vartheta) \in \R^{p,p}
+a_n \S_n(\theta) \cP \Sigma(\theta) \in \R^{p,p}
 \end{eqnarray}
 for some positive, nondecreasing sequence $a_n$.
 Furthermore, we assume that a multivariate central limit theorem holds,
 i.e.,
 \begin{eqnarray} \label{clt}
-a_n^{1/2} (\hat{\theta}_n - \theta) \cL \N_p(0, \Sigma(\vartheta)).
+a_n^{1/2} (\hat{\theta}_n - \theta) \cL \N_p(0, \Sigma(\theta)).
 \end{eqnarray}
 If both (\ref{cov}) and (\ref{clt}) are fulfilled we write $\hat{\theta}_n \an
 \N_p(\theta, \S_n(\theta))$. Then, by Theorem 3.3.A in
-\cite{Serfling1980}, the linear function $\hat{\vartheta}_n = \K \hat{\theta}_n$
-of parameters of interest also follows an approximate multivariate normal 
+\cite{Serfling1980}, the linear function $\hat{\vartheta}_n = \K
+\hat{\theta}_n$, i.e., an estimate of our parameters of interest, 
+also follows an approximate multivariate normal 
 distribution
 \begin{eqnarray*}
-\hat{\vartheta}_n = \K \hat{\theta}_n \an \N_k(\vartheta, \S_n(\vartheta) := \K \S_n(\theta) \K^\top)
+\hat{\vartheta}_n = \K \hat{\theta}_n \an \N_k(\vartheta, \S_n(\vartheta))
 \end{eqnarray*}
+with covariance matrix $\S_n(\vartheta) := \K \S_n(\theta) \K^\top$
 for any fixed matrix $\K \in \R^{k,p}$. Thus we need not distinguish
 between elemental parameters $\theta$ or derived parameters $\vartheta = \K \theta$ 
-that may be of interest to the researcher, such as the parameters $\K \theta$ representing
+that are of interest to the researcher, for example the parameters $\K \theta$ representing
 all pairwise comparisons of elemental parameters. Instead we simply assume 
 for the moment that we have 
 \begin{eqnarray} \label{assume}
@@ -182,58 +186,61 @@ for the moment that we have
 \S_n(\vartheta) \cP \Sigma(\vartheta) \in \R^{k,k}
 \end{eqnarray}
 and that the $k$ parameters in $\vartheta$ are themselves the 
-parameters of interest to the researcher.
+parameters of interest to the researcher. It is assumed that
+the diagonal elements of the covariance matrix are positive, i.e., 
+$\Sigma(\vartheta)_{jj} > 0, j = 1, \dots, k$.
 
 Then, the standardized estimator $\hat{\vartheta}_n$ is again approximately normally
 distributed
 \begin{eqnarray} \label{test}
-\frac{\hat{\vartheta}_n - \vartheta}{\sqrt{\diag(\S_n(\vartheta))}} = \D_n^{-1/2}
+\T_n := \frac{\hat{\vartheta}_n - \vartheta}{\sqrt{\diag(\S_n(\vartheta))}} = \D_n^{-1/2}
 (\hat{\vartheta}_n - \vartheta) \an \N_k(0, \Cor_n)
 \end{eqnarray}
 with $\D_n = \diag(\S_n(\vartheta))$ being the diagonal elements of
-$\S_n(\vartheta)$ and
-$\Cor_n = \D_n^{-1/2} \S_n(\vartheta) \D_n^{-1/2}$. To demonstrate (3), let $\tilde{a}_n
-\equiv 1$ 
-denote a positive, nondecreasing sequence such that
+$\S_n(\vartheta)$ and 
 \begin{eqnarray*}
-\tilde{a}_n \Cor_n = \D_n^{-1/2} \S_n(\vartheta) \D_n^{-1/2} = (a_n \D_n)^{-1/2} (a_n
-\S_n(\vartheta)) (a_n \D_n)^{-1/2}.
+\Cor_n = \D_n^{-1/2} \S_n(\vartheta) \D_n^{-1/2} \in \R^{k,k} 
 \end{eqnarray*}
-With (\ref{cov}) and (\ref{assume}) we have $a_n \S_n(\vartheta) \cP \Sigma(\vartheta)$ and $a_n \D_n \cP
-\diag(\Sigma(\vartheta))$ and with Slutzky's Theorem \citep[Theorem
-1.5.4,][]{Serfling1980} it follows that
+is the correlation matrix of the $k$-dimensional statistic 
+$\T_n$. To demonstrate (\ref{test}), note that 
+with (\ref{cov}) and (\ref{assume}) we have $a_n \S_n(\vartheta) \cP \Sigma(\vartheta)$ 
+and $a_n \D_n \cP \diag(\Sigma(\vartheta))$. Let $\tilde{a}_n
+\equiv 1$  denote a positive, nondecreasing sequence such that
 \begin{eqnarray*}
-\tilde{a}_n \Cor_n = (a_n \D_n)^{-1/2} (a_n \S_n(\vartheta)) (a_n \D_n)^{-1/2} \cP 
-\diag(\Sigma(\vartheta))^{-1/2} \, \Sigma(\vartheta) \,
-\diag(\Sigma(\vartheta))^{-1/2} := \Cor
+\tilde{a}_n \Cor_n  & = & \D_n^{-1/2} \S_n(\vartheta) \D_n^{-1/2} \\
+& = & (a_n \D_n)^{-1/2} (a_n \S_n(\vartheta)) (a_n \D_n)^{-1/2} \\
+& \cP & \diag(\Sigma(\vartheta))^{-1/2} \, \Sigma(\vartheta) \, \diag(\Sigma(\vartheta))^{-1/2} 
+=: \Cor \in \R^{k,k}
 \end{eqnarray*}
-and therefore (\ref{test}) holds. To finish note that
+where the convergence in probability to a constant follows from
+Slutzky's Theorem \citep[Theorem 1.5.4,][]{Serfling1980} and 
+therefore (\ref{test}) holds. To finish note that
 \begin{eqnarray*}
-\D_n^{-1/2} (\hat{\vartheta}_n - \vartheta) = (a_n \D_n)^{-1/2}
-a_n^{1/2} (\hat{\vartheta}_n - \vartheta) \cL \N(0, \Cor).
+\T_n = \D_n^{-1/2} (\hat{\vartheta}_n - \vartheta) = (a_n \D_n)^{-1/2}
+a_n^{1/2} (\hat{\vartheta}_n - \vartheta) \cL \N_k(0, \Cor).
 \end{eqnarray*}
 
 For the purposes of multiple comparisons, we need convergence of
 multivariate probabilities calculated for the vector $\T_{n}$ when $\Cor_n$ 
 is treated as if it were the true correlation matrix. 
 However, probabilities $\Prob(\max(|\T_n| \le t)$
-are simple linear functions of $\Cor_n$ and critical value $t$ which converge by
-$\Cor_n \cP \Cor$.
+are continuous functions of $\Cor_n$ (and a critical value $t$) which converge by
+$\Cor_n \cP \Cor$ as a consequence of Theorem 1.7 in \cite{Serfling1980}.
 
-Since we only assume that the parameters estimates are
-asymptotically normaldistributed with a consistent estimate of the
+Since we only assume that the parameter estimates are
+asymptotically normal distributed with a consistent estimate of the
 associated covariance matrix being available, our framework covers a large
 class of statistical models, including linear regression and ANOVA models,
 generalized linear models, linear mixed effects models, the Cox model,
 robust linear models, etc. Standard software packages can be used to fit
 such models and obtain the estimates $\hat{\theta}_n$ and $\S_n(\theta)$
 which are essentially the only two quantities that are needed for what
-follows. It should be noted that the parameters of interest $\vartheta$ are not
+follows. It should be noted that the elemental parameters $\theta$ are not
 necessarily means or differences of means in AN(C)OVA models. Also, we do
 not restrict our attention to contrasts of such means, but allow for any set
 of constants leading to the linear functions $\vartheta = \K\theta $ of interest.
-Specific examples for $\K$ and $\vartheta $ will be given later in Section~%
-\ref{illustrations}.
+Specific examples for $\K$ and $\theta $ will be given later in Sections~%
+\ref{applications} and \ref{illustrations}.
 
 \section{Global and Simultaneous Inference}
 
@@ -241,7 +248,8 @@ Specific examples for $\K$ and $\vartheta $ will be given later in Section~%
 
 Based on the results from Section~\ref{model}, we now focus on the
 derivation of suitable inference procedures. We start considering the
-general linear hypothesis \citep{Searle1971} 
+general linear hypothesis \citep{Searle1971} formulated in terms
+of our parameters of interest $\vartheta$
 \begin{eqnarray*}
 H_0: \vartheta := \K \theta = \m.
 \end{eqnarray*}
@@ -254,8 +262,9 @@ limiting distribution will now be used as the reference distribution when
 constructing the inference procedures. The global hypothesis $H_0$ can be
 tested using standard global tests, such as the $F$- or the $\chi^2$-test.
 An alternative approach is to use maximum tests, as explained in Subsection~%
-\ref{global}. Note that a small global $p$-value leading to a rejection of $%
-H_0$ does not give further indication about the nature of the significant
+\ref{global}. Note that a small global $p$-value (obtained from one of these
+procedures) leading to a rejection of $H_0$ 
+does not give further indication about the nature of the significant
 result. Therefore, one is often interested in the individual null hypotheses 
 \begin{eqnarray*}
 H_0^j: \vartheta_j = \m_j.
@@ -266,14 +275,14 @@ assessments while maintaining the familywise error rate, as discussed in
 Subsection~\ref{simtest}
 
 At this point it is worth considering two special cases. A stronger
-assumption than asymptotic normality of $\hat{\theta}_n$ (\ref{normality})
+assumption than asymptotic normality of $\hat{\theta}_n$ (\ref{clt})
 is exact normality, i.e., $\hat{\theta}_n \sim \N_p(\theta, \Sigma(\theta))$. 
 If the covariance matrix $\Sigma(\theta)$ is known, it follows by
 standard arguments that $\T_n \sim \N_k(0, \Cor)$. Otherwise, if
 $\Sigma(\theta) = \sigma^2 \A$, where $\A$ is fixed and known but $\sigma^2$ is an unknown
 constant (which is the typical situation of linear models with normal
 i.i.d.~errors and constant variance), the exact distribution of $\T_n$ is a $k$%
--dimensional multivariate $t_p(\nu, \Cor)$ distribution with $\nu$ degrees
+-dimensional multivariate $t_k(\nu, \Cor)$ distribution with $\nu$ degrees
 of freedom ($\nu = n - p - 1$ for linear models), see \citep{Tong1990}.
 
 \subsection{Global Inference}
@@ -281,14 +290,13 @@ of freedom ($\nu = n - p - 1$ for linear models), see \citep{Tong1990}.
 \label{global} %\paragraph{Global tests.}
 
 The $F$- and the $\chi^2$-test are classical approaches to assess the global
-null hypothesis $H_0$. Standard results ensure that 
+null hypothesis $H_0$. Standard results \citep[such as Theorem
+3.5,][]{Serfling1980} ensure that 
 \begin{eqnarray*}
-X^2 & = & (\hat{\vartheta}_n - \m)^\top \D_n^{-1/2} \Cor_n^+
-\D_n^{-1/2}(\hat{\vartheta}_n - \m) 
+X^2 & = & \T_n^\top \Cor_n^+ \T_n
 \cL \chi^2(\Rg(\Cor_n)) \quad \text{when } \hat{\theta}_n \an
 \N_p(\theta, \S_n(\theta)) \\
-F & = & \frac{(\hat{\vartheta}_n - \m)^\top \D_n^{-1/2} \Cor^+
-\D_n^{-1/2}(\hat{\vartheta}_n - \m)}{\Rg(\Cor)} \sim \F(\nu, \Rg(\Cor)) \quad \text{%
+F & = & \frac{\T_n^\top \Cor^+ \T_n}{\Rg(\Cor)} \sim \F(\nu, \Rg(\Cor)) \quad \text{%
 when } \hat{\theta}_n \sim \N_p(\theta, \Sigma(\theta)),
 \end{eqnarray*}
 where $\Rg(\Cor_n)$, $\Rg(\Cor)$ and $\nu$ are the corresponding degrees of freedom
@@ -296,7 +304,7 @@ and $\Cor_n^+$ is the Moore-Penrose inverse of $\Cor_n$.
 
 Another suitable scalar test statistic for testing the global hypothesis $H_0
 $ is to consider the maximum of the individual test statistics $T_{1,n}, \dots,
-T_{k,n}$ of the statistic $\T_n = (T_{1,n}, \dots, T_{k,n})$, leading to a max-$t$ type
+T_{k,n}$ of the multivariate statistic $\T_n = (T_{1,n}, \dots, T_{k,n})$, leading to a max-$t$ type
 test statistic $\max(|\T_n|)$. The distribution of this statistic under the
 conditions of $H_0$ can be handled through the $k$-dimensional distribution 
 \begin{eqnarray}  \label{maxt}
@@ -305,10 +313,10 @@ conditions of $H_0$ can be handled through the $k$-dimensional distribution
 \end{eqnarray}
 for some $t \in \R$, where $\varphi_k$ is the density function of either the
 limiting $k$-dimensional multivariate normal (with $\nu = \infty$ and the `$%
-\approx$' operator) or the exact multivariate $t_p(\nu, \Cor)$-distribution
-(with $\nu < \infty$ and the `$=$' operator). 
-%%Since $\Cor$ is usually
-%%unknown, we plug-in the consistent estimate $\Cor_m$. 
+\approx$' operator) or the exact multivariate $t_k(\nu, \Cor)$-distribution
+(with $\nu < \infty$ and the `$=$' operator). Since $\Cor$ is usually
+unknown, we plug-in the consistent estimate $\Cor_n$ as discussed in
+Section~\ref{model}.
 The resulting global $p$-value for $H_0$ is $1 - \Prob(\max(|%
 \T_n|) \le \max|\tt|)$ when $\T = \tt$ has been observed. Efficient methods
 for approximating the above multivariate normal and $t$ probabilities are
@@ -316,9 +324,9 @@ described in \cite{Genz1992,GenzBretz1999,BretzGenzHothorn2001} and \cite%
 {GenzBretz2002}. %The procedures
 %are applicable to small and moderate problems with up to $k < 100$ hypotheses.
 
-In contrast to the global $F$- or $\chi^2$-test, the max-$t$ test
-$\max(|\T_n|)
-$ also provide information, which of the $k$ individual null hypotheses $%
+In contrast to the global $F$- or $\chi^2$-test, the max-$t$ test,
+based on the test statistic $\max(|\T_n|)$, also provides information, 
+which of the $k$ individual null hypotheses $%
 H_0^j, j = 1, \dots, k$ is significant as shown in the next subsection.
 
 \subsection{Simultaneous Inference}
@@ -403,7 +411,7 @@ The methodological framework described in Sections~\ref{model} and \ref%
 {siminf} is very general and thus applicable to a wide range of statistical
 models. Many estimation techniques, such as (restricted) maximum likelihood
 and M estimates, provide at least asymptotically normal estimates of the
-parameters together with consistent estimate of the covariance matrix. In
+elemental parameters together with consistent estimate of their covariance matrix. In
 this section we illustrate the generality of the methodology by reviewing
 some potential applications. Detailed numerical examples are discussed in
 Section~\ref{illustrations}. In what follows, we assume $\m = 0$ only for
@@ -421,7 +429,7 @@ normal error $\varepsilon_i$ and constant variance $\sigma^2$,
 Y_i = \beta_0 + \sum_{i = 1}^q \beta_i X_{ij} + \sigma \varepsilon_i,
 \end{eqnarray*}
 where $\varepsilon = (\varepsilon_1, \dots, \varepsilon_n)^\top \sim \N_n(0, 
-\mathbf{I}_n).$ The parameter vector of interest is $\theta = (\beta_0,
+\mathbf{I}_n).$ The elemental parameter vector is $\theta = (\beta_0,
 \beta_1, \dots, \beta_q)$, which is usually estimated by 
 \begin{eqnarray*}
 \hat{\theta}_n = \left(\X^\top\X\right)^{-1} \X^\top \Y \sim \N%
@@ -438,7 +446,7 @@ determining the experimental questions of interest we have
 Under the null hypothesis $\vartheta = 0$ the standardized test
 statistics 
 \begin{eqnarray*}
-\T = \D_n^{-1/2} \hat{\vartheta}_n \sim t_{q+1}(n - q, \Cor),
+\T_n = \D_n^{-1/2} \hat{\vartheta}_n \sim t_{q+1}(n - q, \Cor),
 \end{eqnarray*}
 where $\D_n = \hat{\sigma}^2 \diag(\K \left(\X^\top\X \right)^{-1} \K^\top)$ is the diagonal matrix of the estimated variances 
 of $\K \hat{\theta}$ and $\Cor$ is the correlation matrix as
@@ -458,8 +466,10 @@ and independent normal errors $\varepsilon_{ij} \sim \N_1(0, \sigma^2), j =
 1, \dots, q, i = 1, \dots, n_j$. Note that the model description in (\ref%
 {one-way}) is overparameterized. A standard approach is to consider a
 suitable re-parametrization. The so-called "treatment contrast" vector $%
-\vartheta = (\mu, \gamma_2 - \gamma_1, \gamma_3 - \gamma_1, \dots, \gamma_q
-- \gamma_1)$ is, for example, the default re-parametrization used in \RR.
+\theta = (\mu, \gamma_2 - \gamma_1, \gamma_3 - \gamma_1, \dots, \gamma_q
+- \gamma_1)$ is, for example, the default re-parametrization used as
+elemental parameters in the \RR-system for statistical computing
+\citep{rcore2007}.
 
 Many classical multiple comparison procedures can be embedded into this
 framework, including Dunnett's many-to-one comparisons and Tukey's
@@ -470,7 +480,7 @@ Section~\ref{model} we thus have
 \begin{eqnarray*}
 \K_\text{Dunnett} = (0, \diag(q))
 \end{eqnarray*}
-resulting in the linear functions 
+resulting in the parameters of interest
 \begin{eqnarray*}
 \vartheta_\text{Dunnett} = \K_\text{Dunnett} \theta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1,
 \dots, \gamma_q - \gamma_1)
@@ -487,17 +497,17 @@ example, we have
 \end{array}
 \right)
 \end{eqnarray*}
-with 
+with parameters of interest
 \begin{eqnarray*}
-\K_\text{Tukey} \theta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1,
+\vartheta_\text{Tukey} = \K_\text{Tukey} \theta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1,
 \gamma_2 - \gamma_3).
 \end{eqnarray*}
 
 Many further multiple comparison procedures have been investigated in the
 past, which all fit into this framework. We refer to Bretz et al. (2001) for
 a related comprehensive list. Note that under the standard ANOVA assumptions
-of i.i.d. normal errors with constant variance the vector of test statistics 
-$\T$ follows a multivariate $t$ distribution. Thus, related simultaneous
+of i.i.d.~normal errors with constant variance the vector of test statistics 
+$\T_n$ follows a multivariate $t$ distribution. Thus, related simultaneous
 tests and confidence intervals do not rely on asymptotics and can be
 computed analytically instead, as shown in Section~\ref{siminf}.
 
@@ -529,7 +539,8 @@ various tree species from mixed models in Subsection~\ref{forest}.
 
 Yet another application is to use robust variants of the previously
 discussed statistical models. One possibility is to consider the use of
-sandwich estimators $\hat{\Sigma}$ for the covariance matrix $\Sigma$ when,
+sandwich estimators $\S_n(\theta)$ for the covariance matrix
+$\cov(\hat{\theta}_n)$ when,
 for example, the variance homogeneity assumption is violated. An alternative
 is to apply robust estimation techniques in linear models, for example S-,
 M- or MM-estimation 
@@ -544,18 +555,18 @@ examples illustrating these ideas.
 
 \label{implementation}
 
-The \Rpackage{multcomp} package \citep{pkg:multcomp} in \RR{} \citep{R2007}
+The \Rpackage{multcomp} package \citep{pkg:multcomp} in \RR{} \citep{rcore2007}
 provides a general implementation of the framework for simultaneous
-inference in (semi-)\-parametric models described in Sections~\ref{model}
+inference in (~semi-~)\-parametric models described in Sections~\ref{model}
 and~\ref{siminf}. The numerical examples in Section~\ref{illustrations} will
 all be analyzed using the \Rpackage{multcomp} package. In this section we
 briefly introduce the \Rpackage{multcomp} package and refer the reader to
 the online documentation of the package for the technical details.
 
-Estimated model coefficients $\hat{\theta}_n$ and their covariance matrix $%
+Estimated model coefficients $\hat{\theta}_n$ and their estimated covariance matrix $%
 \S_n(\theta)$ are accessible in \RR{} with \Rcmd{coef()} and \Rcmd{vcov()}
 methods available for most statistical models in \RR, such as objects of
-class \Rclass{lm}, \Rclass{glm}, \Rclass{coxph}, \Rclass{nlme}, or %
+class \Rclass{lm}, \Rclass{glm}, \Rclass{coxph}, \Rclass{nlme}, \Rclass{mer} or %
 \Rclass{survreg}. Having this information, the \Rcmd{glht()} function sets
 up the \underline{g}eneral \underline{l}inear \underline{h}ypo\underline{t}%
 hesis for a model `\Robject{model}' and a representation of the matrix $\K$
@@ -614,7 +625,7 @@ Multiple comparisons in linear models have been in use for a long time, see
 this paper we have extended the theory to a broader class of parametric and
 semi-parametric statistical models, which allows a unified treatise of
 multiple comparisons and other simultaneous inference procedures in
-generalized linear models, mixed models, survival models, robust models etc.
+generalized linear models, mixed models, survival models, robust models, etc.
 In essence, all what is required is a parameter estimate $\hat{\theta}_n$
 following an asymptotic multivariate normal distribution, and a consistent
 estimate of its covariance matrix. Standard software packages
@@ -635,7 +646,7 @@ inference is only two commands away.
 \marginpar{
 vignette}
 
-\bibliographystyle{biometrika}
+\bibliographystyle{plainnat}
 \bibliography{references}
 
 \end{document}
