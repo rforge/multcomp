@@ -209,16 +209,16 @@ adjusted <- function(type = c("single-step", "Shaffer", "Westfall", p.adjust.met
     })
 }
 
-adjusted_calpha <- function() {
-    ret <- function(object, level, ...) {
+adjusted_calpha <- function(...) {
+    ret <- function(object, level) {
         pqglht(object)$qfunction(level, adjusted = TRUE, ...)
     }
     attr(ret, "type") <- "adjusted"
     ret
 }
 
-univariate_calpha <- function() {
-    ret <- function(object, level, ...) {
+univariate_calpha <- function(...) {
+    ret <- function(object, level) {
         pqglht(object)$qfunction(level, adjusted = FALSE, ...)
     }
     attr(ret, "type") <- "univariate"

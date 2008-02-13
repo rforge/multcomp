@@ -1,4 +1,9 @@
 
+		CHANGES in `multcomp' VERSION 0.992-xx
+
+    o    warn if ... arguments are ignored
+
+
 		CHANGES in `multcomp' VERSION 0.992-9
 
     o    remove deprecated functions simint and simtest (the files

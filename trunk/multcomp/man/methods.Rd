@@ -28,8 +28,8 @@ adjusted(type = c("single-step", "Shaffer", "Westfall", p.adjust.methods),
          ...)
 Ftest()
 Chisqtest()
-adjusted_calpha()
-univariate_calpha()
+adjusted_calpha(...)
+univariate_calpha(...)
 }
 \arguments{
   \item{object}{ an object of class \code{\link{glht}}.}
@@ -49,7 +49,10 @@ univariate_calpha()
   \item{...}{ additional arguments, such as \code{maxpts}, 
               \code{abseps} or \code{releps} to
               \code{\link[mvtnorm]{pmvnorm}} in \code{adjusted} or 
-              \code{\link[mvtnorm]{qmvnorm}} in \code{confint}.}
+              \code{\link[mvtnorm]{qmvnorm}} in \code{confint}. Note
+               that additional arguments specified to \code{summary},
+               \code{confint}, \code{coef} and \code{vcov} methods
+               are currently ignored.}
 }
 \details{
 
