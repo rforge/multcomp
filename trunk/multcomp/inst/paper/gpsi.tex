@@ -194,8 +194,8 @@ $\SigmaK_{jj} > 0, j = 1, \dots, k$.
 Then, the standardized estimator $\hat{\vartheta}_n$ is again approximately normally
 distributed
 \begin{eqnarray} \label{test}
-\T_n := \frac{\hat{\vartheta}_n - \vartheta}{\sqrt{\diag(\SK)}} = \D_n^{-1/2}
-(\hat{\vartheta}_n - \vartheta) \an \N_k(0, \Cor_n)
+\T_n := %% \frac{\hat{\vartheta}_n - \vartheta}{\sqrt{\diag(\SK)}} =
+\D_n^{-1/2} (\hat{\vartheta}_n - \vartheta) \an \N_k(0, \Cor_n)
 \end{eqnarray}
 with $\D_n = \diag(\SK)$ being the diagonal elements of
 $\SK$ and 
@@ -203,10 +203,13 @@ $\SK$ and
 \Cor_n = \D_n^{-1/2} \SK \D_n^{-1/2} \in \R^{k,k} 
 \end{eqnarray*}
 is the correlation matrix of the $k$-dimensional statistic 
-$\T_n$. To demonstrate (\ref{test}), note that 
+$\T_n$. 
+To demonstrate (\ref{test}), note that 
 with (\ref{assume}) we have $a_n \SK \cP \SigmaK$ 
-and $a_n \D_n \cP \diag(\SigmaK)$. Let $\tilde{a}_n
-\equiv 1$  denote a positive, nondecreasing sequence such that
+and $a_n \D_n \cP \diag(\SigmaK)$. 
+Define the sequence $\tilde{a}_n$ needed to
+establish $\tilde{a}$ convergence in (\ref{test}) by $\tilde{a}_n \equiv
+1$. Then we have
 \begin{eqnarray*}
 \tilde{a}_n \Cor_n  & = & \D_n^{-1/2} \SK \D_n^{-1/2} \\
 & = & (a_n \D_n)^{-1/2} (a_n \SK) (a_n \D_n)^{-1/2} \\
@@ -221,16 +224,19 @@ therefore (\ref{test}) holds. To finish note that
 a_n^{1/2} (\hat{\vartheta}_n - \vartheta) \cL \N_k(0, \Cor).
 \end{eqnarray*}
 
+
 For the purposes of multiple comparisons, we need convergence of
 multivariate probabilities calculated for the vector $\T_n$ when $\T_n$ is
-assumed normally distributed with $\Cor_n$ treated as if it were the true
-correlation matrix.
-However, probabilities $\Prob(\max(|\T_n| \le t)$
+However, such probabilities $\Prob(\max(|\T_n| \le t)$
 are continuous functions of $\Cor_n$ (and a critical value $t$) which converge by
 $\Cor_n \cP \Cor$ as a consequence of Theorem 1.7 in \cite{Serfling1980}.
+In cases where $\T_n$ is assumed
+multivariate distributed with $\Cor_n$ treated as the estimated correlation
+matrix, we have similar convergence as the degrees of freedom approach
+infinity.
 
 Since we only assume that the parameter estimates are
-asymptotically normal distributed with a consistent estimate of the
+asymptotically normally distributed with a consistent estimate of the
 associated covariance matrix being available, our framework covers a large
 class of statistical models, including linear regression and ANOVA models,
 generalized linear models, linear mixed effects models, the Cox model,
@@ -281,7 +287,7 @@ assumption than asymptotic normality of $\hat{\theta}_n$ (\ref{clt})
 is exact normality, i.e., $\hat{\theta}_n \sim \N_p(\theta, \Sigmaraw)$. 
 If the covariance matrix $\Sigmaraw$ is known, 
 it follows by standard arguments that $\T_n \sim \N_k(0, \Cor)$, when $\T_n$ is
-normalized using fixed, known variances. Otherwise, it
+normalized using fixed, known variances. Otherwise, if
 $\Sigmaraw = \sigma^2 \A$, where $\A$ is fixed and known but $\sigma^2$ is an unknown
 constant (which is the typical situation of linear models with normal
 i.i.d.~errors and constant variance), the exact distribution of $\T_n$ is a $k$%
@@ -299,7 +305,7 @@ null hypothesis $H_0$. Standard results \citep[such as Theorem
 X^2 & = & \T_n^\top \Cor_n^+ \T_n
 \cL \chi^2(\Rg(\Cor_n)) \quad \text{when } \hat{\theta}_n \an
 \N_p(\theta, \Sraw) \\
-F & = & \frac{\T_n^\top \Cor^+ \T_n}{\Rg(\Cor)} \sim \F(\nu, \Rg(\Cor)) \quad \text{%
+F & = & \frac{\T_n^\top \Cor^+ \T_n}{\Rg(\Cor)} \sim \F(\Rg(\Cor), \nu) \quad \text{%
 when } \hat{\theta}_n \sim \N_p(\theta, \sigma^2 \A),
 \end{eqnarray*}
 where $\Rg(\Cor_n)$, $\Rg(\Cor)$ and $\nu$ are the corresponding degrees of freedom
@@ -313,7 +319,7 @@ test statistic $\max(|\T_n|)$. The distribution of this statistic under the
 conditions of $H_0$ can be handled through the $k$-dimensional distribution 
 \begin{eqnarray}  \label{maxt}
 \Prob(\max(|\T_n|) \le t) \cong \int\limits_{-t}^t \cdots \int\limits_{t}^t
-\varphi_k(x_1, \dots, x_k; \Cor, \nu) \, dx_1 \cdots dx_k =: g(\Cor, t)
+\varphi_k(x_1, \dots, x_k; \Cor, \nu) \, dx_1 \cdots dx_k =: g_\nu(\Cor, t)
 \end{eqnarray}
 for some $t \in \R$, where $\varphi_k$ is the density function of either the
 limiting $k$-dimensional multivariate normal (with $\nu = \infty$ and the `$%
@@ -321,9 +327,11 @@ limiting $k$-dimensional multivariate normal (with $\nu = \infty$ and the `$%
 (with $\nu < \infty$ and the `$=$' operator). Since $\Cor$ is usually
 unknown, we plug-in the consistent estimate $\Cor_n$ as discussed in
 Section~\ref{model}.
-The resulting global $p$-value for $H_0$ is $1 - \Prob(\max(|%
-\T_n|) \le \max|\tt|)$ when $\T = \tt$ has been observed. Efficient methods
-for approximating the above multivariate normal and $t$ probabilities are
+The resulting global $p$-value 
+(exact or approximate, depending on context) 
+for $H_0$ is $1 - g_\nu(\Cor_n, \max|\tt|)$ when $\T = \tt$ has been observed. 
+Efficient methods
+for approximating the above multivariate normal and $t$ integrals are
 described in \cite{Genz1992,GenzBretz1999,BretzGenzHothorn2001} and \cite%
 {GenzBretz2002}. %The procedures
 %are applicable to small and moderate problems with up to $k < 100$ hypotheses.
@@ -346,11 +354,12 @@ bounded by the nominal significance level $\alpha \in (0, 1)$. In what
 follows we use adjusted $p$-values to describe the decision rules. Adjusted $%
 p$-values are defined as the smallest significance level for which one still
 rejects an individual hypothesis $H_0^j$, given a particular multiple test
-procedure. In the present context of single-step tests, the adjusted $p$-value for the $j$th
+procedure. In the present context of single-step tests, 
+the (at least asymptotic) adjusted $p$-value for the $j$th
 individual two-sided hypothesis $H_0^j: \vartheta_j = \m_j, j = 1,
 \dots, k, $ is given by 
 \begin{eqnarray*}
-p_j = 1 - \Prob(\max(|\T_n|) \le |t_j|),
+p_j = 1 - g_\nu(\Cor_n, |t_j|),
 \end{eqnarray*}
 where $t_1, \dots, t_k$ denote the observed test statistics. By
 construction, we can reject an elementary null hypothesis $H_0^j$, $j= 1,
@@ -358,42 +367,30 @@ construction, we can reject an elementary null hypothesis $H_0^j$, $j= 1,
 to the pre-specified significance level $\alpha$, i.e., $p_j \leq \alpha$.
 The adjusted $p$-values are calculated from expression~(\ref{maxt}).
 
-Similar results also hold for one-sided testing problems. The adjusted $p$%
--values for the two different directions of the alternative hypothesis are
-given by 
-\begin{eqnarray*}
-& & H_0: \vartheta \ge \m \text{ vs. } H_1: \vartheta < \m \quad
-\Rightarrow \quad p_j = 1 - \Prob(\max(\T_n) \le t_j) \quad \text{("less")}, \\
-& & H_0: \vartheta \le \m \text{ vs. } H_1: \vartheta > \m \quad
-\Rightarrow \quad p_j = 1 - \Prob(\min(\T_n) \ge t_j) \quad \text{("greater")}.
-\end{eqnarray*}
-As before, these probabilities can be calculated from 
-\begin{eqnarray*}
-& & \Prob(\max(\T_n) \le t) \cong\int\limits_{-\infty}^t \cdots
-\int\limits_{-\infty}^t \varphi_k(x_1, \dots, x_k; \nu, \Cor) \, dx_1 \cdots
-dx_k \quad \text{("less")}, \\
-& & \Prob(\min(\T_n) \ge t) \cong \int\limits_{t}^\infty \cdots
-\int\limits_{t}^\infty \varphi_k(x_1, \dots, x_k; \nu, \Cor) \, dx_1 \cdots
-dx_k \quad \text{("greater")}.
-\end{eqnarray*}
+Similar results also hold for one-sided testing problems. The adjusted 
+$p$-values for one sided cases are defined
+analogously, using one-sided multidimensional integrals instead of the
+two-sided integrals (\ref{maxt}). 
 Again, we refer to \cite{Genz1992,GenzBretz1999,BretzGenzHothorn2001} and 
 \cite{GenzBretz2002} for the numerical details.
 
 %\paragraph{Simultaneous confidence intervals.}
 
-In addition to a simultaneous test procedure, a simultaneous $(1 - 2\alpha)
+In addition to a simultaneous test procedure, a (at least approximate) 
+simultaneous $(1 - 2\alpha)
 \times 100\%$ confidence interval for $\vartheta$ is given by 
 \begin{eqnarray*}
 \hat{\vartheta}_n \pm q_\alpha \D_n^{1/2}
 \end{eqnarray*}
-where $q_\alpha$ is the $1 - \alpha$ quantile of the distribution of $\T_n$.
+where $q_\alpha$ is the $1 - \alpha$ quantile of the distribution
+(asymptotic, if necessary) of $\T_n$.
 This quantile can be calculated or approximated via (\ref{maxt}), i.e.,
-$q_\alpha$ is chosen such that $g(\Cor_n, q_\alpha) = 1 - \alpha$. 
+$q_\alpha$ is chosen such that $g_\nu(\Cor_n, q_\alpha) = 1 - \alpha$. 
 The corresponding one-sided versions are defined analogously.
 
 It should be noted that the simultaneous inference procedures described
 so far belong to the class of single-step procedures, since a common
-critical value is used for the individual tests. Single-step procedures
+critical value $q_\alpha$ is used for the individual tests. Single-step procedures
 have an advantage that corresponding simultaneous confidence are easily
 available, as previously noted. However, single-step procedures can
 always be improved by stepwise extensions based on the closed test
@@ -436,7 +433,7 @@ In standard regression models the observations $\Z_i$ of subject $i=1,
 1$. The response is modelled by a linear combination of the covariates with
 normal error $\varepsilon_i$ and constant variance $\sigma^2$, 
 \begin{eqnarray*}
-Y_i = \beta_0 + \sum_{i = 1}^q \beta_i X_{ij} + \sigma \varepsilon_i,
+Y_i = \beta_0 + \sum_{j = 1}^q \beta_j X_{ij} + \sigma \varepsilon_i,
 \end{eqnarray*}
 where $\varepsilon = (\varepsilon_1, \dots, \varepsilon_n)^\top \sim \N_n(0, 
 \mathbf{I}_n).$ The elemental parameter vector is $\theta = (\beta_0,
@@ -532,9 +529,11 @@ In \emph{generalized linear models}, the exact distribution of the parameter
 estimates is usually unknown and thus the asymptotic normal distribution is
 the basis for all inference procedures. When we are interested in inference
 about model parameters corresponding to levels of a certain factor, the same
-multiple comparison procedures as sketched above are available. \emph{Linear
-and non-linear mixed effects} models fitted by restricted maximum-likelihood
-provide the data analyst with asymptotically normal errors and a consistent
+multiple comparison procedures as sketched above are available. 
+
+\emph{Linear and non-linear} mixed effects models fitted by restricted
+maximum-likelihood provide the data analyst with asymptotically normal
+estimates and a consistent
 covariance matrix as well so that all assumptions of our framework are met
 and one can set up simultaneous inference procedures for these models as
 well. The same is true for the \emph{Cox model} or other parametric survival

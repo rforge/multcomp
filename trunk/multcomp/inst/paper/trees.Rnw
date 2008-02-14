@@ -47,7 +47,7 @@ trees513$species <- trees513$species[,drop = TRUE]
 @
 
 <<trees-lmer, echo = TRUE>>=
-mmod <- lmer(damage ~ species - 1 + (1 | lattice:plot) + (1 | lattice), 
+mmod <- lmer(damage ~ species - 1 + (1 | plot) + (1 | lattice), 
              data = trees513, family = binomial())
 K <- diag(length(fixef(mmod)))
 @
