@@ -31,7 +31,7 @@ vcov.lmrob <- function(object) object$cov
 
 \section{Illustrations} \label{illustrations}
 
-\subsection{Genetic components of alcoholism} \label{alpha}
+\subsection{Genetic Components of Alcoholism} \label{alpha}
 
 Various studies have linked alcohol dependence phenotypes to chromosome 4.
 One candidate gene is \textit{NACP} (non-amyloid component of plaques),   
@@ -48,10 +48,11 @@ the distribution of the expression level of alpha synuclein mRNA
 in three groups of subjects defined by the allele length.
 
 \setkeys{Gin}{width=0.7\textwidth}
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 <<alpha-data-figure, echo = FALSE, fig = TRUE, width = 7, height = 5>>=
 n <- table(alpha$alength)
+op <- par()
 par(cex.lab = 1.3, cex.axis = 1.3)
 boxplot(elevel ~ alength, data = alpha, ylab = "Expression Level",
         xlab = "NACP-REP1 Allele Length", varwidth = TRUE)
@@ -115,7 +116,7 @@ confidence intervals calculated based on the ordinary and
 sandwich estimator is given in Figure~\ref{alpha-ci}.
 
 \setkeys{Gin}{width=0.95\textwidth}
-\begin{figure}
+\begin{figure}[hb!]
 \begin{center}
 <<alpha-confint-plot, echo = FALSE, fig = TRUE, width = 8, height = 3.5>>=
 par(mai = par("mai") * c(1, 2.1, 1, 0.5))
@@ -134,7 +135,7 @@ plot(ci2, xlim = c(-0.6, 2.6), main = expression(paste("Tukey HSD (sandwich ", b
 \end{figure}
 
 
-\subsection{Prediction of total body fat} \label{bodyfat}
+\subsection{Prediction of Total Body Fat} \label{bodyfat}
 
 \citet{garcia2005} report on the development of predictive regression equations
 for body fat content by means of $p = 9$ common anthropometric
@@ -189,7 +190,7 @@ summary(glht(lmrob(DEXfat ~ ., data = bodyfat), linfct = K))
 and the general result reported above holds under very mild 
 model assumptions.
 
-\subsection{Smoking and Alzheimer's disease} \label{alzheimer}
+\subsection{Smoking and Alzheimer's Disease} \label{alzheimer}
 
 <<alzheimer-demographics, echo = FALSE>>=
 total <- nrow(alzheimer)
@@ -286,7 +287,8 @@ Figure~\ref{alzheimer-plot}. Using this representation of the results,
 it is obvious that Alzheimer's disease is less frequent in non-smoking and
 heavy smoking men compared to all other configurations of the two covariates.
 
-\begin{figure}
+\setkeys{Gin}{width=0.7\textwidth}
+\begin{figure}[hb!]
 \begin{center}
 <<alzheimer-plot, echo = FALSE, fig = TRUE, mai = TRUE, width = 7, height = 5>>=
 plot(gmod_ci, xlab = "Probability of Developing Alzheimer", 
@@ -297,7 +299,7 @@ the probability to suffer from Alzheimer's disease. \label{alzheimer-plot}}
 \end{center}
 \end{figure}
 
-\subsection{Acute myeloid leukemia} \label{AML}
+\subsection{Acute Myeloid Leukemia Survival} \label{AML}
 
 The treatment of patients suffering from acute myeloid leukemia (AML) is
 determined by a tumor classification scheme taking the status of various
@@ -328,3 +330,7 @@ summary(glht(smod, linfct = mcp(risk = "Tukey")))
 @
 Again, a sandwich estimator of the covariance matrix $\Sraw$ can
 be plugged-in but the results stay very much the same in this case.
+
+<<end, echo = FALSE, results = hide>>=
+par(op)
+@

@@ -19,7 +19,7 @@
 \documentclass[12pt,a4paper]{article}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{a4wide}
-\usepackage[lists,heads]{endfloat}
+%%\usepackage[lists,heads]{endfloat}
 
 %TCIDATA{OutputFilter=Latex.dll}
 %TCIDATA{Version=5.00.0.2606}
@@ -39,8 +39,6 @@
   hyperindex = {true},
   linktocpage = {true},
 }
-
-%%\input{tcilatex}
 
 \begin{document}
 
@@ -118,7 +116,7 @@ thus allowing for simultaneous inference in generalized linear models,
 mixed-effects models, survival models, etc.; (ii) arbitrary linear functions
 of the elemental parameters are allowed, not just contrasts of means in AN(C)OVA
 models; (iii) computing the reference distribution is feasible for arbitrary
-designs, especially unbalanced designs; and (iv) a unified implementation is
+designs, especially for unbalanced designs; and (iv) a unified implementation is
 provided which allows for a fast transition of the theoretical results to
 the desks of data analysts interested in simultaneous inferences for
 multiple hypotheses.
@@ -143,16 +141,17 @@ some asymptotic results necessary in the subsequent sections. The results
 from this section form the basis for the simultaneous inference procedures
 described in Section~\ref{siminf}.
 
-Let $\M((\Z_1, \dots, \Z_n), \theta, \eta)$ denote a (semi-)parametric statistical
+Let $\M((\Z_1, \dots, \Z_n), \theta, \eta)$ denote a semi-parametric statistical
 model. The set of $n$ observations is described by $(\Z_1, \dots, \Z_n)$. 
 The model contains fixed but unknown elemental parameters $\theta
 \in \R^p$ and other (random or nuisance) parameters $\eta$. We are
-primarily interested in the linear functions $\vartheta = \K \theta$ of the parameter vector 
+primarily interested in the linear functions $\vartheta := \K \theta$ of the parameter vector 
 $\theta$ as specified through the constant matrix $\K \in \R^{k, p}$.
-Assume that we are given an estimate $\hat{\theta}_n \in \R^p$ of the
-vector of elemental parameters $\theta$. In what follows we describe the underlying
+%%Assume that we are given an estimate $\hat{\theta}_n \in \R^p$ of the
+%%vector of elemental parameters $\theta$. 
+In what follows we describe the underlying
 model assumptions, the limiting distribution of estimates of our parameters of 
-interest $\vartheta := \K \theta$ as well
+interest $\vartheta$ as well
 as the corresponding test statistics for hypotheses about $\vartheta$ 
 and their limiting joint distribution.
 
@@ -177,10 +176,12 @@ distribution
 \hat{\vartheta}_n = \K \hat{\theta}_n \an \N_k(\vartheta, \SK)
 \end{eqnarray*}
 with covariance matrix $\SK := \K \Sraw \K^\top$
-for any fixed matrix $\K \in \R^{k,p}$. Thus we need not distinguish
+for any fixed matrix $\K \in \R^{k,p}$. Thus we need not to distinguish
 between elemental parameters $\theta$ or derived parameters $\vartheta = \K \theta$ 
-that are of interest to the researcher, for example the parameters $\K \theta$ representing
-all pairwise comparisons of elemental parameters. Instead we simply assume 
+that are of interest to the researcher. 
+%%for example the parameters $\K \theta$ representing
+%%all pairwise comparisons of elemental parameters. 
+Instead we simply assume 
 for the moment that we have (in analogy to (\ref{cov}) and (\ref{clt}))
 \begin{eqnarray} \label{assume}
 \hat{\vartheta}_n \an \N_k(\vartheta, \SK) \text{ with } 
@@ -191,13 +192,13 @@ parameters of interest to the researcher. It is assumed that
 the diagonal elements of the covariance matrix are positive, i.e., 
 $\SigmaK_{jj} > 0, j = 1, \dots, k$.
 
-Then, the standardized estimator $\hat{\vartheta}_n$ is again approximately normally
+Then, the standardized estimator $\hat{\vartheta}_n$ is again asymptotically normally
 distributed
 \begin{eqnarray} \label{test}
 \T_n := %% \frac{\hat{\vartheta}_n - \vartheta}{\sqrt{\diag(\SK)}} =
 \D_n^{-1/2} (\hat{\vartheta}_n - \vartheta) \an \N_k(0, \Cor_n)
 \end{eqnarray}
-with $\D_n = \diag(\SK)$ being the diagonal elements of
+where $\D_n = \diag(\SK)$ is the diagonal matrix given by the diagonal elements of
 $\SK$ and 
 \begin{eqnarray*}
 \Cor_n = \D_n^{-1/2} \SK \D_n^{-1/2} \in \R^{k,k} 
@@ -227,6 +228,8 @@ a_n^{1/2} (\hat{\vartheta}_n - \vartheta) \cL \N_k(0, \Cor).
 
 For the purposes of multiple comparisons, we need convergence of
 multivariate probabilities calculated for the vector $\T_n$ when $\T_n$ is
+assumed normally distributed with $\Cor_n$ treated as if it were the true
+correlation matrix.
 However, such probabilities $\Prob(\max(|\T_n| \le t)$
 are continuous functions of $\Cor_n$ (and a critical value $t$) which converge by
 $\Cor_n \cP \Cor$ as a consequence of Theorem 1.7 in \cite{Serfling1980}.
@@ -243,7 +246,8 @@ generalized linear models, linear mixed effects models, the Cox model,
 robust linear models, etc. Standard software packages can be used to fit
 such models and obtain the estimates $\hat{\theta}_n$ and $\Sraw$
 which are essentially the only two quantities that are needed for what
-follows. It should be noted that the elemental parameters $\theta$ are not
+follows in Section~\ref{siminf}. 
+It should be noted that the elemental parameters $\theta$ are not
 necessarily means or differences of means in AN(C)OVA models. Also, we do
 not restrict our attention to contrasts of such means, but allow for any set
 of constants leading to the linear functions $\vartheta = \K\theta $ of interest.
@@ -283,7 +287,7 @@ assessments while maintaining the familywise error rate, as discussed in
 Subsection~\ref{simtest}
 
 At this point it is worth considering two special cases. A stronger
-assumption than asymptotic normality of $\hat{\theta}_n$ (\ref{clt})
+assumption than asymptotic normality of $\hat{\theta}_n$ in (\ref{clt})
 is exact normality, i.e., $\hat{\theta}_n \sim \N_p(\theta, \Sigmaraw)$. 
 If the covariance matrix $\Sigmaraw$ is known, 
 it follows by standard arguments that $\T_n \sim \N_k(0, \Cor)$, when $\T_n$ is
@@ -340,7 +344,7 @@ In contrast to the global $F$- or $\chi^2$-test, the max-$t$ test,
 based on the test statistic $\max(|\T_n|)$, also provides information, 
 which of the $k$ individual null hypotheses $%
 H_0^j, j = 1, \dots, k$ is significant,
-as well well as simultaneous confidence intervals, as shown in the next
+as well as simultaneous confidence intervals, as shown in the next
 subsection.
 
 \subsection{Simultaneous Inference}
@@ -567,7 +571,7 @@ examples illustrating these ideas.
 
 The \Rpackage{multcomp} package \citep{pkg:multcomp} in \RR{} \citep{rcore2007}
 provides a general implementation of the framework for simultaneous
-inference in (~semi-~)\-parametric models described in Sections~\ref{model}
+inference in semi-parametric models described in Sections~\ref{model}
 and~\ref{siminf}. The numerical examples in Section~\ref{illustrations} will
 all be analyzed using the \Rpackage{multcomp} package. In this section we
 briefly introduce the \Rpackage{multcomp} package and refer the reader to

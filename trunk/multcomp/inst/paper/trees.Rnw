@@ -72,7 +72,8 @@ following years has been increased.
 The large confidence interval for ash, maple, elm and lime
 trees is caused by the small sample size.
 
-\begin{figure}
+\setkeys{Gin}{width=0.9\textwidth}
+\begin{figure}[t]
 \begin{center}
 <<trees-plot, echo = FALSE, mai = TRUE, fig = TRUE, width = 7, height = 5>>=
 plot(ci, xlab = "Probability of Damage Caused by Browsing", xlim = c(0, 1), main = "",
