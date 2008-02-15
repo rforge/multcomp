@@ -1,7 +1,11 @@
 
-		CHANGES in `multcomp' VERSION 0.992-xx
+		CHANGES in `multcomp' VERSION 0.993-1
+
+    o    new vignette `Simultaneous Inference in General Parametric Models'
 
     o    warn if ... arguments are ignored
+
+    o    levels in trees513 data slightly changed.
 
 
 		CHANGES in `multcomp' VERSION 0.992-9
