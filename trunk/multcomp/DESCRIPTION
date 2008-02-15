@@ -9,6 +9,6 @@ Description: Simultaneous tests and confidence intervals
   linear, generalized linear, linear mixed effects, and survival models.
 Maintainer: Torsten Hothorn <Torsten.Hothorn@R-project.org>
 Depends: stats, graphics, mvtnorm (>= 0.8-0)
-Suggests: lme4, nlme, survival, robustbase, mboost
+Suggests: lme4, nlme, survival, robustbase, mboost, coin
 LazyData: yes
 License: GPL-2

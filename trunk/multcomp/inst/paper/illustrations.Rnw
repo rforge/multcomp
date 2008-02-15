@@ -99,7 +99,7 @@ allele lengths. A sandwich estimator $\Sraw$
 might be more appropriate in this situation, and
 the \Rarg{vcov} argument of \Rcmd{glht()} can be used
 to specify a function to compute some alternative 
-estimator $\Sraw$ as follows:
+covariance estimator $\Sraw$ as follows:
 <<alpha-aov-tukey-sandwich, echo = TRUE>>=
 amod_glht_sw <- glht(amod, linfct = mcp(alength = "Tukey"), 
                      vcov = sandwich)
@@ -151,7 +151,7 @@ important variables from the available anthropometrical measurements and
 \citet{garcia2005} report a final linear model utilizing
 hip circumference, knee breadth and a compound covariate which is defined as
 the sum of log chin skinfold, log triceps skinfold and log subscapular skinfold.
-Here, we fit the saturated model to the data and use the maximum-test
+Here, we fit the saturated model to the data and use the max-$t$ test 
 over all $t$-statistics to select important variables based on 
 adjusted $p$-values. The linear model including all covariates and
 the classical unadjusted $p$-values are given by
@@ -173,7 +173,7 @@ any of the regression coefficients is non-zero:
 summary(lmod_glht, test = Ftest())
 @
 but the source of the deviation from the global null-hypothesis
-can only be inspected by the corresponding maximum-test, i.e., 
+can only be inspected by the corresponding max-$t$ test, i.e., 
 via
 <<bodyfat-lm-maxtest, echo = TRUE>>=
 summary(lmod_glht)
@@ -187,7 +187,7 @@ model, the results coincide rather nicely:
 <<bodyfat-robust, echo = TRUE>>=
 summary(glht(lmrob(DEXfat ~ ., data = bodyfat), linfct = K))
 @
-and the general result reported above holds under very mild 
+and the result reported above holds under very mild 
 model assumptions.
 
 \subsection{Smoking and Alzheimer's Disease} \label{alzheimer}
@@ -250,7 +250,7 @@ we can set up a linear function $\K$ such that $\left(1 + \exp(- \hat{\vartheta}
 is the vector of estimated probabilities with simultaneous confidence intervals
 \begin{eqnarray*}
 \left(\left(1 + \exp\left(- \left(\hat{\vartheta}_n - q_\alpha \D_n^{1/2}\right)\right)\right)^{-1},
-\left(1 + \exp\left(- \left(\hat{\vartheta}_n + q_\alpha \D_n^{1/2}\right)\right)\right)^{-1}\right)
+\left(1 + \exp\left(- \left(\hat{\vartheta}_n + q_\alpha \D_n^{1/2}\right)\right)\right)^{-1}\right).
 \end{eqnarray*}
 
 <<alzheimer-K, echo = FALSE>>=  

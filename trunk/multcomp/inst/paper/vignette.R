@@ -4,7 +4,7 @@ rnw1 <- readLines("illustrations.Rnw")
 rnw2 <- readLines("trees.Rnw")
 
 tex <- c("%%\\VignetteIndexEntry{Simultaneous Inference in General Parametric Models}", 
-         "%%\VignetteDepends{multcomp,mboost,survival,robustbase,lme4}", 
+         "%%\VignetteDepends{multcomp,mboost,survival,robustbase,lme4,coin}", 
          "%%\\usepackage{Sweave}", tex)
 
 w1 <- grep("input*\\{illustrations\\}", tex)         

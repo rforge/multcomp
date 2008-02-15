@@ -67,8 +67,8 @@ ci$confint[,2:3] <- ci$confint[,3:2]
 @
 The result is shown in Figure~\ref{browsing}. Browsing
 is less frequent in hardwood but especially small oak trees are severely
-at risk and, as a consequence, the number of roe deers to be harvested in the
-following years has been increased.
+at risk.  Consequently, the local authorities increased the number of roe deers 
+to be harvested in the following years.
 The large confidence interval for ash, maple, elm and lime
 trees is caused by the small sample size.
 
