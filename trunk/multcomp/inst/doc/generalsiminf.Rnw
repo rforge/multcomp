@@ -1,35 +1,10 @@
 %%\VignetteIndexEntry{Simultaneous Inference in General Parametric Models}
-%%VignetteDepends{multcomp,mboost,survival,robustbase,lme4}
+%%VignetteDepends{multcomp,mboost,survival,robustbase,lme4,coin}
 %%\usepackage{Sweave}
-%% ToDo
-%% Introduction: more elaborate formulations
-%% add some references to recently published technology
-%% Section 2  / 3: Model & Inference
-%% check
-%% reference for multivariate T distribution and
-%% its applications
-%% Section 4: Applications
-%% references for M, S, REML etc. estimation
-%% Section 5: Implementation
-%% check
-%% Section 6: Illustrations:
-%% check
-%% Section 7: Discussion
-%% some comments on why we saved the world today.
-%% maybe some more references
-
-
 \documentclass[12pt,a4paper]{article}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{a4wide}
 %%\usepackage[lists,heads]{endfloat}
-
-%TCIDATA{OutputFilter=Latex.dll}
-%TCIDATA{Version=5.00.0.2606}
-%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
-%TCIDATA{BibliographyScheme=BibTeX}
-%TCIDATA{LastRevised=Friday, January 25, 2008 13:26:30}
-%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
 
 \input{header}
 \hypersetup{  pdftitle = {Simultaneous Inference in General Parametric Models},
@@ -116,7 +91,7 @@ elemental model parameters $p$. The general framework described here
 extends the current canonical theory with respect to the following aspects:
 (i) model assumptions, such as normality and homoscedasticity are relaxed,
 thus allowing for simultaneous inference in generalized linear models,
-mixed-effects models, survival models, etc.; (ii) arbitrary linear functions
+mixed effects models, survival models, etc.; (ii) arbitrary linear functions
 of the elemental parameters are allowed, not just contrasts of means in AN(C)OVA
 models; (iii) computing the reference distribution is feasible for arbitrary
 designs, especially for unbalanced designs; and (iv) a unified implementation is
@@ -154,7 +129,7 @@ $\theta$ as specified through the constant matrix $\K \in \R^{k, p}$.
 %%vector of elemental parameters $\theta$. 
 In what follows we describe the underlying
 model assumptions, the limiting distribution of estimates of our parameters of 
-interest $\vartheta$ as well
+interest $\vartheta$, as well
 as the corresponding test statistics for hypotheses about $\vartheta$ 
 and their limiting joint distribution.
 
@@ -193,7 +168,7 @@ a_n \SK \cP \SigmaK := \K \Sigma \K^\top \in \R^{k,k}
 and that the $k$ parameters in $\vartheta$ are themselves the 
 parameters of interest to the researcher. It is assumed that
 the diagonal elements of the covariance matrix are positive, i.e., 
-$\SigmaK_{jj} > 0, j = 1, \dots, k$.
+$\SigmaK_{jj} > 0$ for $j = 1, \dots, k$.
 
 Then, the standardized estimator $\hat{\vartheta}_n$ is again asymptotically normally
 distributed
@@ -212,7 +187,7 @@ To demonstrate (\ref{test}), note that
 with (\ref{assume}) we have $a_n \SK \cP \SigmaK$ 
 and $a_n \D_n \cP \diag(\SigmaK)$. 
 Define the sequence $\tilde{a}_n$ needed to
-establish $\tilde{a}$ convergence in (\ref{test}) by $\tilde{a}_n \equiv
+establish $\tilde{a}$-convergence in (\ref{test}) by $\tilde{a}_n \equiv
 1$. Then we have
 \begin{eqnarray*}
 \tilde{a}_n \Cor_n  & = & \D_n^{-1/2} \SK \D_n^{-1/2} \\
@@ -343,7 +318,7 @@ described in \cite{Genz1992,GenzBretz1999,BretzGenzHothorn2001} and \cite%
 {GenzBretz2002}. %The procedures
 %are applicable to small and moderate problems with up to $k < 100$ hypotheses.
 
-In contrast to the global $F$- or $\chi^2$-test, the max-$t$ test,
+In contrast to the global $F$- or $\chi^2$-test, the max-$t$ test
 based on the test statistic $\max(|\T_n|)$, also provides information, 
 which of the $k$ individual null hypotheses $%
 H_0^j, j = 1, \dots, k$ is significant,
@@ -369,13 +344,13 @@ individual two-sided hypothesis $H_0^j: \vartheta_j = \m_j, j = 1,
 p_j = 1 - g_\nu(\Cor_n, |t_j|),
 \end{eqnarray*}
 where $t_1, \dots, t_k$ denote the observed test statistics. By
-construction, we can reject an elementary null hypothesis $H_0^j$, $j= 1,
+construction, we can reject an individual null hypothesis $H_0^j$, $j= 1,
 \ldots, k$, whenever the associated adjusted $p$-value is less than or equal
 to the pre-specified significance level $\alpha$, i.e., $p_j \leq \alpha$.
 The adjusted $p$-values are calculated from expression~(\ref{maxt}).
 
 Similar results also hold for one-sided testing problems. The adjusted 
-$p$-values for one sided cases are defined
+$p$-values for one-sided cases are defined
 analogously, using one-sided multidimensional integrals instead of the
 two-sided integrals (\ref{maxt}). 
 Again, we refer to \cite{Genz1992,GenzBretz1999,BretzGenzHothorn2001} and 
@@ -398,7 +373,7 @@ The corresponding one-sided versions are defined analogously.
 It should be noted that the simultaneous inference procedures described
 so far belong to the class of single-step procedures, since a common
 critical value $q_\alpha$ is used for the individual tests. Single-step procedures
-have an advantage that corresponding simultaneous confidence are easily
+have the advantage that corresponding simultaneous confidence are easily
 available, as previously noted. However, single-step procedures can
 always be improved by stepwise extensions based on the closed test
 procedure. That is, for a given family of null hypotheses $H_0^1, \dots,
@@ -425,7 +400,7 @@ The methodological framework described in Sections~\ref{model} and \ref%
 {siminf} is very general and thus applicable to a wide range of statistical
 models. Many estimation techniques, such as (restricted) maximum likelihood
 and M estimates, provide at least asymptotically normal estimates of the
-elemental parameters together with consistent estimate of their covariance matrix. In
+elemental parameters together with consistent estimates of their covariance matrix. In
 this section we illustrate the generality of the methodology by reviewing
 some potential applications. Detailed numerical examples are discussed in
 Section~\ref{illustrations}. In what follows, we assume $\m = 0$ only for
@@ -458,7 +433,7 @@ determining the experimental questions of interest we have
 \right)^{-1} \K^\top).
 \end{eqnarray*}
 Under the null hypothesis $\vartheta = 0$ the standardized test
-statistics 
+statistic follows a multivariate $t$ distribution
 \begin{eqnarray*}
 \T_n = \D_n^{-1/2} \hat{\vartheta}_n \sim t_{q+1}(n - q, \Cor),
 \end{eqnarray*}
@@ -487,7 +462,7 @@ elemental parameters in the \RR-system for statistical computing
 
 Many classical multiple comparison procedures can be embedded into this
 framework, including Dunnett's many-to-one comparisons and Tukey's
-all-pairwise differences. For Dunnett's procedures, the differences $%
+all-pairwise differences. For Dunnett's procedure, the differences $%
 \gamma_i - \gamma_1$ are tested for all $i=2, \ldots, i$, where $\gamma_1$
 denotes the mean treatment effect of a control group. In the notation from
 Section~\ref{model} we thus have 
@@ -525,7 +500,6 @@ of i.i.d.~normal errors with constant variance the vector of test statistics
 $\T_n$ follows a multivariate $t$ distribution. Thus, related simultaneous
 tests and confidence intervals do not rely on asymptotics and can be
 computed analytically instead, as shown in Section~\ref{siminf}.
-
 To illustrate simultaneous inference procedures in one-way ANOVA models, we
 consider all pairwise comparisons of expression levels for various genetic
 conditions of alcoholism in Subsection~\ref{alpha}.
@@ -544,7 +518,7 @@ estimates and a consistent
 covariance matrix as well so that all assumptions of our framework are met
 and one can set up simultaneous inference procedures for these models as
 well. The same is true for the \emph{Cox model} or other parametric survival
-models such as the \emph{Weibull survival model}.
+models such as the \emph{Weibull model}.
 
 We use logistic regression models to estimated the probability of suffering
 from Alzheimer's disease in Subsection~\ref{alzheimer}, compare several risk
@@ -562,9 +536,8 @@ for example, the variance homogeneity assumption is violated. An alternative
 is to apply robust estimation techniques in linear models, for example S-,
 M- or MM-estimation 
 \citep[see][for
-example]{RousseeuwLeroy2003, mfluc:Stefanski+Boos:2002, Yohai1987, mfluc:White:1994}%
-, which again provide us with asymptotically normal estimates.
-
+example]{RousseeuwLeroy2003, mfluc:Stefanski+Boos:2002, Yohai1987, mfluc:White:1994}, 
+which again provide us with asymptotically normal estimates.
 The reader is referred to Subsection~\ref{bodyfat} for some numerical
 examples illustrating these ideas.
 
@@ -577,14 +550,14 @@ provides a general implementation of the framework for simultaneous
 inference in semi-parametric models described in Sections~\ref{model}
 and~\ref{siminf}. The numerical examples in Section~\ref{illustrations} will
 all be analyzed using the \Rpackage{multcomp} package. In this section we
-briefly introduce the \Rpackage{multcomp} package and refer the reader to
+briefly introduce the user-interface and refer the reader to
 the online documentation of the package for the technical details.
 
 Estimated model coefficients $\hat{\theta}_n$ and their estimated covariance matrix $%
-\Sraw$ are accessible in \RR{} with \Rcmd{coef()} and \Rcmd{vcov()}
+\Sraw$ are accessible in \RR{} via \Rcmd{coef()} and \Rcmd{vcov()}
 methods available for most statistical models in \RR, such as objects of
 class \Rclass{lm}, \Rclass{glm}, \Rclass{coxph}, \Rclass{nlme}, \Rclass{mer} or %
-\Rclass{survreg}. Having this information, the \Rcmd{glht()} function sets
+\Rclass{survreg}. Having this information at hand, the \Rcmd{glht()} function sets
 up the \underline{g}eneral \underline{l}inear \underline{h}ypo\underline{t}%
 hesis for a model `\Robject{model}' and a representation of the matrix $\K$
 (via its \Robject{linfct} argument): 
@@ -732,7 +705,7 @@ allele lengths. A sandwich estimator $\Sraw$
 might be more appropriate in this situation, and
 the \Rarg{vcov} argument of \Rcmd{glht()} can be used
 to specify a function to compute some alternative 
-estimator $\Sraw$ as follows:
+covariance estimator $\Sraw$ as follows:
 <<alpha-aov-tukey-sandwich, echo = TRUE>>=
 amod_glht_sw <- glht(amod, linfct = mcp(alength = "Tukey"), 
                      vcov = sandwich)
@@ -784,7 +757,7 @@ important variables from the available anthropometrical measurements and
 \citet{garcia2005} report a final linear model utilizing
 hip circumference, knee breadth and a compound covariate which is defined as
 the sum of log chin skinfold, log triceps skinfold and log subscapular skinfold.
-Here, we fit the saturated model to the data and use the maximum-test
+Here, we fit the saturated model to the data and use the max-$t$ test 
 over all $t$-statistics to select important variables based on 
 adjusted $p$-values. The linear model including all covariates and
 the classical unadjusted $p$-values are given by
@@ -806,7 +779,7 @@ any of the regression coefficients is non-zero:
 summary(lmod_glht, test = Ftest())
 @
 but the source of the deviation from the global null-hypothesis
-can only be inspected by the corresponding maximum-test, i.e., 
+can only be inspected by the corresponding max-$t$ test, i.e., 
 via
 <<bodyfat-lm-maxtest, echo = TRUE>>=
 summary(lmod_glht)
@@ -820,7 +793,7 @@ model, the results coincide rather nicely:
 <<bodyfat-robust, echo = TRUE>>=
 summary(glht(lmrob(DEXfat ~ ., data = bodyfat), linfct = K))
 @
-and the general result reported above holds under very mild 
+and the result reported above holds under very mild 
 model assumptions.
 
 \subsection{Smoking and Alzheimer's Disease} \label{alzheimer}
@@ -883,7 +856,7 @@ we can set up a linear function $\K$ such that $\left(1 + \exp(- \hat{\vartheta}
 is the vector of estimated probabilities with simultaneous confidence intervals
 \begin{eqnarray*}
 \left(\left(1 + \exp\left(- \left(\hat{\vartheta}_n - q_\alpha \D_n^{1/2}\right)\right)\right)^{-1},
-\left(1 + \exp\left(- \left(\hat{\vartheta}_n + q_\alpha \D_n^{1/2}\right)\right)\right)^{-1}\right)
+\left(1 + \exp\left(- \left(\hat{\vartheta}_n + q_\alpha \D_n^{1/2}\right)\right)\right)^{-1}\right).
 \end{eqnarray*}
 
 <<alzheimer-K, echo = FALSE>>=  
@@ -1037,8 +1010,8 @@ ci$confint[,2:3] <- ci$confint[,3:2]
 @
 The result is shown in Figure~\ref{browsing}. Browsing
 is less frequent in hardwood but especially small oak trees are severely
-at risk and, as a consequence, the number of roe deers to be harvested in the
-following years has been increased.
+at risk.  Consequently, the local authorities increased the number of roe deers 
+to be harvested in the following years.
 The large confidence interval for ash, maple, elm and lime
 trees is caused by the small sample size.
 
@@ -1059,7 +1032,7 @@ plot(ci, xlab = "Probability of Damage Caused by Browsing", xlim = c(0, 1), main
 Multiple comparisons in linear models have been in use for a long time, see 
 \cite{HochbergTamhane1987}, \cite{Hsu1996}, and \cite{Bretzetal2008}. In
 this paper we have extended the theory to a broader class of parametric and
-semi-parametric statistical models, which allows a unified treatment of
+semi-parametric statistical models, which allows for a unified treatment of
 multiple comparisons and other simultaneous inference procedures in
 generalized linear models, mixed models, survival models, robust models, etc.
 In essence, all that is required is a parameter estimate $\hat{\theta}_n$
@@ -1069,7 +1042,7 @@ can be used to compute these quantities. As shown in this paper, these
 quantities are sufficient to derive powerful simultaneous inference
 procedures, which are tailored to the experimental questions under
 investigation. Therefore, honest decisions based on simultaneous inference
-procedures maintaining a pre-specified family-wise error rate (at least
+procedures maintaining a pre-specified familywise error rate (at least
 asymptotically) can now be
 based on almost all classical and modern statistical models.
 
