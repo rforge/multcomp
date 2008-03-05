@@ -3,6 +3,10 @@
 
     o    make sure names are printed correctly when nrow(K) = 1
 
+    o    interaction terms are now correctly handled when a symbolic
+         descripton of the hypotheses is supplied, thanks to 
+         Antonio Fabio Di Narzo for spotting.
+
 
 		CHANGES in `multcomp' VERSION 0.993-1
 
