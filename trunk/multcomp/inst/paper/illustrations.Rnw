@@ -257,10 +257,12 @@ is the vector of estimated probabilities with simultaneous confidence intervals
 a <- cbind(levels(alzheimer$smoking), "Female")
 b <- cbind(levels(alzheimer$smoking), "Male")
 d <- rbind(a, b)
+smk <- factor(d[,1], levels = levels(alzheimer$smoking))
+gen <- factor(d[,2], levels = levels(alzheimer$gender))
+d <- data.frame(smk, gen)
 ### colnames(d) <- c("smoking", "gender")
 colnames(d) <- c("s", "g")
 rownames(d) <- paste(d[,1], d[,2], sep = ":")
-d <- as.data.frame(d)
 K <- model.matrix(~ s * g, data = d)
 colnames(K)[1] <- "(Icpt)"
 attr(K, "assign") <- NULL
@@ -284,8 +286,8 @@ plot(gmod_ci, xlab = "Probability of Developing Alzheimer",
 @
 The simultaneous confidence intervals are depicted in 
 Figure~\ref{alzheimer-plot}. Using this representation of the results,
-it is obvious that Alzheimer's disease is less frequent in non-smoking and
-heavy smoking men compared to all other configurations of the two covariates.
+it is obvious that Alzheimer's disease is less frequent in heavy smoking men 
+compared to all other configurations of the two covariates.
 
 \setkeys{Gin}{width=0.7\textwidth}
 \begin{figure}[hb!]
