@@ -624,7 +624,7 @@ data("alpha", package = "coin")
 data("bodyfat", package = "mboost")
 data("alzheimer", package = "coin")
 if (!file.exists("AML_Bullinger.rda"))
-    load(url("http://www.imbe.med.uni-erlangen.de/~hothorn/AML_Bullinger.rda", open = "r"))
+    load(url("http://www.stat.uni-muenchen.de/~hothorn/data/AML_Bullinger.rda", open = "r"))
 risk <- rep(0, nrow(clinical))
 rlev <- levels(clinical[, "Cytogenetic.group"])
 risk[clinical[, "Cytogenetic.group"] %in% rlev[c(7,8,4)]] <- "low"
