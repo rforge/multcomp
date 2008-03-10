@@ -24,7 +24,7 @@
 \method{plot}{confint.glht}(x, xlim, xlab, ...)
 \method{plot}{glht}(x, ...)
 univariate()
-adjusted(type = c("single-step", "Shaffer", "Westfall", p.adjust.methods), 
+adjusted(type = c("single-step", "Shaffer", "Westfall", "free", p.adjust.methods), 
          ...)
 Ftest()
 Chisqtest()
@@ -75,6 +75,8 @@ univariate_calpha(...)
   normal or $t$ distribution of the linear function, and
   \code{"Shaffer"} and \code{"Westfall"} implement logically constraint 
   multiplicity adjustments (Shaffer, 1986; Westfall, 1997). 
+  \code{"free"} implements multiple testing procedures under free 
+  combinations (Westfall et al, 1999).
   In addition, all adjustment methods
   implemented in \code{\link{p.adjust}} are available as well.
 
@@ -111,6 +113,11 @@ univariate_calpha(...)
    Multiple testing of general contrasts using logical constraints
    and correlations. \emph{Journal of the American Statistical Association},
    \bold{92}, 299--306.
+
+   P. H. Westfall, R. D. Tobias, D. Rom, R. D. Wolfinger, Y. Hochberg (1999).
+   \emph{Multiple Comparisons and Multiple Tests Using the SAS System}.
+   Cary, NC: SAS Institute Inc.
+
 
 }
 \examples{
