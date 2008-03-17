@@ -1,4 +1,11 @@
 
+		CHANGES in `multcomp' VERSION 0.993-3
+
+    o    improve print method for confidence intervals
+
+    o    new adjustment method `free' (for free combinations)
+
+
 		CHANGES in `multcomp' VERSION 0.993-2
 
     o    make sure names are printed correctly when nrow(K) = 1
