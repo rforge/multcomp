@@ -88,6 +88,8 @@ modelparm.default <- function(model, coef. = coef, vcov. = vcov,
             class(model) <- "lm"
             df <- summary(model)$df[2]
         }
+        if (inherits(model, "parm"))
+            df <- model$df
     } else {
         if (df < 0) stop(sQuote("df"), " is not positive")
     }

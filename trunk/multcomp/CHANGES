@@ -1,6 +1,9 @@
 
 		CHANGES in `multcomp' VERSION 0.993-3
 
+    o    new `parm' function for specifying model parameters estimated
+         elsewhere
+
     o    improve print method for confidence intervals
 
     o    new adjustment method `free' (for free combinations)

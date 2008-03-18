@@ -1,5 +1,5 @@
 
-parm <- function(coef, vcov) {
+parm <- function(coef, vcov, df = 0) {
 
     if (length(coef) != nrow(vcov) ||
         length(coef) != ncol(vcov))
@@ -21,8 +21,8 @@ parm <- function(coef, vcov) {
     if (max(abs(vcov - t(vcov))) > .Machine$double.eps)
         stop(sQuote("vcov"), " is not symmetric")
 
-    ret <- list(coef = coef, vcov = vcov)
-    class(ret) <- "param"
+    ret <- list(coef = coef, vcov = vcov, df = df)
+    class(ret) <- "parm"
     ret
 }
 
