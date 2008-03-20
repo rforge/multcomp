@@ -35,7 +35,7 @@ by deer browsing. We fit a mixed logistic regression model
 without intercept and with random effects accounting for the spatial variation
 of the trees. For each plot nested within a set of five plots
 orientated on a 100m transect (the location of the transect
-is determined by a predefined equally spaced lattice of the area under test), 
+is determined by a pre-defined equally spaced lattice of the area under test), 
 a random intercept is included in the model. We are interested
 in probability estimates and confidence intervals for each tree species.
 Each of the six fixed parameters of the model corresponds to one species,

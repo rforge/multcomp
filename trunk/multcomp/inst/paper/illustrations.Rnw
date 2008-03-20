@@ -99,7 +99,7 @@ with the validity of the above results stating that there
 is not difference between any combination of the three
 allele lengths. A sandwich estimator $\Sraw$ 
 might be more appropriate in this situation, and
-the \Rarg{vcov} argument of \Rcmd{glht()} can be used
+the \Rarg{vcov} argument can be used
 to specify a function to compute some alternative 
 covariance estimator $\Sraw$ as follows:
 <<alpha-aov-tukey-sandwich, echo = TRUE>>=
