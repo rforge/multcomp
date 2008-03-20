@@ -43,7 +43,7 @@ grant ST217.}
 %%inaugural lecture at 
 %%Ludwig-Maximilians-Universit{\"a}t M{\"u}nchen (April 25, 2008).}
 \inst{1}} \address[\inst{1}]{
-Institut f{\"u}r Statistik, Ludwig-Maximilians-Universit{\"a}t M{\"u}nchen \\
+Institut f{\"u}r Statistik \\ Ludwig-Maximilians-Universit{\"a}t M{\"u}nchen \\
 Ludwigstra{\ss }e 33, D--80539 M{\"u}nchen, Germany}
 
 \author[Frank Bretz]{Frank Bretz \inst{2}}
@@ -221,7 +221,7 @@ However, such probabilities $\Prob(\max(|\T_n| \le t)$
 are continuous functions of $\Cor_n$ (and a critical value $t$) which converge by
 $\Cor_n \cP \Cor$ as a consequence of Theorem 1.7 in \cite{Serfling1980}.
 In cases where $\T_n$ is assumed
-multivariate distributed with $\Cor_n$ treated as the estimated correlation
+multivariate $t$ distributed with $\Cor_n$ treated as the estimated correlation
 matrix, we have similar convergence as the degrees of freedom approach
 infinity.
 
@@ -254,10 +254,9 @@ H_0: \vartheta := \K \theta = \m.
 \end{eqnarray*}
 Under the conditions of $H_0$ it follows from Section~\ref{model} that 
 \begin{eqnarray*}
-\T_n = \D_n^{-1/2} (\hat{\vartheta}_n - \m) \cL \N_k(0, \Cor). 
+\T_n = \D_n^{-1/2} (\hat{\vartheta}_n - \m) \an \N_k(0, \Cor_n). 
 \end{eqnarray*}
-This
-limiting distribution will now be used as the reference distribution when
+This approximating distribution will now be used as the reference distribution when
 constructing the inference procedures. The global hypothesis $H_0$ can be
 tested using standard global tests, such as the $F$- or the $\chi^2$-test.
 An alternative approach is to use maximum tests, as explained in Subsection~%
@@ -268,7 +267,8 @@ result. Therefore, one is often interested in the individual null hypotheses
 \begin{eqnarray*}
 H_0^j: \vartheta_j = \m_j.
 \end{eqnarray*}
-(Note that $H_0 = \bigcap_{j = 1}^k H_0^j$.) Testing the hypotheses set $%
+%%(Note that $H_0 = \bigcap_{j = 1}^k H_0^j$.) 
+Testing the hypotheses set $%
 \{H_0^1, \ldots, H_0^k\}$ simultaneously thus requires the individual
 assessments while maintaining the familywise error rate, as discussed in
 Subsection~\ref{simtest}
@@ -278,10 +278,11 @@ assumption than asymptotic normality of $\hat{\theta}_n$ in (\ref{clt})
 is exact normality, i.e., $\hat{\theta}_n \sim \N_p(\theta, \Sigmaraw)$. 
 If the covariance matrix $\Sigmaraw$ is known, 
 it follows by standard arguments that $\T_n \sim \N_k(0, \Cor)$, when $\T_n$ is
-normalized using fixed, known variances. Otherwise, if
-$\Sigmaraw = \sigma^2 \A$, where $\A$ is fixed and known but $\sigma^2$ is an unknown
-constant (which is the typical situation of linear models with normal
-i.i.d.~errors and constant variance), the exact distribution of $\T_n$ is a $k$%
+normalized using fixed, known variances. Otherwise, 
+in the typical situation  of linear models with normal i.i.d.
+errors, $\Sigmaraw = \sigma^2 \A$, where $\sigma^2$ is unknown
+but $\A$ is fixed and known, 
+the exact distribution of $\T_n$ is a $k$%
 -dimensional multivariate $t_k(\nu, \Cor)$ distribution with $\nu$ degrees
 of freedom ($\nu = n - p - 1$ for linear models), see \citep{Tong1990}.
 
@@ -294,15 +295,15 @@ null hypothesis $H_0$. Standard results \citep[such as Theorem
 3.5,][]{Serfling1980} ensure that 
 \begin{eqnarray*}
 X^2 & = & \T_n^\top \Cor_n^+ \T_n
-\cL \chi^2(\Rg(\Cor_n)) \quad \text{when } \hat{\theta}_n \an
+\cL \chi^2(\Rg(\Cor)) \quad \text{when } \hat{\theta}_n \an
 \N_p(\theta, \Sraw) \\
 F & = & \frac{\T_n^\top \Cor^+ \T_n}{\Rg(\Cor)} \sim \F(\Rg(\Cor), \nu) \quad \text{%
 when } \hat{\theta}_n \sim \N_p(\theta, \sigma^2 \A),
 \end{eqnarray*}
-where $\Rg(\Cor_n)$, $\Rg(\Cor)$ and $\nu$ are the corresponding degrees 
-of freedom of the $\chi^2$ and $\F$ distribution, respectively,
-and superscript $+$ denotes the Moore-Penrose inverse of the corresponding
-matrix.
+where $\Rg(\Cor)$ and $\nu$ are the corresponding degrees 
+of freedom of the $\chi^2$ and $\F$ distribution, respectively.
+Furthermore, $\Rg(\Cor_n)^+$ denotes the Moore-Penrose inverse of the correlation
+matrix $\Rg(\Cor)$.
 
 Another suitable scalar test statistic for testing the global hypothesis $H_0
 $ is to consider the maximum of the individual test statistics $T_{1,n}, \dots,
