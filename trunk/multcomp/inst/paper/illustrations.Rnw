@@ -69,7 +69,7 @@ rankif <- function(data) trafo(data, numeric_trafo = rank)
 
 Thus, we fit a simple one-way ANOVA model to the data and 
 define $\K$ such that $\K \theta$ contains all three 
-group differences (Tukey's all-pair differences):
+group differences (Tukey's all-pairwise differences):
 <<alpha-aov-tukey, echo = TRUE>>=
 data("alpha", package = "coin")
 amod <- aov(elevel ~ alength, data = alpha)
@@ -96,7 +96,7 @@ summary(amod_glht)
 Because of the variance heterogeneity 
 that can be observed in Figure~\ref{alpha-box}, one might be concerned 
 with the validity of the above results stating that there
-is not difference between any combination of the three
+is no difference between any combination of the three
 allele lengths. A sandwich estimator $\Sraw$ 
 might be more appropriate in this situation, and
 the \Rarg{vcov} argument can be used
@@ -125,9 +125,9 @@ par(mai = par("mai") * c(1, 2.1, 1, 0.5))
 layout(matrix(1:2, ncol = 2))
 ci1 <- confint(glht(amod, linfct = mcp(alength = "Tukey")))
 ci2 <- confint(glht(amod, linfct = mcp(alength = "Tukey"), vcov = sandwich))
-plot(ci1, xlim = c(-0.6, 2.6), main = expression(paste("Tukey HSD (ordinary ", bold(S)[n], ")")), 
+plot(ci1, xlim = c(-0.6, 2.6), main = expression(paste("Tukey (ordinary ", bold(S)[n], ")")), 
     xlab = "Difference", ylim = c(0.5, 3.5))
-plot(ci2, xlim = c(-0.6, 2.6), main = expression(paste("Tukey HSD (sandwich ", bold(S)[n], ")")), 
+plot(ci2, xlim = c(-0.6, 2.6), main = expression(paste("Tukey (sandwich ", bold(S)[n], ")")), 
     xlab = "Difference", ylim = c(0.5, 3.5))
 @
 \caption{\Robject{alpha} data: Simultaneous confidence intervals based
@@ -161,7 +161,7 @@ the classical unadjusted $p$-values are given by
 data("bodyfat", package = "mboost")
 summary(lmod <- lm(DEXfat ~ ., data = bodyfat))
 @
-The linear function $\K$ is basically the identity matrix, except 
+The marix of linear functions $\K$ is basically the identity matrix, except 
 for the intercept which is omitted. Once the matrix $\K$ has been 
 defined, it can be used to set up the general linear hypotheses:
 <<bodyfat-lm-maxtest, echo = TRUE>>=
@@ -174,7 +174,7 @@ any of the regression coefficients is non-zero:
 <<bodyfat-lm-Ftest, echo = TRUE>>=
 summary(lmod_glht, test = Ftest())
 @
-but the source of the deviation from the global null-hypothesis
+but the source of the deviation from the global null hypothesis
 can only be inspected by the corresponding max-$t$ test, i.e., 
 via
 <<bodyfat-lm-maxtest, echo = TRUE>>=
@@ -234,7 +234,8 @@ from Alzheimer's disease or other dementias):
 data("alzheimer", package = "coin")
 y <- factor(alzheimer$disease == "Alzheimer's", 
              labels = c("other", "Alzheimer"))
-gmod <- glm(y ~ smoking * gender, data = alzheimer, family = binomial())
+gmod <- glm(y ~ smoking * gender, data = alzheimer, 
+             family = binomial())
 summary(gmod)
 @
 The negative regression coefficient for heavy smoking males indicates
@@ -248,7 +249,7 @@ disease can be estimated by computing the logit function
 of the linear predictor from model \Robject{gmod}. Using
 the \Rcmd{predict()} method for generalized linear models
 is a convenient way to compute these probability estimates. Alternatively,
-we can set up a linear function $\K$ such that $\left(1 + \exp(- \hat{\vartheta}_n)\right)^{-1}$
+we can set up $\K$ such that $\left(1 + \exp(- \hat{\vartheta}_n)\right)^{-1}$
 is the vector of estimated probabilities with simultaneous confidence intervals
 \begin{eqnarray*}
 \left(\left(1 + \exp\left(- \left(\hat{\vartheta}_n - q_\alpha \D_n^{1/2}\right)\right)\right)^{-1},
@@ -324,7 +325,7 @@ t(8;21), t(15;17) and inv(16); `intermediate': normal karyotype and t(9;11);
 and `high': all other forms). One interesting question might be the
 usefulness of this risk score. Here, we fit a Weibull survival model
 to the data including all above mentioned covariates as well
-as their interactions with the patient's gender. Tukey's all-pair comparisons
+as their interactions with the patient's gender. Tukey's all-pairwise comparisons
 highlight that there seems to be a difference between `high' scores
 and both `low' and `intermediate' ones but the latter two aren't distinguishable:
 <<bullinger-survreg, echo = TRUE>>=
