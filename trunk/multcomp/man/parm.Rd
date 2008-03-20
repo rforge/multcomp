@@ -5,7 +5,7 @@
   Directly specify estimated model parameters and their covariance matrix.
 }
 \usage{
-parm(coef, vcov, df)
+parm(coef, vcov, df = 0)
 }
 \arguments{
   \item{coef}{ estimated coefficients.}

@@ -1,6 +1,6 @@
 
-R version 2.6.0 (2007-10-03)
-Copyright (C) 2007 The R Foundation for Statistical Computing
+R version 2.6.2 (2008-02-08)
+Copyright (C) 2008 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -38,7 +38,7 @@ H-M  -4.722222 -13.54187  4.097425 0.4049442
 
 > confint(glht(fm1, linfct = mcp(tension = "Tukey")))
 
-	 Simultaneous Confidence Intervals for General Linear Hypotheses
+	 Simultaneous Confidence Intervals
 
 Multiple Comparisons of Means: Tukey Contrasts
 
@@ -46,15 +46,14 @@ Multiple Comparisons of Means: Tukey Contrasts
 Fit: aov(formula = breaks ~ wool * tension, data = warpbreaks)
 
 Estimated Quantile = 2.4188
+95% family-wise confidence level
+ 
 
 Linear Hypotheses:
            Estimate lwr      upr     
 M - L == 0 -10.0000 -18.8208  -1.1792
 H - L == 0 -14.7222 -23.5430  -5.9014
 H - M == 0  -4.7222 -13.5430   4.0986
-
-95% family-wise confidence level
- 
 
 > summary(glht(fm1, linfct = mcp(tension = "Tukey")))
 
@@ -72,7 +71,7 @@ H - L == 0  -14.722      3.647  -4.037  <0.001 ***
 H - M == 0   -4.722      3.647  -1.295  0.4049    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-(Adjusted p values reported)
+(Adjusted p values reported -- single-step method)
 
 > 
 > TukeyHSD(fm1, "wool", ordered = FALSE)
@@ -87,7 +86,7 @@ B-A -5.777778 -11.76458 0.2090243 0.058213
 
 > confint(glht(fm1, linfct = mcp(wool = "Tukey")))
 
-	 Simultaneous Confidence Intervals for General Linear Hypotheses
+	 Simultaneous Confidence Intervals
 
 Multiple Comparisons of Means: Tukey Contrasts
 
@@ -95,13 +94,12 @@ Multiple Comparisons of Means: Tukey Contrasts
 Fit: aov(formula = breaks ~ wool * tension, data = warpbreaks)
 
 Estimated Quantile = 2.0106
+95% family-wise confidence level
+ 
 
 Linear Hypotheses:
            Estimate lwr      upr     
 B - A == 0  -5.7778 -11.7646   0.2090
-
-95% family-wise confidence level
- 
 
 > summary(glht(fm1, linfct = mcp(wool = "Tukey")))
 
@@ -117,6 +115,6 @@ Linear Hypotheses:
 B - A == 0   -5.778      2.978   -1.94  0.0582 .
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-(Adjusted p values reported)
+(Adjusted p values reported -- single-step method)
 
 > 

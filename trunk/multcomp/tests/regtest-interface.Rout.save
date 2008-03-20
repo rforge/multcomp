@@ -1,6 +1,6 @@
 
-R version 2.6.0 (2007-10-03)
-Copyright (C) 2007 The R Foundation for Statistical Computing
+R version 2.6.2 (2008-02-08)
+Copyright (C) 2008 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -141,7 +141,7 @@ rx == 0            0.5286
 > amod <- aov(weight ~ dose + gesttime + number, data = litter)
 > confint(glht(amod, linfct = mcp(dose = "Means")))
 
-	 Simultaneous Confidence Intervals for General Linear Hypotheses
+	 Simultaneous Confidence Intervals
 
 Multiple Comparisons of Means: Mean Contrasts
 
@@ -149,6 +149,8 @@ Multiple Comparisons of Means: Mean Contrasts
 Fit: aov(formula = weight ~ dose + gesttime + number, data = litter)
 
 Estimated Quantile = 2.5559
+95% family-wise confidence level
+ 
 
 Linear Hypotheses:
          Estimate lwr     upr    
@@ -156,8 +158,5 @@ Linear Hypotheses:
 5 == 0   29.0127  26.6372 31.3883
 50 == 0  30.0743  27.5239 32.6246
 500 == 0 29.6899  27.1590 32.2208
-
-95% family-wise confidence level
- 
 
 > 

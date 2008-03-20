@@ -21,7 +21,12 @@
 \begin{document}
 
 \title{Simultaneous Inference \\
-in General Parametric Models}
+in General Parametric Models
+\footnote{This is a preprint of an article published in
+Biometrical Journal, Volume 50, Number 3.                                      
+Copyright \copyright{} 2008 WILEY-VCH Verlag GmbH \& Co. KGaA, Weinheim;
+available online
+\url{http://www.biometrical-journal.com}.}}
 \author{\textbf{Torsten Hothorn} \\
 %EndAName
 Institut f{\"u}r Statistik \\
@@ -61,8 +66,6 @@ convenient interface to the general approach adopted here.
 \textbf{Key words}: multiple tests, multiple comparisons, simultaneous
 confidence intervals, \newline
 adjusted $p$-values, multivariate normal distribution, robust statistics.
-
-\newpage
 
 \section{Introduction}
 
@@ -290,7 +293,8 @@ X^2 & = & \T_n^\top \Cor_n^+ \T_n
 F & = & \frac{\T_n^\top \Cor^+ \T_n}{\Rg(\Cor)} \sim \F(\Rg(\Cor), \nu) \quad \text{%
 when } \hat{\theta}_n \sim \N_p(\theta, \sigma^2 \A),
 \end{eqnarray*}
-where $\Rg(\Cor_n)$, $\Rg(\Cor)$ and $\nu$ are the corresponding degrees of freedom
+where $\Rg(\Cor_n)$, $\Rg(\Cor)$ and $\nu$ are the corresponding degrees 
+of freedom of the $\chi^2$ and $\F$ distribution, respectively,
 and superscript $+$ denotes the Moore-Penrose inverse of the corresponding
 matrix.
 
@@ -300,7 +304,7 @@ T_{k,n}$ of the multivariate statistic $\T_n = (T_{1,n}, \dots, T_{k,n})$, leadi
 test statistic $\max(|\T_n|)$. The distribution of this statistic under the
 conditions of $H_0$ can be handled through the $k$-dimensional distribution 
 \begin{eqnarray}  \label{maxt}
-\Prob(\max(|\T_n|) \le t) \cong \int\limits_{-t}^t \cdots \int\limits_{t}^t
+\Prob(\max(|\T_n|) \le t) \cong \int\limits_{-t}^t \cdots \int\limits_{-t}^t
 \varphi_k(x_1, \dots, x_k; \Cor, \nu) \, dx_1 \cdots dx_k =: g_\nu(\Cor, t)
 \end{eqnarray}
 for some $t \in \R$, where $\varphi_k$ is the density function of either the

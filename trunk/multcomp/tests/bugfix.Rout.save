@@ -103,7 +103,7 @@ function (type = c("univariate", "adjusted", p.adjust.methods),
     }
     return(p.adjust(pvals, method = type))
 }
-<environment: 0x8480cac>
+<environment: 0x888dd28>
 
 $qfunction
 function (conf.level, adjusted = TRUE, ...) 
@@ -122,7 +122,7 @@ function (conf.level, adjusted = TRUE, ...)
     attr(ret, "error") <- calpha$estim.prec
     return(ret)
 }
-<environment: 0x8480cac>
+<environment: 0x888dd28>
 
 $coefficients
  2times - 1time  4times - 1time   drugD - 1time   drugE - 1time 4times - 2times 
@@ -236,7 +236,7 @@ Error in factor_contrasts(model) :
 > tmp <- confint(wht, calpha=2)
 > print(tmp)
 
-	 Simultaneous Confidence Intervals for General Linear Hypotheses
+	 Simultaneous Confidence Intervals
 
 Multiple Comparisons of Means: Tukey Contrasts
 
@@ -244,15 +244,14 @@ Multiple Comparisons of Means: Tukey Contrasts
 Fit: aov(formula = breaks ~ wool * tension, data = warpbreaks)
 
 Estimated Quantile = 2
+95% confidence level
+ 
 
 Linear Hypotheses:
            Estimate lwr      upr     
 M - L == 0 -10.0000 -17.2935  -2.7065
 H - L == 0 -14.7222 -22.0157  -7.4287
 H - M == 0  -4.7222 -12.0157   2.5713
-
-95% confidence level
- 
 
 > 
 > ### coef. and vcov. didn't pass through
