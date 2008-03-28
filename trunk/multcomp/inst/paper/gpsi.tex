@@ -624,7 +624,11 @@ Because it is impossible to determine the parameters of interest
 automatically in this case, \Rcmd{mcp()} in \Rpackage{multcomp} 
 version 1.0-0 and higher generates comparisons for the main effects
 $\gamma_j$ only, ignoring covariates and interactions (older versions
-automatically averaged over interaction terms). We refer to
+automatically averaged over interaction terms). 
+We suggest to the users that they write out, manually, the set of contrasts they
+want. One should do this whenever there is doubt about what the
+default contrasts measure, which typically happens in models with higher
+order interaction terms. We refer to
 \cite{Hsu1996}, Chapter~7, and \cite{Searle1971}, Chapter~7.3, 
 for further discussions and examples on this issue.
 
