@@ -22,4 +22,4 @@ pdf:	gpsi.tex illustrations.tex trees.tex references.bib header.tex
 zip:	
 	~/bin/texclean gpsi.tex
 	rm -rf multcomp.zip
-	zip multcomp.zip *
+	zip multcomp.zip *tex *pdf *bib
