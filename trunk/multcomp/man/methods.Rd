@@ -122,8 +122,8 @@ univariate_calpha(...)
 }
 \examples{
 
-  ### set up a two-way ANOVA with interactions
-  amod <- aov(breaks ~ wool * tension, data = warpbreaks)
+  ### set up a two-way ANOVA 
+  amod <- aov(breaks ~ wool + tension, data = warpbreaks)
 
   ### set up all-pair comparisons for factor `tension'
   wht <- glht(amod, linfct = mcp(tension = "Tukey"))

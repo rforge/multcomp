@@ -91,9 +91,12 @@ Multiple Comparisons of Means: Dunnett Contrasts
 
 Linear Hypotheses:
            Estimate
-B - A == 0   0.5135
-C - A == 0   0.6699
+B - A == 0   0.3242
+C - A == 0   0.6837
 
+Warning message:
+In mcp2matrix(model, linfct = linfct) :
+  covariate interactions found -- default contrast might be inappropriate
 > 
 > # with contrasts as expressions
 > glht(lmod, linfct = mcp(f1 = c("B - A = 0", "C - A = 0")))
@@ -105,9 +108,12 @@ Multiple Comparisons of Means: User-defined Contrasts
 
 Linear Hypotheses:
            Estimate
-B - A == 0   0.5135
-C - A == 0   0.6699
+B - A == 0   0.3242
+C - A == 0   0.6837
 
+Warning message:
+In mcp2matrix(model, linfct = linfct) :
+  covariate interactions found -- default contrast might be inappropriate
 > 
 > tmp <- multcomp:::chrlinfct2matrix(c(l1 = "x1 - x2 = 2", 
 +                                       l2 = "x2 + 3 * x3 = 1"), 

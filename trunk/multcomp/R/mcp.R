@@ -141,31 +141,10 @@ mcp2matrix <- function(model, linfct) {
             Kstar <- linfct[[nm]]
         }
         pos <- factors[nm,] == 1
-        ### average over interaction terms (if any)
-        if (sum(pos) > 1) {
-            Kinter <- c()
-            for (i in which(pos)[-1]) {
-                k <- sum(attr(mm, "assign") == i) / ncol(Kstar)
-                ivar <- rownames(factors)[factors[ ,i] == 1]
-                ivar <- ivar[ivar != nm]
-                classes <- sapply(mf[, ivar, drop = FALSE], is.factor)
-                if (all(classes)) {
-                    fact <- 1 / (k + 1)
-                } else {
-                    fact <- 1
-                    warning("covariate interactions found -- please choose appropriate contrast")
-                }
-                if (sum(factors[1:which(rownames(factors) == nm), i]) == 1) {
-                    Kinter <- cbind(Kinter, 
-                        Kstar[,rep(1:ncol(Kstar), k), drop = FALSE] * fact)
-                } else {
-                    Kinter <- cbind(Kinter, 
-                        Kstar[,rep(1:ncol(Kstar), rep(k, ncol(Kstar))), 
-                              drop = FALSE] * fact)
-                }
-            }
-            Kstar <- cbind(Kstar, Kinter)
-        }
+        ### interaction terms (if any)
+        if (sum(pos) > 1)
+            warning("covariate interactions found -- ", 
+                    "default contrast might be inappropriate")
         hypo[[nm]] <- list(K = Kstar,
             where = attr(mm, "assign") %in% which(factors[nm,] == 1))
     }

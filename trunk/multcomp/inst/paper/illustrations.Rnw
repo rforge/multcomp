@@ -69,7 +69,7 @@ rankif <- function(data) trafo(data, numeric_trafo = rank)
 
 Thus, we fit a simple one-way ANOVA model to the data and 
 define $\K$ such that $\K \theta$ contains all three 
-group differences (Tukey's all-pairwise differences):
+group differences (Tukey's all-pairwise comparisons):
 <<alpha-aov-tukey, echo = TRUE>>=
 data("alpha", package = "coin")
 amod <- aov(elevel ~ alength, data = alpha)

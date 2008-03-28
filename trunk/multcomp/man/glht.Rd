@@ -101,6 +101,18 @@ mcp(...)
   \code{\link{contrMat}} may serve as a symbolic description of 
   contrasts as well.
 
+  The \code{mcp} function must be used with care when defining parameters
+  of interest in two-way ANOVA or ANCOVA models. Here, the definition
+  of treatment differences (such as Tukey's all-pair comparisons or Dunnett's
+  comparison with a control) might be problem specific. 
+  Because it is impossible to determine the parameters of interest
+  automatically in this case, \code{mcp} in multcomp
+  version 1.0-0 and higher generates comparisons for the main effects
+  only, ignoring covariates and interactions (older versions
+  automatically averaged over interaction terms). A warning is given. We refer to
+  Hsu (1996), Chapter 7, for further discussions and examples on this
+  issue.
+
   \code{glht} extracts the number of degrees of freedom
   for models of class \code{lm} (via \code{\link{modelparm}}) and the
   exact multivariate $t$ distribution is evaluated. For all other
@@ -142,6 +154,9 @@ mcp(...)
 
     Shayle R. Searle (1971), \emph{Linear Models}.
     John Wiley \& Sons, New York.
+
+    Jason C. Hsu (1996), \emph{Multiple Comparisons}.
+    Chapman & Hall, London.
 
 }
 \examples{

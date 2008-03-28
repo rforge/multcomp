@@ -83,7 +83,7 @@ is, the probability of at least one erroneous rejection is larger than $%
 multiplicity and thus ensure that the overall type I error remains below the
 pre-specified significance level $\alpha$. Examples of such multiple
 comparison procedures include Dunnett's many-to-one comparisons, Tukey's
-all-pairwise differences, sequential pairwise contrasts, comparisons with
+all-pairwise comparisons, sequential pairwise contrasts, comparisons with
 the average, changepoint analyses, dose-response contrasts, etc. These
 procedures are all well established for classical regression and ANOVA
 models allowing for covariates and/or factorial treatment structures with
@@ -473,7 +473,7 @@ elemental parameters in the \RR-system for statistical computing
 
 Many classical multiple comparison procedures can be embedded into this
 framework, including Dunnett's many-to-one comparisons and Tukey's
-all-pairwise differences. For Dunnett's procedure, the differences $%
+all-pairwise comparisons. For Dunnett's procedure, the differences $%
 \gamma_i - \gamma_1$ are tested for all $i=2, \ldots, i$, where $\gamma_1$
 denotes the mean treatment effect of a control group. In the notation from
 Section~\ref{model} we thus have 
@@ -514,6 +514,7 @@ computed analytically instead, as shown in Section~\ref{siminf}.
 To illustrate simultaneous inference procedures in one-way ANOVA models, we
 consider all pairwise comparisons of expression levels for various genetic
 conditions of alcoholism in Subsection~\ref{alpha}.
+
 
 \paragraph{Further parametric models.}
 
@@ -597,11 +598,33 @@ compared and the model contrasts used to define the design matrix of the
 model have to be taken into account. The \Rcmd{mcp()} function takes the
 name of the factor to be tested as an argument as well as a character
 defining the type of comparisons as its value. For example, \Rcmd{mcp(type =
-"Tukey")} sets up a matrix $\K$ for Tukey's all-pairwise differences among
+"Tukey")} sets up a matrix $\K$ for Tukey's all-pairwise comparisons among
 the levels of the factor \Robject{type}, which has to appear on right hand
 side of the model formula of \Robject{model}. In this particular case, we
 need to assume that \Rcmd{model.frame()} and \Rcmd{model.matrix()} methods
 for \Robject{model} are available as well.
+
+The \Rcmd{mcp()} function must be used with care when defining parameters 
+of interest in two-way ANOVA or ANCOVA models. Here, the definition
+of treatment differences (such as Tukey's all-pair comparisons or Dunnett's
+comparison with a control) 
+might be problem specific. For example, in an ANCOVA model (here without
+intercept term)
+\begin{eqnarray*}
+Y_{ij} = \gamma_j + \beta_j X_i + \varepsilon_{ij}; \quad j = 1, \dots, q, i
+= 1, \dots, n_j
+\end{eqnarray*}
+the parameters of interest might be $\gamma_j - \gamma_1 + \beta_j x -
+\beta_1 x$ for some value $x$ of the continuous covariate $X$ rather
+than the comparisons with a control $\gamma_j - \gamma_1$. The same
+problem occurs when interaction terms are present in a two-way ANOVA model.
+Because it is impossible to determine the parameters of interest
+automatically in this case, \Rcmd{mcp()} in \Rpackage{multcomp} 
+version 1.0-0 and higher generates comparisons for the main effects
+$\gamma_j$ only, ignoring covariates and interactions (older versions
+automatically averaged over interaction terms). We refer to
+\cite{Hsu1996}, Chapter 7, for further discussions and examples on this
+issue.
 
 Objects of class \Rclass{glht} returned by \Rcmd{glht()} include %
 \Rcmd{coef()} and \Rcmd{vcov()} methods to compute $\hat{\vartheta}_n$ and $%

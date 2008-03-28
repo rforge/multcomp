@@ -3,6 +3,8 @@
 
     o    unify both vignettes
 
+    o    mcp() doesn't try to take care of interaction terms anymore
+
 
 		CHANGES in `multcomp' VERSION 0.993-3
 
