@@ -616,15 +616,17 @@ Y_{ij} = \gamma_j + \beta_j X_i + \varepsilon_{ij}; \quad j = 1, \dots, q, i
 \end{eqnarray*}
 the parameters of interest might be $\gamma_j - \gamma_1 + \beta_j x -
 \beta_1 x$ for some value $x$ of the continuous covariate $X$ rather
-than the comparisons with a control $\gamma_j - \gamma_1$. The same
-problem occurs when interaction terms are present in a two-way ANOVA model.
+than the comparisons with a control $\gamma_j - \gamma_1$
+that would be computed by \Rcmd{mcp()} with \Rcmd{"Dunnett"} option. The same
+problem occurs when interaction terms are present in a two-way ANOVA model,
+where the hypotheses might depend on the sample sizes.
 Because it is impossible to determine the parameters of interest
 automatically in this case, \Rcmd{mcp()} in \Rpackage{multcomp} 
 version 1.0-0 and higher generates comparisons for the main effects
 $\gamma_j$ only, ignoring covariates and interactions (older versions
 automatically averaged over interaction terms). We refer to
-\cite{Hsu1996}, Chapter 7, for further discussions and examples on this
-issue.
+\cite{Hsu1996}, Chapter~7, and \cite{Searle1971}, Chapter~7.3, 
+for further discussions and examples on this issue.
 
 Objects of class \Rclass{glht} returned by \Rcmd{glht()} include %
 \Rcmd{coef()} and \Rcmd{vcov()} methods to compute $\hat{\vartheta}_n$ and $%

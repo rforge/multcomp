@@ -118,7 +118,7 @@ confidence intervals calculated based on the ordinary and
 sandwich estimator is given in Figure~\ref{alpha-ci}.
 
 \setkeys{Gin}{width=0.95\textwidth}
-\begin{figure}[t]
+\begin{figure}[h]
 \begin{center}
 <<alpha-confint-plot, echo = FALSE, fig = TRUE, width = 8, height = 3.5>>=
 par(mai = par("mai") * c(1, 2.1, 1, 0.5))
@@ -293,7 +293,7 @@ it is obvious that Alzheimer's disease is less frequent in heavy smoking men
 compared to all other configurations of the two covariates.
 
 \setkeys{Gin}{width=0.8\textwidth}
-\begin{figure}[t]
+\begin{figure}[h]
 \begin{center}
 <<alzheimer-plot, echo = FALSE, fig = TRUE, mai = TRUE, width = 7, height = 5>>=
 plot(gmod_ci, xlab = "Probability of Developing Alzheimer", 
