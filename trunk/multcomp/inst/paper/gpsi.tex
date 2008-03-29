@@ -98,7 +98,7 @@ combination of elemental model parameters and we allow for $k$ of such null
 hypotheses to be tested simultaneously, regardless of the number of 
 elemental model parameters $p$. The general framework described here
 extends the current canonical theory with respect to the following aspects:
-(i) model assumptions, such as normality and homoscedasticity are relaxed,
+(i) model assumptions such as normality and homoscedasticity are relaxed,
 thus allowing for simultaneous inference in generalized linear models,
 mixed effects models, survival models, etc.; (ii) arbitrary linear functions
 of the elemental parameters are allowed, not just contrasts of means in AN(C)OVA
@@ -284,7 +284,7 @@ errors, $\Sigmaraw = \sigma^2 \A$, where $\sigma^2$ is unknown
 but $\A$ is fixed and known, 
 the exact distribution of $\T_n$ is a $k$%
 -dimensional multivariate $t_k(\nu, \Cor)$ distribution with $\nu$ degrees
-of freedom ($\nu = n - p - 1$ for linear models), see \citep{Tong1990}.
+of freedom ($\nu = n - p - 1$ for linear models), see \cite{Tong1990}.
 
 \subsection{Global Inference}
 
@@ -384,7 +384,7 @@ The corresponding one-sided versions are defined analogously.
 It should be noted that the simultaneous inference procedures described
 so far belong to the class of single-step procedures, since a common
 critical value $q_\alpha$ is used for the individual tests. Single-step procedures
-have the advantage that corresponding simultaneous confidence are easily
+have the advantage that corresponding simultaneous confidence intervals are easily
 available, as previously noted. However, single-step procedures can
 always be improved by stepwise extensions based on the closed test
 procedure. That is, for a given family of null hypotheses $H_0^1, \dots,
@@ -410,7 +410,7 @@ this paper, see for example \cite{Westfall1997} and
 The methodological framework described in Sections~\ref{model} and \ref%
 {siminf} is very general and thus applicable to a wide range of statistical
 models. Many estimation techniques, such as (restricted) maximum likelihood
-and M estimation, provide at least asymptotically normal estimates of the
+and M-estimation, provide at least asymptotically normal estimates of the
 elemental parameters together with consistent estimates of their covariance matrix. In
 this section we illustrate the generality of the methodology by reviewing
 some potential applications. Detailed numerical examples are discussed in
@@ -474,7 +474,7 @@ elemental parameters in the \RR-system for statistical computing
 Many classical multiple comparison procedures can be embedded into this
 framework, including Dunnett's many-to-one comparisons and Tukey's
 all-pairwise comparisons. For Dunnett's procedure, the differences $%
-\gamma_i - \gamma_1$ are tested for all $i=2, \ldots, i$, where $\gamma_1$
+\gamma_j - \gamma_1$ are tested for all $j=2, \ldots, q$, where $\gamma_1$
 denotes the mean treatment effect of a control group. In the notation from
 Section~\ref{model} we thus have 
 \begin{eqnarray*}
@@ -597,9 +597,9 @@ The last alternative is convenient when contrasts of factor levels are to be
 compared and the model contrasts used to define the design matrix of the
 model have to be taken into account. The \Rcmd{mcp()} function takes the
 name of the factor to be tested as an argument as well as a character
-defining the type of comparisons as its value. For example, \Rcmd{mcp(type =
+defining the type of comparisons as its value. For example, \Rcmd{mcp(treat =
 "Tukey")} sets up a matrix $\K$ for Tukey's all-pairwise comparisons among
-the levels of the factor \Robject{type}, which has to appear on right hand
+the levels of the factor \Robject{treat}, which has to appear on right hand
 side of the model formula of \Robject{model}. In this particular case, we
 need to assume that \Rcmd{model.frame()} and \Rcmd{model.matrix()} methods
 for \Robject{model} are available as well.

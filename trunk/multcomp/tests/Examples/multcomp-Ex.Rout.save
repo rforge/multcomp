@@ -1049,6 +1049,25 @@ b3 - b0 >= 0 -1.66667     -Inf -0.03603
 >   K <- glht(amod, linfct = mcp(temp = "Tukey"))$linfct
 Warning in mcp2matrix(model, linfct = linfct) :
   covariate interactions found -- default contrast might be inappropriate
+>   K
+              (Intercept) templow tempmedium envirenv2 envirenv3 envirenv4
+low - high              0       1          0         0         0         0
+medium - high           0       0          1         0         0         0
+medium - low            0      -1          1         0         0         0
+              envirenv5 templow:envirenv2 tempmedium:envirenv2
+low - high            0                 0                    0
+medium - high         0                 0                    0
+medium - low          0                 0                    0
+              templow:envirenv3 tempmedium:envirenv3 templow:envirenv4
+low - high                    0                    0                 0
+medium - high                 0                    0                 0
+medium - low                  0                    0                 0
+              tempmedium:envirenv4 templow:envirenv5 tempmedium:envirenv5
+low - high                       0                 0                    0
+medium - high                    0                 0                    0
+medium - low                     0                 0                    0
+attr(,"type")
+[1] "Tukey"
 >   glht(amod, K)
 
 	 General Linear Hypotheses
@@ -1058,9 +1077,9 @@ Multiple Comparisons of Means: Tukey Contrasts
 
 Linear Hypotheses:
                    Estimate
-low - high == 0      -5.035
-medium - high == 0   -5.920
-medium - low == 0    -0.885
+low - high == 0       -1.26
+medium - high == 0    -1.34
+medium - low == 0     -0.08
 
 > 
 >   ### comparisons of means (by averaging interaction effects)
@@ -1070,6 +1089,25 @@ medium - low == 0    -0.885
 >   K[2, med] <- 1 / (length(low) + 1)
 >   K[3, med] <- 1 / (length(low) + 1)
 >   K[3, low] <- - 1 / (length(low) + 1)
+>   K
+              (Intercept) templow tempmedium envirenv2 envirenv3 envirenv4
+low - high              0       1          0         0         0         0
+medium - high           0       0          1         0         0         0
+medium - low            0      -1          1         0         0         0
+              envirenv5 templow:envirenv2 tempmedium:envirenv2
+low - high            0               0.2                  0.0
+medium - high         0               0.0                  0.2
+medium - low          0              -0.2                  0.2
+              templow:envirenv3 tempmedium:envirenv3 templow:envirenv4
+low - high                  0.2                  0.0               0.2
+medium - high               0.0                  0.2               0.0
+medium - low               -0.2                  0.2              -0.2
+              tempmedium:envirenv4 templow:envirenv5 tempmedium:envirenv5
+low - high                     0.0               0.2                  0.0
+medium - high                  0.2               0.0                  0.2
+medium - low                   0.2              -0.2                  0.2
+attr(,"type")
+[1] "Tukey"
 >   confint(glht(amod, K))
 
 	 Simultaneous Confidence Intervals
@@ -1122,20 +1160,22 @@ Multiple Comparisons of Means: Tukey Contrasts
 Fit: aov(formula = waste ~ temp * envir, data = waste)
 
 Linear Hypotheses:
-                         Estimate Std. Error t value p value
-temp: low - high == 0      -5.035      3.908  -1.288   1.000
-temp: medium - high == 0   -5.920      3.908  -1.515   1.000
-temp: medium - low == 0    -0.885      3.908  -0.226   1.000
-envir: env2 - env1 == 0    -1.670      2.168  -0.770   1.000
-envir: env3 - env1 == 0    -1.870      2.424  -0.772   1.000
-envir: env4 - env1 == 0     3.530      2.424   1.457   1.000
-envir: env5 - env1 == 0     2.280      2.168   1.052   1.000
-envir: env3 - env2 == 0    -0.200      2.868  -0.070   1.000
-envir: env4 - env2 == 0     5.200      2.424   2.146   0.633
-envir: env5 - env2 == 0     3.950      2.868   1.377   1.000
-envir: env4 - env3 == 0     5.400      3.595   1.502   1.000
-envir: env5 - env3 == 0     4.150      2.424   1.712   0.967
-envir: env5 - env4 == 0    -1.250      2.868  -0.436   1.000
+                         Estimate Std. Error t value p value  
+temp: low - high == 0      -1.260      1.084  -1.162   1.000  
+temp: medium - high == 0   -1.340      1.084  -1.236   1.000  
+temp: medium - low == 0    -0.080      1.084  -0.074   1.000  
+envir: env2 - env1 == 0     1.830      1.084   1.688   0.784  
+envir: env3 - env1 == 0     1.330      1.084   1.227   1.000  
+envir: env4 - env1 == 0     3.805      1.084   3.511   0.041 *
+envir: env5 - env1 == 0     3.660      1.084   3.377   0.041 *
+envir: env3 - env2 == 0    -0.500      1.084  -0.461   1.000  
+envir: env4 - env2 == 0     1.975      1.084   1.822   0.619  
+envir: env5 - env2 == 0     1.830      1.084   1.688   0.619  
+envir: env4 - env3 == 0     2.475      1.084   2.283   0.337  
+envir: env5 - env3 == 0     2.330      1.084   2.150   0.337  
+envir: env5 - env4 == 0    -0.145      1.084  -0.134   1.000  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 (Adjusted p values reported -- Shaffer method)
 
 > 
@@ -1145,7 +1185,7 @@ envir: env5 - env4 == 0    -1.250      2.868  -0.436   1.000
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  17.737 0.108 17.916 0 0 
+Time elapsed:  16.481 0.02 16.532 0 0 
 > grDevices::dev.off()
 null device 
           1 

@@ -329,7 +329,7 @@ as their interactions with the patient's gender. Tukey's all-pairwise comparison
 highlight that there seems to be a difference between `high' scores
 and both `low' and `intermediate' ones but the latter two aren't distinguishable:
 <<bullinger-survreg, echo = TRUE>>=
-smod <- survreg(Surv(time, event) ~ Sex * (Age + WBC + LDH + FLT3 + risk), 
+smod <- survreg(Surv(time, event) ~ Sex + Age + WBC + LDH + FLT3 + risk, 
                  data = clinical)
 summary(glht(smod, linfct = mcp(risk = "Tukey")))
 @

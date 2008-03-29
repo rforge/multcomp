@@ -110,7 +110,8 @@ mcp(...)
   version 1.0-0 and higher generates comparisons for the main effects
   only, ignoring covariates and interactions (older versions
   automatically averaged over interaction terms). A warning is given. We refer to
-  Hsu (1996), Chapter 7, for further discussions and examples on this
+  Hsu (1996), Chapter 7, and Searle (1971), Chapter 7.3, 
+  for further discussions and examples on this
   issue.
 
   \code{glht} extracts the number of degrees of freedom

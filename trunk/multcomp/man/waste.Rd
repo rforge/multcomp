@@ -35,6 +35,7 @@
 
   ### comparisons of main effects only
   K <- glht(amod, linfct = mcp(temp = "Tukey"))$linfct
+  K
   glht(amod, K)
 
   ### comparisons of means (by averaging interaction effects)
@@ -44,6 +45,7 @@
   K[2, med] <- 1 / (length(low) + 1)
   K[3, med] <- 1 / (length(low) + 1)
   K[3, low] <- - 1 / (length(low) + 1)
+  K
   confint(glht(amod, K))
 
   ### same as TukeyHSD
