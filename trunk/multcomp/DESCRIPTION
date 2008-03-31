@@ -1,5 +1,5 @@
 Package: multcomp
-Title: Simultaneous Inference for General Linear Hypotheses
+Title: Simultaneous Inference in General Parametric Models
 Version: 1.0-0
 Date: $Date$
 Author: Torsten Hothorn, Frank Bretz and Peter Westfall with
