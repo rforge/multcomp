@@ -18,14 +18,15 @@
 }
 \usage{
 \method{summary}{glht}(object, test = adjusted(), ...)
-\method{confint}{glht}(object, parm, level = 0.95, calpha = adjusted_calpha(), ...)
+\method{confint}{glht}(object, parm, level = 0.95, calpha = adjusted_calpha(), 
+        ...)
 \method{coef}{glht}(object, rhs = FALSE, ...)
 \method{vcov}{glht}(object, ...)
 \method{plot}{confint.glht}(x, xlim, xlab, ...)
 \method{plot}{glht}(x, ...)
 univariate()
-adjusted(type = c("single-step", "Shaffer", "Westfall", "free", p.adjust.methods), 
-         ...)
+adjusted(type = c("single-step", "Shaffer", "Westfall", "free", 
+         p.adjust.methods), ...)
 Ftest()
 Chisqtest()
 adjusted_calpha(...)
@@ -38,7 +39,7 @@ univariate_calpha(...)
   \item{level}{ the confidence level required.}
   \item{calpha}{ either a function computing the critical value or the critical value itself.}
   \item{rhs}{logical, indicating whether the linear function
-              \eqn{K \hat{\beta}} or the right hand side 
+              \eqn{K \hat{\theta}} or the right hand side 
               \eqn{m} (\code{rhs = TRUE}) of the linear hypothesis
               should be returned.}
   \item{type}{ the multiplicity adjustment (\code{adjusted}) 
@@ -59,10 +60,10 @@ univariate_calpha(...)
   The methods for general linear hypotheses as described by objects returned
   by \code{\link{glht}} can be used to actually test the global
   null hypothesis, each of the partial hypotheses and for
-  simultaneous confidence intervals for the linear function $K \beta$.
+  simultaneous confidence intervals for the linear function $K \theta$.
   
   The \code{\link{coef}} and \code{\link{vcov}} methods compute the linear
-  function $K \hat{\beta}$ and its covariance, respectively.
+  function $K \hat{\theta}$ and its covariance, respectively.
 
   The \code{test} argument to \code{summary} takes a function specifying
   the type of test to be applied. Classical Chisq (Wald test) or F statistics
@@ -93,12 +94,16 @@ univariate_calpha(...)
   class \code{\link{lm}}, are evaluated using the procedures
   implemented in package \code{mvtnorm}.
 
+  A more detailed description of the underlying methodology is
+  available from Hothorn et al. (2008).
+
+
 }
 \value{
 
   \code{summary} computes (adjusted) p values for general linear hypotheses,
   \code{\link{confint}} computes (adjusted) confidence intervals. 
-  \code{\link{coef}} returns estimates of the linear function $K \beta$
+  \code{\link{coef}} returns estimates of the linear function $K \theta$
   and \code{\link{vcov}} its covariance. 
 
 }
@@ -118,6 +123,10 @@ univariate_calpha(...)
    \emph{Multiple Comparisons and Multiple Tests Using the SAS System}.
    Cary, NC: SAS Institute Inc.
 
+   Torsten Hothorn, Frank Bretz and Peter Westfall (2008),
+   Simultaneous Inference in General Parametric Models.
+   \emph{Biometrical Journal}, \bold{50}(3) (forthcoming);
+   See \code{vignette("generalsiminf", package = "multcomp")}.
 
 }
 \examples{
