@@ -1086,8 +1086,3 @@ package vignette ``\Rcmd{generalsiminf}''.
 \bibliography{references}
 
 \end{document}
-
-\bibliographystyle{plainnat}
-\bibliography{references}
-
-\end{document}
