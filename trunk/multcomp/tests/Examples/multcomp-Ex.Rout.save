@@ -306,8 +306,9 @@ C 6 -0.1667 -0.3333 -0.5000 1.0000
 C 1 -1.0000  1.0000    0.0      0
 C 2 -0.3333 -0.6667    1.0      0
 C 3 -0.1667 -0.3333   -0.5      1
->  ### Umbrella-protected Williams contrasts, i.e. a sequence of Williams-type
->  ### contrasts with groups of higher order stepwise omitted
+>  ### Umbrella-protected Williams contrasts, i.e. a sequence of 
+>  ### Williams-type contrasts with groups of higher order 
+>  ### stepwise omitted
 >  contrMat(n, type = "UmbrellaWilliams")
 
 	 Multiple Comparisons of Means: UmbrellaWilliams Contrasts
@@ -1185,7 +1186,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  16.481 0.02 16.532 0 0 
+Time elapsed:  16.737 0.028 16.833 0 0 
 > grDevices::dev.off()
 null device 
           1 
