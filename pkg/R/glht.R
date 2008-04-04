@@ -1,4 +1,6 @@
 
+# $Id$
+
 ### general linear hypotheses
 glht <- function(model, linfct, ...) UseMethod("glht", linfct)
 

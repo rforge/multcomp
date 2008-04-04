@@ -1,5 +1,5 @@
 
-# $Id: simint.R,v 1.52 2005/07/25 15:25:05 hothorn Exp $
+# $Id$
 
 pqglht <- function(object) 
 {

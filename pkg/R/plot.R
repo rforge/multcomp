@@ -1,4 +1,6 @@
 
+# $Id$
+
 ### uhhh -- mainly copy and paste from plot.TukeyHSD
 ### with modifications by Richard M. Heiberger <rmh@temple.edu>
 plot.confint.glht <- function(x, xlim, xlab, ...) {

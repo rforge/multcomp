@@ -1,4 +1,6 @@
 
+# $Id$
+
 ### methods for `glht' objects
 coef.glht <- function(object, rhs = FALSE, ...) 
 {

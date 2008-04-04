@@ -1,4 +1,5 @@
 
+# $Id$
 
 ### oh dear!
 ### Cox models don't have any intercept ...

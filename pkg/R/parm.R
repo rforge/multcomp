@@ -1,4 +1,6 @@
 
+# $Id$
+
 parm <- function(coef, vcov, df = 0) {
 
     if (length(coef) != nrow(vcov) ||

@@ -1,4 +1,6 @@
 
+# $Id$
+
 ### determine if an expression `x' can be interpreted as numeric
 is_num <- function(x) {
     if (length(x) == 1) return(is.numeric(x))
