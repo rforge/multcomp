@@ -1,4 +1,9 @@
 
+		CHANGES in `multcomp' VERSION 1.0-1
+
+    o    make sure more than 2 groups are present in contrMat()
+
+
 		CHANGES in `multcomp' VERSION 1.0-0
 
     o    unify both vignettes
