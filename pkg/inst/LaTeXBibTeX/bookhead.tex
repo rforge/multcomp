@@ -1,0 +1,264 @@
+
+\documentclass{../LaTeXBibTeX/chapman}
+
+%%% copy Sweave.sty definitions
+
+%%% keeps `sweave' from adding `\usepackage{Sweave}': DO NOT REMOVE
+%\usepackage{Sweave} 
+
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage{graphicx,ae,fancyvrb}
+\IfFileExists{upquote.sty}{\RequirePackage{upquote}}{}
+\usepackage{relsize}
+
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{fontfamily=courier,
+                                              fontshape=it,
+                                              fontsize=\relsize{-1}}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{}
+\newenvironment{Schunk}{}{}
+
+%%% environment for raw output
+\newcommand{\SchunkRaw}{\renewenvironment{Schunk}{}{}
+    \DefineVerbatimEnvironment{Soutput}{Verbatim}{fontfamily=courier,
+                                                  fontshape=it,
+                                                  fontsize=\small}
+    \rawSinput
+}
+
+%%% environment for labeled output
+\newcommand{\nextcaption}{}
+\newcommand{\SchunkLabel}{
+  \renewenvironment{Schunk}{\begin{figure}[ht] }{\caption{\nextcaption}
+  \end{figure} }
+  \DefineVerbatimEnvironment{Sinput}{Verbatim}{frame = topline}
+  \DefineVerbatimEnvironment{Soutput}{Verbatim}{frame = bottomline, 
+                                                samepage = true,
+                                                fontfamily=courier,
+                                                fontshape=it,
+                                                fontsize=\relsize{-1}}
+}
+
+
+%%% S code with line numbers
+\DefineVerbatimEnvironment{Sinput}
+{Verbatim}
+{
+%%  numbers=left
+}
+
+\newcommand{\numberSinput}{
+    \DefineVerbatimEnvironment{Sinput}{Verbatim}{numbers=left}
+}
+\newcommand{\rawSinput}{
+    \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+}
+
+
+%%% R / System symbols
+\newcommand{\R}{\textsf{R}}
+\newcommand{\rR}{{R}}
+\renewcommand{\S}{\textsf{S}}
+\newcommand{\SPLUS}{\textsf{S-PLUS}}
+\newcommand{\rSPLUS}{{S-PLUS}}
+\newcommand{\SPSS}{\textsf{SPSS}}
+\newcommand{\EXCEL}{\textsf{Excel}}
+\newcommand{\ACCESS}{\textsf{Access}}
+\newcommand{\SQL}{\textsf{SQL}}
+%%\newcommand{\Rpackage}[1]{\hbox{\rm\textit{#1}}}
+%%\newcommand{\Robject}[1]{\hbox{\rm\texttt{#1}}}
+%%\newcommand{\Rclass}[1]{\hbox{\rm\textit{#1}}}
+%%\newcommand{\Rcmd}[1]{\hbox{\rm\texttt{#1}}}
+\newcommand{\Rpackage}[1]{\index{#1 package@\textit{#1} package}\textit{#1}}
+\newcommand{\Robject}[1]{\texttt{#1}}
+\newcommand{\Rclass}[1]{\index{#1 class@\textit{#1} class}\textit{#1}}
+\newcommand{\Rcmd}[1]{\index{#1 function@\texttt{#1} function}\texttt{#1}}
+\newcommand{\Roperator}[1]{\texttt{#1}}
+\newcommand{\Rarg}[1]{\texttt{#1}}
+\newcommand{\Rlevel}[1]{\texttt{#1}}
+
+
+%%% other symbols
+\newcommand{\file}[1]{\hbox{\rm\texttt{#1}}}
+%%\newcommand{\stress}[1]{\index{#1}\textit{#1}} 
+\newcommand{\stress}[1]{\textit{#1}} 
+\newcommand{\booktitle}[1]{`#1'} %%'
+
+%%% Math symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\newcommand{\bm}[1]{{\boldsymbol {#1}}}
+\newcommand{\bma}{{\bm a}}
+\newcommand{\bmb}{{\bm b}}
+\newcommand{\bmc}{{\bm c}}
+\newcommand{\bmd}{{\bm d}}
+\newcommand{\bme}{{\bm e}}
+\newcommand{\bmf}{{\bm f}}
+\newcommand{\bmg}{{\bm g}}
+\newcommand{\bmh}{{\bm h}}
+\newcommand{\bmi}{{\bm i}}
+\newcommand{\bmj}{{\bm j}}
+\newcommand{\bmk}{{\bm k}}
+\newcommand{\bml}{{\bm l}}
+\newcommand{\bmm}{{\bm m}}
+\newcommand{\bmn}{{\bm n}}
+\newcommand{\bmo}{{\bm p}}
+\newcommand{\bmp}{{\bm o}}
+\newcommand{\bmq}{{\bm q}}
+\newcommand{\bmr}{{\bm r}}
+\newcommand{\bms}{{\bm s}}
+\newcommand{\bmt}{{\bm t}}
+\newcommand{\bmu}{{\bm u}}
+\newcommand{\bmv}{{\bm v}}
+\newcommand{\bmw}{{\bm w}}
+\newcommand{\bmx}{{\bm x}}
+\newcommand{\bmy}{{\bm y}}
+\newcommand{\bmz}{{\bm z}}
+
+\newcommand{\bmA}{{\bm A}}
+\newcommand{\bmB}{{\bm B}}
+\newcommand{\bmC}{{\bm C}}
+\newcommand{\bmD}{{\bm D}}
+\newcommand{\bmE}{{\bm E}}
+\newcommand{\bmF}{{\bm F}}
+\newcommand{\bmG}{{\bm G}}
+\newcommand{\bmH}{{\bm H}}
+\newcommand{\bmI}{{\bm I}}
+\newcommand{\bmJ}{{\bm J}}
+\newcommand{\bmK}{{\bm K}}
+\newcommand{\bmL}{{\bm L}}
+\newcommand{\bmM}{{\bm M}}
+\newcommand{\bmN}{{\bm N}}
+\newcommand{\bmO}{{\bm O}}
+\newcommand{\bmP}{{\bm P}}
+\newcommand{\bmQ}{{\bm Q}}
+\newcommand{\bmR}{{\bm R}}
+\newcommand{\bmS}{{\bm S}}
+\newcommand{\bmT}{{\bm T}}
+\newcommand{\bmU}{{\bm U}}
+\newcommand{\bmV}{{\bm V}}
+\newcommand{\bmW}{{\bm W}}
+\newcommand{\bmX}{{\bm X}}
+\newcommand{\bmY}{{\bm Y}}
+\newcommand{\bmZ}{{\bm Z}}
+
+\newcommand{\eps}{\epsilon}
+\newcommand{\sig}{\sigma}
+\newcommand{\Sig}{\Sigma}
+\newcommand{\vt}{\vartheta}
+\newcommand{\vareps}{\varepsilon}
+
+\newcommand{\bmalpha}{\bm\alpha}
+\newcommand{\bmbeta}{\bm\beta}
+\newcommand{\bmgamma}{\bm\gamma}
+\newcommand{\bmdelta}{\bm\delta}
+\newcommand{\bmeps}{\bm\epsilon}
+\newcommand{\bmvareps}{\bm\epsilon}
+\newcommand{\bmzeta}{\bm\zeta}
+\newcommand{\bmeta}{\bm\eta}
+\newcommand{\bmtheta}{\bm\theta}
+\newcommand{\bmvartheta}{\bm\vartheta}
+\newcommand{\bmiota}{\bm\iota}
+\newcommand{\bmkappa}{\bm\kappa}
+\newcommand{\bmlambda}{\bm\lambda}
+\newcommand{\bmmu}{\bm\mu}
+\newcommand{\bmnu}{\bm\nu}
+
+\newcommand{\bmxi}{\bm\xi}
+\newcommand{\bmgo}{\bm\o}
+\newcommand{\bmpi}{\bm\pi}
+\newcommand{\bmvarpi}{\bm\varpi}
+\newcommand{\bmrho}{\bm\rho}
+\newcommand{\bmvarrho}{\bm\varrho}
+\newcommand{\bmsigma}{\bm\sigma}
+\newcommand{\bmvarsigma}{\bm\varsigma}
+\newcommand{\bmtau}{\bm\tau}
+\newcommand{\bmupsilon}{\upsilon}
+\newcommand{\bmphi}{\bm\phi}
+\newcommand{\bmvarphi}{\bm\varphi}
+\newcommand{\bmchi}{\bm\chi}
+\newcommand{\bmpsi}{\bm \psi}
+\newcommand{\bmomega}{\bm\omega}
+
+\newcommand{\bmGamma}{\bm\Gamma}
+\newcommand{\bmDelta}{\bm\Delta}
+\newcommand{\bmTheta}{\bm\Theta}
+\newcommand{\bmLambda}{\bm\Lambda}
+\newcommand{\bmXi}{\bm\Xi}
+\newcommand{\bmPi}{\bm\Pi}
+\newcommand{\bmSigma}{\bm\Sigma}
+\newcommand{\bmUpsilon}{\Upsilon}
+\newcommand{\bmPhi}{\bm\Phi}
+\newcommand{\bmPsi}{\bm \Psi}
+\newcommand{\bmOmega}{\bm\Omega}
+
+
+\newcommand{\gauss}{{\cal N}}
+\newcommand{\inv}{{^{-1}}}
+\newcommand{\pr}{{^\prime}}
+\newcommand{\bzero}{{\bm 0}}
+\newcommand{\bone}{{\bm 1}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\nat}{\mathbb{N}}
+
+
+%%% links
+\usepackage{hyperref}
+
+\hypersetup{%
+  pdftitle = {Multiple Comparisons in R},
+  pdfsubject = {Book},
+  pdfauthor = {Bretz, Hothorn, Westfall},
+  colorlinks = {true},
+  linkcolor = {blue},
+  citecolor = {blue},
+  urlcolor = {red},
+  hyperindex = {true},
+  linktocpage = {true},
+}
+
+
+%%% captions & tables
+%% <FIXME>: conflics with figure definition in chapman.cls
+%%\usepackage[format=hang,margin=10pt,labelfont=bf]{caption}
+%% </FIMXE>
+\usepackage{longtable}
+\usepackage{rotating}
+
+%%% R symbol in chapter 1
+\usepackage{wrapfig}
+
+%%% Bibliography
+\usepackage[round,comma]{natbib}
+\renewcommand{\refname}{References \addcontentsline{toc}{chapter}{References}}
+\citeindexfalse
+
+%%% texi2dvi complains that \newblock is undefined, hm...
+\def\newblock{\hskip .11em plus .33em minus .07em}
+
+%%% Example sections
+\newcounter{exercise}[chapter]
+\setcounter{exercise}{0}
+\newcommand{\exercise}{\item{\stepcounter{exercise} Ex.
+                       \arabic{chapter}.\arabic{exercise} }}
+
+
+%% URLs
+\newcommand{\curl}[1]{\begin{center} \url{#1} \end{center}}
+
+%%% for manual corrections
+%\renewcommand{\baselinestretch}{2}
+
+%%% plot sizes
+\setkeys{Gin}{width=0.95\textwidth}
+
+%%% color
+\usepackage{color}
+
+%%% hyphenations
+\hyphenation{drop-out}
+
+%%% new bidirectional quotes need 
+\usepackage[utf8]{inputenc}

@@ -1,0 +1,182 @@
+
+\input{../LaTeXBibTeX/bookhead}
+
+%%% line numbering, for proof-reading only
+%% \usepackage[pagewise,switch]{lineno}
+
+%%% Author index
+%%\usepackage{authorindex}
+%%\let\cite=\aicite
+
+\usepackage{upquote}
+
+%% index
+\usepackage{makeidx}
+\makeindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Insert the below macro in your tex file preamble area %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\makeatletter
+
+%%% Below Macro removes the preface, list of figures and Tables form toc
+%%%%%%
+
+\def\@schapter#1{% 
+  \chaptermark{#1}%
+  \addtocontents{lof}{\protect\addvspace{10pt}}%
+  \addtocontents{lot}{\protect\addvspace{10pt}}%
+  \thispagestyle{empty}
+  \if@nocntentry
+  \else
+    %\addcontentsline{toc}{chapter}{#1}%
+  \fi
+  \if@twocolumn
+    \@topnewpage[\@makeschapterhead{#1}]%
+  \else
+    \@makeschapterhead{#1}\@afterheading
+  \fi
+}
+
+
+%%% For empty pages with crop marks %%%%
+
+\def\ps@empty{%
+     \let\@mkboth\@gobbletwo
+     \let\@oddhead\top@cornermarks
+    \let\@evenhead\top@cornermarks
+     \def\@oddfoot{}% 
+     \def\@evenfoot{}%
+}
+
+
+
+% UPDATED LIST OF FIGURES MACRO
+%
+\def\listoffigures{\@restonecolfalse
+ \if@twocolumn \@restonecoltrue\onecolumn \fi
+\chapter*{List of Figures}
+\thispagestyle{empty}
+% \@mkboth{List of Figures}{List of Figures}
+ \@starttoc{lof}
+ \if@restonecol \twocolumn \fi
+}
+ 
+%
+% UPDATED LIST OF TABLES MACRO
+%
+\def\listoftables{\@restonecolfalse
+ \if@twocolumn \@restonecoltrue \onecolumn \fi
+ \chapter*{List of Tables}
+\thispagestyle{empty}
+% \@mkboth{List of Tables}{List of Tables}
+ \@starttoc{lot}
+ \if@restonecol \twocolumn\fi
+}
+
+%
+% Updated Contents
+%
+
+\def\tableofcontents{\@restonecolfalse
+  \if@twocolumn
+    \@restonecoltrue\onecolumn
+  \fi
+  \@nocntentrytrue
+  \chapter*{Contents}%
+  \pagestyle{empty}
+  \@nocntentryfalse
+% \@mkboth{Contents}{Contents}%
+  \@starttoc{toc}%
+  \if@restonecol\twocolumn\fi
+}
+
+\def\l@figure{\@dottedtocline{1}{1.5em}{2.9em}}
+\def\l@table{\@dottedtocline{1}{1.5em}{2.9em}}
+
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\input{../LaTeXBibTeX/booktitle}
+
+\maketitle
+
+
+\ 
+
+\thispagestyle{empty}
+
+\cleardoublepage
+
+\ 
+
+\thispagestyle{empty}
+
+\cleardoublepage
+
+\begin{center}
+\large{
+Dedication \\
+\vspace{1cm}
+To everybody}
+\end{center}
+
+\ 
+
+\thispagestyle{empty}
+
+\cleardoublepage
+
+\pagestyle{empty}
+
+\input{preface}
+
+\listoffigures
+
+\listoftables
+
+\tableofcontents
+
+\clearpage
+
+%% \linenumbers
+
+\input{Ch_Introduction}
+
+\input{Ch_Error_Rates}
+
+
+%% \addcontentsline{toc}{chapter}{Bibliography}
+
+\makeatletter
+\def\@schapter#1{%
+  \chaptermark{#1}%
+  \addtocontents{lof}{\protect\addvspace{10pt}}%
+  \addtocontents{lot}{\protect\addvspace{10pt}}%
+  \if@nocntentry
+  \else
+    \addcontentsline{toc}{chapter}{#1}%
+  \fi
+  \if@twocolumn
+    \@topnewpage[\@makeschapterhead{#1}]%
+  \else
+    \@makeschapterhead{#1}\@afterheading
+  \fi
+}
+\makeatother
+
+
+\bibliographystyle{../LaTeXBibTeX/refstyle}
+\bibliography{../LaTeXBibTeX/references}
+
+\thispagestyle{headings}
+
+\printindex
+
+\end{document}

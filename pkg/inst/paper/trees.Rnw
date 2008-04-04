@@ -1,0 +1,85 @@
+
+\SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE}
+
+<<warning, echo = FALSE, results = tex>>=
+cat("\n\n\t%%%% DON'T EDIT THIS FILE\n\n")
+@
+
+
+<<setup, echo = FALSE, results = hide>>=
+options(prompt = "R> ")
+options(SweaveHooks = list(mai = function() par(mai = par("mai") * c(1, 3, 1, 1))))
+library("multcomp")
+library("lme4")
+data("trees513", package = "multcomp")
+@
+
+\subsection{Forest Regeneration} \label{forest}
+
+In most parts of Germany, the natural or artificial 
+regeneration of forests is difficult due to a high browsing
+intensity. Young trees suffer from browsing damage, mostly by roe 
+and red deer. In order to estimate the browsing intensity for
+several tree species, the Bavarian State Ministry of Agriculture
+and Forestry conducts a survey every three years. Based on 
+the estimated percentage of damaged trees, suggestions for
+the implementation or modification of deer management plans are made.
+The survey takes place in all $756$ game management districts 
+(`Hegegemeinschaften') in Bavaria. Here, we focus on the 2006 data 
+of the game management district number 513 `Unterer Aischgrund' 
+(located in Frankonia between Erlangen and H\"ochstadt). The data
+of \Sexpr{nrow(trees513)} trees include the species and a binary
+variable indicating whether or not the tree suffers from damage caused
+by deer browsing. We fit a mixed logistic regression model 
+\citep[using package \Rpackage{lme4},][]{Rnews:Bates:2005,pkg:lme4}
+without intercept and with random effects accounting for the spatial variation
+of the trees. For each plot nested within a set of five plots
+orientated on a 100m transect (the location of the transect
+is determined by a pre-defined equally spaced lattice of the area under test), 
+a random intercept is included in the model. We are interested
+in probability estimates and confidence intervals for each tree species.
+Each of the six fixed parameters of the model corresponds to one species,
+therefore, $\K = \text{diag}(6)$ is the linear function we are interested
+in:
+<<trees-setup, echo = FALSE, results = hide>>=
+trees513 <- subset(trees513, !species %in% c("fir", "softwood (other)"))
+trees513$species <- trees513$species[,drop = TRUE]
+@
+
+<<trees-lmer, echo = TRUE>>=
+mmod <- lmer(damage ~ species - 1 + (1 | lattice / plot),
+              data = trees513, family = binomial())
+K <- diag(length(fixef(mmod)))
+@
+
+<<trees-K-cosmetics, echo = FALSE, results = hide>>=
+colnames(K) <- rownames(K) <- 
+    paste(gsub("species", "", names(fixef(mmod))), 
+          " (", table(trees513$species), ")", sep = "")
+@
+
+Based on $\K$, we first compute simultaneous confidence intervals
+for $\K \theta$ and transform these into probabilities:
+<<trees-ci, echo = TRUE>>=
+ci <- confint(glht(mmod, linfct = K))
+ci$confint <- 1 - binomial()$linkinv(ci$confint)
+ci$confint[,2:3] <- ci$confint[,3:2]
+@
+The result is shown in Figure~\ref{browsing}. Browsing
+is less frequent in hardwood but especially small oak trees are severely
+at risk.  Consequently, the local authorities increased the number of roe deers 
+to be harvested in the following years.
+The large confidence interval for ash, maple, elm and lime
+trees is caused by the small sample size.
+
+\setkeys{Gin}{width=0.8\textwidth}
+\begin{figure}[t]
+\begin{center}
+<<trees-plot, echo = FALSE, mai = TRUE, fig = TRUE, width = 7, height = 4.5>>=
+plot(ci, xlab = "Probability of Damage Caused by Browsing", xlim = c(0, 1), main = "",
+     ylim = c(0.5, 6.5))
+@
+\caption{\Robject{trees513} data: Probability of damage caused by roe deer browsing 
+   for six tree species. Sample sizes are given in brackets. \label{browsing}}
+\end{center}
+\end{figure}
