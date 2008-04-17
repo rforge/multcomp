@@ -1,0 +1,325 @@
+
+\documentclass[landscape]{slides}
+
+%%\usepackage{Sweave}
+
+
+
+\usepackage[coloremph,colorhighlight,LMU,nologo,printout]{RSlides}
+\usepackage{url,listings}
+\usepackage{SweaveSlides}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{hyperref}
+
+\input{header}
+\usepackage{amstext}
+
+\title{Simultaneous Inference in \\ General Parametric Models}
+\author{Torsten Hothorn \\ Institut für Statistik \\ 
+(in collaboration with Frank Bretz and \\ Peter Westfall)}
+\fancyfoot[L]{\tiny 2008-04-25} %%\copyright{} 2007 Friedrich Leisch
+\fancyfoot[R]{\arabic{page}}
+
+\sloppy
+
+\begin{document}
+
+\maketitle
+
+\newslide{Introduction}
+
+\newslide{Model}
+
+$\M((\Z_1, \dots, \Z_n), \theta, \eta)$ is a (semiparametric) model with
+
+\begin{itemize}
+\item $n$ observations $(\Z_1, \dots, \Z_n)$
+\item elemental parameters $\theta \in \R^p$ and
+\item other (random or nuisance) parameters $\eta$.
+\end{itemize}
+
+We are interested in linear functions $\vartheta := \K \theta$ defined
+by a constant matrix $\K \in \R^{k, p}$.
+
+\newslide{Estimation}
+
+$\hat{\theta}_n \in \R^p$ is an estimate of $\theta$ and
+$\Sraw \in \R^{p,p}$ is an estimate of $\cov(\hat{\theta}_n)$ with
+\begin{eqnarray*}
+a_n \Sraw \cP \Sigmaraw \in \R^{p,p}
+\end{eqnarray*}
+for some positive, nondecreasing sequence $a_n$.
+
+A multivariate central limit theorem is assumed:
+\begin{eqnarray*}
+a_n^{1/2} (\hat{\theta}_n - \theta) \cL \N_p(0, \Sigmaraw).
+\end{eqnarray*}
+
+We write $\hat{\theta}_n \an \N_p(\theta, \Sraw)$.
+
+These assumptions are fulfilled for most of the models commonly in use.
+
+\newslide{Distribution of $\vartheta$}
+
+By Theorem 3.3.A in
+\cite{Serfling1980}, the linear function $\hat{\vartheta}_n = \K 
+\hat{\theta}_n$, i.e., an estimate of our parameters of interest,
+also follows an approximate multivariate normal
+distribution
+\begin{eqnarray*}
+\hat{\vartheta}_n = \K \hat{\theta}_n \an \N_k(\vartheta, \SK)
+\end{eqnarray*}
+with covariance matrix $\SK := \K \Sraw \K^\top$
+for any fixed matrix $\K \in \R^{k,p}$
+
+Therefore, we simply assume
+\begin{eqnarray*}
+\hat{\vartheta}_n \an \N_k(\vartheta, \SK) \text{ with }
+a_n \SK \cP \SigmaK := \K \Sigma \K^\top \in \R^{k,k}
+\end{eqnarray*}
+
+\newslide{A Statistic and its Distribution}
+
+Consider the multivariate statistic
+\begin{eqnarray*}
+\T_n := %% \frac{\hat{\vartheta}_n - \vartheta}{\sqrt{\diag(\SK)}} =
+\D_n^{-1/2} (\hat{\vartheta}_n - \vartheta) 
+%%\an \N_k(0, \Cor_n)
+\end{eqnarray*}
+where $\D_n = \diag(\SK)$ is the diagonal matrix given by the diagonal elements of
+$\SK$.
+
+By Slutzky's Theorem, this statistic is again asymptotically normally
+distributed
+\begin{eqnarray*}
+\T_n \an \N_k(0, \Cor_n)
+\end{eqnarray*}
+where
+\begin{eqnarray*}
+\Cor_n = \D_n^{-1/2} \SK \D_n^{-1/2} \in \R^{k,k}
+\end{eqnarray*}
+is the correlation matrix of the $k$-dimensional statistic $\T_n$. 
+
+
+\newslide{General Linear Hypothesis}
+
+Consider the null hypothesis
+\begin{eqnarray*}
+H_0: \vartheta := \K \theta = \m.
+\end{eqnarray*}
+
+Classically, $F$- or $\chi^2$-statistics are used to test $H_0$.
+However, a rejection of $H_0$ 
+does not give further indication about the nature of the significant
+result. Therefore, one is often interested in the individual null hypotheses
+\begin{eqnarray*}
+H_0^j: \vartheta_j = \m_j.
+\end{eqnarray*}
+
+Testing the hypotheses set $\{H_0^1, \ldots, H_0^k\}$ simultaneously thus requires the individual
+assessments while maintaining the familywise error rate.
+
+\newslide{A Maximum-Type Statistic}
+
+An alternative test statistic for testing $H_0$ is
+\begin{eqnarray*}
+\max(|\T_n|)
+\end{eqnarray*}
+
+Can we approximate it's distribution under $H_0$ efficiently?
+
+We have to find a good approximation of $\Prob(\max(|\T_n|) \le t)$
+for some $t \in \R^+$.
+
+\newslide{Null-Distribution and a Global Test}
+
+\begin{eqnarray*}
+\Prob(\max(|\T_n|) \le t) = \int\limits_{-t}^t \cdots \int\limits_{-t}^t
+\varphi_k(x_1, \dots, x_k; \Cor) \, dx_1 \cdots dx_k =: g(\Cor, t) 
+\end{eqnarray*}
+where $\varphi_k$ is the $k$-dimensional normal density function.
+
+$\Cor$ is not known but $g(\Cor, t)$ is a continuous function of $\Cor$ 
+and converges as $\Cor_n \cP \Cor$. The integral can be approximated
+by quasi-randomized Monte-Carlo methods \citep{Genz1992,GenzBretz1999}.
+
+The resulting global $p$-value 
+for $H_0$ is then 
+\begin{eqnarray*}
+p_\text{global} = 1 - g(\Cor_n, \max|\tt|)
+\end{eqnarray*}
+when $\T = \tt$ has been observed.
+
+\newslide{Simultaneous Inference}
+
+But what about the partial hypotheses $H_0^1, \ldots, H_0^k$?
+
+It's simple!
+
+The multiplicity adjusted $p$-value for the $j$th
+individual two-sided hypothesis 
+\begin{eqnarray*}
+H_0^j: \vartheta_j = \m_j, j = 1, \dots, k,
+\end{eqnarray*}
+is given by 
+\begin{eqnarray*}
+p_j = 1 - g(\Cor_n, |t_j|),
+\end{eqnarray*}
+where $t_1, \dots, t_k$ denote the observed test statistics (single-step procedure).
+
+Reject each $H_0^j$ at family-wise error rate $\alpha$ when $p_j \leq \alpha$.
+
+\newslide{Simultenous Confidence Intervals}
+
+A simultaneous $(1 - 2\alpha)
+\times 100\%$ confidence interval for $\vartheta$ is given by 
+\begin{eqnarray*}
+\hat{\vartheta}_n \pm q_\alpha \D_n^{1/2}
+\end{eqnarray*}
+where $q_\alpha$ is the (approximate) $1 - \alpha$ quantile of the distribution of $\T_n$.
+
+\newslide{Examples: Linear Regression}
+
+Observations $\Z_i = (Y_i, \X_i), i = 1, \dots, n$ consist of a response $Y_i$
+and exploratory variables $\X_i = (X_{i1}, \dots, X_{iq})$.
+
+Model:
+\begin{eqnarray*}
+Y_i = \beta_0 + \sum_{j = 1}^q \beta_j X_{ij} + \sigma \varepsilon_i,
+\end{eqnarray*}
+with elemental parameters $\theta = (\beta_0, \beta_1, \dots, \beta_q)$
+estimated via
+\begin{eqnarray*}
+\hat{\theta}_n = \left(\X^\top\X\right)^{-1} \X^\top \Y \sim \N%
+_{q+1}\left(\theta, \sigma^2 \left(\X^\top\X\right)^{-1}\right),
+\end{eqnarray*}
+
+Now
+\begin{eqnarray*}
+\hat{\vartheta}_n = \K \hat{\theta}_n \sim \N_k(\K \theta, \sigma^2 \K \left(\X^\top\X%
+\right)^{-1} \K^\top)
+\end{eqnarray*}
+and
+\begin{eqnarray*}
+\T_n = \D_n^{-1/2} \hat{\vartheta}_n \sim t_{q+1}(n - q, \Cor),
+\end{eqnarray*}
+(Note: the normal density $\varphi_k$ can be replaced by the
+$t$-density in this case!)
+
+\newslide{Predicting Body Fat}
+
+\cite{garcia2005} describe a linear model
+for total body fat prediction.
+
+\textbf{Aim:} Based on $p = 9$ simple measurements (circumferences of elbow, knee etc)
+we want to estimate a simple (!) formula to predict the total body fat obtained for
+$n = 71$ healthy German women by means of Dual Energy X-Ray Absorptiometry. 
+
+\textbf{Problem:} Variable selection!
+
+\newslide{Linear Model Fit}
+
+\begin{Schunk}
+\begin{Sinput}
+R> data("bodyfat", package = "mboost")
+R> summary(lmod <- lm(DEXfat ~ ., data = bodyfat))
+\end{Sinput}
+\begin{Soutput}
+Call:
+lm(formula = DEXfat ~ ., data = bodyfat)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.9539 -1.9494 -0.2190  1.1693 10.8119 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  -69.02828    7.51686  -9.183 4.18e-13 ***
+age            0.01996    0.03221   0.620  0.53777    
+waistcirc      0.21049    0.06714   3.135  0.00264 ** 
+hipcirc        0.34351    0.08037   4.274 6.85e-05 ***
+elbowbreadth  -0.41237    1.02291  -0.403  0.68826    
+kneebreadth    1.75798    0.72495   2.425  0.01829 *  
+anthro3a       5.74230    5.20752   1.103  0.27449    
+anthro3b       9.86643    5.65786   1.744  0.08622 .  
+anthro3c       0.38743    2.08746   0.186  0.85338    
+anthro4       -6.57439    6.48918  -1.013  0.31500    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+
+Residual standard error: 3.281 on 61 degrees of freedom
+Multiple R-squared: 0.9231,	Adjusted R-squared: 0.9117 
+F-statistic: 81.35 on 9 and 61 DF,  p-value: < 2.2e-16 
+\end{Soutput}
+\end{Schunk}
+
+
+\newslide{Parameters of Interest}
+
+\begin{Schunk}
+\begin{Sinput}
+R> K <- cbind(0, diag(length(coef(lmod)) - 1))
+R> rownames(K) <- names(coef(lmod))[-1]
+R> lmod_glht <- glht(lmod, linfct = K) 
+\end{Sinput}
+\end{Schunk}
+
+\newslide{$F$-Test}
+
+\begin{Schunk}
+\begin{Sinput}
+R> summary(lmod_glht, test = Ftest())
+\end{Sinput}
+\begin{Soutput}
+	 General Linear Hypotheses
+
+Linear Hypotheses:
+                  Estimate
+age == 0           0.01996
+waistcirc == 0     0.21049
+hipcirc == 0       0.34351
+elbowbreadth == 0 -0.41237
+kneebreadth == 0   1.75798
+anthro3a == 0      5.74230
+anthro3b == 0      9.86643
+anthro3c == 0      0.38743
+anthro4 == 0      -6.57439
+
+Global Test:
+      F DF1 DF2    Pr(>F)
+1 81.35   9  61 1.387e-30
+\end{Soutput}
+\end{Schunk}
+
+\newslide{Maximum Test}
+\begin{Schunk}
+\begin{Sinput}
+R> summary(lmod_glht)
+\end{Sinput}
+\begin{Soutput}
+	 Simultaneous Tests for General Linear Hypotheses
+
+Fit: lm(formula = DEXfat ~ ., data = bodyfat)
+
+Linear Hypotheses:
+                  Estimate Std. Error t value p value    
+age == 0           0.01996    0.03221   0.620  0.9959    
+waistcirc == 0     0.21049    0.06714   3.135  0.0213 *  
+hipcirc == 0       0.34351    0.08037   4.274  <0.001 ***
+elbowbreadth == 0 -0.41237    1.02291  -0.403  0.9998    
+kneebreadth == 0   1.75798    0.72495   2.425  0.1316    
+anthro3a == 0      5.74230    5.20752   1.103  0.8948    
+anthro3b == 0      9.86643    5.65786   1.744  0.4783    
+anthro3c == 0      0.38743    2.08746   0.186  1.0000    
+anthro4 == 0      -6.57439    6.48918  -1.013  0.9295    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+(Adjusted p values reported -- single-step method)
+\end{Soutput}
+\end{Schunk}
+
+
+\end{document}
+
