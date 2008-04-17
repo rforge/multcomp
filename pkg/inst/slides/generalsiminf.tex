@@ -2,12 +2,14 @@
 \documentclass[landscape]{slides}
 
 %%\usepackage{Sweave}
+\newenvironment{thebibliography}{}
 
 
 
-\usepackage[coloremph,colorhighlight,LMU,nologo,printout]{RSlides}
+\usepackage[coloremph,colorhighlight,LMU,printout]{RSlides}
 \usepackage{url,listings}
 \usepackage{SweaveSlides}
+\usepackage{natbib}
 
 \usepackage[utf8]{inputenc}
 
@@ -15,6 +17,8 @@
 
 \input{header}
 \usepackage{amstext}
+
+\setkeys{Gin}{height = 0.9\textheight}
 
 \title{Simultaneous Inference in \\ General Parametric Models}
 \author{Torsten Hothorn \\ Institut für Statistik \\ 
@@ -29,6 +33,13 @@
 \maketitle
 
 \newslide{Introduction}
+
+\begin{center}
+\includegraphics{figs/verbiss}
+\includegraphics{figs/reh}
+\includegraphics{figs/zaun}
+\includegraphics[height=\textheight]{figs/rotbuche2007}
+\end{center}
 
 \newslide{Model}
 
@@ -224,34 +235,25 @@ $n = 71$ healthy German women by means of Dual Energy X-Ray Absorptiometry.
 \begin{Schunk}
 \begin{Sinput}
 R> data("bodyfat", package = "mboost")
-R> summary(lmod <- lm(DEXfat ~ ., data = bodyfat))
+R> lmod <- lm(DEXfat ~ ., data = bodyfat)
+R> summary(lmod)
 \end{Sinput}
+\end{Schunk}
+\begin{Schunk}
 \begin{Soutput}
-Call:
-lm(formula = DEXfat ~ ., data = bodyfat)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--6.9539 -1.9494 -0.2190  1.1693 10.8119 
-
-Coefficients:
-              Estimate Std. Error t value Pr(>|t|)    
-(Intercept)  -69.02828    7.51686  -9.183 4.18e-13 ***
-age            0.01996    0.03221   0.620  0.53777    
-waistcirc      0.21049    0.06714   3.135  0.00264 ** 
-hipcirc        0.34351    0.08037   4.274 6.85e-05 ***
-elbowbreadth  -0.41237    1.02291  -0.403  0.68826    
-kneebreadth    1.75798    0.72495   2.425  0.01829 *  
-anthro3a       5.74230    5.20752   1.103  0.27449    
-anthro3b       9.86643    5.65786   1.744  0.08622 .  
-anthro3c       0.38743    2.08746   0.186  0.85338    
-anthro4       -6.57439    6.48918  -1.013  0.31500    
+               Estimate Std. Error t value  Pr(>|t|)    
+(Intercept)  -69.028276   7.516860 -9.1831 4.184e-13 ***
+age            0.019962   0.032213  0.6197  0.537767    
+waistcirc      0.210487   0.067145  3.1348  0.002644 ** 
+hipcirc        0.343513   0.080373  4.2740 6.852e-05 ***
+elbowbreadth  -0.412369   1.022907 -0.4031  0.688259    
+kneebreadth    1.757984   0.724952  2.4250  0.018286 *  
+anthro3a       5.742295   5.207524  1.1027  0.274492    
+anthro3b       9.866431   5.657864  1.7438  0.086224 .  
+anthro3c       0.387430   2.087463  0.1856  0.853376    
+anthro4       -6.574395   6.489177 -1.0131  0.314999    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-
-Residual standard error: 3.281 on 61 degrees of freedom
-Multiple R-squared: 0.9231,	Adjusted R-squared: 0.9117 
-F-statistic: 81.35 on 9 and 61 DF,  p-value: < 2.2e-16 
 \end{Soutput}
 \end{Schunk}
 
@@ -263,7 +265,20 @@ F-statistic: 81.35 on 9 and 61 DF,  p-value: < 2.2e-16
 R> K <- cbind(0, diag(length(coef(lmod)) - 1))
 R> rownames(K) <- names(coef(lmod))[-1]
 R> lmod_glht <- glht(lmod, linfct = K) 
+R> K
 \end{Sinput}
+\begin{Soutput}
+             [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+age             0    1    0    0    0    0    0    0    0     0
+waistcirc       0    0    1    0    0    0    0    0    0     0
+hipcirc         0    0    0    1    0    0    0    0    0     0
+elbowbreadth    0    0    0    0    1    0    0    0    0     0
+kneebreadth     0    0    0    0    0    1    0    0    0     0
+anthro3a        0    0    0    0    0    0    1    0    0     0
+anthro3b        0    0    0    0    0    0    0    1    0     0
+anthro3c        0    0    0    0    0    0    0    0    1     0
+anthro4         0    0    0    0    0    0    0    0    0     1
+\end{Soutput}
 \end{Schunk}
 
 \newslide{$F$-Test}
@@ -319,6 +334,169 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 (Adjusted p values reported -- single-step method)
 \end{Soutput}
 \end{Schunk}
+
+\newslide{ANOVA}
+
+Model:
+\begin{eqnarray*}
+Y_{ij} = \mu + \gamma_{j} + \varepsilon_{ij}
+\end{eqnarray*}
+
+Overparameterized, usually the elemental parameters are
+$theta = (\mu, \gamma_2 - \gamma_1, \gamma_3 - \gamma_1, \dots, \gamma_q - \gamma_1)$.
+
+\textbf{Dunnett many-to-one comparisons}:
+\begin{eqnarray*}
+\K_\text{Dunnett} &=& (0, \diag(q)) \\
+\vartheta_\text{Dunnett} &=& \K_\text{Dunnett} \theta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1,
+\dots, \gamma_q - \gamma_1)
+\end{eqnarray*}
+
+\textbf{Tukey all-pair comparisons}:
+\begin{eqnarray*}
+\K_\text{Tukey} &=& \left(
+\begin{array}{rrr}
+0 & 1 & 0 \\ 
+0 & 0 & 1 \\ 
+0 & 1 & -1%  
+\end{array}  
+\right) \\
+\vartheta_\text{Tukey} &=& \K_\text{Tukey} \theta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1,
+\gamma_2 - \gamma_3).
+\end{eqnarray*}
+
+\newslide{Genetic Components of Alcoholism}
+
+\begin{center}   
+\includegraphics{generalsiminf-alpha-data-figure}
+\end{center}
+
+\newpage
+
+\begin{Schunk}
+\begin{Sinput}
+R> data("alpha", package = "coin")   
+R> amod <- aov(elevel ~ alength, data = alpha)
+R> confint(glht(amod, linfct = mcp(alength = "Tukey")))
+\end{Sinput}
+\begin{Soutput}
+	 Simultaneous Confidence Intervals
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: aov(formula = elevel ~ alength, data = alpha)
+
+Estimated Quantile = 2.3716
+95% family-wise confidence level
+ 
+
+Linear Hypotheses:
+                          Estimate lwr      upr     
+intermediate - short == 0  0.43415 -0.47569  1.34399
+long - short == 0          1.18875 -0.04509  2.42259
+long - intermediate == 0   0.75460 -0.33128  1.84047
+\end{Soutput}
+\end{Schunk}
+
+\newpage
+
+\begin{Schunk}
+\begin{Sinput}
+R> amod_glht_sw <- glht(amod, linfct = mcp(alength = "Tukey"),
++                       vcov = sandwich)
+R> confint(amod_glht_sw)
+\end{Sinput}
+\begin{Soutput}
+	 Simultaneous Confidence Intervals
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: aov(formula = elevel ~ alength, data = alpha)
+
+Estimated Quantile = 2.372
+95% family-wise confidence level
+ 
+
+Linear Hypotheses:
+                          Estimate   lwr        upr       
+intermediate - short == 0  0.4341523 -0.5714214  1.4397260
+long - short == 0          1.1887500  0.1375775  2.2399225
+long - intermediate == 0   0.7545977 -0.0005637  1.5097591
+\end{Soutput}
+\end{Schunk}
+
+\newpage
+
+\setkeys{Gin}{height = 0.6\textheight}
+\begin{center}
+\includegraphics{generalsiminf-alpha-confint-plot}
+\end{center}  
+
+\newslide{Generalized Mixed Models}
+
+Model:
+\begin{eqnarray*}
+\E(\mathbf{y}_i) = h(\mathbf{X}_i \theta + \mathbf{Z} \mathbf{b}_i)
+\end{eqnarray*}
+for the $n_i$ observations in group $i$ with random effects $\mathbf{b}_i$.
+
+We are interested in inference about $\K \theta$. For example in a logistic mixed model, in
+confidence intervals for the predicted probabilities
+\begin{eqnarray*}
+\left(\left(1 + \exp\left(- \left(\hat{\vartheta}_n - q_\alpha \D_n^{1/2}\right)\right)\right)^{-1},
+\left(1 + \exp\left(- \left(\hat{\vartheta}_n + q_\alpha \D_n^{1/2}\right)\right)\right)^{-1}\right).
+\end{eqnarray*}
+
+\newslide{Dear Browsing in Frankonia}
+
+
+
+\begin{Schunk}
+\begin{Sinput}
+R> mmod <- lmer(damage ~ species - 1 + (1 | lattice / plot),
++               data = trees513, family = binomial())
+R> K <- diag(length(fixef(mmod)))
+\end{Sinput}
+\end{Schunk}
+
+
+\begin{Schunk}
+\begin{Sinput}
+R> ci <- confint(glht(mmod, linfct = K))
+R> ci$confint <- 1 - binomial()$linkinv(ci$confint)
+R> ci$confint[,2:3] <- ci$confint[,3:2]
+R> ci
+\end{Sinput}
+\begin{Soutput}
+	 Simultaneous Confidence Intervals
+
+Fit: NULL
+
+Estimated Quantile = 2.6069
+95% family-wise confidence level
+ 
+
+Linear Hypotheses:
+                             Estimate  lwr       upr      
+spruce (119) == 0            0.0054694 0.0006618 0.0436751
+pine (823) == 0              0.0087108 0.0032325 0.0232569
+beech (266) == 0             0.0668613 0.0291410 0.1460614
+oak (1258) == 0              0.2173645 0.1370886 0.3268432
+ash/maple/elm/lime (30) == 0 0.2240237 0.0382194 0.6771497
+hardwood (other) (191) == 0  0.1697274 0.0883524 0.3012820
+\end{Soutput}
+\end{Schunk}
+
+\setkeys{Gin}{height = 0.9\textheight}
+
+\begin{center}
+\includegraphics{generalsiminf-trees-plot}
+\end{center}
+
+%%\bibliography{../paper/references}
+%%\bibliographystyle{plainnat}
 
 
 \end{document}
