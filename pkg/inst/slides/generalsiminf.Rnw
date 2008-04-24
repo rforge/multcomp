@@ -35,7 +35,7 @@ vcov.lmrob <- function(object) object$cov
 
 \title{Simultaneous Inference in \\ General Parametric Models}
 \author{Torsten Hothorn \\ Institut für Statistik \\ 
-(in collaboration with Frank Bretz and \\ Peter Westfall)}
+(in collaboration with Frank Bretz, Novartis, and \\ Peter Westfall, Texas Tech)}
 \fancyfoot[L]{\tiny 2008-04-25} %%\copyright{} 2007 Friedrich Leisch
 \fancyfoot[R]{\arabic{page}}
 
@@ -52,6 +52,8 @@ vcov.lmrob <- function(object) object$cov
 \includegraphics{figs/reh}
 \includegraphics{figs/zaun}
 \includegraphics[height=\textheight]{figs/rotbuche2007}
+\includegraphics[height=\textheight]{figs/esche2007}
+
 \end{center}
 
 \newslide{Model}
@@ -88,7 +90,7 @@ These assumptions are fulfilled for most of the models commonly in use.
 \newslide{Distribution of $\vartheta$}
 
 By Theorem 3.3.A in
-\cite{Serfling1980}, the linear function $\hat{\vartheta}_n = \K 
+Serfling (1980), the linear function $\hat{\vartheta}_n = \K 
 \hat{\theta}_n$, i.e., an estimate of our parameters of interest,
 also follows an approximate multivariate normal
 distribution
@@ -167,7 +169,7 @@ where $\varphi_k$ is the $k$-dimensional normal density function.
 
 $\Cor$ is not known but $g(\Cor, t)$ is a continuous function of $\Cor$ 
 and converges as $\Cor_n \cP \Cor$. The integral can be approximated
-by quasi-randomized Monte-Carlo methods \citep{Genz1992,GenzBretz1999}.
+by quasi-randomized Monte-Carlo methods (Genz, 1992, Genz and Bretz, 1999).
 
 The resulting global $p$-value 
 for $H_0$ is then 
@@ -191,23 +193,23 @@ is given by
 \begin{eqnarray*}
 p_j = 1 - g(\Cor_n, |t_j|),
 \end{eqnarray*}
-where $t_1, \dots, t_k$ denote the observed test statistics (single-step procedure).
+where $\tt = (t_1, \dots, t_k)$ denote the observed test statistics (single-step procedure).
 
 Reject each $H_0^j$ at family-wise error rate $\alpha$ when $p_j \leq \alpha$.
 
-\newslide{Simultenous Confidence Intervals}
+\newslide{Simultaneous Confidence Intervals}
 
 A simultaneous $(1 - 2\alpha)
 \times 100\%$ confidence interval for $\vartheta$ is given by 
 \begin{eqnarray*}
 \hat{\vartheta}_n \pm q_\alpha \D_n^{1/2}
 \end{eqnarray*}
-where $q_\alpha$ is the (approximate) $1 - \alpha$ quantile of the distribution of $\T_n$.
+where $q_\alpha$ is the (approximate) $1 - \alpha$ quantile of the distribution of $\max(|\T_n|)$.
 
 \newslide{Examples: Linear Regression}
 
-Observations $\Z_i = (Y_i, \X_i), i = 1, \dots, n$ consist of a response $Y_i$
-and exploratory variables $\X_i = (X_{i1}, \dots, X_{iq})$.
+$\Z_i = (Y_i, \X_i), i = 1, \dots, n$, with response $Y_i$
+and exploratory variables \\ $\X_i = (X_{i1}, \dots, X_{iq})$
 
 Model:
 \begin{eqnarray*}
@@ -217,7 +219,7 @@ with elemental parameters $\theta = (\beta_0, \beta_1, \dots, \beta_q)$
 estimated via
 \begin{eqnarray*}
 \hat{\theta}_n = \left(\X^\top\X\right)^{-1} \X^\top \Y \sim \N%
-_{q+1}\left(\theta, \sigma^2 \left(\X^\top\X\right)^{-1}\right),
+_{q+1}\left(\theta, \sigma^2 \left(\X^\top\X\right)^{-1}\right).
 \end{eqnarray*}
 
 Now
@@ -227,14 +229,12 @@ Now
 \end{eqnarray*}
 and
 \begin{eqnarray*}
-\T_n = \D_n^{-1/2} \hat{\vartheta}_n \sim t_{q+1}(n - q, \Cor),
+\T_n = \D_n^{-1/2} \hat{\vartheta}_n \sim t_{q+1}(n - q, \Cor) \quad \text{exact inference possible!}
 \end{eqnarray*}
-(Note: the normal density $\varphi_k$ can be replaced by the
-$t$-density in this case!)
 
 \newslide{Predicting Body Fat}
 
-\cite{garcia2005} describe a linear model
+Garcia et al. (2005) describe a linear model
 for total body fat prediction.
 
 \textbf{Aim:} Based on $p = 9$ simple measurements (circumferences of elbow, knee etc)
@@ -282,8 +282,8 @@ Model:
 Y_{ij} = \mu + \gamma_{j} + \varepsilon_{ij}
 \end{eqnarray*}
 
-Overparameterized, usually the elemental parameters are
-$theta = (\mu, \gamma_2 - \gamma_1, \gamma_3 - \gamma_1, \dots, \gamma_q - \gamma_1)$.
+Overparameterized, usually the elemental parameters are \\
+$\theta = (\mu, \gamma_2 - \gamma_1, \gamma_3 - \gamma_1, \dots, \gamma_q - \gamma_1)$.
 
 \textbf{Dunnett many-to-one comparisons}:
 \begin{eqnarray*}
@@ -302,7 +302,7 @@ $theta = (\mu, \gamma_2 - \gamma_1, \gamma_3 - \gamma_1, \dots, \gamma_q - \gamm
 \end{array}  
 \right) \\
 \vartheta_\text{Tukey} &=& \K_\text{Tukey} \theta = (\gamma_2 - \gamma_1, \gamma_3 - \gamma_1,
-\gamma_2 - \gamma_3).
+\gamma_2 - \gamma_3)
 \end{eqnarray*}
 
 \newslide{Genetic Components of Alcoholism}
@@ -324,6 +324,7 @@ rankif <- function(data) trafo(data, numeric_trafo = rank)
 <<alpha-aov-tukey, echo = TRUE>>=
 data("alpha", package = "coin")   
 amod <- aov(elevel ~ alength, data = alpha)
+library("multcomp")
 confint(glht(amod, linfct = mcp(alength = "Tukey")))
 @
 
@@ -359,14 +360,21 @@ Model:
 \end{eqnarray*}
 for the $n_i$ observations in group $i$ with random effects $\mathbf{b}_i$.
 
-We are interested in inference about $\K \theta$. For example in a logistic mixed model, in
-confidence intervals for the predicted probabilities
+We are interested in inference about $\K \theta$. 
+
+For example in a logistic mixed model, in
+confidence intervals for the predicted probabilities in $\hat{\vartheta}_n = \mathbf{X} \hat{\theta}_n$
 \begin{eqnarray*}
 \left(\left(1 + \exp\left(- \left(\hat{\vartheta}_n - q_\alpha \D_n^{1/2}\right)\right)\right)^{-1},
 \left(1 + \exp\left(- \left(\hat{\vartheta}_n + q_\alpha \D_n^{1/2}\right)\right)\right)^{-1}\right).
 \end{eqnarray*}
 
 \newslide{Dear Browsing in Frankonia}
+
+\setkeys{Gin}{height = 0.7\textheight}
+\begin{center}
+\includegraphics{figs/aischgrund}
+\end{center}
 
 <<trees-setup, echo = FALSE, results = hide>>=
 library("multcomp")
@@ -405,9 +413,34 @@ plot(ci, xlab = "Probability of Damage Caused by Browsing", xlim = c(0, 1), main
 @
 \end{center}
 
-%%\bibliography{../paper/references}
-%%\bibliographystyle{plainnat}
+\newslide{References}
 
+\small
+
+Ada~L. Garcia, Karen Wagner, Torsten Hothorn, Corinna Koebnick, Hans-Joachim~F.
+  Zunft, and Ulrike Trippo.
+Improved prediction of body fat by measuring skinfold thickness,
+  circumferences, and bone breadths.
+\emph{Obesity Research}, 13\penalty0 (3):\penalty0 626--634, 2005.
+
+Alan Genz.
+Numerical computation of multivariate normal probabilities.
+\emph{Journal of Computational and Graphical Statistics}, 1:\penalty0
+  141--149, 1992.
+
+Alan Genz and Frank Bretz.
+Numerical computation of multivariate $t$-probabilities with
+  application to power calculation of multiple contrasts.
+\emph{Journal of Statistical Computation and Simulation},
+  63:\penalty0 361--378, 1999.
+
+Torsten Hothorn, Frank Bretz and Peter Westfall.
+Simultaneous Inference in General Parametric Models.
+\emph{Biometrical Journal}, 50\penalty0 (3), 2008.
+
+Robert~J. Serfling.
+\emph{Approximation Theorems of Mathematical Statistics}.
+John Wiley \& Sons, New York, 1980.
 
 \end{document}
 
