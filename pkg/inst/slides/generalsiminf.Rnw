@@ -51,8 +51,9 @@ vcov.lmrob <- function(object) object$cov
 \includegraphics{figs/verbiss}
 \includegraphics{figs/reh}
 \includegraphics{figs/zaun}
-\includegraphics[height=\textheight]{figs/rotbuche2007}
-\includegraphics[height=\textheight]{figs/esche2007}
+
+\includegraphics[width=0.45\textwidth, keepaspectratio=true]{figs/rotbuche2007}
+\includegraphics[width=0.45\textwidth, keepaspectratio=true]{figs/esche2007}
 
 \end{center}
 
@@ -340,8 +341,7 @@ confint(amod_glht_sw)
 
 \setkeys{Gin}{height = 0.6\textheight}
 \begin{center}
-<<alpha-confint-plot, echo = FALSE, fig = TRUE, width = 8, height = 3.5>>=
-par(mai = par("mai") * c(1, 2.1, 1, 0.5))
+<<alpha-confint-plot, echo = FALSE, fig = TRUE, width = 8, height = 3.5, mai = TRUE>>=
 layout(matrix(1:2, ncol = 2))
 ci1 <- confint(glht(amod, linfct = mcp(alength = "Tukey")))
 ci2 <- confint(glht(amod, linfct = mcp(alength = "Tukey"), vcov = sandwich))
@@ -405,6 +405,10 @@ ci
 @
 
 \setkeys{Gin}{height = 0.9\textheight}
+
+<<dummy, echo = FALSE, results = hide>>=
+dev.off()
+@
 
 \begin{center}
 <<trees-plot, echo = FALSE, mai = TRUE, fig = TRUE, width = 7, height = 4.5>>=
