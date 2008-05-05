@@ -17,6 +17,7 @@ if (lme4OK) {
     glme4 <- glht(stool.lmer, K)
     glme41 <- glht(stool.lmer, mcp(Type = "Tukey"))
     stopifnot(all.equal(coef(glme4), coef(glme41)))
+    print(summary(glme41, test = Chisqtest()))
 
     if (nlmeOK) {
         stool.lme <- lme(effort ~ Type, data = ergoStool,

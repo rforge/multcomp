@@ -6,6 +6,8 @@
     o    check if `model' is an S4 object before trying to extract its
          `call' slot
 
+    o    better warning when df.residual fails
+
 
 		CHANGES in `multcomp' VERSION 1.0-0
 

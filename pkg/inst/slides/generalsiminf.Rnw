@@ -259,6 +259,7 @@ printCoefmat(summary(lmod)$coefficients)
 \newslide{Parameters of Interest}
 
 <<bodyfat-lm-maxtest, echo = TRUE>>=
+library("multcomp")
 K <- cbind(0, diag(length(coef(lmod)) - 1))
 rownames(K) <- names(coef(lmod))[-1]
 lmod_glht <- glht(lmod, linfct = K) 
@@ -325,7 +326,7 @@ rankif <- function(data) trafo(data, numeric_trafo = rank)
 <<alpha-aov-tukey, echo = TRUE>>=
 data("alpha", package = "coin")   
 amod <- aov(elevel ~ alength, data = alpha)
-library("multcomp")
+
 confint(glht(amod, linfct = mcp(alength = "Tukey")))
 @
 

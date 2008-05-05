@@ -116,13 +116,15 @@ global <- function(type = c("Chisq", "F"))
         SSH <- t(tmp) %*% MP$MPinv %*% tmp
 
         q <- MP$rank
-        df <- df.residual(object$model)
-        if (is.null(df)) {
-            type <- "Chisq"
-            warning(sQuote("df.residual"), " is not available for ",
-                    sQuote("model"), " performing F test")
+        if (type == "F") {
+            df <- df.residual(object$model)
+            if (is.null(df)) {
+                type <- "Chisq"
+                warning(sQuote("df.residual"), " is not available for ",
+                        sQuote("model"), " a Chisq test is performed ",
+                        "instead of the requested F test.")
+            }
         }
-
         if (type == "Chisq") {
             pval <- pchisq(SSH, q, lower.tail = FALSE)
         } else {
