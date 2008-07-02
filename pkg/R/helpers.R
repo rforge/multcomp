@@ -24,39 +24,6 @@ model.matrix.lme <- function(object, ...)
 model.frame.lme <- function(object, ...)
     object$data
 
-### some methods of (g)lmer objects
-model.frame.mer <- function(object, ...) {
-    x <- object@frame
-    if (is.null(x))
-        stop("models of class ", class(object), 
-             " need to be fitted with argument ", 
-             sQuote("model = TRUE"))
-    x
-}
-model.frame.lmer <- model.frame.mer
-model.frame.glmer <- model.frame.mer
-
-model.matrix.mer <- function(object, ...) {
-    return(model.matrix(terms(object), model.frame(object)))
-}
-model.matrix.lmer <- model.matrix.mer
-model.matrix.glmer <- model.matrix.mer
-
-
-### and now for (g)lmer2 (thanks for Manuel Eugster)
-terms.lmer2 <- function(x, ...) return(x@terms) 
-model.frame.lmer2 <- model.frame.mer
-model.matrix.lmer2 <- function(object, ...) {
-  return(model.matrix(terms(object), model.frame(object)))
-}
-terms.glmer2 <- function(x, ...) return(x@terms) 
-
-model.frame.glmer2 <- model.frame.mer
-model.matrix.glmer2 <- function(object, ...) {
-  return(model.matrix(terms(object), model.frame(object)))
-}
-
-
 ### extract coefficients, covariance matrix and 
 ### degrees of freedom (if available) from `model'
 modelparm <- function(model, coef., vcov., df, ...) 
@@ -119,10 +86,6 @@ modelparm.default <- function(model, coef. = coef, vcov. = vcov,
 ### mixed effects models (package `lme4')
 modelparm.mer <- function(model, coef. = fixef, vcov. = vcov, df = NULL, ...)
     modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
-modelparm.lmer <- modelparm.mer
-modelparm.glmer <- modelparm.mer
-modelparm.lmer2 <- modelparm.mer
-modelparm.glmer2 <- modelparm.mer
 
 ### package `nlme'
 modelparm.lme <- function(model, coef. = nlme:::fixef, vcov. = vcov, df = NULL, ...)

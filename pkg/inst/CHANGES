@@ -1,4 +1,10 @@
 
+		CHANGES in `multcomp' VERSION 1.0-2
+
+    o    use new model.matrix / model.frame methods for class mer in
+         lme4 (>= 0.999375-16)
+
+
 		CHANGES in `multcomp' VERSION 1.0-1
 
     o    make sure more than 2 groups are present in contrMat()
