@@ -20,8 +20,8 @@ parm <- function(coef, vcov, df = 0) {
     if (!is.numeric(vcov) || !is.matrix(vcov))
         stop(sQuote("vcov"), " is not a numeric matrix")
 
-    if (max(abs(vcov - t(vcov))) > .Machine$double.eps)
-        stop(sQuote("vcov"), " is not symmetric")
+    if (!isSymmetric(vcov, tol = sqrt(.Machine$double.eps)))
+        stop(sQuote("vcov"), " is not a symmetric matrix")
 
     ret <- list(coef = coef, vcov = vcov, df = df)
     class(ret) <- "parm"
