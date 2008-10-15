@@ -137,7 +137,12 @@ chrlinfct2matrix <- function(ex, var) {
 
     for (i in 1:length(ex)) {
 
-        tmp <- expression2coef(parse(text = ex[i]))
+        expr <- parse(text = ex[i])
+        if (length(expr[[1]]) != 3)
+            stop("argument ", sQuote(ex[i]), 
+                 " cannot be interpreted as expression")
+
+        tmp <- expression2coef(expr)
 
         if (!all(tmp$names %in% var))
             stop("variable(s) ", sQuote(tmp$names[!tmp$names %in% var]), 
