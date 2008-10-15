@@ -111,4 +111,4 @@ glht(amod, linfct = mcp(gr = "Tukey"))
 ### better error message
 ### suggested by Rich
 amod <- aov(breaks ~ tension, data = warpbreaks)
-glht(amod, linfct = mcp(tension = "Warp"))
+try(glht(amod, linfct = mcp(tension = "Warp")))
