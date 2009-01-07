@@ -1,7 +1,7 @@
 Package: multcomp
 Title: Simultaneous Inference in General Parametric Models
-Version: 1.0-3
-Date: $Date$
+Version: 1.0-4
+Date: 2009-01-07
 Author: Torsten Hothorn, Frank Bretz and Peter Westfall with
   contributions by Richard M. Heiberger
 Description: Simultaneous tests and confidence intervals
