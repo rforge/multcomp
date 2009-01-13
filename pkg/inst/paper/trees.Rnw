@@ -59,13 +59,16 @@ colnames(K) <- rownames(K) <-
 @
 
 Based on $\K$, we first compute simultaneous confidence intervals
-for $\K \theta$ and transform these into probabilities:
+for $\K \theta$ and transform these into probabilities.
+Note that $\left(1 + \exp(- \hat{\vartheta})\right)^{-1}$
+is the vector of estimated probabilities in our model, 
+the confidence intervals for $\K \theta$ can be transformed in the very same way:
 <<trees-ci, echo = TRUE>>=
 ci <- confint(glht(mmod, linfct = K))
 ci$confint <- 1 - binomial()$linkinv(ci$confint)
 ci$confint[,2:3] <- ci$confint[,3:2]
 @
-The result is shown in Figure~\ref{browsing}. Browsing
+The result is shown in Figure~\ref{SIMC-trees-plot}. Browsing
 is less frequent in hardwood but especially small oak trees are severely
 at risk.  Consequently, the local authorities increased the number of roe deers 
 to be harvested in the following years.
@@ -75,11 +78,11 @@ trees is caused by the small sample size.
 \setkeys{Gin}{width=0.8\textwidth}
 \begin{figure}[t]
 \begin{center}
-<<trees-plot, echo = FALSE, mai = TRUE, fig = TRUE, width = 7, height = 4.5>>=
+<<SIMC-trees-plot, echo = TRUE, mai = TRUE, fig = TRUE, width = 7, height = 4.5>>=
 plot(ci, xlab = "Probability of Damage Caused by Browsing", xlim = c(0, 1), main = "",
      ylim = c(0.5, 6.5))
 @
 \caption{\Robject{trees513} data: Probability of damage caused by roe deer browsing 
-   for six tree species. Sample sizes are given in brackets. \label{browsing}}
+   for six tree species. Sample sizes are given in brackets. \label{SIMC-trees-plot}}
 \end{center}
 \end{figure}
