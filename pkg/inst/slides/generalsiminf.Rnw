@@ -366,8 +366,8 @@ We are interested in inference about $\K \theta$.
 For example in a logistic mixed model, in
 confidence intervals for the predicted probabilities in $\hat{\vartheta}_n = \mathbf{X} \hat{\theta}_n$
 \begin{eqnarray*}
-\left( && \left(1 + \exp\left(- \left(\hat{\vartheta}_n - q_\alpha \text{diag}(\D_n)^{1/2}\right)\right)\right)^{-1}, \\
-       && \left(1 + \exp\left(- \left(\hat{\vartheta}_n + q_\alpha \text{diag}(\D_n)^{1/2}\right)\right)\right)^{-1}\right).
+\left(  \left(1 + \exp\left(- \left(\hat{\vartheta}_n - q_\alpha \text{diag}(\D_n)^{1/2}\right)\right)\right)^{-1}, \right. \\
+\left.  \left(1 + \exp\left(- \left(\hat{\vartheta}_n + q_\alpha \text{diag}(\D_n)^{1/2}\right)\right)\right)^{-1}\right) .
 \end{eqnarray*}
 
 \newslide{Dear Browsing in Frankonia}
@@ -447,7 +447,7 @@ as good as a group Lasso approach.
 Leisch and Hothorn (in preparation) aim to identify
 \begin{itemize}
 \item non-zero parameters in components of a mixture model
-      (componentwise variable selection) and 
+      (component\-wise variable selection) and 
 \item parameters that are equal in two or more components of
       a mixture model.
 \end{itemize}
