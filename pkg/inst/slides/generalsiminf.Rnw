@@ -36,7 +36,7 @@ vcov.lmrob <- function(object) object$cov
 \title{Simultaneous Inference in \\ General Parametric Models}
 \author{Torsten Hothorn \\ Institut für Statistik \\ 
 (in collaboration with Frank Bretz, Novartis, and \\ Peter Westfall, Texas Tech)}
-\fancyfoot[L]{\tiny 2008-04-25} %%\copyright{} 2007 Friedrich Leisch
+\fancyfoot[L]{\tiny WU Wien, 2009-01-23} %%\copyright{} 2007 Friedrich Leisch
 \fancyfoot[R]{\arabic{page}}
 
 \sloppy
@@ -52,8 +52,8 @@ vcov.lmrob <- function(object) object$cov
 \includegraphics{figs/reh}
 \includegraphics{figs/zaun}
 
-\includegraphics[width=0.45\textwidth, keepaspectratio=true]{figs/rotbuche2007}
-\includegraphics[width=0.45\textwidth, keepaspectratio=true]{figs/esche2007}
+\includegraphics[width=0.45\textwidth, keepaspectratio=true]{figs/rotbuche2007.png}
+\includegraphics[width=0.45\textwidth, keepaspectratio=true]{figs/esche2007.png}
 
 \end{center}
 
@@ -203,7 +203,7 @@ Reject each $H_0^j$ at familywise error rate $\alpha$ when $p_j \leq \alpha$.
 A simultaneous $(1 - 2\alpha)
 \times 100\%$ confidence interval for $\vartheta$ is given by 
 \begin{eqnarray*}
-\hat{\vartheta}_n \pm q_\alpha \D_n^{1/2}
+\hat{\vartheta}_n \pm q_\alpha \text{diag}(\D_n)^{1/2}
 \end{eqnarray*}
 where $q_\alpha$ is the (approximate) $1 - \alpha$ quantile of the distribution of $\max(|\T_n|)$.
 
@@ -366,15 +366,15 @@ We are interested in inference about $\K \theta$.
 For example in a logistic mixed model, in
 confidence intervals for the predicted probabilities in $\hat{\vartheta}_n = \mathbf{X} \hat{\theta}_n$
 \begin{eqnarray*}
-\left(\left(1 + \exp\left(- \left(\hat{\vartheta}_n - q_\alpha \D_n^{1/2}\right)\right)\right)^{-1},
-\left(1 + \exp\left(- \left(\hat{\vartheta}_n + q_\alpha \D_n^{1/2}\right)\right)\right)^{-1}\right).
+\left( && \left(1 + \exp\left(- \left(\hat{\vartheta}_n - q_\alpha \text{diag}(\D_n)^{1/2}\right)\right)\right)^{-1}, \\
+       && \left(1 + \exp\left(- \left(\hat{\vartheta}_n + q_\alpha \text{diag}(\D_n)^{1/2}\right)\right)\right)^{-1}\right).
 \end{eqnarray*}
 
 \newslide{Dear Browsing in Frankonia}
 
 \setkeys{Gin}{height = 0.7\textheight}
 \begin{center}
-\includegraphics{figs/aischgrund}
+\includegraphics{figs/aischgrund.png}
 \end{center}
 
 <<trees-setup, echo = FALSE, results = hide>>=
@@ -418,20 +418,62 @@ plot(ci, xlab = "Probability of Damage Caused by Browsing", xlim = c(0, 1), main
 @
 \end{center}
 
-\newslide{Thanks}
+\newslide{Odds-Ratios}
 
+Agresti et al.~(2008) propose simultaneous confidence intervals 
+for odds-ratios. Simultaneous Wald intervals can be derived from
+a logistic regression model:
+
+<<Agresti-ex, echo = TRUE>>=
+resp <- cbind(succ = c(13, 27, 22, 9),
+              fail = c(87, 86, 87, 87) - c(13, 27, 22, 9))
+trt <- as.factor(c("Coenzyme", "Remacemide", "Combination", "Placebo"))
+mod <- glm(resp ~ trt, family = binomial())
+exp(confint(glht(mod, mcp(trt = "Tukey")))$confint)
+@
+
+\newslide{Multivariate Time Series}
+
+Haufe et al.~(NIPS 2008) investigate ''spatial causal discovery in
+multivariate time series'' by vector autoregressive models and
+aim to identify non-vanishing coefficients in these models, 
+for example fitted using Ridge regression.
+
+Multiple tests for this variable selection problem perform
+as good as a group Lasso approach.
+
+\newslide{Mixture Models}
+
+Leisch and Hothorn (in preparation) aim to identify
 \begin{itemize}
-\item Bayerisches Staatsministerium für Landwirtschaft \& Forsten (ST217)
-\item Roland Baier
-\item Jan Ulbricht
-\item Lisa Möst
-\item Bernhard Rüger
+\item non-zero parameters in components of a mixture model
+      (componentwise variable selection) and 
+\item parameters that are equal in two or more components of
+      a mixture model.
 \end{itemize}
+Once an estimate of the variance-covariance matrix of all 
+parameters is available the presented theory and
+computational infrastructure in \textbf{multcomp}
+can be applied.
+
+%\newslide{Thanks}
+%
+%\begin{itemize}
+%\item Bayerisches Staatsministerium für Landwirtschaft \& Forsten (ST217)
+%\item Roland Baier
+%\item Jan Ulbricht
+%\item Lisa Möst
+%\item Bernhard Rüger
+%\end{itemize}
 
 
 \newslide{References}
 
 \small
+
+Alan Agresti, Matilde Bini, Bruno Bertaccini, and Euijung Ryu.
+Simultaneous Confidence Intervals for Comparing Binomial Parameters.
+\emph{Biometrics}, 64, 1270--1275.
 
 Ada~L. Garcia, Karen Wagner, Torsten Hothorn, Corinna Koebnick, Hans-Joachim~F.
   Zunft, and Ulrike Trippo.
@@ -449,6 +491,10 @@ Numerical computation of multivariate $t$-probabilities with
   application to power calculation of multiple contrasts.
 \emph{Journal of Statistical Computation and Simulation},
   63:\penalty0 361--378, 1999.
+
+Stefan Haufe, Klaus-Robert M\"uller, Guido Nolte, and Nicole Kr\"amer (2009).
+Sparse Causal Discovery in Multivariate Time Series.
+\emph{JMLR: Workshop and Conference Proceedings}, to appear.
 
 Torsten Hothorn, Frank Bretz and Peter Westfall.
 Simultaneous Inference in General Parametric Models.
