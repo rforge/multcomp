@@ -252,7 +252,19 @@ lmod <- lm(DEXfat ~ ., data = bodyfat)
 summary(lmod)
 @
 <<bodyfat-lm-print, echo = FALSE>>=
+x <- summary(lmod)
+digits <- 3
 printCoefmat(summary(lmod)$coefficients)
+if (!is.null(x$fstatistic)) {
+    cat("Multiple R-squared:", formatC(x$r.squared, digits = digits))
+    cat(",\tAdjusted R-squared:", formatC(x$adj.r.squared, 
+            digits = digits), "\nF-statistic:", formatC(x$fstatistic[1], 
+            digits = digits), "on", x$fstatistic[2], "and", x$fstatistic[3], 
+            "DF,  p-value:", format.pval(pf(x$fstatistic[1L], 
+                x$fstatistic[2L], x$fstatistic[3L], lower.tail = FALSE), 
+                digits = digits), "\n")
+    }
+
 @
 
 
@@ -472,8 +484,8 @@ can be applied.
 \small
 
 Alan Agresti, Matilde Bini, Bruno Bertaccini, and Euijung Ryu.
-Simultaneous Confidence Intervals for Comparing Binomial Parameters.
-\emph{Biometrics}, 64, 1270--1275.
+Simultaneous confidence intervals for comparing binomial parameters.
+\emph{Biometrics}, 64, 1270--1275, 2008.
 
 Ada~L. Garcia, Karen Wagner, Torsten Hothorn, Corinna Koebnick, Hans-Joachim~F.
   Zunft, and Ulrike Trippo.
@@ -492,12 +504,12 @@ Numerical computation of multivariate $t$-probabilities with
 \emph{Journal of Statistical Computation and Simulation},
   63:\penalty0 361--378, 1999.
 
-Stefan Haufe, Klaus-Robert M\"uller, Guido Nolte, and Nicole Kr\"amer (2009).
-Sparse Causal Discovery in Multivariate Time Series.
+Stefan Haufe, Klaus-Robert M\"uller, Guido Nolte, and Nicole Kr\"amer.
+Sparse causal discovery in multivariate time series.
 \emph{JMLR: Workshop and Conference Proceedings}, to appear.
 
 Torsten Hothorn, Frank Bretz and Peter Westfall.
-Simultaneous Inference in General Parametric Models.
+Simultaneous inference in general parametric models.
 \emph{Biometrical Journal}, 50\penalty0 (3), 2008.
 
 Robert~J. Serfling.
