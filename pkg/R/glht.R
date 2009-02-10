@@ -2,7 +2,16 @@
 # $Id$
 
 ### general linear hypotheses
-glht <- function(model, linfct, ...) UseMethod("glht", linfct)
+glht <- function(model, linfct, ...) {
+    if (missing(linfct)) {
+        mpar <- modelparm(model, ...)
+        linfct <- diag(length(mpar$coef))
+        rownames(linfct) <- names(mpar$coef)
+        glht(model = model, linfct = linfct, ...)
+    } else {
+        UseMethod("glht", linfct)
+    }
+}
 
 ### K coef(model) _!alternative_ rhs
 glht.matrix <- function(model, linfct, 

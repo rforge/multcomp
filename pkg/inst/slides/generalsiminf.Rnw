@@ -163,7 +163,7 @@ for some $t \in \R^+$.
 \newslide{Null-Distribution and a Global Test}
 
 \begin{eqnarray*}
-\Prob(\max(|\T_n|) \le t) = \int\limits_{-t}^t \cdots \int\limits_{-t}^t
+\Prob(\max(|\T_n|) \le t) \cong \int\limits_{-t}^t \cdots \int\limits_{-t}^t
 \varphi_k(x_1, \dots, x_k; \Cor) \, dx_1 \cdots dx_k =: g(\Cor, t) 
 \end{eqnarray*}
 where $\varphi_k$ is the $k$-dimensional normal density function.

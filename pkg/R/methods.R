@@ -62,3 +62,6 @@ confint.glht <- function(object, parm, level = 0.95, calpha = adjusted_calpha(),
     class(object) <- c("confint.glht", "glht")
     return(object)
 }
+
+cftest <- function(model, ...)
+    summary(glht(model), test = univariate(), ...)
