@@ -34,11 +34,11 @@ library("multcomp")
 library("foreign")
 
 dataurl <- "http://www.src.uchicago.edu/datalib/chfls/data/chfls1.sav"
-setwd(tempdir())
-download.file(dataurl, destfile = "chfls1.sav")
+td <- tempdir()
+download.file(dataurl, destfile = file.path(td, "chfls1.sav"))
 
 ### data see http://www.spc.uchicago.edu/prc/chfls.php
-chfls1 <- read.spss("chfls1.sav", to.data.frame = TRUE)
+chfls1 <- read.spss(file.path(td, "chfls1.sav"), to.data.frame = TRUE)
 
 ### choose neccessary variables
 org <- chfls1[, c("REGION6", "ZJ05", "ZJ06", "A35", "ZJ07", "ZJ16M", "INCRM",
