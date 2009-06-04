@@ -64,8 +64,6 @@ plot.cld <- function(x, type = c("response", "lp"), ...) {
                        function(x) paste(strsplit(x, "")[[1]], "\n", collapse = ""))
     vletters <- vletters[gsub(" ", "", levels(x$x))]
     msletters <- msletters[gsub(" ", "", levels(x$x))]
-    ### remove last newline
-    msletters <- sapply(msletters, function(x) substr(x, 1, nchar(x) - 1))
     type <- match.arg(type)
     dat <- x[c("x", "y", "lp")]
     if (is.null(x$weights)) {
@@ -99,11 +97,11 @@ plot.cld <- function(x, type = c("response", "lp"), ...) {
                 plot(survfit(y ~ x, data = dat), lty = 1:nlevels(dat$x), ...)
                 nc <- nchar(levels(dat$x))                              
                 spaces <- unlist(lapply( max(nc)-nc, function(x) return(paste( rep(" ",x) ,collapse="")))) 
-                old.par <- par() ###family="mono") 
+#                old.par <- par(family="mono") 
                 legend("topright", lty = 1:nlevels(dat$x), 
                        legend = paste(levels(dat$x), spaces, ": ", msletters, sep=""), 
                        ...)
-                par(old.par)
+#                par(old.par)
             })
     }
 }

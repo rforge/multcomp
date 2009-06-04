@@ -118,20 +118,24 @@
     ### specify all pair-wise comparisons among levels of "Cage"
     cm.glht <- glht(cm, mcp(Cage = "Tukey"))
     # extract information & plot
+    old.par <- par()
+    ### use mono font family
+    if (dev.interactive())
+        old.oar <- par(family = "mono")
     plot(cld(cm.glht), col=c("black", "red", "blue", "green"))
- }
+    par(old.par)
+  }
 
- if (require("nlme") && require("lme4")) {
+  if (require("nlme") && require("lme4")) {
     data("ergoStool", package = "nlme")
 
     stool.lmer <- lmer(effort ~ Type + (1 | Subject),
                        data = ergoStool)
     glme41 <- glht(stool.lmer, mcp(Type = "Tukey"))
 
-   old.par <- par(mai=c(1,1,1.5,1))
-   plot(cld(glme41))
-   par(old.par)
- }
-
+    old.par <- par(mai=c(1,1,1.5,1))
+    plot(cld(glme41))
+    par(old.par)
+  }
 }
 \keyword{hplot}
