@@ -1,4 +1,3 @@
-
 ### compact letter displays
 
 cld <- function(object, ...)
@@ -221,8 +220,12 @@ insert_absorb <- function( x, Letters=c(letters, LETTERS), separator="." ){
 # mat         ... a LetterMatrix as produced by function insert_absorb()
 # start.col   ... either a single integer specifying the column to start with or a vector
 #                 of max. length equal to ncol(mat) specifying the column order to be used.
+# Letters     ... a set of user defined letters { default is Letters=c(letters, LETTERS) }
+# separator   ... a separating character used to produce a sufficiently large set of
+#                 characters for a compact letter display (default is separator=".") in case
+#                 the number of letters required exceeds the number of letters available 
 
-sweepLetters <- function(mat, start.col=1){
+sweepLetters <- function(mat, start.col=1, Letters=c(letters, LETTERS), separator="."){
 
   stopifnot( all(start.col %in% 1:ncol(mat)) )
   locked <- matrix(rep(0,ncol(mat)*nrow(mat)), ncol=ncol(mat))          # 1 indicates that another letter dependes on this entry
@@ -271,14 +274,14 @@ sweepLetters <- function(mat, start.col=1){
     }
     if(all(mat[,i]==FALSE)){                                           # delete column where each entry is FALSE and restart
       mat <- mat[,-i,drop=FALSE]
-      colnames(mat) <- get_letters( ncol(mat))
-      return(sweepLetters(mat))
+      colnames(mat) <- get_letters( ncol(mat), Letters=Letters, separator=separator)
+      return(sweepLetters(mat, Letters=Letters, separator=separator))
     }
   }
   onlyF <- apply(mat, 2, function(x) return(all(!x)))
   if( any(onlyF) ){                                                     # There are columns with just FALSE entries
     mat <- mat[,-which(onlyF),drop=FALSE]
-    colnames(mat) <- get_letters( ncol(mat))
+    colnames(mat) <- get_letters( ncol(mat), Letters=Letters, separator=separator)
   }
   return( mat )
 }
