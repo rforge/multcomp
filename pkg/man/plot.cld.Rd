@@ -121,7 +121,7 @@
     old.par <- par()
     ### use mono font family
     if (dev.interactive())
-        old.oar <- par(family = "mono")
+        old.par <- par(family = "mono")
     plot(cld(cm.glht), col=c("black", "red", "blue", "green"))
     par(old.par)
   }
