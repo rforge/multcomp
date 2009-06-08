@@ -4,6 +4,8 @@
 
     o    new compact letter displays
 
+    o    force binary mode when downloading SPSS data files
+
 
 		CHANGES in `multcomp' VERSION 1.0-8
 
