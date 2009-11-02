@@ -3,6 +3,8 @@
 
     o   print calls when available only
 
+    o   support for coxme objects
+
 
 		CHANGES in `multcomp' VERSION 1.1-2
 
