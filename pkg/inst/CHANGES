@@ -5,6 +5,8 @@
 
     o   support for coxme objects
 
+    o   allow xlab and ylab arguments for plot.cld
+
 
 		CHANGES in `multcomp' VERSION 1.1-2
 
