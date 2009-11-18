@@ -31,7 +31,9 @@ model.frame.coxph.penal <- function(object, ...) {
     tm <- terms(object)
     class(object) <- "coxph"
     mf <- model.frame(object)
-    model.frame(tm, data = mf)
+    ret <- cbind(mf[[1]], model.frame(delete.response(tm), data = mf))
+    colnames(ret)[1] <- colnames(mf)[1]
+    ret
 }
 
 terms.coxph.penal <- function(object, ...) {
