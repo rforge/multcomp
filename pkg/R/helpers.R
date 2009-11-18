@@ -14,6 +14,54 @@ model.matrix.coxph <- function(object, ...) {
     mm
 }
 
+model.matrix.coxph.penal <- function(object, ...) {
+
+    class(object) <- "coxph"
+    mm <- model.matrix(object)
+    at <- attributes(mm)
+    indx <- grep("frailty", colnames(mm))
+    ret <- mm[ , -indx, drop = FALSE]
+    attr(ret, "assign") <- at$assign[-indx]
+    attr(ret, "contrasts") <- at$contrasts
+    ret
+}
+
+model.frame.coxph.penal <- function(object, ...) {
+
+    tm <- terms(object)
+    class(object) <- "coxph"
+    mf <- model.frame(object)
+    model.frame(tm, data = mf)
+}
+
+terms.coxph.penal <- function(object, ...) {
+
+    class(object) <- "coxph"           
+    tm <- terms(object)
+    ctm <- as.character(tm)
+    x <- strsplit(ctm[3], "+", fixed = TRUE)[[1]]
+    x <- x[-grep("frailty", x)]
+    fm <- paste(ctm[2], "~", paste(x, collapse = "+"))
+    terms(as.formula(fm))
+}
+
+coxph.penalcoef <- function(object, ...) {
+
+    mm <- model.matrix(object)
+    class(object) <- "coxph"
+    cf <- coef(object)
+    cf[1:ncol(mm)]
+}
+
+coxph.penalvcov <- function(object, ...) {
+    
+    mm <- model.matrix(object)
+    class(object) <- "coxph"
+    vc <- vcov(object)        
+    vc[1:ncol(mm), 1:ncol(mm), drop = FALSE]
+}
+
+
 model.matrix.survreg <- function(object, ...) {
    model.matrix(delete.response(terms(object)),
                        data = model.frame(object))
@@ -140,6 +188,10 @@ modelparm.aovlist <- function(model, coef. = coef, vcov. = vcov, df = NULL, ...)
     stop(sQuote("glht"), " does not support objects of class ", sQuote("aovlist"))
 
 modelparm.coxme <- function(model, coef. = coxmecoef, vcov. = coxmevcov, df = NULL, ...)
+    modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
+
+modelparm.coxph.penal <- function(model, coef. = coxph.penalcoef, 
+                                  vcov. = coxph.penalvcov, df = NULL, ...)
     modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
 
 ### modified from package MASS  
