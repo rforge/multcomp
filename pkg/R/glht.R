@@ -81,7 +81,7 @@ glht.mcp <- function(model, linfct, ...) {
 
     ### extract factors and contrast matrices from `model'
     ia <- attr(linfct, "interaction_average")
-    ca <- attr(linfct, "interaction_average")
+    ca <- attr(linfct, "covariate_average")
     if (ia || ca) {
         ### experimental version
         tmp <- mcp2matrix2(model, linfct = linfct, interaction_average = ia,
