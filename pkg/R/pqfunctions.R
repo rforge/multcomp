@@ -68,8 +68,8 @@ pqglht <- function(object)
     qfunction <- function(conf.level, adjusted = TRUE, ...) {
 
         tail <- switch(object$alternative, "two.sided" = "both.tails",
-                                    "less"      = "upper.tail",
-                                    "greater"   = "lower.tail")
+                                    "less"      = "lower.tail",
+                                    "greater"   = "upper.tail")
         if (adjusted) {
             calpha <- qmvt(conf.level, df = df, corr = cr, tail = tail, 
                            ...)

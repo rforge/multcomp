@@ -44,9 +44,9 @@ confint.glht <- function(object, parm, level = 0.95, calpha = adjusted_calpha(),
             UpperCL <- betahat + calpha * ses
         }, "less" = {
             LowerCL <- rep(-Inf, length(ses))
-            UpperCL <- betahat - calpha * ses
+            UpperCL <- betahat + calpha * ses
         }, "greater" = {
-            LowerCL <- betahat - calpha * ses
+            LowerCL <- betahat + calpha * ses
             UpperCL <- rep( Inf, length(ses))
     })
 
