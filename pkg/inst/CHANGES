@@ -10,6 +10,9 @@
         - SAS code in inst/MCMT
         - new demos
 
+    o   source code for simulations with unbalanced heteroscedstic
+        designs added
+
 
 		CHANGES in `multcomp' VERSION 1.1-5
 
