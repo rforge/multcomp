@@ -1,4 +1,10 @@
 
+		CHANGES in `multcomp' VERSION 1.1-8
+
+    o   example on simultaneous tests against one- and
+        two-sided alternatives in ?glht.
+
+
 		CHANGES in `multcomp' VERSION 1.1-7
 
     o   mix of alternatives is currently not supported 
