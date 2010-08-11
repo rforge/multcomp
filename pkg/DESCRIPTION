@@ -1,7 +1,7 @@
 Package: multcomp
 Title: Simultaneous Inference in General Parametric Models
-Version: 1.1-8
-Date: 2010-05-18
+Version: 1.2-0
+Date: 2010-08-11
 Author: Torsten Hothorn, Frank Bretz and Peter Westfall and 
   Richard M. Heiberger and Andre Schuetzenmeister
 Description: Simultaneous tests and confidence intervals
@@ -13,4 +13,3 @@ Suggests: lme4 (>= 0.999375-16), nlme, robustbase, mboost, coin,
   MASS, car, foreign, xtable, sandwich
 LazyData: yes
 License: GPL-2
-Packaged: 2010-01-20 15:32:46 UTC; hothorn

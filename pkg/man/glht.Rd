@@ -135,7 +135,7 @@ mcp(..., interaction_average = FALSE, covariate_average = FALSE)
   and \code{\link{confint.glht}} methods, respectively.
 
   A more detailed description of the underlying methodology is
-  available from Hothorn et al. (2008).
+  available from Hothorn et al. (2008) and Bretz et al. (2010).
 
 }
 \value{
@@ -159,6 +159,9 @@ mcp(..., interaction_average = FALSE, covariate_average = FALSE)
 
 }
 \references{
+
+    Frank Bretz, Torsten Hothorn and Peter Westfall (2010),
+    \emph{Multiple Comparisons Using R}, CRC Press, Boca Raton.
 
     Shayle R. Searle (1971), \emph{Linear Models}.
     John Wiley \& Sons, New York.
