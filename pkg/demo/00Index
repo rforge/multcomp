@@ -1,5 +1,5 @@
-Ch_Intro.R	Introduction
-Ch_Theory.R	General Concepts
-Ch_GLM.R	Multiple Comparisons in Parametric Models
-Ch_Appl.R	Applications
-Ch_Misc.R	Further Topics
+Ch_Intro	Introduction
+Ch_Theory	General Concepts
+Ch_GLM		Multiple Comparisons in Parametric Models
+Ch_Appl		Applications
+Ch_Misc		Further Topics
