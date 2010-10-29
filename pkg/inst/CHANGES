@@ -1,4 +1,9 @@
 
+		CHANGES in `multcomp' VERSION 1.2-3
+
+    o   fix problem with plot.glht (lwd = 0 does not make sense)
+
+
 		CHANGES in `multcomp' VERSION 1.2-2
 
     o   fix dependencies, really
