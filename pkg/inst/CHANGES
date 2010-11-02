@@ -1,7 +1,12 @@
 
-		CHANGES in `multcomp' VERSION 1.2-3
+		CHANGES in `multcomp' VERSION 1.2-4
 
     o   fix problem with plot.glht (lwd = 0 does not make sense)
+
+
+		CHANGES in `multcomp' VERSION 1.2-3
+
+    o   new example on frailty models, see ?cml
 
 
 		CHANGES in `multcomp' VERSION 1.2-2
