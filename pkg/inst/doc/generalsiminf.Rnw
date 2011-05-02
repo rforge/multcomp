@@ -829,9 +829,12 @@ and caused the rejection of $H_0$. Alternatively, an MM-estimator
 \citep{Yohai1987} as implemented by \Rcmd{lmrob()} from package 
 \Rpackage{lmrob} \citep{pkg:robustbase} 
 can be used to fit a robust version of the above linear
-model, the results coincide rather nicely:
+model, the results coincide rather nicely (note that the control
+arguments to \Rcmd{lmrob()} were changed in \Rpackage{multcomp} version 1.2-6
+and thus the results have slightly changed):
 <<bodyfat-robust, echo = TRUE>>=
-summary(glht(lmrob(DEXfat ~ ., data = bodyfat), linfct = K))
+summary(glht(lmrob(DEXfat ~ ., data = bodyfat,
+             control = lmrob.control(setting = "KS2011")), linfct = K))
 @
 and the result reported above holds under very mild 
 model assumptions.

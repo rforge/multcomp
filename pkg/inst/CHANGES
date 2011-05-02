@@ -1,4 +1,17 @@
 
+		CHANGES in `multcomp' VERSION 1.2-6
+
+    o    `manual' na.omit before stepAIC is called in
+          chfls1.Rnw vignette
+
+    o    use lmrob.control(setting = "KS2011") in generalsiminf.Rnw
+
+
+		CHANGES in `multcomp' VERSION 1.2-5
+
+    o    missing comment in multcomp_VA.R
+
+
 		CHANGES in `multcomp' VERSION 1.2-4
 
     o   fix problem with plot.glht (lwd = 0 does not make sense)
