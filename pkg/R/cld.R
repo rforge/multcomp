@@ -4,7 +4,7 @@ cld <- function(object, ...)
     UseMethod("cld")
 
 cld.glht <- function(object, level = 0.05, decreasing = FALSE, ...)
-    cld(summary(object), level = level, decreasing = FALSE)
+    cld(summary(object), level = level, decreasing = decreasing)
 
 extr <- function(object) {
 
@@ -41,7 +41,7 @@ cld.summary.glht <- function(object, level = 0.05, decreasing = FALSE, ...) {
     signif <- (object$test$pvalues < level)
     names(signif) <- gsub("\\s", "", rownames(object$linfct))
     ret$signif <- signif
-    ret$mcletters <- insert_absorb(signif, decreasing = FALSE,)
+    ret$mcletters <- insert_absorb(signif, decreasing = decreasing,)
     class(ret) <- "cld"
     ret
 }
@@ -53,7 +53,7 @@ cld.confint.glht <- function(object, decreasing = FALSE, ...) {
     signif <- !(object$confint[, "lwr"] < 0 & object$confint[, "upr"] > 0)
     names(signif) <- gsub("\\s", "", rownames(object$linfct))
     ret$signif <- signif
-    ret$mcletters <- insert_absorb(signif, decreasing = FALSE)
+    ret$mcletters <- insert_absorb(signif, decreasing = decreasing)
     class(ret) <- "cld" 
     ret
 }
