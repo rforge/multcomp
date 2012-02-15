@@ -171,6 +171,15 @@ modelparm.coxph.penal <- function(model, coef. = coxph.penalcoef,
                                   vcov. = coxph.penalvcov, df = NULL, ...)
     modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
 
+polrvcov <- function(object) {
+   cf <- coef(object)
+   vcov <- vcov(object)
+   vcov[names(cf), names(cf)]
+}
+
+modelparm.polr <- function(model, coef. = coef, vcov. = polrvcov, df = NULL, ...)
+    modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
+
 ### modified from package MASS  
 MPinv <- function (X, tol = sqrt(.Machine$double.eps))
 {

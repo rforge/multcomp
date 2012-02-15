@@ -1,4 +1,8 @@
 
+		CHANGES in `multcomp' VERSION 1.2-10
+
+    o    handle polr objects in package, not only vignette
+
 		CHANGES in `multcomp' VERSION 1.2-9
 
     o    new coxme methods
