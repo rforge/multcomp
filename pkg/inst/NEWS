@@ -1,4 +1,9 @@
 
+		CHANGES in `multcomp' VERSION 1.2-11
+
+    o    handle merMod objects (package lme4 aka lme4Eigen)
+
+
 		CHANGES in `multcomp' VERSION 1.2-10
 
     o    handle polr objects in package, not only in vignette

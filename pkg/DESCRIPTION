@@ -1,6 +1,6 @@
 Package: multcomp
 Title: Simultaneous Inference in General Parametric Models
-Version: 1.2-10
+Version: 1.2-11
 Date: 2012-02-15
 Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"), 
                     email = "Torsten.Hothorn@R-project.org"), 

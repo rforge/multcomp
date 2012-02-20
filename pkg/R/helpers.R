@@ -147,6 +147,10 @@ modelparm.default <- function(model, coef. = coef, vcov. = vcov,
 modelparm.mer <- function(model, coef. = fixef, vcov. = vcov, df = NULL, ...)
     modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
 
+### mixed effects models (package `lme4Eigen')
+modelparm.merMod <- function(model, coef. = fixef, vcov. = vcov, df = NULL, ...)
+    modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
+
 ### package `nlme'
 modelparm.lme <- function(model, coef. = nlme:::fixef, vcov. = vcov, df = NULL, ...)
     modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
