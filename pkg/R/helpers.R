@@ -175,6 +175,8 @@ modelparm.coxph.penal <- function(model, coef. = coxph.penalcoef,
                                   vcov. = coxph.penalvcov, df = NULL, ...)
     modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
 
+model.matrix.polr <- model.matrix.coxph
+
 polrvcov <- function(object) {
    cf <- coef(object)
    vcov <- vcov(object)
