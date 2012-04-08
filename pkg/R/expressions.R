@@ -107,8 +107,8 @@ expression2coef <- function(ex) {
         cf <- c(cf, tmp$coef)
         nm <- c(nm, tmp$var)
 
-        ### x == "A"
-        if (is.name(x)) break
+        ### x == "A" or x == "A:B"
+        if (is.name(x) || x[[1]] == ":") break
         ### x == "-1"
         if (is_num(x)) break
         ### x == "3 * A"
