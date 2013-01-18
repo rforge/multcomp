@@ -1,4 +1,9 @@
 
+		CHANGES in `multcomp' VERSION 1.2-16
+
+    o    allow for levels with "-" and other special symbols for cld()
+
+
 		CHANGES in `multcomp' VERSION 1.2-15
 
     o    fix DESCRIPTION file entries
