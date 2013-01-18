@@ -25,13 +25,17 @@ extr <- function(object) {
     x <- mf[[object$focus]]
     xname <- object$focus
 
+    K <- contrMat(table(x), type = "Tukey")
+    comps <- cbind(apply(K, 1, function(k) levels(x)[k == 1]),
+                   apply(K, 1, function(k) levels(x)[k == -1]))
+
     f <- if (inherits(object$model, "coxph")) predict else fitted
     lp <- f(object$model)
 
     ret <- list(y = y, yname = yname,  
                 x = x, xname = xname, 
                 weights = model.weights(mf), 
-                lp = lp, covar = covar)
+                lp = lp, covar = covar, comps = comps)
     return(ret)
 }
 
@@ -41,7 +45,8 @@ cld.summary.glht <- function(object, level = 0.05, decreasing = FALSE, ...) {
     signif <- (object$test$pvalues < level)
     names(signif) <- gsub("\\s", "", rownames(object$linfct))
     ret$signif <- signif
-    ret$mcletters <- insert_absorb(signif, decreasing = decreasing,)
+    ret$mcletters <- insert_absorb(signif, decreasing = decreasing, 
+                                   comps = ret$comps, ...)
     class(ret) <- "cld"
     ret
 }
@@ -53,7 +58,8 @@ cld.confint.glht <- function(object, decreasing = FALSE, ...) {
     signif <- !(object$confint[, "lwr"] < 0 & object$confint[, "upr"] > 0)
     names(signif) <- gsub("\\s", "", rownames(object$linfct))
     ret$signif <- signif
-    ret$mcletters <- insert_absorb(signif, decreasing = decreasing)
+    ret$mcletters <- insert_absorb(signif, decreasing = decreasing, 
+                                   comps = ret$comps)
     class(ret) <- "cld" 
     ret
 }
@@ -127,16 +133,19 @@ plot.cld <- function(x, type = c("response", "lp"), ...) {
 #               the number of letters required exceeds the number of letters available
 # Decreasing ... Inverse the order of the letters 
 
-insert_absorb <- function( x, Letters=c(letters, LETTERS), separator=".", decreasing = decreasing ){
+insert_absorb <- function( x, Letters=c(letters, LETTERS), separator=".", decreasing = FALSE, 
+                           comps = NULL){
 
   obj_x <- deparse(substitute(x))
-  namx <- names(x)
-  namx <- gsub(" ", "", names(x))
-  if(length(namx) != length(x))
-    stop("Names required for ", obj_x)
-  split_names <- strsplit(namx, "-")
-  stopifnot( sapply(split_names, length) == 2 )
-  comps <- t(as.matrix(as.data.frame(split_names)))
+  if (is.null(comps)) {
+      namx <- names(x)
+      namx <- gsub(" ", "", names(x))
+      if(length(namx) != length(x))
+          stop("Names required for ", obj_x)
+      split_names <- strsplit(namx, "-")
+      stopifnot( sapply(split_names, length) == 2 )
+      comps <- t(as.matrix(as.data.frame(split_names)))
+  } 
   rownames(comps) <- names(x)
   lvls <- unique(as.vector(comps))
   n <- length(lvls)
