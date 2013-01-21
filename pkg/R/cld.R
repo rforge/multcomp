@@ -43,7 +43,7 @@ cld.summary.glht <- function(object, level = 0.05, decreasing = FALSE, ...) {
 
     ret <- extr(object)
     signif <- (object$test$pvalues < level)
-    names(signif) <- gsub("\\s", "", rownames(object$linfct))
+    # names(signif) <- gsub("\\s", "", rownames(object$linfct))
     ret$signif <- signif
     ret$mcletters <- insert_absorb(signif, decreasing = decreasing, 
                                    comps = ret$comps, ...)
@@ -56,7 +56,7 @@ cld.confint.glht <- function(object, decreasing = FALSE, ...) {
     ret <- extr(object)
     ### significant, if confidence interval does not contains 0
     signif <- !(object$confint[, "lwr"] < 0 & object$confint[, "upr"] > 0)
-    names(signif) <- gsub("\\s", "", rownames(object$linfct))
+    # names(signif) <- gsub("\\s", "", rownames(object$linfct))
     ret$signif <- signif
     ret$mcletters <- insert_absorb(signif, decreasing = decreasing, 
                                    comps = ret$comps)
