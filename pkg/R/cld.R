@@ -47,6 +47,16 @@ cld.summary.glht <- function(object, level = 0.05, decreasing = FALSE, ...) {
     ret$signif <- signif
     ret$mcletters <- insert_absorb(signif, decreasing = decreasing, 
                                    comps = ret$comps, ...)
+                           
+   # start edit
+    
+    ret$mcletters$Letters <- ret$mcletters$Letters[levels(ret$x)]
+    ret$mcletters$monospacedLetters <- ret$mcletters$monospacedLetters[levels(ret$x)]
+    ret$mcletters$LetterMatrix <- ret$mcletters$LetterMatrix[levels(ret$x),]
+    
+   # end edit
+                           
+                          
     class(ret) <- "cld"
     ret
 }
@@ -60,6 +70,15 @@ cld.confint.glht <- function(object, decreasing = FALSE, ...) {
     ret$signif <- signif
     ret$mcletters <- insert_absorb(signif, decreasing = decreasing, 
                                    comps = ret$comps)
+                           
+    # start edit
+                           
+    ret$mcletters$Letters <- ret$mcletters$Letters[levels(ret$x)]
+    ret$mcletters$monospacedLetters <- ret$mcletters$monospacedLetters[levels(ret$x)]
+    ret$mcletters$LetterMatrix <- ret$mcletters$LetterMatrix[levels(ret$x),]
+                                   
+    # end edit                      
+                           
     class(ret) <- "cld" 
     ret
 }
