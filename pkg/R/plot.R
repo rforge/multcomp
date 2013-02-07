@@ -40,6 +40,8 @@ plot.confint.glht <- function(x, xlim, xlab, ylim, ...) {
             main <- paste(format(100 * attr(x$confint, "conf.level"), 2),
                           "% confidence level\n", sep = "")
         }
+    } else {
+        main <- NULL ### main was already plotted in plot() via ...
     }
     if (missing(xlab))
           xlab <- "Linear Function"
