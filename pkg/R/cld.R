@@ -43,10 +43,14 @@ cld.summary.glht <- function(object, level = 0.05, decreasing = FALSE, ...) {
 
     ret <- extr(object)
     signif <- (object$test$pvalues < level)
+    # Order the levels according to its mean
+    # Tidy up: ret$y[1:length(ret$x)]], cox models concatenates a vector of live/dead
+    # I think this way is easier than to deal with gsub later and it's more general
+    lvl_order <- levels(ret$x)[order(tapply(as.numeric(ret$y)[1:length(ret$x)], ret$x, mean))]
     # names(signif) <- gsub("\\s", "", rownames(object$linfct))
     ret$signif <- signif
     ret$mcletters <- insert_absorb(signif, decreasing = decreasing, 
-                                   comps = ret$comps, ...)
+                                   comps = ret$comps, lvl_order = lvl_order, ...)
                            
    # start edit
     
@@ -66,10 +70,13 @@ cld.confint.glht <- function(object, decreasing = FALSE, ...) {
     ret <- extr(object)
     ### significant, if confidence interval does not contains 0
     signif <- !(object$confint[, "lwr"] < 0 & object$confint[, "upr"] > 0)
+    # Tidy up: ret$y[1:length(ret$x)]], cox models concatenates a vector of live/dead
+    # I think this way is easier than to deal with gsub later and it's more general
+    lvl_order <- levels(ret$x)[order(tapply(as.numeric(ret$y)[1:length(ret$x)], ret$x, mean))]
     # names(signif) <- gsub("\\s", "", rownames(object$linfct))
     ret$signif <- signif
     ret$mcletters <- insert_absorb(signif, decreasing = decreasing, 
-                                   comps = ret$comps)
+                                   comps = ret$comps, lvl_order = lvl_order, ...)
                            
     # start edit
                            
@@ -153,7 +160,7 @@ plot.cld <- function(x, type = c("response", "lp"), ...) {
 # Decreasing ... Inverse the order of the letters 
 
 insert_absorb <- function( x, Letters=c(letters, LETTERS), separator=".", decreasing = FALSE, 
-                           comps = NULL){
+                           comps = NULL, lvl_order){
 
   obj_x <- deparse(substitute(x))
   if (is.null(comps)) {
@@ -166,7 +173,7 @@ insert_absorb <- function( x, Letters=c(letters, LETTERS), separator=".", decrea
       comps <- t(as.matrix(as.data.frame(split_names)))
   } 
   rownames(comps) <- names(x)
-  lvls <- unique(as.vector(comps))
+  lvls <- lvl_order
   n <- length(lvls)
   lmat <- array(TRUE, dim=c(n,1), dimnames=list(lvls, NULL) )
 
