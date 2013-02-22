@@ -9,6 +9,7 @@ cld.glht <- function(object, level = 0.05, decreasing = FALSE, ...)
 extr <- function(object) {
 
     stopifnot(object$type == "Tukey")
+    
 
     mf <- model.frame(object$model)
     if (!is.null(attr(mf, "terms"))) {
@@ -17,6 +18,14 @@ extr <- function(object) {
         tm <- try(terms(object$model))
         if (inherits(tm, "try-error")) stop("no terms component found")
     }
+    
+
+    ### <FIXME> not very nice    
+    if(any(class(object$model) == "lme")){
+      mf <- get_all_vars(tm, mf)
+    }
+    ### </FIXME>
+    
     covar <- (length(attr(tm, "term.labels")) > 1)
     y <- mf[[1L]]
     yname <- colnames(mf)[[1L]]
