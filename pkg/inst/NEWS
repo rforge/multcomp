@@ -1,4 +1,9 @@
 
+		CHANGES in `multcomp' VERSION 1.2-17
+
+    o    fix typo in DESCRIPTION file
+
+
 		CHANGES in `multcomp' VERSION 1.2-16
 
     o    allow for levels with "-" and other special symbols for cld()
