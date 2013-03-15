@@ -5,7 +5,7 @@ Date: 2013-01-18
 Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"), 
                     email = "Torsten.Hothorn@R-project.org"), 
         person("Frank", "Bretz", role = "aut"), 
-        person("Peter", "Westfal", role = "aut"),
+        person("Peter", "Westfall", role = "aut"),
         person("Richard M.", "Heiberger", role = "ctb"),
         person("Andre", "Schuetzenmeister", role = "ctb"))
 Description: Simultaneous tests and confidence intervals
