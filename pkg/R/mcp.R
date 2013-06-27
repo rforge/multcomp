@@ -357,7 +357,7 @@ mcp2matrix2 <- function (model, linfct, interaction_average = FALSE,
                      stop("inconsistent covariate_average")
                    c.a <-
                      if (covariate_average=="mean" || covariate_average==TRUE)
-                       mean(mf[, ivar, drop = FALSE])
+                       colMeans(mf[, ivar, drop = FALSE])
                      else
                        unlist(covariate_average)
                    whichCols <- grep(names(classes), dimnames(Ktotal)[[2]])
