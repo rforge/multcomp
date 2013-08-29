@@ -237,7 +237,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   ### extract information
 >   tuk.cld <- cld(tuk)
 >   ### use sufficiently large upper margin
->   old.par <- par( mai=c(1,1,1.25,1))
+>   old.par <- par(mai=c(1,1,1.25,1), no.readonly = TRUE)
 >   ### plot
 >   plot(tuk.cld)
 >   par(old.par)
@@ -250,7 +250,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   ### extract information
 >   tuk.cld2 <- cld(tuk2)
 >   ### use sufficiently large upper margin
->   old.par <- par( mai=c(1,1,1.25,1))
+>   old.par <- par(mai=c(1,1,1.25,1), no.readonly = TRUE)
 >   ### plot using different colors
 >   plot(tuk.cld2, col=c("black", "red", "blue"))
 >   par(old.par)
@@ -263,8 +263,8 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 >   ### extract information
 >   mod.cld <- cld(glht.mod)
 >   ### use sufficiently large upper margin
->   old.par <- par(mai=c(1,1,1.5,1))
->   ### plott
+>   old.par <- par(mai=c(1,1,1.5,1), no.readonly = TRUE)
+>   ### plot
 >   plot(mod.cld)
 >   par(old.par)
 > 
@@ -1543,7 +1543,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  10.112 0.2 10.343 0 0 
+Time elapsed:  9.94 0.204 10.158 0 0 
 > grDevices::dev.off()
 null device 
           1 
