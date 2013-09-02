@@ -70,7 +70,7 @@ model.matrix.survreg <- function(object, ...) {
 }
 
 ### coxme objects
-model.matrix.coxme <- multcomp:::model.matrix.coxph
+model.matrix.coxme <- multcomp::model.matrix.coxph
 
 
 
@@ -152,7 +152,7 @@ modelparm.merMod <- function(model, coef. = fixef, vcov. = vcov, df = NULL, ...)
     modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
 
 ### package `nlme'
-modelparm.lme <- function(model, coef. = nlme:::fixef, vcov. = vcov, df = NULL, ...)
+modelparm.lme <- function(model, coef. = nlme::fixef, vcov. = vcov, df = NULL, ...)
     modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
 
 ### survreg models (package `survival')
