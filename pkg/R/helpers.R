@@ -70,7 +70,7 @@ model.matrix.survreg <- function(object, ...) {
 }
 
 ### coxme objects
-model.matrix.coxme <- multcomp::model.matrix.coxph
+model.matrix.coxme <- model.matrix.coxph
 
 
 
