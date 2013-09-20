@@ -6,3 +6,4 @@ inst/paper
 inst/slides
 inst/multcomp_book
 inst/LaTeXBibTeX
+vignettes/*pdf
