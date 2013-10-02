@@ -97,7 +97,12 @@ group <- factor(rep(c("A", "B"), 50))
 m1 <- glm(y2.1 ~ group, family = binomial)
 m2 <- glm(y2.2 ~ group, family = binomial)
 
-summary(glht(mmm(m1 = m1, m2 = m2), mlf(m1 = "groupB = 0", m2 = "groupB = 0")))
+summary(glht(mmm(m1 = m1, m2 = m2), 
+             mlf(m1 = "groupB = 0", m2 = "groupB = 0")))
+
+### use sandwich covariance matrix
+summary(glht(mmm(m1 = m1, m2 = m2), 
+             mlf(m1 = "groupB = 0", m2 = "groupB = 0"), vcov = sandwich))
 
 }
 \keyword{models}

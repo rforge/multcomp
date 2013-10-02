@@ -64,12 +64,12 @@ coef.mmm <- function(object, ...) {
 }
 
 ### extract estimating functions
-estfun.mmm <- function(object, ...)
-    do.call("cbind", lapply(object, estfun, ...))
+estfun.mmm <- function(x, ...)
+    do.call("cbind", lapply(x, estfun, ...))
 
 ### extract bread
-bread.mmm <- function(object, ...)
-    .bdiag(lapply(object, bread))
+bread.mmm <- function(x, ...)
+    .bdiag(lapply(x, bread))
 
 ### set-up total covariance matrix
 vcov.mmm <- function(object, ...) {
