@@ -57,6 +57,34 @@ mlf(...)
 
 \examples{
 
+### replicate analysis of Hasler & Hothorn (2011), 
+### A Dunnett-Type Procedure for Multiple Endpoints,
+### The International Journal of Biostatistics: Vol. 7: Iss. 1, Article 3.
+### DOI: 10.2202/1557-4679.1258
+
+data("coagulation", package = "SimComp")
+
+coagulation$Group <- relevel(coagulation$Group, ref = 3)
+
+m1 <- lm(Thromb.count ~ Group, data = coagulation)
+m2 <- lm(ADP ~ Group, data = coagulation)
+m3 <- lm(TRAP ~ Group, data = coagulation)
+
+g <- glht(mmm(Thromb = m1, ADP = m2, TRAP = m3),
+          mlf(Thromb = mcp(Group = "Dunnett"),
+              ADP    = mcp(Group = "Dunnett"),
+              TRAP   = mcp(Group = "Dunnett")))
+summary(g)
+confint(g)
+
+g <- glht(mmm(Thromb = m1, ADP = m2, TRAP = m3),
+          mlf(Thromb = mcp(Group = "Dunnett"),
+              ADP    = mcp(Group = "Dunnett"),
+              TRAP   = mcp(Group = "Dunnett")), vcov = sandwich)
+summary(g)
+confint(g)
+
+
 ## Combining linear regression and logistic regression
 set.seed(29)
 y1 <- rnorm(100)
