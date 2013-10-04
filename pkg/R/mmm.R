@@ -47,7 +47,6 @@ mmm <- function(...) {
 mlf <- function(...) {
 
      ret <- list(...)
-     stopifnot(!is.null(names(ret)))
      class(ret) <- "mlf"
      ret
 }
@@ -57,7 +56,7 @@ coef.mmm <- function(object, ...) {
 
      ret <- lapply(object, function(o) modelparm(o)$coef)
      n <- lapply(1:length(ret), function(i) 
-                 paste(names(object)[i], names(ret[[i]]), sep = "_"))
+                 paste(names(object)[i], names(ret[[i]]), sep = ": "))
      ret <- unlist(ret)
      names(ret) <- unlist(n)
      ret
@@ -90,11 +89,21 @@ vcov.mmm <- function(object, ...) {
 glht.mlf <- function(model, linfct, ...) {
 
     stopifnot(inherits(model, "mmm"))
+    if (length(linfct) == 1) {
+        linfct <- linfct[rep(1, length(model))]
+        names(linfct) <- names(model)
+    }
+    if (!isTRUE(all.equal(names(model), names(linfct))))
+        stop("names of ", sQuote("model"), " and ", sQuote("linfct"),
+             " are not identical")
+
     K <- lapply(names(model), function(i) 
                 glht(model[[i]], linfct = linfct[[i]], ...)$linfct)
     for (k in 1:length(K)) {
-        rownames(K[[k]]) <- paste(names(model)[k], rownames(K[[k]]), sep = "_")
-        colnames(K[[k]]) <- paste(names(model)[k], colnames(K[[k]]), sep = "_")
+        rownames(K[[k]]) <- paste(names(model)[k], 
+            rownames(K[[k]]), sep = ": ")
+        colnames(K[[k]]) <- paste(names(model)[k], 
+            colnames(K[[k]]), sep = ": ")
     }
 
     glht.matrix(model, linfct = .bdiag(K), ...)

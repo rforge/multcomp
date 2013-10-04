@@ -1,6 +1,8 @@
 
 library("multcomp")
 
+###<FIXME> compare results of mmod and glht.mlf </FIXME>
+
 ### code by Christian Ritz
 "mmod" <- function(modelList, varName, seType = "san")
 {
