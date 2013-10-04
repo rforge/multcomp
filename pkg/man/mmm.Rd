@@ -111,6 +111,26 @@ g <- glht(mmm(Thromb = m1, ADP = m2, TRAP = m3),
 summary(g)
 confint(g)
 
+### attitude towards science data
+data("mn6.9", package = "multmod")
+
+### one model for each item
+mn6.9.y1 <- glm(y1 ~ group, family = binomial(), 
+                na.action = na.omit, data = mn6.9)
+mn6.9.y2 <- glm(y2 ~ group, family = binomial(), 
+                na.action = na.omit, data = mn6.9)
+mn6.9.y3 <- glm(y3 ~ group, family = binomial(), 
+                na.action = na.omit, data = mn6.9)
+mn6.9.y4 <- glm(y4 ~ group, family = binomial(), 
+                na.action = na.omit, data = mn6.9)
+
+### test all parameters simulaneously
+summary(glht(mmm(mn6.9.y1, mn6.9.y2, mn6.9.y3, mn6.9.y4), 
+             mlf(diag(2))))
+### group differences
+summary(glht(mmm(mn6.9.y1, mn6.9.y2, mn6.9.y3, mn6.9.y4), 
+             mlf("group2 = 0")))
+
 ### alternative analysis of Klingenberg & Satopaa (2013),
 ### Simultaneous Confidence Intervals for Comparing Margins of
 ### Multivariate Binary Data, CSDA, 64, 87-98
