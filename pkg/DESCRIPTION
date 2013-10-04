@@ -18,7 +18,7 @@ Depends: stats, graphics, mvtnorm (>= 0.8-0), survival (>= 2.35-7),
   sandwich, zoo
 Suggests: lme4 (>= 0.999375-16), nlme, robustbase, mboost, coin, MASS,
         car, foreign, xtable, lmtest, coxme (>= 2.2-1),
-        TH.data, SimComp
+        TH.data, SimComp, multmod
 URL: The publishers web page is
         http://www.crcpress.com/product/isbn/9781584885740
 LazyData: yes
