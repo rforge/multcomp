@@ -105,6 +105,7 @@ confint(g)
 }
 
 ### use sandwich variance matrix
+library("sandwich")
 g <- glht(mmm(Thromb = m1, ADP = m2, TRAP = m3),
           mlf(mcp(Group = "Dunnett")), 
           alternative = "greater", vcov = sandwich)
