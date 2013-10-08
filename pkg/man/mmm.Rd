@@ -33,6 +33,10 @@ mlf(...)
   The implementation assumes that the model were fitted to the same data,
   i.e., the rows of the matrices returned by \code{estfun} belong to the
   same observations for each model.
+
+  The reference distribution is always multivariate normal, if you want
+  to use the multivariate t, please specify the corresponding degrees of
+  freedom as an additional \code{df} argument to \code{\link{glht}}.
 }
 
 \value{
