@@ -37,6 +37,11 @@ mlf(...)
   The reference distribution is always multivariate normal, if you want
   to use the multivariate t, please specify the corresponding degrees of
   freedom as an additional \code{df} argument to \code{\link{glht}}.
+
+  Observations with missing values contribute zero to the score function.
+  Models have to be fitted using \code{\link{na.exclude}} as \code{na.action}
+  argument.
+
 }
 
 \value{
