@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2013-09-01 r63796) -- "Unsuffered Consequences"
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
@@ -601,14 +601,6 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 +     confint(amod_glht)
 + }
 Loading required package: sandwich
-Loading required package: zoo
-
-Attaching package: ‘zoo’
-
-The following objects are masked from ‘package:base’:
-
-    as.Date, as.Date.numeric
-
 
 	 Simultaneous Confidence Intervals
 
@@ -644,7 +636,7 @@ PE9 - PE7 == 0  0.085583  0.006582  0.164584
 > 
 > cleanEx()
 
-detaching ‘package:sandwich’, ‘package:zoo’
+detaching ‘package:sandwich’
 
 > nameEx("glht")
 > ### * glht
@@ -653,7 +645,8 @@ detaching ‘package:sandwich’, ‘package:zoo’
 > 
 > ### Name: glht
 > ### Title: General Linear Hypotheses
-> ### Aliases: glht glht.matrix glht.character glht.expression glht.mcp mcp
+> ### Aliases: glht glht.matrix glht.character glht.expression glht.mcp
+> ###   glht.mlf mcp
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -1129,6 +1122,450 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 detaching ‘package:MASS’
 
+> nameEx("mmm")
+> ### * mmm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: mmm
+> ### Title: Simultaneous Inference for Multiple Marginal Models
+> ### Aliases: mmm mlf
+> ### Keywords: models
+> 
+> ### ** Examples
+> 
+> 
+> ### replicate analysis of Hasler & Hothorn (2011), 
+> ### A Dunnett-Type Procedure for Multiple Endpoints,
+> ### The International Journal of Biostatistics: Vol. 7: Iss. 1, Article 3.
+> ### DOI: 10.2202/1557-4679.1258
+> 
+> ### see ?coagulation
+> data("coagulation", package = "SimComp")
+> 
+> ### level "S" is the standard, "H" and "B" are novel procedures
+> coagulation$Group <- relevel(coagulation$Group, ref = "S")
+> 
+> ### fit marginal models
+> (m1 <- lm(Thromb.count ~ Group, data = coagulation))
+
+Call:
+lm(formula = Thromb.count ~ Group, data = coagulation)
+
+Coefficients:
+(Intercept)       GroupB       GroupH  
+    0.87219      0.12170      0.04351  
+
+> (m2 <- lm(ADP ~ Group, data = coagulation))
+
+Call:
+lm(formula = ADP ~ Group, data = coagulation)
+
+Coefficients:
+(Intercept)       GroupB       GroupH  
+    0.80801      0.21211      0.08422  
+
+> (m3 <- lm(TRAP ~ Group, data = coagulation))
+
+Call:
+lm(formula = TRAP ~ Group, data = coagulation)
+
+Coefficients:
+(Intercept)       GroupB       GroupH  
+    0.72529      0.10525      0.07109  
+
+> 
+> ### set-up Dunnett comparisons for H - S and B - S 
+> ### for all three models
+> g <- glht(mmm(Thromb = m1, ADP = m2, TRAP = m3),
++           mlf(mcp(Group = "Dunnett")), alternative = "greater")
+> 
+> ### joint correlation
+> cov2cor(vcov(g))
+              Thromb: B - S Thromb: H - S ADP: B - S ADP: H - S TRAP: B - S
+Thromb: B - S     1.0000000     0.2841127  0.8492078  0.1712958   0.3142199
+Thromb: H - S     0.2841127     1.0000000  0.1339935  0.8869262   0.3423331
+ADP: B - S        0.8492078     0.1339935  1.0000000  0.1162019   0.2396233
+ADP: H - S        0.1712958     0.8869262  0.1162019  1.0000000   0.2236344
+TRAP: B - S       0.3142199     0.3423331  0.2396233  0.2236344   1.0000000
+TRAP: H - S       0.3765291     0.7054480  0.1924089  0.5818189   0.5560384
+              TRAP: H - S
+Thromb: B - S   0.3765291
+Thromb: H - S   0.7054480
+ADP: B - S      0.1924089
+ADP: H - S      0.5818189
+TRAP: B - S     0.5560384
+TRAP: H - S     1.0000000
+> 
+> ### simultaneous p-values adjusted by taking the correlation
+> ### between the score contributions into account
+> summary(g)
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Linear Hypotheses:
+                   Estimate Std. Error z value Pr(>z)  
+Thromb: B - S <= 0  0.12170    0.10468   1.163 0.3747  
+Thromb: H - S <= 0  0.04351    0.10238   0.425 0.7267  
+ADP: B - S <= 0     0.21211    0.08394   2.527 0.0263 *
+ADP: H - S <= 0     0.08422    0.08209   1.026 0.4401  
+TRAP: B - S <= 0    0.10525    0.14287   0.737 0.5828  
+TRAP: H - S <= 0    0.07109    0.13973   0.509 0.6902  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+(Adjusted p values reported -- single-step method)
+
+> ### simultaneous confidence intervals
+> confint(g)
+
+	 Simultaneous Confidence Intervals
+
+Fit: NULL
+
+Quantile = -2.2713
+95% family-wise confidence level
+ 
+
+Linear Hypotheses:
+                   Estimate lwr      upr     
+Thromb: B - S <= 0  0.12170 -0.11606      Inf
+Thromb: H - S <= 0  0.04351 -0.18903      Inf
+ADP: B - S <= 0     0.21211  0.02146      Inf
+ADP: H - S <= 0     0.08422 -0.10223      Inf
+TRAP: B - S <= 0    0.10525 -0.21925      Inf
+TRAP: H - S <= 0    0.07109 -0.24628      Inf
+
+> 
+> ### compare with
+> ## Not run: 
+> ##D     library("SimComp")
+> ##D     SimCiDiff(data = coagulation, grp = "Group",
+> ##D               resp = c("Thromb.count","ADP","TRAP"), 
+> ##D               type = "Dunnett", alternative = "greater",
+> ##D               covar.equal = TRUE)
+> ## End(Not run)
+> 
+> ### use sandwich variance matrix
+> library("sandwich")
+> g <- glht(mmm(Thromb = m1, ADP = m2, TRAP = m3),
++           mlf(mcp(Group = "Dunnett")), 
++           alternative = "greater", vcov = sandwich)
+> summary(g)
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Linear Hypotheses:
+                   Estimate Std. Error z value Pr(>z)  
+Thromb: B - S <= 0  0.12170    0.08719   1.396 0.2728  
+Thromb: H - S <= 0  0.04351    0.09814   0.443 0.7190  
+ADP: B - S <= 0     0.21211    0.07664   2.767 0.0135 *
+ADP: H - S <= 0     0.08422    0.06749   1.248 0.3358  
+TRAP: B - S <= 0    0.10525    0.13590   0.774 0.5644  
+TRAP: H - S <= 0    0.07109    0.13909   0.511 0.6892  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+(Adjusted p values reported -- single-step method)
+
+> confint(g)
+
+	 Simultaneous Confidence Intervals
+
+Fit: NULL
+
+Quantile = -2.2714
+95% family-wise confidence level
+ 
+
+Linear Hypotheses:
+                   Estimate lwr      upr     
+Thromb: B - S <= 0  0.12170 -0.07633      Inf
+Thromb: H - S <= 0  0.04351 -0.17941      Inf
+ADP: B - S <= 0     0.21211  0.03802      Inf
+ADP: H - S <= 0     0.08422 -0.06907      Inf
+TRAP: B - S <= 0    0.10525 -0.20344      Inf
+TRAP: H - S <= 0    0.07109 -0.24483      Inf
+
+> 
+> ### attitude towards science data
+> data("mn6.9", package = "TH.data")
+> 
+> ### one model for each item
+> mn6.9.y1 <- glm(y1 ~ group, family = binomial(), 
++                 na.action = na.omit, data = mn6.9)
+> mn6.9.y2 <- glm(y2 ~ group, family = binomial(), 
++                 na.action = na.omit, data = mn6.9)
+> mn6.9.y3 <- glm(y3 ~ group, family = binomial(), 
++                 na.action = na.omit, data = mn6.9)
+> mn6.9.y4 <- glm(y4 ~ group, family = binomial(), 
++                 na.action = na.omit, data = mn6.9)
+> 
+> ### test all parameters simulaneously
+> summary(glht(mmm(mn6.9.y1, mn6.9.y2, mn6.9.y3, mn6.9.y4), 
++              mlf(diag(2))))
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Linear Hypotheses:
+                 Estimate Std. Error z value Pr(>|z|)    
+mn6.9.y1: 1 == 0  1.47323    0.06649  22.156   <1e-04 ***
+mn6.9.y1: 2 == 0  0.14833    0.09638   1.539   0.5806    
+mn6.9.y2: 1 == 0 -1.38713    0.06476 -21.419   <1e-04 ***
+mn6.9.y2: 2 == 0 -0.19598    0.09455  -2.073   0.2331    
+mn6.9.y3: 1 == 0  0.44024    0.05306   8.298   <1e-04 ***
+mn6.9.y3: 2 == 0 -0.37449    0.07417  -5.049   <1e-04 ***
+mn6.9.y4: 1 == 0  0.16537    0.05197   3.182   0.0108 *  
+mn6.9.y4: 2 == 0 -0.37132    0.07357  -5.047   <1e-04 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+(Adjusted p values reported -- single-step method)
+
+> ### group differences
+> summary(glht(mmm(mn6.9.y1, mn6.9.y2, mn6.9.y3, mn6.9.y4), 
++              mlf("group2 = 0")))
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Linear Hypotheses:
+                      Estimate Std. Error z value Pr(>|z|)    
+mn6.9.y1: group2 == 0  0.14833    0.09638   1.539    0.409    
+mn6.9.y2: group2 == 0 -0.19598    0.09455  -2.073    0.144    
+mn6.9.y3: group2 == 0 -0.37449    0.07417  -5.049   <1e-04 ***
+mn6.9.y4: group2 == 0 -0.37132    0.07357  -5.047   <1e-04 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+(Adjusted p values reported -- single-step method)
+
+> 
+> ### alternative analysis of Klingenberg & Satopaa (2013),
+> ### Simultaneous Confidence Intervals for Comparing Margins of
+> ### Multivariate Binary Data, CSDA, 64, 87-98
+> ### http://dx.doi.org/10.1016/j.csda.2013.02.016
+> 
+> ### see supplementary material for data description
+> ### NOTE: this is not the real data but only a subsample
+> influenza <- structure(list(
++ HEADACHE = c(1L, 0L, 0L, 1L, 0L, 0L, 1L, 1L, 1L,
++ 0L, 0L, 1L, 0L, 1L, 0L, 1L, 1L, 1L, 1L, 1L, 1L, 0L, 0L, 0L, 0L,
++ 1L, 1L), MALAISE = c(0L, 0L, 1L, 1L, 0L, 1L, 1L, 1L, 0L, 1L,
++ 0L, 0L, 1L, 1L, 0L, 0L, 1L, 0L, 1L, 0L, 1L, 0L, 1L, 1L, 0L, 1L,
++ 0L), PYREXIA = c(0L, 0L, 0L, 0L, 0L, 1L, 0L, 1L, 0L, 0L, 1L,
++ 1L, 1L, 1L, 0L, 0L, 0L, 0L, 0L, 1L, 1L, 1L, 0L, 0L, 0L, 1L, 1L
++ ), ARTHRALGIA = c(0L, 0L, 0L, 0L, 1L, 0L, 1L, 0L, 1L, 1L, 0L,
++ 0L, 1L, 1L, 0L, 1L, 0L, 0L, 1L, 0L, 0L, 0L, 0L, 1L, 1L, 1L, 1L
++ ), group = structure(c(2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L,
++ 2L, 2L, 2L, 2L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L,
++ 1L), .Label = c("pla", "trt"), class = "factor"), Freq = c(32L,
++ 165L, 10L, 23L, 3L, 1L, 4L, 2L, 4L, 2L, 1L, 1L, 1L, 1L, 167L,
++ 1L, 11L, 37L, 7L, 7L, 5L, 3L, 3L, 1L, 2L, 4L, 2L)), .Names = c("HEADACHE",
++ "MALAISE", "PYREXIA", "ARTHRALGIA", "group", "Freq"), row.names = c(1L,
++ 2L, 3L, 5L, 9L, 36L, 43L, 50L, 74L, 83L, 139L, 175L, 183L, 205L,
++ 251L, 254L, 255L, 259L, 279L, 281L, 282L, 286L, 302L, 322L, 323L,
++ 366L, 382L), class = "data.frame")
+> influenza <- influenza[rep(1:nrow(influenza), influenza$Freq), 1:5]
+> 
+> ### Fitting marginal logistic regression models
+> (head_logreg <- glm(HEADACHE ~ group, data = influenza, 
++                     family = binomial()))
+
+Call:  glm(formula = HEADACHE ~ group, family = binomial(), data = influenza)
+
+Coefficients:
+(Intercept)     grouptrt  
+    -0.8664      -0.1384  
+
+Degrees of Freedom: 499 Total (i.e. Null);  498 Residual
+Null Deviance:	    594.8 
+Residual Deviance: 594.3 	AIC: 598.3
+> (mala_logreg <- glm(MALAISE ~ group, data = influenza, 
++                     family = binomial()))
+
+Call:  glm(formula = MALAISE ~ group, family = binomial(), data = influenza)
+
+Coefficients:
+(Intercept)     grouptrt  
+    -1.9551       0.4114  
+
+Degrees of Freedom: 499 Total (i.e. Null);  498 Residual
+Null Deviance:	    422.7 
+Residual Deviance: 420 	AIC: 424
+> (pyre_logreg <- glm(PYREXIA ~ group, data = influenza, 
++                     family = binomial()))
+
+Call:  glm(formula = PYREXIA ~ group, family = binomial(), data = influenza)
+
+Coefficients:
+(Intercept)     grouptrt  
+     -2.389       -1.158  
+
+Degrees of Freedom: 499 Total (i.e. Null);  498 Residual
+Null Deviance:	    215.8 
+Residual Deviance: 208.1 	AIC: 212.1
+> (arth_logreg <- glm(ARTHRALGIA ~ group, data = influenza, 
++                     family = binomial()))
+
+Call:  glm(formula = ARTHRALGIA ~ group, family = binomial(), data = influenza)
+
+Coefficients:
+(Intercept)     grouptrt  
+    -2.6178      -0.1337  
+
+Degrees of Freedom: 499 Total (i.e. Null);  498 Residual
+Null Deviance:	    237.8 
+Residual Deviance: 237.7 	AIC: 241.7
+> 
+> ### Simultaneous inference for log-odds
+> xy.sim <- glht(mmm(head = head_logreg,
++                    mala = mala_logreg,
++                    pyre = pyre_logreg,
++                    arth = arth_logreg),
++                mlf("grouptrt = 0"))
+> summary(xy.sim)
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Linear Hypotheses:
+                    Estimate Std. Error z value Pr(>|z|)  
+head: grouptrt == 0  -0.1384     0.1990  -0.695   0.9181  
+mala: grouptrt == 0   0.4114     0.2538   1.621   0.3355  
+pyre: grouptrt == 0  -1.1580     0.4460  -2.596   0.0358 *
+arth: grouptrt == 0  -0.1337     0.3661  -0.365   0.9918  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+(Adjusted p values reported -- single-step method)
+
+> confint(xy.sim)
+
+	 Simultaneous Confidence Intervals
+
+Fit: NULL
+
+Quantile = 2.4749
+95% family-wise confidence level
+ 
+
+Linear Hypotheses:
+                    Estimate lwr      upr     
+head: grouptrt == 0 -0.13837 -0.63078  0.35403
+mala: grouptrt == 0  0.41140 -0.21669  1.03948
+pyre: grouptrt == 0 -1.15795 -2.26187 -0.05404
+arth: grouptrt == 0 -0.13371 -1.03979  0.77237
+
+> 
+> ### Artificial examples
+> ### Combining linear regression and logistic regression
+> set.seed(29)
+> y1 <- rnorm(100)
+> y2 <- factor(y1 + rnorm(100, sd = .1) > 0)
+> x1 <- gl(4, 25) 
+> x2 <- runif(100, 0, 10)
+> 
+> m1 <- lm(y1 ~ x1 + x2)
+> m2 <- glm(y2 ~ x1 + x2, family = binomial())
+> ### Note that the same explanatory variables are considered in both models
+> ### but the resulting parameter estimates are on 2 different scales 
+> ### (original and log-odds scales)
+> 
+> ### Simultaneous inference for the same parameter in the 2 model fits
+> summary(glht(mmm(m1 = m1, m2 = m2), mlf("x12 = 0")))
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Linear Hypotheses:
+             Estimate Std. Error z value Pr(>|z|)
+m1: x12 == 0  -0.3537     0.2850  -1.241    0.321
+m2: x12 == 0  -0.6409     0.5765  -1.112    0.392
+(Adjusted p values reported -- single-step method)
+
+> 
+> ### Simultaneous inference for different parameters in the 2 model fits
+> summary(glht(mmm(m1 = m1, m2 = m2),
++              mlf(m1 = "x12 = 0", m2 = "x13 = 0")))
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Linear Hypotheses:
+             Estimate Std. Error z value Pr(>|z|)
+m1: x12 == 0  -0.3537     0.2850  -1.241    0.362
+m2: x13 == 0  -0.8264     0.5824  -1.419    0.270
+(Adjusted p values reported -- single-step method)
+
+> 
+> ### Simultaneous inference for different and identical parameters in the 2
+> ### model fits
+> summary(glht(mmm(m1 = m1, m2 = m2),
++              mlf(m1 = c("x12 = 0", "x13 = 0"), m2 = "x13 = 0")))
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Linear Hypotheses:
+             Estimate Std. Error z value Pr(>|z|)
+m1: x12 == 0  -0.3537     0.2850  -1.241    0.418
+m1: x13 == 0  -0.4220     0.2849  -1.481    0.286
+m2: x13 == 0  -0.8264     0.5824  -1.419    0.317
+(Adjusted p values reported -- single-step method)
+
+> 
+> ### Examples for binomial data
+> ### Two independent outcomes
+> y1.1 <- rbinom(100, 1, 0.5)
+> y1.2 <- rbinom(100, 1, 0.5)
+> group <- factor(rep(c("A", "B"), 50))
+> 
+> m1 <- glm(y1.1 ~ group, family = binomial)
+> m2 <- glm(y1.2 ~ group, family = binomial)
+> 
+> summary(glht(mmm(m1 = m1, m2 = m2), 
++              mlf("groupB = 0")))
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Linear Hypotheses:
+                 Estimate Std. Error z value Pr(>|z|)
+m1: groupB == 0 4.855e-01  4.043e-01   1.201    0.407
+m2: groupB == 0 9.356e-16  4.013e-01   0.000    1.000
+(Adjusted p values reported -- single-step method)
+
+> 
+> ### Two perfectly correlated outcomes
+> y2.1 <- rbinom(100, 1, 0.5)
+> y2.2 <- y2.1
+> group <- factor(rep(c("A", "B"), 50))
+> 
+> m1 <- glm(y2.1 ~ group, family = binomial)
+> m2 <- glm(y2.2 ~ group, family = binomial)
+> 
+> summary(glht(mmm(m1 = m1, m2 = m2), 
++              mlf("groupB = 0")))
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Linear Hypotheses:
+                Estimate Std. Error z value Pr(>|z|)
+m1: groupB == 0   0.4015     0.4021   0.999    0.318
+m2: groupB == 0   0.4015     0.4021   0.999    0.318
+(Adjusted p values reported -- single-step method)
+
+> 
+> ### use sandwich covariance matrix
+> summary(glht(mmm(m1 = m1, m2 = m2), 
++              mlf("groupB = 0"), vcov = sandwich))
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Linear Hypotheses:
+                Estimate Std. Error z value Pr(>|z|)
+m1: groupB == 0   0.4015     0.4021   0.999    0.318
+m2: groupB == 0   0.4015     0.4021   0.999    0.318
+(Adjusted p values reported -- single-step method)
+
+> 
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:sandwich’
+
 > nameEx("parm")
 > ### * parm
 > 
@@ -1268,18 +1705,14 @@ Loading required package: MASS
 +   }
 Loading required package: nlme
 Loading required package: lme4
-Loading required package: Matrix
 Loading required package: lattice
+Loading required package: Matrix
 
 Attaching package: ‘lme4’
 
-The following objects are masked from ‘package:nlme’:
+The following object is masked from ‘package:nlme’:
 
-    VarCorr, lmList
-
-The following objects are masked from ‘package:stats’:
-
-    AIC, BIC
+    lmList
 
 > 
 > 
@@ -1543,7 +1976,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  10.556 0.192 10.767 0 0 
+Time elapsed:  10.9 0.24 11.161 0 0 
 > grDevices::dev.off()
 null device 
           1 

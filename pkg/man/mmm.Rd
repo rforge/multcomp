@@ -122,7 +122,7 @@ summary(g)
 confint(g)
 
 ### attitude towards science data
-data("mn6.9", package = "multmod")
+data("mn6.9", package = "TH.data")
 
 ### one model for each item
 mn6.9.y1 <- glm(y1 ~ group, family = binomial(), 
