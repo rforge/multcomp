@@ -14,12 +14,12 @@ Description: Simultaneous tests and confidence intervals
   The package includes demos reproducing analyzes presented
   in the book "Multiple Comparisons Using R" (Bretz, Hothorn, 
   Westfall, 2010, CRC Press).
-Depends: stats, graphics, mvtnorm (>= 0.8-0), survival (>= 2.35-7)
+Depends: stats, graphics, mvtnorm (>= 0.8-0), survival (>= 2.35-7), 
+  TH.data (>= 1.0-2)
 Imports: sandwich (>= 2.3-0)
 Suggests: lme4 (>= 0.999375-16), nlme, robustbase, mboost, coin, MASS,
-        car, foreign, xtable, lmtest, coxme (>= 2.2-1),
-        TH.data (>= 1.0-2), SimComp
+  car, foreign, xtable, lmtest, coxme (>= 2.2-1), SimComp
 URL: The publishers web page is
-        http://www.crcpress.com/product/isbn/9781584885740
+  http://www.crcpress.com/product/isbn/9781584885740
 LazyData: yes
 License: GPL-2
