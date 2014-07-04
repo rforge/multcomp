@@ -1,0 +1,26 @@
+- name: Torsten Hothorn
+  given: Torsten
+  family: Hothorn
+  role:
+  - aut
+  - cre
+  email: Torsten.Hothorn@R-project.org
+  comment: ~
+  url: http://user.math.uzh.ch/hothorn/
+  image: http://user.math.uzh.ch/hothorn/pics/th.jpg
+- name: Frank Bretz
+  given: Frank
+  family: Bretz
+  role: aut
+  email: ~
+  comment: ~
+  url: http://www.biostat.uni-hannover.de/fb.html
+  image: http://mediasres-itn.eu/sites/default/files/images/Frank%20Bretz.JPG
+- name: Peter Westfall
+  given: Peter
+  family: Westfall
+  role: aut
+  email: ~
+  comment: ~
+  url: http://westfall.ba.ttu.edu/pwvita.htm
+  image: http://www.rawlsnews.ba.ttu.edu/wp-content/uploads/peter-westfall.jpg

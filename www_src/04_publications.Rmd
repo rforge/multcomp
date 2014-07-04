@@ -1,0 +1,25 @@
+---
+layout: page
+title: Publications
+permalink: /publications/
+---
+
+Scholary papers describing the methodology
+========================================================
+
+```{r setup, include = FALSE, cache = FALSE}
+library("RefManageR")
+bib <- ReadBib("TH.bib", check = FALSE)
+BibOptions(check.entries = FALSE, style = "html", cite.style = "authoryear",
+           bib.style = "numeric")
+```
+The multcomp package implements multiplicity-adjusted tests and simultaneous
+confidence intervals for linear combinations of model parameters using
+methodology described in `r Citet(bib, "Hothorn+Bretz+Westfall:2008")`
+and the book by `r Citet(bib, "Bretz+Hothorn+Westfall_2010")`.
+
+**References**
+
+```{r results = "asis", echo = FALSE}
+PrintBibliography(bib, .opts = list(check.entries = FALSE, sorting = "ynt"))
+```
