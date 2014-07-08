@@ -5,12 +5,12 @@ library("markdown")
 pkg <- "multcomp"
 download.file("http://user.math.uzh.ch/hothorn/TH.bib", dest = "TH.bib")
 dest <- "html"
+publish <- "../www"
 
 if (!file.exists(dest))
     dir.create(dest)
 
 stopifnot(file.exists(dest)) 
-system("rm -rf www/_posts/*")
 
 template <- system.file("template", package = "pkg2html")
 
@@ -35,12 +35,22 @@ for (f in Rmd)
 
 file.remove("TH.bib")
 
-#file.copy("party.jpg", file.path(dest, "img"))
 x <- readLines(file.path(dest, "_data", "pkg.yml"))
-#x <- c(x, "headpic: /img/party.jpg")
-x <- c(x, "acol: \'a         { color: #FF00FF; text-decoration: none; }\'")
-x <- c(x, "acolvisited: \'a:visited { color: #FF0000; }\'")
+x <- c(x, "headpic: /img/multcomp.png")
 writeLines(x, con = file.path(dest, "_data", "pkg.yml"))
 
+file.copy("_config.yml", dest, overwrite = TRUE)
+
 yml <- list.files(pattern = "yml$")
+yml <- yml[-grep("^_", yml)]
 sapply(yml, function(f) file.copy(f, file.path(dest, "_data"), overwrite = TRUE))
+
+system(paste("cat site.css >> ", file.path(dest, "css", "main.css")))
+
+wd <- setwd(dest)
+
+system("jekyll build")
+
+setwd(wd)
+
+system(paste("cp -ra", file.path(dest, "_site/*"), publish))
