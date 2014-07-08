@@ -4,10 +4,10 @@
   role:
   - aut
   - cre
-  email: Torsten.Hothorn@R-project.org
+  email: Torsten.Hothorn_@_R-project.org
   comment: ~
   url: http://user.math.uzh.ch/hothorn/
-  image: http://user.math.uzh.ch/hothorn/pics/th.jpg
+  image: torsten_hothorn.jpg
 - name: Frank Bretz
   given: Frank
   family: Bretz
@@ -15,7 +15,7 @@
   email: ~
   comment: ~
   url: http://www.biostat.uni-hannover.de/fb.html
-  image: http://mediasres-itn.eu/sites/default/files/images/Frank%20Bretz.JPG
+  image: frank_bretz.jpg
 - name: Peter Westfall
   given: Peter
   family: Westfall
@@ -23,4 +23,4 @@
   email: ~
   comment: ~
   url: http://westfall.ba.ttu.edu/pwvita.htm
-  image: http://www.rawlsnews.ba.ttu.edu/wp-content/uploads/peter-westfall.jpg
+  image: peter_westfall.jpg
