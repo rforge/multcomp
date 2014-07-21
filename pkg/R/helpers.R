@@ -93,6 +93,16 @@ modelparm.default <- function(model, coef. = coef, vcov. = vcov,
                               df = NULL, ...) 
 {
 
+    ### allow specification of coef and vcov directly
+    if (!is.function(coef.)) {
+        beta <- coef.
+        coef. <- function(model) return(beta)
+    }
+    if (!is.function(vcov.)) {
+        sigma <- vcov.
+        vcov. <- function(model) return(sigma)
+    }
+
     ### extract coefficients and their covariance matrix
     beta <- try(coef.(model))
     if (inherits(beta, "try-error"))
