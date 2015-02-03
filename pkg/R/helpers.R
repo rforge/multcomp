@@ -81,8 +81,11 @@ model.matrix.aovlist <- function(object, ...)
 model.matrix.lme <- function(object, ...)
     model.matrix(terms(object), data = model.frame(object), ...)
 
-model.frame.lme <- function(object, ...)
-    object$data
+model.frame.lme <- function(object, ...) {
+    ret <- object$data
+    if (is.null(ret)) stop("object does not contain any data")
+    ret
+}
 
 ### extract coefficients, covariance matrix and 
 ### degrees of freedom (if available) from `model'
