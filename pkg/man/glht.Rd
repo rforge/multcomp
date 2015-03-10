@@ -52,7 +52,20 @@ mcp(..., interaction_average = FALSE, covariate_average = FALSE)
                 multiple comparisons are defined by 
                 matrices or symbolic descriptions specifying contrasts
                 of factor levels where the arguments correspond
-                to factor names.}
+                to factor names.
+
+                In addition, passing the argument \code{verbose=TRUE} as part of
+                the \dots arguments causes the reimplemented parser for the
+                \code{linfct} argument to trace its states. The functionality
+                is intended to track down problems therein.
+
+                Passing the argument \code{zerocheck=F} prevents the
+                parser from rejecting a hypothesis with zero or near-zero
+                effect coefficients, as it would be the case with '"0*x1 +x2 == 0"'.
+
+                Cave: if used, the parameter \code{verbose} and \code{zerocheck} 
+                will also be passed to the \code{\link{modelparm}} functions.
+                }
 }
 \details{
 

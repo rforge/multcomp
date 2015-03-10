@@ -65,7 +65,7 @@ factor_contrasts <- function(model) {
 
 ### convert linear hypotheses supplied as single matrices,
 ### type arguments or expressions into one matrix
-mcp2matrix <- function(model, linfct) {
+mcp2matrix <- function(model, linfct, ...) {
 
     ### extract factors and contrasts
     fc <- factor_contrasts(model)
@@ -107,7 +107,7 @@ mcp2matrix <- function(model, linfct) {
                     ctype <<- c(ctype, types[pm])
                 } else {
                     ### if not, interpret kch as an expression
-                    tmp <-  chrlinfct2matrix(kch, levels(mf[[nm]]))
+                    tmp <-  chrlinfct2matrix(kch, levels(mf[[nm]]), ...)
                     tmpK <- tmp$K
                     m <<- c(m, tmp$m)
                     if (is.null(alternative)) {
@@ -211,7 +211,7 @@ function (model, focus, mmm.data = model$model, formula.in = terms(model),
 }
 
 mcp2matrix2 <- function (model, linfct, interaction_average = FALSE, 
-                         covariate_average = FALSE) 
+                         covariate_average = FALSE, ...) 
 {
     fc <- factor_contrasts(model)
     contrasts <- fc$contrasts
@@ -248,7 +248,7 @@ mcp2matrix2 <- function (model, linfct, interaction_average = FALSE,
                   ctype <<- c(ctype, types[pm])
                 }
                 else {
-                  tmp <- chrlinfct2matrix(kch, levels(mf[[nm]]))
+                  tmp <- chrlinfct2matrix(kch, levels(mf[[nm]]), ...)
                   tmpK <- tmp$K
                   m <<- c(m, tmp$m)
                   if (is.null(alternative)) {
