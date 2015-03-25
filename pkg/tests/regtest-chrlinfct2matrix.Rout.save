@@ -46,7 +46,7 @@ Type 'q()' to quit R.
 > 
 > 
 > expectSucc<- function(testname, x, expected ) {
-+  if ( class( tx <- try(x, silent = T) ) == 'try-error' ) {
++  if ( inherits( tx <- try(x, silent = T), 'try-error' ) ) {
 +       stop(testname, ' unexpectedly failed. Result is: ', attr(tx,'condition')$message, '\n')
 +  }
 + 
@@ -74,8 +74,8 @@ Type 'q()' to quit R.
 + }
 > 
 > expectFail <- function(testname, x) {
-+  if ( class( tx <- try(x, silent = T) ) != 'try-error' ) {
-+       stop(testname, ': unexpectedly succeeded. Result is ', paste(tx, collapse = ', '),'\n')
++  if ( ! inherits( tx <- try(x, silent = T), 'try-error') ) {
++         stop(testname, ': unexpectedly succeeded. Result is ', paste(tx, collapse = ', '),'\n')
 +  }
 +  message(testname, ': expectedly failed. Message is ', attr(tx,'condition')$message, '\n')
 + }
@@ -83,7 +83,13 @@ Type 'q()' to quit R.
 > 
 > # external definitions for evaluation within equation 'l13'
 > l13.f <- function(x) exp(x)
-> PI    <- pi
+> PI     <- pi
+> common <-  c('x1','x2','x3','x4','x1:x2','x1:x2:x3','GenotypeWT:ReagentsCMH','GenotypeWT:ReagentsCMH+pSOD')
+> 
+> expectSucc('test 0.l06', multcomp:::chrlinfct2matrix(c(l06 = '-(x1 - x2)*-2  - (1/3+2)*( -x3 - 2*x4 )*7/-10 = -3'),c('x1','x2','x3','x4'), verbose = F), expected = list( K = c(2, -2, (1/3+2)*-7/10, 2*(1/3+2)*-7/10), m = -3))
+test 0.l06: expectedly succeeded
+
+> 
 > 
 > expectSucc('test 0',
 +            x = multcomp:::chrlinfct2matrix( c( l01 = '  x1 - x2 = 2'
@@ -105,7 +111,8 @@ Type 'q()' to quit R.
 +                                              , l17 = ' x1+x1+x2 = x3+1'
 +                                              , l18 = ' 14 + x1 + 3 + x1 + 3*(2 + x2 + 3/2)/3 = 4*x3+1'
 +                                              ),
-+                                             c('x1','x2','x3','x4','x1:x2','x1:x2:x3','GenotypeWT:ReagentsCMH','GenotypeWT:ReagentsCMH+pSOD')
++                                             c('x1','x2','x3','x4','x1:x2','x1:x2:x3','GenotypeWT:ReagentsCMH','GenotypeWT:ReagentsCMH+pSOD'),
++                                             verbose=F
 +                                          ), # chrlinfct ...
 +             expected = list( K = rbind( c(           1,                 -1,                      0,                 0,       0,     0,         0,           0)
 +                                       , c(           0,                  1,                      3,                 0,       0,     0,         0,           0)
@@ -155,153 +162,109 @@ test 0: expectedly succeeded
 > 
 > #test 01 previously failed for addressing x1 twice. It still fails, but this time for another reason: the sum of the coefs of all x1 is zero.
 > #A more apt test is in test 01a
-> expectFail('test 01',  multcomp:::chrlinfct2matrix(c(l1 = "x1 - x1  = 0"), c('x1','x2')))
-test 01: expectedly failed. Message is multcomp::expression2coef::walkCode::equ(l1): within expression 'x1 - x1 = 0' the coefficients of the following effects evaluate to zero (or near zero, entailing numeric instability): 'x1'. Values are 0. Calling glht with the argument zerocheck=F will disable this test.
+> expectFail('test 01',  multcomp:::chrlinfct2matrix(c(l1 = 'x1 - x1  = 0'), c('x1','x2'), verbose=F))
+test 01: expectedly failed. Message is multcomp::expression2coef::walkCode::eqn(l1): within expression 'x1 - x1 = 0' the coefficients of the following effects evaluate to zero (or near zero): 'x1'. Values are 0. Calling glht with the argument zerocheck=F will disable this check.
 
-> expectSucc('test 01a', multcomp:::chrlinfct2matrix(c(l1 = "3/5*(x1 - 2*x1)  = 0"), c('x1','x2'),verbose=F), expected = list(K = c(3/5*(1-2), 0), m = 0))
+> expectSucc('test 01a', multcomp:::chrlinfct2matrix(c(l1 = '3/5*(x1 - 2*x1)  = 0'), c('x1','x2'),verbose=F), expected = list(K = c(3/5*(1-2), 0), m = 0))
 test 01a: expectedly succeeded
 
 > 
-> expectFail('test 02',  multcomp:::chrlinfct2matrix(c(l1 = "x1 - X2  = 0"), c('x1','x2')))
-test 02: expectedly failed. Message is multcomp::expression2coef::walkCode::eval(l1): the evaluation of the expression 'X2' failed with "object 'X2' not found"
+> expectFail('test 02',  multcomp:::chrlinfct2matrix(c(l1 = 'x1 - X2  = 0'), c('x1','x2')))
+test 02: expectedly failed. Message is multcomp::expression2coef::walkCode::eval(l1): evaluation of expression '`X2`*-1' failed with "object 'X2' not found".
 
 > 
 > #test 03 previously failed, but works now by shifting the constant terms to the right hand side, inverting sign
-> expectSucc('test 03',  multcomp:::chrlinfct2matrix(c(l1 = "x1 - x2 -1 = 0"), c('x1','x2'),verbose=T), expected = list(K = c(1, -1), m = 1))
-multcomp::expression2coef(l1): effect names are 'x1', 'x2'
-multcomp::expression2coef(l1): length of ex is 1
-....handler(l1): v is '=', mode(v) = character, typeof(v) = character, length(v) = 1, coef(v) = 1
-....handler(l1): returns [ '= x 1' ] from expr ("=") x 1
-....equ(l1): v is '=', 'x1 - x2 - 1', '0' (or deparsed: 'x1 - x2 - 1 = 0' ), mode(v) = call, typeof(v) = language, length(v) = 3, coef(v) = 1
-....equ(l1): 'x1 - x2 - 1' '=' '0'
-....equ(l1): walking lhs term 'x1 - x2 - 1' x 1
-........handler(l1): v is '-', mode(v) = character, typeof(v) = character, length(v) = 1, coef(v) = 1
-........handler(l1): returns [ '- x 1' ] from expr ("-") x 1
-........sub(l1): v is '-', 'x1 - x2', '1' (or deparsed: 'x1 - x2 - 1' ), mode(v) = call, typeof(v) = language, length(v) = 3, coef(v) = 1
-........sub(l1): minuend is 'x1 - x2'
-........sub(l1): subtrahend is '1'
-........sub(l1): uminus is FALSE
-........sub(l1): walking minuend 'x1 - x2' x 1
-............handler(l1): v is '-', mode(v) = character, typeof(v) = character, length(v) = 1, coef(v) = 1
-............handler(l1): returns [ '- x 1' ] from expr ("-") x 1
-............sub(l1): v is '-', 'x1', 'x2' (or deparsed: 'x1 - x2' ), mode(v) = call, typeof(v) = language, length(v) = 3, coef(v) = 1
-............sub(l1): minuend is 'x1'
-............sub(l1): subtrahend is 'x2'
-............sub(l1): uminus is FALSE
-............sub(l1): walking minuend 'x1' x 1
-................leaf(l1): v is 'x1' (or deparsed: 'x1' ), mode(v) = name, typeof(v) = symbol, length(v) = 1, coef(v) = 1
-................leaf(l1): returns [ 'x1 x 1' ] from expr (x1) x 1
-............sub(l1): walking subtrahend 'x2' x -1
-................leaf(l1): v is 'x2' (or deparsed: 'x2' ), mode(v) = name, typeof(v) = symbol, length(v) = 1, coef(v) = -1
-................leaf(l1): returns [ 'x2 x -1' ] from expr (x2) x -1
-............sub(l1): returns [ 'x1 x 1' and 'x2 x -1' ] from expr (x1 - x2) x 1
-........sub(l1): walking subtrahend '1' x -1
-............leaf(l1): v is '-1', mode(v) = numeric, typeof(v) = double, length(v) = 1, coef(v) = 1
-............leaf(l1): returns [ '-1 x 1' ] from expr (-1) x 1
-........as.addend(l1): created the symbol '-1 ~ 1' in place of the the numeric literal '-1'
-........sub(l1): returns [ 'x1 x 1', 'x2 x -1', '-1 ~ 1 x -1' ] from expr (x1 - x2 - 1) x 1
-....equ(l1): walking rhs term '0' x 1
-........leaf(l1): v is '0', mode(v) = numeric, typeof(v) = double, length(v) = 1, coef(v) = 1
-........leaf(l1): returns [ '0 x 1' ] from expr (0) x 1
-........transform(l1): v is '=', 'x1 - x2 - 1', '0' (or deparsed: 'x1 - x2 - 1 = 0' ), mode(v) = call, typeof(v) = language, length(v) = 3, coef(v) = 1
-........transform(l1): lhs before shift is 'x1', 'x2', '`-1 ~ 1`'
-........transform(l1): rhs before shift is '0'
-........transform(l1): lhs after shift is 'x1' and 'x2'
-........transform(l1): rhs after shift is '0' and '1'
-............merge(l1): v is '=', 'x1 - x2 - 1', '0' (or deparsed: 'x1 - x2 - 1 = 0' ), mode(v) = call, typeof(v) = language, length(v) = 3, coef(v) = 1
-............merge(l1): adding up the coefs of 1 copies of 'x1'
-............merge(l1): adding coef of 'x1 x 1'
-............merge(l1): sum over all copies of 'x1' is 1
-............merge(l1): adding up the coefs of 1 copies of 'x2'
-............merge(l1): adding coef of 'x2 x -1'
-............merge(l1): sum over all copies of 'x2' is -1
-............merge(l1): returns [ 'x1 x 1' and 'x2 x -1' ] from expr (x1 - x2 - 1 = 0) x 1
-........transform(l1): returns [ 'c("x1 x 1", "x2 x 1")' and '1 x 1' ] from expr (x1 - x2 - 1 = 0) x 1
-....equ(l1): returns [ 'c("list(x1, x2) x 1", "1 x 1")' and 'c("= x 1", "two.sided x 1", "x1 - x2 - 1 x 1", "0 x 1", "x1 - x2 - 1 = 0 x 1")' ] from expr (x1 - x2 - 1 = 0) x 1
-multcomp::expression2coef(l1): returning names 'x1', 'x2'
-multcomp::expression2coef(l1): returning coefs '1', '-1'
+> expectSucc('test 03',  multcomp:::chrlinfct2matrix(c(l1 = 'x1 - x2 -1 = 0'), c('x1','x2'),verbose=F), expected = list(K = c(1, -1), m = 1))
 test 03: expectedly succeeded
 
 > 
-> expectFail('test 04',  multcomp:::chrlinfct2matrix(c(l1 = "x1 * x2  = 0"), c('x1','x2'),verbose=T))
-multcomp::expression2coef(l1): effect names are 'x1', 'x2'
-multcomp::expression2coef(l1): length of ex is 1
-....handler(l1): v is '=', mode(v) = character, typeof(v) = character, length(v) = 1, coef(v) = 1
-....handler(l1): returns [ '= x 1' ] from expr ("=") x 1
-....equ(l1): v is '=', 'x1 * x2', '0' (or deparsed: 'x1 * x2 = 0' ), mode(v) = call, typeof(v) = language, length(v) = 3, coef(v) = 1
-....equ(l1): 'x1 * x2' '=' '0'
-....equ(l1): walking lhs term 'x1 * x2' x 1
-........handler(l1): v is '*', mode(v) = character, typeof(v) = character, length(v) = 1, coef(v) = 1
-........handler(l1): returns [ '* x 1' ] from expr ("*") x 1
-........mul(l1): v is '*', 'x1', 'x2' (or deparsed: 'x1 * x2' ), mode(v) = call, typeof(v) = language, length(v) = 3, coef(v) = 1
-........mul(l1): walking term a 'x1' x 1
-............leaf(l1): v is 'x1' (or deparsed: 'x1' ), mode(v) = name, typeof(v) = symbol, length(v) = 1, coef(v) = 1
-............leaf(l1): returns [ 'x1 x 1' ] from expr (x1) x 1
-........mul(l1): walking term b 'x2' x 1
-............leaf(l1): v is 'x2' (or deparsed: 'x2' ), mode(v) = name, typeof(v) = symbol, length(v) = 1, coef(v) = 1
-............leaf(l1): returns [ 'x2 x 1' ] from expr (x2) x 1
-test 04: expectedly failed. Message is multcomp::expression2coef::walkCode::mul(l1): multiplication of effects 'x1' and 'x2' as in 'x1 * x2' is not implemented
+> expectFail('test 04',  multcomp:::chrlinfct2matrix(c(l1 = 'x1 * x2  = 0'), c('x1','x2'),verbose=F))
+test 04: expectedly failed. Message is multcomp::expression2coef::walkCode::mul(l1): multiplication of effects as intended in 'x1 * x2' is not implemented.
 
 > 
-> expectFail('test 05',  multcomp:::chrlinfct2matrix(c(l1 = "x1 / x2  = 0"), c('x1','x2')))
-test 05: expectedly failed. Message is multcomp::expression2coef::walkCode::div(l1): division by effect 'x2' as in 'x1/x2' is not implemented
+> expectFail('test 05',  multcomp:::chrlinfct2matrix(c(l1 = 'x1 / x2  = 0'), c('x1','x2')))
+test 05: expectedly failed. Message is multcomp::expression2coef::walkCode::div(l1): division by effect 'x2' as in 'x1/x2' is currently not implementable.
 
 > 
-> expectFail('test 06',  multcomp:::chrlinfct2matrix(c(l1 = "x1 - exp(x2)  = 0"), c('x1','x2')))
-test 06: expectedly failed. Message is multcomp::expression2coef::walkCode::call(l1): within expression 'exp(x2)', the term(s) 'x2' must not denote an effect
+> expectFail('test 06',  multcomp:::chrlinfct2matrix(c(l1 = 'x1 - exp(x2)  = 0'), c('x1','x2')))
+test 06: expectedly failed. Message is multcomp::expression2coef::walkCode::call(l1): within expression 'exp(x2)', 'x2' must not denote an effect because its estimate is not yet known here.
 
 > 
-> expectFail('test 07',  multcomp:::chrlinfct2matrix(c(l1 = "sin(Pi)*x1   = 0"), c('x1','x2')))
-test 07: expectedly failed. Message is multcomp::expression2coef::walkCode::call(l1): the evaluation of the expression 'sin(Pi)' failed with "object 'Pi' not found"
+> expectFail('test 07',  multcomp:::chrlinfct2matrix(c(l1 = 'sin(Pi)*x1   = 0'), c('x1','x2')))
+test 07: expectedly failed. Message is multcomp::expression2coef::walkCode::call(l1): do.call(sin, Pi) said 'object 'Pi' not found'. Expression was 'sin(Pi)'.
 
 > 
-> expectFail('test 08',  multcomp:::chrlinfct2matrix(c(l1 = "3*4 = 0"), c('x1','x2')))
-test 08: expectedly failed. Message is multcomp::expression2coef::walkCode::equ(l1): no effects found in '3 * 4 = 0'
+> expectFail('test 08',  multcomp:::chrlinfct2matrix(c(l1 = '3*4 = 0'), c('x1','x2')))
+test 08: expectedly failed. Message is multcomp::expression2coef::walkCode::eqn(l1): equation '3 * 4 = 0' does not name any effect.
 
 > 
-> expectFail('test 09',  multcomp:::chrlinfct2matrix(c(l1 = "x1 + 3*(4-5+1)*x2 = 0"), c('x1','x2')))
-test 09: expectedly failed. Message is multcomp::expression2coef::walkCode::equ(l1): within expression 'x1 + 3 * (4 - 5 + 1) * x2 = 0' the coefficients of the following effects evaluate to zero (or near zero, entailing numeric instability): 'x2'. Values are 0. Calling glht with the argument zerocheck=F will disable this test.
+> expectFail('test 09',  multcomp:::chrlinfct2matrix(c(l1 = 'x1 + 3*(4-5+1)*x2 = 0'), c('x1','x2')))
+test 09: expectedly failed. Message is multcomp::expression2coef::walkCode::eqn(l1): within expression 'x1 + 3 * (4 - 5 + 1) * x2 = 0' the coefficients of the following effects evaluate to zero (or near zero): 'x2'. Values are 0. Calling glht with the argument zerocheck=F will disable this check.
 
 > 
-> expectFail('test 10',  multcomp:::chrlinfct2matrix(c(l1 = "x1*3/0 = 0"), c('x1','x2')))
-test 10: expectedly failed. Message is multcomp::expression2coef::walkCode::div(l1): won't divide by 0 in 'x1 * 3/0'
+> expectFail('test 10',  multcomp:::chrlinfct2matrix(c(l1 = 'x1*3/0 = 0'), c('x1','x2')))
+test 10: expectedly failed. Message is multcomp::expression2coef::walkCode::div(l1): won't divide by 0 in 'x1 * 3/0'.
 
 > 
-> expectFail('test 11',  multcomp:::chrlinfct2matrix(c(l1 = "log(-1)*x1 = 0"), c('x1','x2')))
-test 11: expectedly failed. Message is multcomp::expression2coef::walkCode::call(l1): the expression 'log(-1)' did not evaluate to a real valued numeric constant. Result is 'NaN'
+> expectFail('test 11',  multcomp:::chrlinfct2matrix(c(l1 = 'log(-1)*x1 = 0'), c('x1','x2')))
+test 11: expectedly failed. Message is multcomp::expression2coef::walkCode::call(l1): 'log(-1)' returned non-finite result 'NaN'.
 
 Warning message:
-In log(-1 * 1) : NaNs produced
+In log(-1) : NaNs produced
 > 
-> expectFail('test 12',  multcomp:::chrlinfct2matrix(c(l1 = "1/2(x1-x2) = x3"), c('x1','x2','x3')))
-test 12: expectedly failed. Message is multcomp::expression2coef::walkCode::call(l1): an operator appears to be missing somewhere within expression '2(x1 - x2)'
+> expectFail('test 12',  multcomp:::chrlinfct2matrix(c(l1 = '1/2(x1-x2) = x3'), c('x1','x2','x3')))
+test 12: expectedly failed. Message is multcomp::expression2coef::walkCode::call(l1): within expression '2(x1 - x2)', 'x1' must not denote an effect because its estimate is not yet known here.
+
+> expectFail('test 12b', multcomp:::chrlinfct2matrix(c(l1 = '1/2(1-2)*(x1-x2) = x3 '), c('x1','x2','x3')))
+test 12b: expectedly failed. Message is multcomp::expression2coef::walkCode::call(l1): do.call(2, -1) said 'could not find function "2"'. Expression was '2(1 - 2)'.
+
+> expectFail('test 12c', multcomp:::chrlinfct2matrix(c(l1 = '1/2(a-2)*(x1-x2) = x3 '), c('x1','x2','x3')))
+test 12c: expectedly failed. Message is multcomp::expression2coef::walkCode::eval(l1): evaluation of expression '`a`' failed with "object 'a' not found".
+
+> expectFail('test 12d', multcomp:::chrlinfct2matrix(c(l1 = '1/a(1-2)*(x1-x2) = x3 '), c('x1','x2','x3')))
+test 12d: expectedly failed. Message is multcomp::expression2coef::walkCode::call(l1): do.call(a, -1) said 'could not find function "a"'. Expression was 'a(1 - 2)'.
+
+> expectFail('test 12e', multcomp:::chrlinfct2matrix(c(l1 = '1/diff(c(1,2))*(x1-x2) = x3 '), c('x1','x2','x3')))
+test 12e: expectedly failed. Message is multcomp::expression2coef::walkCode::call(l1): the expression 'c(1, 2)' returned 2 numbers: '1' and '2'. This is currently not supported.
 
 > 
-> expectFail('test 13',  multcomp:::chrlinfct2matrix(c(l1 = "1/2(x1-x2) = "), c('x1','x2','x3')))
-test 13: expectedly failed. Message is <text>:2:0: unexpected end of input
-1: 1/2(x1-x2) = 
-   ^
+> expectFail('test 13',  multcomp:::chrlinfct2matrix(c(l1 = '1/2(x1-x2) = '), c('x1','x2','x3')))
+test 13: expectedly failed. Message is multcomp::chrlinfct2matrix: argument '1/2(x1-x2) = ' cannot be interpreted as expression.
 
-> expectFail('test 13b', multcomp:::chrlinfct2matrix(c(l1 = "1/2*(x1-x2) = "), c('x1','x2','x3')))
-test 13b: expectedly failed. Message is <text>:2:0: unexpected end of input
-1: 1/2*(x1-x2) = 
-   ^
+> expectFail('test 13b', multcomp:::chrlinfct2matrix(c(l1 = '1/2*(x1-x2) = '), c('x1','x2','x3')))
+test 13b: expectedly failed. Message is multcomp::chrlinfct2matrix: argument '1/2*(x1-x2) = ' cannot be interpreted as expression.
 
-> expectFail('test 13c', multcomp:::chrlinfct2matrix(c(l1 = "1/2*(x1-x2) "), c('x1','x2','x3')))
+> expectFail('test 13c', multcomp:::chrlinfct2matrix(c(l1 = '1/2*(x1-x2) '), c('x1','x2','x3')))
 test 13c: expectedly failed. Message is multcomp::expression2coef(l1): no valid comparison found in '1/2 * (x1 - x2)'
 
 > 
-> expectFail('test 14',  multcomp:::chrlinfct2matrix(c(l1 = "1/2(x1-x2) = x3", l1 = "1/2(x1-x2) = x3"), c('x1','x2','x3')))
-test 14: expectedly failed. Message is multcomp::chrlinfct2matrix: duplicated names in argument ex = [  'l1'  ]
+> expectFail('test 14',  multcomp:::chrlinfct2matrix(c(l1 = '1/2(x1-x2) = x3', l1 = '1/2(x1-x2) = x3'), c('x1','x2','x3')))
+test 14: expectedly failed. Message is multcomp::chrlinfct2matrix: Within argument ex, the following linear function names are duplicated: 'l1'.
 
 > 
-> expectFail('test 15',  multcomp:::chrlinfct2matrix(c(l1 = "10^-30 *(x1 - x2) = 0"), c('x1','x2')))
-test 15: expectedly failed. Message is multcomp::expression2coef::walkCode::equ(l1): within expression '10^-30 * (x1 - x2) = 0' the coefficients of the following effects evaluate to zero (or near zero, entailing numeric instability): 'x1' and 'x2'. Values are 1e-30, -1e-30. Calling glht with the argument zerocheck=F will disable this test.
+> expectFail('test 15',  multcomp:::chrlinfct2matrix(c(l1 = '10^-30 *(x1 - x2) = 0'), c('x1','x2')))
+test 15: expectedly failed. Message is multcomp::expression2coef::walkCode::eqn(l1): within expression '10^-30 * (x1 - x2) = 0' the coefficients of the following effects evaluate to zero (or near zero): 'x1' and 'x2'. Values are 1e-30, -1e-30. Calling glht with the argument zerocheck=F will disable this check.
 
-> expectSucc('test 15a', multcomp:::chrlinfct2matrix(c(l1 = "10^-30 *(x1 - x2) = 0"), c('x1','x2'), zerocheck=F), expected = list(K = c(10^-30, -10^-30), m = 0))
+> expectSucc('test 15a', multcomp:::chrlinfct2matrix(c(l1 = '10^-30 *(x1 - x2) = 0'), c('x1','x2'), zerocheck=F), expected = list(K = c(10^-30, -10^-30), m = 0))
 test 15a: expectedly succeeded
 
 > 
+> expectSucc('test 16',  multcomp:::chrlinfct2matrix(c('claim 1'= 'A - B + 3*B +10 +10 == 0'),c('A','B'),verbose=F),expected = list(K = c(1,2),m=-20))
+test 16: expectedly succeeded
+
+> expectFail('test 16b', multcomp:::chrlinfct2matrix(c('claim 1'= 'A - B + 3*B +10 +10 == 0'),c('A','B','B'),verbose=F))
+test 16b: expectedly failed. Message is multcomp::chrlinfct2matrix: There are duplicate effect names in argument var: 'B'.
+
+> 
+> 
+> expectSucc('test 17',  multcomp:::chrlinfct2matrix(c('claim 1'= 'B - A == pi'), c('A','B'), verbose = F), expected = list(K = c(-1,+1),m = +pi))
+test 17: expectedly succeeded
+
+> expectSucc('test 17b', multcomp:::chrlinfct2matrix(c('claim 1'= 'pi == B - A'), c('A','B'), verbose = F), expected = list(K = c(+1,-1),m = -pi))
+test 17b: expectedly succeeded
+
+> 
+> 
 > proc.time()
    user  system elapsed 
-  0.333   0.027   0.350 
+  0.584   0.024   0.599 

@@ -19,7 +19,6 @@ Type 'q()' to quit R.
 > library("multcomp")
 Loading required package: mvtnorm
 Loading required package: survival
-Loading required package: splines
 Loading required package: TH.data
 > set.seed(290875)
 > 
@@ -105,7 +104,7 @@ function (type = c("univariate", "adjusted", p.adjust.methods),
     }
     return(p.adjust(pvals, method = type))
 }
-<environment: 0x6ee6551d10>
+<environment: 0xea67e8758>
 
 $qfunction
 function (conf.level, adjusted = TRUE, ...) 
@@ -124,7 +123,7 @@ function (conf.level, adjusted = TRUE, ...)
     attr(ret, "error") <- calpha$estim.prec
     return(ret)
 }
-<environment: 0x6ee6551d10>
+<environment: 0xea67e8758>
 
 $coefficients
  2times - 1time  4times - 1time   drugD - 1time   drugE - 1time 4times - 2times 
@@ -360,8 +359,7 @@ Linear Hypotheses:
 > ### suggested by Rich
 > amod <- aov(breaks ~ tension, data = warpbreaks)
 > try(glht(amod, linfct = mcp(tension = "Warp")))
-Error in chrlinfct2matrix(kch, levels(mf[[nm]]), ...) : 
-  argument 'Warp' cannot be interpreted as expression
+Error : multcomp::chrlinfct2matrix: argument 'Warp' cannot be interpreted as expression.
 > 
 > ### cld did not find a terms component
 > ### spotted by Peter B. Mandeville <mandevip@hotmail.com>
@@ -453,4 +451,4 @@ Warning messages:
 > 
 > proc.time()
    user  system elapsed 
-  1.297   0.036   1.324 
+  1.380   0.039   1.412 
