@@ -217,51 +217,6 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > 
 > 
 > cleanEx()
-> nameEx("chrlinfct2matrix")
-> ### * chrlinfct2matrix
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: chrlinfct2matrix
-> ### Title: Interpreter for character representations of linear functions
-> ### Aliases: chrlinfct2matrix
-> 
-> ### ** Examples
-> 
-> a <- '1/2*( x1 -   x2 ) +1 = 1/3 * x1:x2'
-> b <- '1/3*( x2 - 2*x1 ) -3 = 2 + exp((-2)^3) * x1:x2'
-> multcomp:::chrlinfct2matrix(ex = c('test x' = a,  'test y' = b), var = c('x1', 'x2', 'x1:x2'))
-$K
-                                x1         x2         x1:x2
-1/2 * (x1 - x2) + 1      0.5000000 -0.5000000 -0.3333333333
-1/3 * (x2 - 2 * x1) - 3 -0.6666667  0.3333333 -0.0003354626
-
-$m
-[1] -1  5
-
-$alternative
-[1] "two.sided"
-
-$h0
-$h0$lhs
-[1] "1/2 * (x1 - x2) + 1"     "1/3 * (x2 - 2 * x1) - 3"
-
-$h0$rhs
-[1] "1/3 * x1:x2"             "2 + exp((-2)^3) * x1:x2"
-
-$h0$labels
-$h0$labels$original
-[1] "test x" "test y"
-
-$h0$labels$generated
-NULL
-
-
-
-> 
-> 
-> 
-> cleanEx()
 > nameEx("cld")
 > ### * cld
 > 
@@ -610,29 +565,6 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 (Adjusted p values reported -- Westfall method)
 
 > 
-> 
-> 
-> 
-> cleanEx()
-> nameEx("expression2coef")
-> ### * expression2coef
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: expression2coef
-> ### Title: 'expression2coef' is an interpreter for a single null hypothesis
-> ### Aliases: expression2coef
-> 
-> ### ** Examples
-> 
-> e1 <- parse(text = ' (x2 - x1) >= 1 + sin(pi/4) * ( 2*x3 - x4 ) ')
-> e2 <- parse(text = ' (x2 - x1) - sin(pi/4) * ( 2*x3 - x4 ) -1 >= 0 ')
-> 
-> r1 <- multcomp:::expression2coef( e1, c('x1', 'x2', 'x3', 'x4'), 'h0.1a' )
-> r2 <- multcomp:::expression2coef( e2, c('x1', 'x2', 'x3', 'x4'), 'h0.1b' )
-> 
-> stopifnot( all.equal( r1$coef, r2$coef ) )
-> stopifnot( all.equal( r1$m, r2$m ) )
 > 
 > 
 > 
@@ -1967,7 +1899,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  13.865 0.089 13.964 0 0 
+Time elapsed:  13.811 0.11 13.928 0 0 
 > grDevices::dev.off()
 null device 
           1 

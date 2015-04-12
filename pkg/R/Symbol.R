@@ -10,6 +10,7 @@
 #' @method  is.Symbol    Return true if applied to an instance of \class{Symbol}
 #' @method  as.character Same as name
 #' @method  quoted       Return the symbol name enclosed in backticks
+#' @rdname  internal/Symbol
 setClass( Class     = 'Symbol',
           slots     =  c( name = 'character', coef = 'numeric'),
           prototype =  list( name = character(0), coef = 1),
@@ -27,6 +28,7 @@ setClass( Class     = 'Symbol',
 #' @param  name Symbol name
 #' @param  coef Symbol coefficient
 #' @return An instance of Symbol or NULL if initialization fails
+#' @rdname  internal/Symbol
 setMethod(f = 'initialize', signature = 'Symbol', definition = function( .Object, name, coef ) {
    .Object@name <- name
    .Object@coef <- coef
@@ -41,16 +43,19 @@ setMethod(f = 'initialize', signature = 'Symbol', definition = function( .Object
 #' @title  Generic method is.Symbol
 #' @param  object  Any object
 #' @return True if object is an instance derived from class Symbol
+#' @rdname  internal/Symbol
 setGeneric('is.Symbol', function(object) standardGeneric('is.Symbol'))
 
 #' @title   Test if object is an instance derived from  class Symbol
 #' @param   object Any object (except an instance derived from class Symbol) 
 #' @return  Always false
+#' @rdname  internal/Symbol
 setMethod('is.Symbol', signature = 'ANY', definition = function(object) F )
 
 #' @title   Test if object is an instance derived from  class Symbol
 #' @param   object An instance derived from class Symbol
 #' @return  Always true
+#' @rdname  internal/Symbol
 setMethod('is.Symbol', signature = 'Symbol', definition = function(object) T )
 
 
@@ -60,24 +65,28 @@ setMethod('is.Symbol', signature = 'Symbol', definition = function(object) T )
 #' @param   object Any object
 #' @param   ...  Other arguments prescribed by \code{\link[stats]{coef}}, ignored
 #' @return  Coefficient value
+#' @rdname  internal/Symbol
 setGeneric('coef', function(object) standardGeneric('coef'))
 
 #' @title   Get the value of the coefficient associated with the symbol
 #' @param   object  An instance derived from class Symbol
 #' @param   ...  Other arguments prescribed by \code{\link[stats]{coef}}, ignored
 #' @return  Value of the coefficient
+#' @rdname  internal/Symbol
 setMethod('coef', signature = 'Symbol', definition = function(object, ...) object@coef )
 
 #' @title   Generic method  coef<-
 #' @param   object  Any object
 #' @param   value   A scalar
 #' @return  Instance of object
+#' @rdname  internal/Symbol
 setGeneric('coef<-', function(object, value) standardGeneric('coef<-'))
 
 #' @title   Sets the coefficient of the Symbol instance to a new value
 #' @param   object   Instance of class Symbol
 #' @param   value    A scalar
 #' @return  Instance of object
+#' @rdname  internal/Symbol
 setReplaceMethod('coef',  signature = 'Symbol', definition = function(object, value) { 
    object@coef <- value
    validObject(object)
@@ -91,16 +100,19 @@ setReplaceMethod('coef',  signature = 'Symbol', definition = function(object, va
 #' @title  Generic method 'name'
 #' @param   object Any object
 #' @return  Name of object as a character string
+#' @rdname  internal/Symbol
 setGeneric('name', function(object) standardGeneric('name'))
 
 #' @title   Get the name of the Symbol instance
 #' @param   object An instance derived from class Symbol
 #' @return  Name of object as a character string
+#' @rdname  internal/Symbol
 setMethod('name', signature = 'Symbol', definition = function(object) object@name )
 
 #' @title   Get the name of the Symbol instance
 #' @param   x  An instance derived from the Symbol
 #' @return  Name of object as a character string (same as name method)
+#' @rdname  internal/Symbol
 setMethod('as.character', signature = 'Symbol', definition = function(x) name(x) )
 
 # Establish the 'quoted' method:
@@ -108,11 +120,13 @@ setMethod('as.character', signature = 'Symbol', definition = function(x) name(x)
 #' @title  Quote the name of the Symbol instance using backticks ('`')
 #' @param  object Any object
 #' @return Name of object as a quoted character string
+#' @rdname  internal/Symbol
 setGeneric('quoted', function(object) standardGeneric('quoted'))
 
 #' @title   Quote the name of the Symbol instance using backticks ('`')
 #' @param   object An instance derived from class Symbol
 #' @return  Name of object as a quoted character string
+#' @rdname  internal/Symbol
 setMethod('quoted', signature = 'Symbol', definition = function(object) paste0('`',object@name,'`' ))
 
 
@@ -124,6 +138,7 @@ setMethod('quoted', signature = 'Symbol', definition = function(object) paste0('
 #' @param  e1  Instance of Symbol
 #' @param  e2  Instance of Symbol
 #' @return true if both names are equal
+#' @rdname  internal/Symbol
 setMethod('==', signature = c(e1 = 'Symbol', e2 = 'Symbol'), definition = function(e1, e2) {
    name(e1) == name(e2)  
 })
@@ -132,6 +147,7 @@ setMethod('==', signature = c(e1 = 'Symbol', e2 = 'Symbol'), definition = functi
 #' @param  e1  Instance of Symbol
 #' @param  e2  A character string
 #' @return True if name for instance is equal to string e2
+#' @rdname  internal/Symbol
 setMethod('==', signature = c(e1 = 'Symbol', e2 = 'character'), definition = function(e1, e2) {
    name(e1) == e2
 })
@@ -140,6 +156,7 @@ setMethod('==', signature = c(e1 = 'Symbol', e2 = 'character'), definition = fun
 #' @param  name  Name of the Symbol
 #' @param  coef  Symbol coefficient 
 #' @return A new instance of class Symbol
+#' @rdname  internal/Symbol
 Symbol <- function(name, coef=1) new("Symbol", name, coef)
 
 

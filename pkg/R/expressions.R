@@ -17,12 +17,11 @@
 #'              \item  coef          Vector of effect coefficients
 #'              \item  names         Vector of effect names
 #'              \item  m             Right-hand side value (a numeric value of length 1)
-#'              \item  alternative   One of: 'less' or 'greater' or 'two.sided'
+#'              \item  alternative   One of: 'less', 'greater' or 'two.sided'
 #'              \item  lhs           Left-hand side terms
 #'              \item  rhs           Right-hand side terms
 #'         }
-#' @note    Implementation needs package \pkg{codetools}
-#' @seealso chrlinfct2matrix
+#'
 #' @examples 
 #' e1 <- parse(text = ' (x2 - x1) >= 1 + sin(pi/4) * ( 2*x3 - x4 ) ')
 #' e2 <- parse(text = ' (x2 - x1) - sin(pi/4) * ( 2*x3 - x4 ) -1 >= 0 ')
@@ -30,10 +29,12 @@
 #' r1 <- multcomp:::expression2coef( e1, c('x1', 'x2', 'x3', 'x4'), 'h0.1a' )
 #' r2 <- multcomp:::expression2coef( e2, c('x1', 'x2', 'x3', 'x4'), 'h0.1b' )
 #' 
-#' stopifnot( all.equal( r1$coef, r2$coef ) )
-#' stopifnot( all.equal( r1$m, r2$m ) )
+#' stopifnot( identical( r1$coef, r2$coef ) )
+#' stopifnot( identical( r1$m, r2$m ) )
 #'
-#' @details
+#' @note    Implementation needs package \pkg{codetools} and also depends on S4 classes defined in Symbol.R, Effect.R and Literal.R
+#' @seealso chrlinfct2matrix
+#' @note
 #'          Starting from the results of a call to \code{parse(text='some equation')}, 
 #'          the function \code{expression2coef} gets called with an object of type expression passed 
 #'          in its parameter `ex`. 
@@ -43,7 +44,8 @@
 #'          Each entry of these recursive lists is then going to be inspected by the interaction 
 #'          of a pair of very concisely written functions:  \code{makeCodeWalker(..., handler, call, leaf)} 
 #'          and \code{walkCode(e, w = makeCodeWalker())}  with `e` representing the  symbol node 
-#'          to be processed. Both can be found in \pkg{base}. The walkCode function itself spans only a few lines:
+#'          to be processed. Both can be found in package \pkg{codetools}. The walkCode function 
+#'          itself spans only a few lines:
 #'          \preformatted{
 #'            walkCode <- 
 #'            function ( e, w = makeCodeWalker() ) {
@@ -54,7 +56,7 @@
 # (roxygen2 bug: need to move the curly 
 #  brace from the end of the previous line 
 #  to avoid an error saying unmatched 
-#  braces ... within a preformatted block!)
+#  braces ... within a block tagged as 'preformatted' ...)
 #
 #'                       h <- w$handler(as.character(e[[1]]), w)
 #'                       if (!is.null(h) ) 
@@ -65,7 +67,7 @@
 #'            }
 #'          }
 #'          There is also the \code{\link[codetools]{showTree}} utility which can print 
-#'          out something very close to a polish notatation of any expression by 
+#'          out something very close to a polish notation of any expression by 
 #'          simply using makeCodeWalker's default implementation.
 #'
 #'          Standing on the fundament laid by the codetools framework, a call to the 
@@ -79,7 +81,7 @@
 #'                                        call    = function (v, w) { (...)}, 
 #'                                        leaf    = function (v, w) { (...)}))
 #'          }
-#'          The symbol tree  for eqn{ ( a - x ) * 2 >= 0} would  look like this:
+#'          The symbol tree  for \eqn{ ( a - x ) * 2 >= 0} would  look like this:
 #'          \preformatted{
 #'                      >=        <- node is addressed by as.list(exp[[1]])[1]
 #'                     /  \
@@ -118,7 +120,7 @@
 #'          the node and its subtree gets passed to \code{call(v, w)}, with the idea to transfer
 #'          control to some external functions able to handle that node.
 #'
-#'          Now, the other cornerstone of this implementation consists in binding a coefficcient 
+#'          Now, the other cornerstone of this implementation consists in binding a coefficient 
 #'          to each node of the parse tree. For  \eqn{(a - x) * 2  >= 0}, this would look like 
 #'          a decorated christmas tree:
 #'          \preformatted{
@@ -182,7 +184,7 @@
 #'          For keeping track of coefs, coefficients were previously linked as an additional 
 #'          attribute to the symbol nodes of the tree returned by \code{\link[base]{parse}}. This 
 #'          is not very different from instances of S4 classes carrying around their slot values as 
-#'          attributes named like the slot names. 
+#'          attributes named after the slot names. 
 #'
 #'          Linking the coefficients as attributes to the variables and expressions they actually 
 #'          belong to appeared to be attractive as this spared the effort of inventing 
@@ -214,13 +216,18 @@
 #'          \code{add(v, w)} and \code{sub(v, w)} function had to return a list of symbol 
 #'          nodes, containing both effects and literal elements at the same time.  Hence the class
 #'          \linkS4class{Literal} was introduced to provide placeholder also for 
-#'          additive constants as they can not be folded together with effect symbols.
+#'          additive constants as they can not be folded together with effect symbols. 
 #'
 #'          \code{transform} and \code{merge} utilities running below the equation handler
 #'          \code{eqn(v, w)} are thus finally able to add up all these coefficients, transfer the 
 #'          result to unique instances of the effect variable representing the left-hand side, and also 
-#'          sum up all literals which all together form the right-hand side value.
+#'          sum up all literals and return the result as right-hand side value.
+#' 
+#'          Todo: Instances of class 'Literal' aren't really needed any more since coefficients of 
+#'          numeric literals are immediately folded. Yet leaving these instances in place for some time
+#'          will make any related problem easily recognizable from trace output.
 #'
+#' @rdname internal/expression2coef
 expression2coef <- function(ex, vars, sh0, verbose = F, zerocheck = T) {
 
    if ( verbose ) {
@@ -696,7 +703,7 @@ expression2coef <- function(ex, vars, sh0, verbose = F, zerocheck = T) {
                                     #' @title  Evaluate otherwise unhandled expressions ( e.g. a function call or operators like '^')
                                     #' @param  v Symbol node
                                     #' @param  w Environment created by \code{makeCodeWalker}
-                                    #' @return A numeric scalar, else call w$fatal    
+                                    #' @return A scalar, else call w$fatal    
                                     #' @note   Called from the walkCode() whenever w$handler(v, w) returns null
                                     call = function(v, w) {
                                            w$enter('call', v, w)
@@ -892,7 +899,7 @@ expression2coef <- function(ex, vars, sh0, verbose = F, zerocheck = T) {
                                        rhs <- tmp$src
 
                                        # switch all literals over to the right-hand side
-                                       tmp <- flip(dst = rhs, src = lhs, is.match = function(x) is.numeric(x) ||  is.Literal(x) )
+                                       tmp <- flip(dst = rhs, src = lhs, is.match = function(x) is.numeric(x) || is.Literal(x) )
                                        lhs <- tmp$src
                                        rhs <- tmp$dst
 
@@ -968,7 +975,7 @@ expression2coef <- function(ex, vars, sh0, verbose = F, zerocheck = T) {
                                     #' @title  Translate the comparison operator into traditional text
                                     #' @param  v  Symbol node of \code{w$eqn(v, w)}
                                     #' @param  w  Environment as created by \code{makeCodeWalker}
-                                    #' @return One of: 'less' | 'greater' | 'two.sided'
+                                    #' @return One of: 'less', 'greater' or 'two.sided'
                                     as.side = function(v, w) {
                                               switch( v,
                                                       '<=' = 'greater',
@@ -1181,7 +1188,7 @@ expression2coef <- function(ex, vars, sh0, verbose = F, zerocheck = T) {
 #' a <- '1/2*( x1 -   x2 ) +1 = 1/3 * x1:x2'
 #' b <- '1/3*( x2 - 2*x1 ) -3 = 2 + exp((-2)^3) * x1:x2'
 #' multcomp:::chrlinfct2matrix(ex = c('test x' = a,  'test y' = b), var = c('x1', 'x2', 'x1:x2'))
-#'
+#' @rdname internal/chrlinfct2matrix
 chrlinfct2matrix <- function(ex, var, verbose=F, zerocheck=T, ...) {
 
     enum <- function(x) {
