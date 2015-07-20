@@ -1,7 +1,7 @@
 
 R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
 Copyright (C) 2014 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -23,6 +23,7 @@ Type 'q()' to quit R.
 > library('multcomp')
 Loading required package: mvtnorm
 Loading required package: survival
+Loading required package: splines
 Loading required package: TH.data
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
@@ -307,6 +308,8 @@ The following object is masked from ‘package:base’:
 
     backsolve
 
+Loading required package: nlme
+Loading required package: Matrix
 Warning in Ops.factor(1, center) : ‘|’ not meaningful for factors
 Warning in Ops.factor(1, center) : ‘|’ not meaningful for factors
             Estimate      lwr upr
@@ -317,7 +320,8 @@ trt3 - trt1 1.396362 1.068776 Inf
 > 
 > cleanEx()
 
-detaching ‘package:coxme’, ‘package:bdsmatrix’
+detaching ‘package:coxme’, ‘package:Matrix’, ‘package:nlme’,
+  ‘package:bdsmatrix’
 
 > nameEx("contrMat")
 > ### * contrMat
@@ -1760,7 +1764,7 @@ b3 - b0 >= 0 -1.66667     -Inf -0.03616
 > 
 >   ### comparisons of main effects only
 >   K <- glht(amod, linfct = mcp(temp = "Tukey"))$linfct
-Warning in mcp2matrix(model, linfct = linfct, ...) :
+Warning in mcp2matrix(model, linfct = linfct) :
   covariate interactions found -- default contrast might be inappropriate
 >   K
               (Intercept) templow tempmedium envirenv2 envirenv3 envirenv4
@@ -1857,9 +1861,9 @@ medium-low  -0.241 -1.500054  1.0180543 0.8737275
 > 
 >   ### set up linear hypotheses for all-pairs of both factors
 >   wht <- glht(amod, linfct = mcp(temp = "Tukey", envir = "Tukey"))
-Warning in mcp2matrix(model, linfct = linfct, ...) :
+Warning in mcp2matrix(model, linfct = linfct) :
   covariate interactions found -- default contrast might be inappropriate
-Warning in mcp2matrix(model, linfct = linfct, ...) :
+Warning in mcp2matrix(model, linfct = linfct) :
   covariate interactions found -- default contrast might be inappropriate
 > 
 >   ### cf. Westfall et al. (1999, page 181)
@@ -1899,7 +1903,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  13.811 0.11 13.928 0 0 
+Time elapsed:  12.1 0.131 12.242 0 0 
 > grDevices::dev.off()
 null device 
           1 

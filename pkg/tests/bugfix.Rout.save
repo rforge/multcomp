@@ -1,7 +1,7 @@
 
 R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
 Copyright (C) 2014 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -19,6 +19,7 @@ Type 'q()' to quit R.
 > library("multcomp")
 Loading required package: mvtnorm
 Loading required package: survival
+Loading required package: splines
 Loading required package: TH.data
 > set.seed(290875)
 > 
@@ -104,7 +105,7 @@ function (type = c("univariate", "adjusted", p.adjust.methods),
     }
     return(p.adjust(pvals, method = type))
 }
-<environment: 0xea67e8758>
+<environment: 0x319ba30>
 
 $qfunction
 function (conf.level, adjusted = TRUE, ...) 
@@ -123,7 +124,7 @@ function (conf.level, adjusted = TRUE, ...)
     attr(ret, "error") <- calpha$estim.prec
     return(ret)
 }
-<environment: 0xea67e8758>
+<environment: 0x319ba30>
 
 $coefficients
  2times - 1time  4times - 1time   drugD - 1time   drugE - 1time 4times - 2times 
@@ -181,7 +182,7 @@ Linear Hypotheses:
 b - a == 0   -5.833
 
 Warning messages:
-1: In mcp2matrix(model, linfct = linfct, ...) :
+1: In mcp2matrix(model, linfct = linfct) :
   covariate interactions found -- default contrast might be inappropriate
 2: In glht.matrix(model = list(coefficients = c(14.4166666666667, -5.83333333333334,  :
   6 out of 19 coefficients not estimable in 'model'
@@ -199,7 +200,7 @@ E - C == 0     -3.5
 E - D == 0      4.5
 
 Warning messages:
-1: In mcp2matrix(model, linfct = linfct, ...) :
+1: In mcp2matrix(model, linfct = linfct) :
   covariate interactions found -- default contrast might be inappropriate
 2: In glht.matrix(model = list(coefficients = c(14.4166666666667, -5.83333333333334,  :
   6 out of 19 coefficients not estimable in 'model'
@@ -220,7 +221,7 @@ i - g == 0      3.5
 i - h == 0     -5.0
 
 Warning messages:
-1: In mcp2matrix(model, linfct = linfct, ...) :
+1: In mcp2matrix(model, linfct = linfct) :
   covariate interactions found -- default contrast might be inappropriate
 2: In glht.matrix(model = list(coefficients = c(14.4166666666667, -5.83333333333334,  :
   6 out of 19 coefficients not estimable in 'model'
@@ -244,7 +245,7 @@ i - g == 0 -13.8456
 i - h == 0  -4.2885
 
 Warning message:
-In mcp2matrix(model, linfct = linfct, ...) :
+In mcp2matrix(model, linfct = linfct) :
   covariate interactions found -- default contrast might be inappropriate
 > 
 > ### stop with informative error message
@@ -259,7 +260,7 @@ Error in factor_contrasts(model) :
 > amod <- aov(breaks ~ wool * tension, data = warpbreaks)
 > wht <- glht(amod, linfct = mcp(tension = "Tukey"))
 Warning message:
-In mcp2matrix(model, linfct = linfct, ...) :
+In mcp2matrix(model, linfct = linfct) :
   covariate interactions found -- default contrast might be inappropriate
 > tmp <- confint(wht, calpha=2)
 > print(tmp)
@@ -297,13 +298,13 @@ H - M == 0   0.5556  -9.7590  10.8702
 > ### checks in mcp (spotted by Rich)
 > amod <- aov(breaks ~ tension, data = warpbreaks)
 > try(glht(amod, linfct = mcp(group = "Tukey")))
-Error in mcp2matrix(model, linfct = linfct, ...) : 
+Error in mcp2matrix(model, linfct = linfct) : 
   Variable(s) 'group' have been specified in 'linfct' but cannot be found in 'model'! 
 > tmp <- warpbreaks
 > class(tmp$tension) <- "numeric"
 > amod <- aov(breaks ~ tension, data = tmp)
 > try(glht(amod, linfct = mcp(tension = "Tukey")))
-Error in mcp2matrix(model, linfct = linfct, ...) : 
+Error in mcp2matrix(model, linfct = linfct) : 
   Variable(s) 'tension' of class 'integer' is/are not contained as a factor in 'model'.
 > 
 > ### symbolic description and interactions
@@ -359,7 +360,8 @@ Linear Hypotheses:
 > ### suggested by Rich
 > amod <- aov(breaks ~ tension, data = warpbreaks)
 > try(glht(amod, linfct = mcp(tension = "Warp")))
-Error : multcomp::chrlinfct2matrix: argument 'Warp' cannot be interpreted as expression.
+Error in chrlinfct2matrix(kch, levels(mf[[nm]])) : 
+  argument 'Warp' cannot be interpreted as expression
 > 
 > ### cld did not find a terms component
 > ### spotted by Peter B. Mandeville <mandevip@hotmail.com>
@@ -451,4 +453,4 @@ Warning messages:
 > 
 > proc.time()
    user  system elapsed 
-  1.380   0.039   1.412 
+  1.168   0.028   1.184 

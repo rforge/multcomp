@@ -67,16 +67,9 @@ glht.character <- function(model, linfct, ...) {
 
     ### extract coefficients and their covariance matrix
     beta <- modelparm(model, ...)$coef
-    tmp  <- chrlinfct2matrix(linfct, names(beta), ...)
-    res  <- glht(model, linfct = tmp$K, rhs = tmp$m, 
-                 alternative = tmp$alternative, ...)
-
-    if   (!is.null(tmp$h0$labels$original))
-          res$focus <- tmp$h0$labels$original
-    else
-          res$focus <- tmp$h0$labels$generated
-          
-    return(res)
+    tmp <- chrlinfct2matrix(linfct, names(beta))
+    return(glht(model, linfct = tmp$K, rhs = tmp$m, 
+                alternative = tmp$alternative, ...))
 }
 
 ### symbolic description of H_0
@@ -92,10 +85,10 @@ glht.mcp <- function(model, linfct, ...) {
     if (ia || ca) {
         ### experimental version
         tmp <- mcp2matrix2(model, linfct = linfct, interaction_average = ia,
-                           covariate_average = ca, ...)
+                           covariate_average = ca)
     } else {
         ### use old version
-        tmp <- mcp2matrix(model, linfct = linfct, ...)
+        tmp <- mcp2matrix(model, linfct = linfct)
     }
     args <- list(model = model, linfct = tmp$K)
     if (!is.null(tmp$alternative))

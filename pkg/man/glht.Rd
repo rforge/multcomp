@@ -52,17 +52,7 @@ mcp(..., interaction_average = FALSE, covariate_average = FALSE)
                 multiple comparisons are defined by 
                 matrices or symbolic descriptions specifying contrasts
                 of factor levels where the arguments correspond
-                to factor names.
-
-                In addition, passing the argument \code{verbose=TRUE} as part of
-                the \dots arguments causes the reimplemented interpreter for the
-                \code{linfct} argument to trace its states. 
-
-                Passing the argument \code{zerocheck=F} prevents the
-                interpreter from rejecting a hypothesis with zero or near-zero
-                effect coefficients, as it would be the case with 
-                \eqn{0*x1 +x2 == 0}.
-               }
+                to factor names.}
 }
 \details{
 
@@ -157,30 +147,22 @@ mcp(..., interaction_average = FALSE, covariate_average = FALSE)
 \value{
 
   An object of class \code{glht}, more specifically a list with elements
-  \item{model}{        a fitted model, used in the call to \code{glht}}
-  \item{linfct}{       the matrix of linear functions}
-  \item{rhs}{          the vector of right hand side values \eqn{m}}
-  \item{coef}{         the values of the linear functions}
-  \item{vcov}{         the covariance matrix of the values of the linear functions}
-  \item{df}{           optionally, the degrees of freedom when the exact t 
-                       distribution is used for inference}
-  \item{alternative}{  a character string specifying the alternative hypothesis}
-  \item{type}{         optionally, a character string giving the name of 
-                       the specific procedure, with \code{print}, \code{\link{summary}}, 
-                       \code{\link{confint}}, \code{\link{coef}} and \code{\link{vcov}} 
-                       methods being available.}
-  \item{focus}{        When called with \code{linfct} being an \code{mcp} object, 
-                       an additional element \code{focus} is available
-                       storing the names of the factors under test. 
-                 
-                       \code{focus} is also available when \code{glht} was
-                       called with a list of manually crafted hypotheses assigned 
-                       to the \code{linfct} argument.  
+  \item{model}{a fitted model, used in the call to \code{glht}}
+  \item{linfct}{ the matrix of linear functions}
+  \item{rhs}{ the vector of right hand side values \eqn{m}}
+  \item{coef}{ the values of the linear functions}
+  \item{vcov}{ the covariance matrix of the values of the linear functions}
+  \item{df}{ optionally, the degrees of freedom when the exact t 
+             distribution is used for inference}
+  \item{alternative}{ a character string specifying the alternative
+      hypothesis}
+  \item{type}{ optionally, a character string giving the name of the specific procedure}
+  with \code{print}, \code{\link{summary}}, 
+  \code{\link{confint}}, \code{\link{coef}} and \code{\link{vcov}} 
+  methods being available. When called with \code{linfct} being an
+  \code{mcp} object, an additional element \code{focus} is available
+  storing the names of the factors under test.
 
-                       If the elements of this list were named, \code{focus} 
-                       will contain the original labels. Else it will contain 
-                       generated labels matching the regular expression pattern 
-                       'h0[.][0-9]\{2\}'.}
 }
 \references{
 

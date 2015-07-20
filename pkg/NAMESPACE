@@ -4,7 +4,6 @@ import(mvtnorm)
 import(survival)
 import(TH.data)
 importFrom(codetools, walkCode, makeCodeWalker)
-importFrom(methods, setClass, setMethod, setReplaceMethod, setGeneric)
 
 export(glht, contrMat, univariate, adjusted, Ftest, Chisqtest, mcp, modelparm,
        adjusted_calpha, univariate_calpha, parm, cftest, cld, mmm, mlf)
