@@ -1,99 +1,32 @@
 
-R Under development (unstable) (2015-06-30 r68608) -- "Unsuffered Consequences"
-Copyright (C) 2015 The R Foundation for Statistical Computing
-Platform: x86_64-unknown-linux-gnu (64-bit)
+### mixed effects models
+### feature request by John Wilkinson <jnwilks@btinternet.com>
+### and Dieter Menne <dieter.menne@menne-biomed.de>
 
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under certain conditions.
-Type 'license()' or 'licence()' for distribution details.
+library("multcomp")
 
-R is a collaborative project with many contributors.
-Type 'contributors()' for more information and
-'citation()' on how to cite R or R packages in publications.
+lme4OK <- require("lme4")
+if (lme4OK) {
 
-Type 'demo()' for some demos, 'help()' for on-line help, or
-'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
+    data("ergoStool", package = "nlme")
+    K <- glht(aov(effort ~ Type, data = ergoStool), mcp(Type = "Tukey"))$linfct
 
-> 
-> ### mixed effects models
-> ### feature request by John Wilkinson <jnwilks@btinternet.com>
-> ### and Dieter Menne <dieter.menne@menne-biomed.de>
-> 
-> library("multcomp")
-Loading required package: mvtnorm
-Loading required package: survival
-Loading required package: TH.data
-> 
-> lme4OK <- require("lme4")
-Loading required package: lme4
-Loading required package: Matrix
+    stool.lmer <- lmer(effort ~ Type + (1 | Subject),
+                       data = ergoStool)
+    glme4 <- glht(stool.lmer, K)
+    glme41 <- glht(stool.lmer, mcp(Type = "Tukey"))
+    stopifnot(all.equal(coef(glme4), coef(glme41)))
+    print(summary(glme41, test = Chisqtest()))
 
-Attaching package: 'Matrix'
+    nlmeOK <- require("nlme")
+    if (nlmeOK) {
 
-The following objects are masked from 'package:base':
+        stool.lme <- lme(effort ~ Type, data = ergoStool,
+                        random = ~ 1 | Subject)
+        gnlme <- glht(stool.lme,K)
+        stopifnot(all.equal(coef(glme4), coef(gnlme)))
 
-    crossprod, tcrossprod
-
-Loading required package: Rcpp
-
-Attaching package: 'lme4'
-
-The following object is masked from 'package:stats':
-
-    sigma
-
-> if (lme4OK) {
-+ 
-+     data("ergoStool", package = "nlme")
-+     K <- glht(aov(effort ~ Type, data = ergoStool), mcp(Type = "Tukey"))$linfct
-+ 
-+     stool.lmer <- lmer(effort ~ Type + (1 | Subject),
-+                        data = ergoStool)
-+     glme4 <- glht(stool.lmer, K)
-+     glme41 <- glht(stool.lmer, mcp(Type = "Tukey"))
-+     stopifnot(all.equal(coef(glme4), coef(glme41)))
-+     print(summary(glme41, test = Chisqtest()))
-+ 
-+     nlmeOK <- require("nlme")
-+     if (nlmeOK) {
-+ 
-+         stool.lme <- lme(effort ~ Type, data = ergoStool,
-+                         random = ~ 1 | Subject)
-+         gnlme <- glht(stool.lme,K)
-+         stopifnot(all.equal(coef(glme4), coef(gnlme)))
-+ 
-+         gnlme2 <- glht(stool.lme, linfct = mcp(Type = "Tukey"))
-+         stopifnot(all.equal(coef(glme4), coef(gnlme2)))
-+     }
-+ }
-
-	 General Linear Hypotheses
-
-Multiple Comparisons of Means: Tukey Contrasts
-
-
-Linear Hypotheses:
-             Estimate
-T2 - T1 == 0   3.8889
-T3 - T1 == 0   2.2222
-T4 - T1 == 0   0.6667
-T3 - T2 == 0  -1.6667
-T4 - T2 == 0  -3.2222
-T4 - T3 == 0  -1.5556
-
-Global Test:
-  Chisq DF Pr(>Chisq)
-1 67.07  3  1.812e-14
-Loading required package: nlme
-
-Attaching package: 'nlme'
-
-The following object is masked from 'package:lme4':
-
-    lmList
-
-> 
-> proc.time()
-   user  system elapsed 
-  1.558   0.023   1.574 
+        gnlme2 <- glht(stool.lme, linfct = mcp(Type = "Tukey"))
+        stopifnot(all.equal(coef(glme4), coef(gnlme2)))
+    }
+}
