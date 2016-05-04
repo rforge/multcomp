@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Version 0.992-6</title>
+    <title>Version 1.4-5</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
-    <link rel="canonical" href="http://multcomp.r-forge.r-project.org/2007/10/18/0.992-6/">
+    <link rel="canonical" href="http://multcomp.r-forge.r-project.org/2016/05/04/1.4-5/">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="http://multcomp.r-forge.r-project.org/css/main.css">
@@ -62,15 +62,16 @@ hljs.initHighlightingOnLoad();
       <div class="post">
 
   <header class="post-header">
-    <h1>Version 0.992-6</h1>
-    <p class="meta">Oct 18, 2007</p>
+    <h1>Version 1.4-5</h1>
+    <p class="meta">May 4, 2016</p>
   </header>
 
   <article class="post-content">
   <ul>
-<li> add support for lme4::(g)lmer2 objects (thanks to Manuel Eugster) </li>
-<li> coef. and vcov. didn't always pass through, spotted by
-     John Deke <jdeke73_at_gmail.com> </li>
+<li> fix bug in linfct specified as a character (aka expression).
+     Coefficients of main effects may have been incorrect in the
+     presence of interaction terms as reported by Melissa Chester Key
+     <melkey_at_iu.edu> </li>
 </ul>
 
   </article>
