@@ -61,7 +61,7 @@ side <- function(ex) {
 }
 
 
-expression2coef <- function(ex, vars, debug = F) {
+expression2coef <- function(ex, vars, debug = FALSE) {
 
    ### uses walkCode and makeCodeWalker from codetools
 
