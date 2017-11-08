@@ -99,7 +99,8 @@ model.frame.lme <- function(object, ...) {
 modelparm <- function(model, coef., vcov., df, ...) 
     UseMethod("modelparm")
 
-modelparm.default <- function(model, coef. = coef, vcov. = vcov, 
+modelparm.default <- function(model, coef. = coef, 
+                              vcov. = function(x) vcov(x, complete = FALSE), 
                               df = NULL, ...) 
 {
 
