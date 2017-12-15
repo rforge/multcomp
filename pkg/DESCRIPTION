@@ -3,7 +3,7 @@ Title: Simultaneous Inference in General Parametric Models
 Version: 1.4-8
 Date: 2017-11-08
 Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"), 
-                    email = "Torsten.Hothorn@R-project.org"), 
+                    email = "Torsten.Hothorn@R-project.org", comment = c(ORCID = "0000-0001-8301-0471")), 
         person("Frank", "Bretz", role = "aut"), 
         person("Peter", "Westfall", role = "aut"),
         person("Richard M.", "Heiberger", role = "ctb"),
