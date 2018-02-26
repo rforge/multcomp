@@ -19,7 +19,7 @@ Depends: stats, graphics, mvtnorm (>= 1.0-3), survival (>= 2.39-4),
   TH.data (>= 1.0-2)
 Imports: sandwich (>= 2.3-0), codetools
 Suggests: lme4 (>= 0.999375-16), nlme, robustbase, coin, MASS,
-  car, foreign, xtable, lmtest, coxme (>= 2.2-1), SimComp, ISwR
+  foreign, xtable, lmtest, coxme (>= 2.2-1), SimComp, ISwR
 URL: http://multcomp.R-forge.R-project.org
   The publishers web page is http://www.crcpress.com/product/isbn/9781584885740
 LazyData: yes
