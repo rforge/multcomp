@@ -125,7 +125,7 @@ contrMat <- function(n, type = c("Dunnett", "Tukey", "Sequen", "AVE",
     }, "GrandMean" = {
         CM <- matrix(rep(-n/sum(n), k), nrow = k, byrow = TRUE)
         diag(CM) <- diag(CM) + 1
-        rnames <- c(rnames, paste("C", 1:nrow(CM)))
+        rnames <- varnames
     })
 
     rownames(CM) <- rnames
