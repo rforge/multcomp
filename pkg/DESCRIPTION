@@ -1,7 +1,7 @@
 Package: multcomp
 Title: Simultaneous Inference in General Parametric Models
-Version: 1.4-9
-Date: 2018-08-24
+Version: 1.4-10
+Date: 2019-02-27
 Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"), 
                     email = "Torsten.Hothorn@R-project.org", comment = c(ORCID = "0000-0001-8301-0471")), 
         person("Frank", "Bretz", role = "aut"), 
@@ -19,7 +19,7 @@ Depends: stats, graphics, mvtnorm (>= 1.0-3), survival (>= 2.39-4),
   TH.data (>= 1.0-2)
 Imports: sandwich (>= 2.3-0), codetools
 Suggests: lme4 (>= 0.999375-16), nlme, robustbase, coin, MASS,
-  foreign, xtable, lmtest, coxme (>= 2.2-1), SimComp, ISwR
+  foreign, xtable, lmtest, coxme (>= 2.2-1), SimComp, ISwR, tram (>= 0.2-5)
 URL: http://multcomp.R-forge.R-project.org
   The publishers web page is http://www.crcpress.com/product/isbn/9781584885740
 LazyData: yes
