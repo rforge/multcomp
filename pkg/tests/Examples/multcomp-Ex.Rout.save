@@ -1,6 +1,6 @@
 
-R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -1459,8 +1459,8 @@ m2: x13 == 0  -0.8264     0.5824  -1.419    0.317
 > 
 > ### Examples for binomial data
 > ### Two independent outcomes
-> y1.1 <- rbinom(100, 1, 0.5)
-> y1.2 <- rbinom(100, 1, 0.5)
+> y1.1 <- rbinom(100, 1, 0.45)
+> y1.2 <- rbinom(100, 1, 0.55)
 > group <- factor(rep(c("A", "B"), 50))
 > 
 > m1 <- glm(y1.1 ~ group, family = binomial)
@@ -1472,14 +1472,14 @@ m2: x13 == 0  -0.8264     0.5824  -1.419    0.317
 	 Simultaneous Tests for General Linear Hypotheses
 
 Linear Hypotheses:
-                 Estimate Std. Error z value Pr(>|z|)
-m1: groupB == 0 4.855e-01  4.043e-01   1.201    0.407
-m2: groupB == 0 9.356e-16  4.013e-01   0.000    1.000
+                Estimate Std. Error z value Pr(>|z|)
+m1: groupB == 0  0.41502    0.40905   1.015    0.523
+m2: groupB == 0  0.08161    0.40407   0.202    0.974
 (Adjusted p values reported -- single-step method)
 
 > 
 > ### Two perfectly correlated outcomes
-> y2.1 <- rbinom(100, 1, 0.5)
+> y2.1 <- rbinom(100, 1, 0.45)
 > y2.2 <- y2.1
 > group <- factor(rep(c("A", "B"), 50))
 > 
@@ -1493,8 +1493,8 @@ m2: groupB == 0 9.356e-16  4.013e-01   0.000    1.000
 
 Linear Hypotheses:
                 Estimate Std. Error z value Pr(>|z|)
-m1: groupB == 0   0.4015     0.4021   0.999    0.318
-m2: groupB == 0   0.4015     0.4021   0.999    0.318
+m1: groupB == 0   0.2427     0.4028   0.603    0.547
+m2: groupB == 0   0.2427     0.4028   0.603    0.547
 (Adjusted p values reported -- single-step method)
 
 > 
@@ -1506,8 +1506,8 @@ m2: groupB == 0   0.4015     0.4021   0.999    0.318
 
 Linear Hypotheses:
                 Estimate Std. Error z value Pr(>|z|)
-m1: groupB == 0   0.4015     0.4021   0.999    0.318
-m2: groupB == 0   0.4015     0.4021   0.999    0.318
+m1: groupB == 0   0.2427     0.4028   0.603    0.547
+m2: groupB == 0   0.2427     0.4028   0.603    0.547
 (Adjusted p values reported -- single-step method)
 
 > 
@@ -1926,7 +1926,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.53 0.068 9.62 0 0 
+Time elapsed:  9.653 0.056 9.709 0 0 
 > grDevices::dev.off()
 null device 
           1 
