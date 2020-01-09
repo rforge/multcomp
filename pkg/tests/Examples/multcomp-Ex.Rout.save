@@ -515,56 +515,11 @@ E - D == 0  -6.5333     0.8679  -7.527 1.21e-06 ***
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 (Univariate p values reported)
 
->   summary(dht, test = adjusted("Shaffer"))
-
-	 Simultaneous Tests for General Linear Hypotheses
-
-Multiple Comparisons of Means: Tukey Contrasts
-
-
-Fit: aov(formula = plates ~ block + detergent, data = detergent)
-
-Linear Hypotheses:
-           Estimate Std. Error t value Pr(>|t|)    
-B - A == 0  -2.1333     0.8679  -2.458 0.051524 .  
-C - A == 0   3.6000     0.8679   4.148 0.003028 ** 
-D - A == 0   2.2000     0.8679   2.535 0.044149 *  
-E - A == 0  -4.3333     0.8679  -4.993 0.000531 ***
-C - B == 0   5.7333     0.8679   6.606 3.63e-05 ***
-D - B == 0   4.3333     0.8679   4.993 0.000531 ***
-E - B == 0  -2.2000     0.8679  -2.535 0.044149 *  
-D - C == 0  -1.4000     0.8679  -1.613 0.126291    
-E - C == 0  -7.9333     0.8679  -9.140 9.45e-07 ***
-E - D == 0  -6.5333     0.8679  -7.527 7.26e-06 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-(Adjusted p values reported -- Shaffer method)
-
->   summary(dht, test = adjusted("Westfall"))
-
-	 Simultaneous Tests for General Linear Hypotheses
-
-Multiple Comparisons of Means: Tukey Contrasts
-
-
-Fit: aov(formula = plates ~ block + detergent, data = detergent)
-
-Linear Hypotheses:
-           Estimate Std. Error t value Pr(>|t|)    
-B - A == 0  -2.1333     0.8679  -2.458  0.05002 .  
-C - A == 0   3.6000     0.8679   4.148  0.00271 ** 
-D - A == 0   2.2000     0.8679   2.535  0.04297 *  
-E - A == 0  -4.3333     0.8679  -4.993  < 0.001 ***
-C - B == 0   5.7333     0.8679   6.606  < 0.001 ***
-D - B == 0   4.3333     0.8679   4.993  < 0.001 ***
-E - B == 0  -2.2000     0.8679  -2.535  0.04297 *  
-D - C == 0  -1.4000     0.8679  -1.613  0.12629    
-E - C == 0  -7.9333     0.8679  -9.140  < 0.001 ***
-E - D == 0  -6.5333     0.8679  -7.527  < 0.001 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-(Adjusted p values reported -- Westfall method)
-
+>   ## Not run: 
+> ##D   summary(dht, test = adjusted("Shaffer"))
+> ##D   summary(dht, test = adjusted("Westfall"))
+> ##D   
+> ## End(Not run)
 > 
 > 
 > 
@@ -1926,7 +1881,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.653 0.056 9.709 0 0 
+Time elapsed:  8.816 0.095 8.933 0 0 
 > grDevices::dev.off()
 null device 
           1 
