@@ -168,6 +168,7 @@ abline(h = 467, lty=3)
 ### chunk number 22: ad-1
 ###################################################
 if (FALSE) {
+### asd.sim doesn't exist in asd anymore
 library("asd")
 res <- asd.sim(nsamp = c(110, 110), early = c(0.3, 0.3), 
      final = c(0.3, 0.3), nsim = 10000, corr = 1, select = 1, 
