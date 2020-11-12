@@ -553,6 +553,10 @@ chrlinfct2matrix <- function(ex, var) {
 
         tmp <- expression2coef(expr,vars=var)
 
+        ### (Intercept) lost () in expression2coef
+        if ("(Intercept)" %in% var)
+            tmp$names[tmp$names == "Intercept"] <- "(Intercept)"
+
         if (!all(tmp$names %in% var))
             stop("multcomp:::chrlinfct2matrix: variable(s) ", 
                   paste(sQuote(tmp$names[!tmp$names %in% var]),collapse=', '), " not found", call. = FALSE )
