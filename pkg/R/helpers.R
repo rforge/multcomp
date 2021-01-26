@@ -176,6 +176,13 @@ modelparm.merMod <- function(model, coef. = lme4::fixef, vcov. = vcov, df = NULL
 modelparm.lme <- function(model, coef. = nlme::fixef, vcov. = vcov, df = NULL, ...)
     modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
 
+### package glmmTMB
+modelparm.glmmTMB <- function(model, 
+    coef. = function(object) glmmTMB::fixef(object)$cond, 
+    vcov. = function(object) vcov(object)$cond, 
+    df = NULL, .
+    modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
+
 ### survreg models (package `survival')
 vcovsurvreg <- function(object, ...) {
     sigma <- vcov(object)
