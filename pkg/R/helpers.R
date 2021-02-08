@@ -180,7 +180,7 @@ modelparm.lme <- function(model, coef. = nlme::fixef, vcov. = vcov, df = NULL, .
 modelparm.glmmTMB <- function(model, 
     coef. = function(object) glmmTMB::fixef(object)$cond, 
     vcov. = function(object) vcov(object)$cond, 
-    df = NULL, .
+    df = NULL, ...)
     modelparm.default(model, coef. = coef., vcov. = vcov., df = df, ...)
 
 ### survreg models (package `survival')
